@@ -1,4 +1,4 @@
-const {Sequelize, DataTypes} = require("sequelize");
+const { DataTypes} = require("sequelize");
 const ConnectDB = require("../until/Connect_MySQL");
 
 const sequelize = ConnectDB();
@@ -28,6 +28,17 @@ const SinhVien = sequelize.define("sinh_vien", {
    ho_khau_thuong_tru:{
      type: DataTypes.STRING,
    },
+   mat_khau:{
+     type: DataTypes.STRING,
+     allowNull:false,
+   },
+   so_dien_thoai:{
+     type: DataTypes.CHAR(10),
+   },
+   so_cmnd:{
+     type: DataTypes.CHAR(20),
+   }
+   
 });
 
 sequelize.sync().then(() => {
