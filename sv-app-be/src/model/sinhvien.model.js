@@ -1,10 +1,12 @@
-const { DataTypes} = require("sequelize");
+const { Sequelize, DataTypes, Model} = require("sequelize");
 const ConnectDB = require("../until/Connect_MySQL");
+const bcrypt = require("bcryptjs");
 
 const sequelize = ConnectDB();
 
+class SinhVien extends Model {}
 
-const SinhVien = sequelize.define("sinh_vien", {
+SinhVien.init ({
    ma_sinh_vien: {
      type: DataTypes.INTEGER,
      allowNull: false,
@@ -38,11 +40,21 @@ const SinhVien = sequelize.define("sinh_vien", {
    so_cmnd:{
      type: DataTypes.CHAR(20),
    }
-   
-});
+  }, {
+    sequelize,
+    modelName:'sinh_vien',
+    timestamps:false,
+    freezeTableName:true
+  })
 
-sequelize.sync().then(() => {
-   console.log('Book table created successfully!');
-}).catch((error) => {
-   console.error('Unable to create table : ', error);
-});
+SinhVien.sync({ alter: true });
+
+
+const isValidPassword = async function (newPassword) {
+  try {
+    return await bcrypt.compare(newPassword, this.password);
+  } catch (error) {
+    throw new Error(error);
+  }
+};
+module.exports = SinhVien;
