@@ -3,19 +3,20 @@ const ConnectDB = require("../until/Connect_MySQL");
 
 const sequelize = ConnectDB();
 
-const TonGiao = sequelize.define("ton_giao",{
-    ma_ton_giao:{
+const Khoa = sequelize.define("khoa",{
+    ma_khoa:{
         type: DataTypes.INTEGER,
         allowNull: false,
         primaryKey: true,
     },
-    ten_ton_giao:{
+    ten_khoa:{
         type: DataTypes.STRING,
         allowNull:false,
     },
     mo_ta:{
         type: DataTypes.STRING,
-    },
-    timestamps: false,
-})
-
+    }, 
+  
+},  {timestamps: false,freezeTableName: true})
+Khoa.sync({ alter: true });
+module.exports = Khoa;

@@ -3,13 +3,13 @@ const ConnectDB = require("../until/Connect_MySQL");
 
 const sequelize = ConnectDB();
 
-const TonGiao = sequelize.define("ton_giao",{
-    ma_ton_giao:{
+const DanToc = sequelize.define("dan_toc",{
+    ma_dan_toc:{
         type: DataTypes.INTEGER,
         allowNull: false,
         primaryKey: true,
     },
-    ten_ton_giao:{
+    ten_dan_toc:{
         type: DataTypes.STRING,
         allowNull:false,
     },
@@ -18,4 +18,3 @@ const TonGiao = sequelize.define("ton_giao",{
     },
     timestamps: false,
 })
-
