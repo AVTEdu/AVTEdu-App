@@ -1,9 +1,9 @@
 import React from "react";
-import "../css/login.css";
-import Logo from '../images/Logo.png';
-import bg from '../images/bg02.jpg';
-import Logo2 from '../images/logo2.png';
-import { LoginAdmin } from "../admin_component/login";
+// import "../css/login.css";
+import "../assets/css/login.css"
+import bg from '../assets/img/login_img/bg02.jpg';
+import Logo2 from '../assets/img/login_img/logo2.png';
+
 
 export const Login = () => {
     return (
