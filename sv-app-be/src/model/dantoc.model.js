@@ -1,9 +1,11 @@
-const {Sequelize, DataTypes} = require("sequelize");
+const {Sequelize, DataTypes, Model} = require("sequelize");
 const ConnectDB = require("../until/Connect_MySQL");
 
 const sequelize = ConnectDB();
 
-const DanToc = sequelize.define("dan_toc",{
+class DanToc extends Model {};
+
+DanToc.init({
     ma_dan_toc:{
         type: DataTypes.INTEGER,
         allowNull: false,
@@ -15,6 +17,7 @@ const DanToc = sequelize.define("dan_toc",{
     },
     mo_ta:{
         type: DataTypes.STRING,
-    },
-    timestamps: false,
-})
+    }
+},{timestamps: false,freezeTableName: true})
+DanToc.sync({ alter: true });
+module.exports= DanToc;

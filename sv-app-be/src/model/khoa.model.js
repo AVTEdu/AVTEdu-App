@@ -3,7 +3,9 @@ const ConnectDB = require("../until/Connect_MySQL");
 
 const sequelize = ConnectDB();
 
-const Khoa = sequelize.define("khoa",{
+class Khoa extends Model {};
+
+Khoa.init({
     ma_khoa:{
         type: DataTypes.INTEGER,
         allowNull: false,
@@ -17,6 +19,6 @@ const Khoa = sequelize.define("khoa",{
         type: DataTypes.STRING,
     }, 
   
-},  {timestamps: false,freezeTableName: true})
+},{timestamps: false,freezeTableName: true})
 Khoa.sync({ alter: true });
 module.exports = Khoa;

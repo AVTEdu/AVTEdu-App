@@ -1,9 +1,11 @@
-const {Sequelize, DataTypes} = require("sequelize");
+const {Sequelize, DataTypes, Model} = require("sequelize");
 const ConnectDB = require("../until/Connect_MySQL");
 
 const sequelize = ConnectDB();
 
-const MoHinhDaoTao = sequelize.define("mo_hinh_dao_tao",{
+class MoHinhDaoTao extends Model{};
+
+MoHinhDaoTao.init({
     ma_mo_hinh_dao_tao:{
         type: DataTypes.INTEGER,
         allowNull: false,
@@ -17,4 +19,6 @@ const MoHinhDaoTao = sequelize.define("mo_hinh_dao_tao",{
         type: DataTypes.STRING,
     },
     timestamps: false,
-})
+},{timestamps: false,freezeTableName: true})
+MoHinhDaoTao.sync({ alter: true });
+module.exports= MoHinhDaoTao;
