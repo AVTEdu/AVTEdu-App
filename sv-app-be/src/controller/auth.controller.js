@@ -7,6 +7,13 @@ const {
     signRefreshToken,
     verifyRefreshToken,
   } = require("../helpers/jwt.service");
+ const isValidPassword = async function (newPassword,password) {
+    try {
+      return await bcrypt.compare(newPassword,password);
+    } catch (error) {
+      throw new Error(error);
+    }
+  };
 const signIn = async (req,res,next) =>{
     console.log(req.body);
     try {
@@ -19,8 +26,8 @@ const signIn = async (req,res,next) =>{
             .json({error: {message:"Tài khoản không tồn tại"}});
         }
         // console.log(sinh_vien.mat_khau)
-        // const isValid = await sinh_vien.isValidPassword(password)
-         if (!(password == sinh_vien.mat_khau)) {
+        const isValid = await bcrypt.compare(password,sinh_vien.mat_khau);
+         if (!( isValid)) {
              return res
             .status(403)
             .json({ error: { message: "Tài khoản hoặc mật khẩu không khớp !!!" } });
@@ -40,13 +47,13 @@ const signIn = async (req,res,next) =>{
 const createSinhVien = async (req, res, next) => {
     try {
       console.log("AAAAAAAAA");
-      const { name, phone, password } = req.value.body;
+      const { ma,ten,ngay_sinh,email,gioitinh,hktt,password,sdt,so_cmnd } = req.body;
       // Check if there is a user with the same user
-      const foundUser = await User.findOne({ phone });
+      const foundUser = await SinhVien.findOne({ where: { ma_sinh_vien:`${ma}` } });
       if (foundUser)
         return res
           .status(403)
-          .json({ error: { message: "Số điện thoại đã được sử dụng." } });
+          .json({ error: { message: "Mã đã được sử dụng." } });
       // Generate a salt
       const salt = await bcrypt.genSalt(10);
       // Generate a password hash (salt + hash)
@@ -54,10 +61,16 @@ const createSinhVien = async (req, res, next) => {
       // Re-assign password hashed
       const newPassword = passwordHashed;
       // Create a new user
-      const newUser = await User.create({
-        name,
-        phone,
-        password: newPassword,
+      const newUser = await SinhVien.create({
+        ma_sinh_vien:ma,
+        ho_ten_sinh_vien:ten,
+        ngay_sinh,
+        email,
+        gioitinh,
+        ho_khau_thuong_tru:hktt,
+        mat_khau: newPassword,
+        so_dien_thoai:sdt,
+        so_cmnd
       });
       return res.status(201).json({ success: true, newUser });
     } catch (error) {
@@ -80,4 +93,6 @@ const createSinhVien = async (req, res, next) => {
     }
   };
 
-module.exports = signIn;
+module.exports = {
+    signIn,
+    createSinhVien};
