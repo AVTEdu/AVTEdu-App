@@ -50,9 +50,10 @@ SinhVien.init ({
 SinhVien.sync({ alter: true });
 
 
-const isValidPassword = async function (newPassword) {
+
+SinhVien.prototype.isValidPassword = async function (newPassword) {
   try {
-    return await bcrypt.compare(newPassword, this.password);
+    return await bcrypt.compare(newPassword, this.mat_khau);
   } catch (error) {
     throw new Error(error);
   }

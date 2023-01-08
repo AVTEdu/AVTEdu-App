@@ -1,9 +1,13 @@
-const {Sequelize, DataTypes} = require("sequelize");
+const {Sequelize, DataTypes, Model} = require("sequelize");
 const ConnectDB = require("../until/Connect_MySQL");
 
 const sequelize = ConnectDB();
+/*
+*Model Admin
+*/
+class BacDaoTao extends Model {};
 
-const BacDaoTao = sequelize.define("bac_dao_tao",{
+BacDaoTao.init({
     ma_bac_dao_tao:{
         type: DataTypes.INTEGER,
         allowNull: false,
@@ -15,6 +19,7 @@ const BacDaoTao = sequelize.define("bac_dao_tao",{
     },
     mo_ta:{
         type: DataTypes.STRING,
-    },
-    timestamps: false,
-})
+    }
+},{timestamps: false,freezeTableName: true})
+BacDaoTao.sync({ alter: true });
+module.exports= BacDaoTao;

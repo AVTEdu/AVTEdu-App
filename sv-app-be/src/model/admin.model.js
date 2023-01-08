@@ -1,10 +1,14 @@
-const {Sequelize, DataTypes} = require("sequelize");
+const {Sequelize, DataTypes, Model} = require("sequelize");
 const ConnectDB = require("../until/Connect_MySQL");
 const Khoa = require("./khoa.model");
 
 const sequelize = ConnectDB();
+/*
+*Model Admin
+*/
+class Admin extends Model {};
 
-const Admin = sequelize.define("admin",{
+Admin.init({
     ma_admin:{
         type: DataTypes.INTEGER,
         allowNull: false,
@@ -17,14 +21,16 @@ const Admin = sequelize.define("admin",{
     password:{
         type: DataTypes.STRING,
         allowNull:false
-    }, 
-    ma_khoa:{
-        type: DataTypes.INTEGER,
-        references: 'khoa', // <<< Note, its table's name, not object name
-        referencesKey: 'ma_khoa' // <<< Note, its a column name
-    },
-    timestamps: false,
+    }
 }, {timestamps: false,freezeTableName: true})
-Admin.hasMany(Khoa);
+Admin.hasMany(Khoa,{
+    onDelete: 'RESTRICT',
+    onUpdate: 'RESTRICT',
+    foreignKey:{
+        name:'ma_khoa',
+        type:DataTypes.INTEGER,
+        allowNull:false
+    }
+});
 Admin.sync({ alter: true });
 module.exports = Admin;

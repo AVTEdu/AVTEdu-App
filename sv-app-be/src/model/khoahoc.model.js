@@ -1,9 +1,11 @@
-const {Sequelize, DataTypes} = require("sequelize");
+const {Sequelize, DataTypes, Model} = require("sequelize");
 const ConnectDB = require("../until/Connect_MySQL");
 
 const sequelize = ConnectDB();
 
-const KhoaHoc = sequelize.define("khoa_hoc",{
+class KhoaHoc extends Model {};
+
+KhoaHoc.init({
     ma_khoa_hoc:{
         type: DataTypes.INTEGER,
         allowNull: false,
@@ -24,5 +26,6 @@ const KhoaHoc = sequelize.define("khoa_hoc",{
     mo_ta:{
         type: DataTypes.STRING,
     },
-    timestamps: false,
-})
+},{timestamps: false,freezeTableName: true});
+KhoaHoc.sync({ alter: true });
+module.exports= KhoaHoc;
