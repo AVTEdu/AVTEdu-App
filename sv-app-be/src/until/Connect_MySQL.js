@@ -19,9 +19,14 @@ const CheckDB = () => {
         connection.query(`CREATE DATABASE IF NOT EXISTS ${DatabaseName};`);
     });
 }
+<<<<<<< HEAD
+const ConnectDB = () =>{
+    const sequelize= new Sequelize(
+=======
 const ConnectDB = () => {
     CheckDB();
     const sequelize = new Sequelize(
+>>>>>>> main
         `${DatabaseName}`,
         `${DatabaseUsername}`,
         `${DatabasePassword}`,
@@ -41,5 +46,6 @@ const ConnectDB = () => {
 
 }
 ConnectDB();
-module.exports = CheckDB;
-module.exports = ConnectDB;
+module.exports = {
+    ConnectDB,
+    CheckDB};

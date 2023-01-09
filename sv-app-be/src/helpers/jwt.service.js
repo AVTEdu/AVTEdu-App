@@ -1,21 +1,26 @@
 const JWT = require("jsonwebtoken");
 const client = require("../helpers/connect_redis");
 const dotenv = require("dotenv").config();
+//Tạo access token lúc đăng nhập
 const signAccessToken = async (userId) => {
   return new Promise((resolve, reject) => {
     const payload = {
       userId,
     };
+    //Mã bí mật 
     const secret = process.env.ACCESS_TOKEN_SECRET;
+    //Token tồn tại trong 5 giờ
     const options = {
       expiresIn: "5h",
     };
+    //Hàm tạo token
     JWT.sign(payload, secret, options, (err, token) => {
       if (err) reject(err);
       resolve(token);
     });
   });
 };
+//Kiểm tra token đăng nhập
 const verifyAccessToken = (req, res, next) => {
   const Authorization = req.headers["authorization"];
   if (!req.headers["authorization"]) {

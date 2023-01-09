@@ -1,8 +1,8 @@
 const {Sequelize, DataTypes, Model} = require("sequelize");
-const ConnectDB = require("../until/Connect_MySQL");
+const Connect_MySQL = require("../until/Connect_MySQL");
 const Khoa = require("./khoa.model");
 
-const sequelize = ConnectDB();
+const sequelize =  Connect_MySQL.ConnectDB();
 /*
 *Model Admin
 */
@@ -22,7 +22,12 @@ Admin.init({
         type: DataTypes.STRING,
         allowNull:false
     }
-}, {timestamps: false,freezeTableName: true})
+},{
+    sequelize,
+    modelName:'admin',
+    timestamps:false,
+    freezeTableName:true
+  });
 Admin.hasMany(Khoa,{
     onDelete: 'RESTRICT',
     onUpdate: 'RESTRICT',

@@ -1,7 +1,7 @@
 const {Sequelize, DataTypes, Model} = require("sequelize");
-const ConnectDB = require("../until/Connect_MySQL");
+const Connect_MySQL = require("../until/Connect_MySQL");
 
-const sequelize = ConnectDB();
+const sequelize = Connect_MySQL.ConnectDB();
 
 class MoHinhDaoTao extends Model{};
 
@@ -19,6 +19,11 @@ MoHinhDaoTao.init({
         type: DataTypes.STRING,
     },
     timestamps: false,
-},{timestamps: false,freezeTableName: true})
+},{
+    sequelize,
+    modelName:'mo_hinh_dao_tao',
+    timestamps:false,
+    freezeTableName:true
+  });
 MoHinhDaoTao.sync({ alter: true });
 module.exports= MoHinhDaoTao;

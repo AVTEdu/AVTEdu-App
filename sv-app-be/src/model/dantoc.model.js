@@ -1,7 +1,7 @@
 const {Sequelize, DataTypes, Model} = require("sequelize");
-const ConnectDB = require("../until/Connect_MySQL");
+const Connect_MySQL = require("../until/Connect_MySQL");
 
-const sequelize = ConnectDB();
+const sequelize = Connect_MySQL.ConnectDB();
 
 class DanToc extends Model {};
 
@@ -18,6 +18,11 @@ DanToc.init({
     mo_ta:{
         type: DataTypes.STRING,
     }
-},{timestamps: false,freezeTableName: true})
+},{
+    sequelize,
+    modelName:'dantoc',
+    timestamps:false,
+    freezeTableName:true
+  });
 DanToc.sync({ alter: true });
 module.exports= DanToc;

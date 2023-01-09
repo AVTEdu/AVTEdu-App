@@ -1,12 +1,12 @@
-const redis = require("redis");
-const client = redis.createClient({
-  // url:"redis://redis-17678.c1.ap-southeast-1-1.ec2.cloud.redislabs.com:17678",
-  // auth_user:"Aluwas",
-  // auth_pass:"Anhviet6jklz!",
-  port: 6379,
-  host: "127.0.0.1",
+const Redis = require('ioredis');
+const fs = require('fs');
+require('dotenv').config();
+
+const client = new Redis({
+    host:process.env.REDIS_CONNECT_URL,
+    port:process.env.REDIS_CONNECT_PORT,
+    password:process.env.REDIS_CONNECT_PASSWORD,
 });
-client.connect();
 client.ping((err, pong) => {
   console.log(pong);
 });
