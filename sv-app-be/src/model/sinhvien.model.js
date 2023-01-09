@@ -1,10 +1,18 @@
 const { Sequelize, DataTypes, Model} = require("sequelize");
-const ConnectDB = require("../until/Connect_MySQL");
+const Connect_MySQL = require("../until/Connect_MySQL");
 const bcrypt = require("bcryptjs");
 
-const sequelize = ConnectDB();
+const sequelize = Connect_MySQL.ConnectDB();
 
-class SinhVien extends Model {}
+class SinhVien extends Model {
+  isValidPassword = async function (newPassword) {
+    try {
+      return await bcrypt.compare(newPassword,this.mat_khau);
+    } catch (error) {
+      throw new Error(error);
+    }
+  };
+}
 
 SinhVien.init ({
    ma_sinh_vien: {
@@ -48,14 +56,4 @@ SinhVien.init ({
   })
 
 SinhVien.sync({ alter: true });
-
-
-
-SinhVien.prototype.isValidPassword = async function (newPassword) {
-  try {
-    return await bcrypt.compare(newPassword, this.mat_khau);
-  } catch (error) {
-    throw new Error(error);
-  }
-};
 module.exports = SinhVien;

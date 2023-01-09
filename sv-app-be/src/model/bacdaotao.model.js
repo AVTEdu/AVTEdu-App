@@ -1,7 +1,7 @@
 const {Sequelize, DataTypes, Model} = require("sequelize");
-const ConnectDB = require("../until/Connect_MySQL");
+const Connect_MySQL = require("../until/Connect_MySQL");
 
-const sequelize = ConnectDB();
+const sequelize = Connect_MySQL.ConnectDB();
 /*
 *Model Admin
 */
@@ -20,6 +20,11 @@ BacDaoTao.init({
     mo_ta:{
         type: DataTypes.STRING,
     }
-},{timestamps: false,freezeTableName: true})
+},{
+    sequelize,
+    modelName:'bacdaotao',
+    timestamps:false,
+    freezeTableName:true
+  });
 BacDaoTao.sync({ alter: true });
 module.exports= BacDaoTao;

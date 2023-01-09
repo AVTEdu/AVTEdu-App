@@ -1,7 +1,7 @@
 const {Sequelize, DataTypes, Model} = require("sequelize");
-const ConnectDB = require("../until/Connect_MySQL");
+const Connect_MySQL = require("../until/Connect_MySQL");
 
-const sequelize = ConnectDB();
+const sequelize = Connect_MySQL.ConnectDB();
 
 class KhoaHoc extends Model {};
 
@@ -26,6 +26,11 @@ KhoaHoc.init({
     mo_ta:{
         type: DataTypes.STRING,
     },
-},{timestamps: false,freezeTableName: true});
+},{
+    sequelize,
+    modelName:'khoa_hoc',
+    timestamps:false,
+    freezeTableName:true
+  });
 KhoaHoc.sync({ alter: true });
 module.exports= KhoaHoc;

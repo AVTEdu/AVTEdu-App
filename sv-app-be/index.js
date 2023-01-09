@@ -9,9 +9,9 @@ const SinhVien = require('./src/model/sinhvien.model')
 const PORT = process.env.PORT || 9090
 
 const  homeRouter = require('./src/router/home.router');
-const ConnectDB = require('./src/until/Connect_MySQL');
-
-ConnectDB();
+const Connect_MySQL = require('./src/until/Connect_MySQL');
+Connect_MySQL.CheckDB();
+Connect_MySQL.ConnectDB();
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use("/",homeRouter);
