@@ -1,5 +1,6 @@
-const {Sequelize, DataTypes} = require("sequelize");
+const {Sequelize, DataTypes,Model} = require("sequelize");
 const Connect_MySQL = require("../until/Connect_MySQL");
+
 
 const sequelize = Connect_MySQL.ConnectDB();
 
@@ -25,5 +26,4 @@ Khoa.init({
     timestamps:false,
     freezeTableName:true
   });
-Khoa.sync({ alter: true });
 module.exports = Khoa;

@@ -1,6 +1,13 @@
 const { Sequelize, DataTypes, Model} = require("sequelize");
 const Connect_MySQL = require("../until/Connect_MySQL");
 const bcrypt = require("bcryptjs");
+const TonGiao = require("./tongiao.model");
+const DanToc = require("./dantoc.model");
+const Khoa = require("./khoa.model");
+const BacDaoTao = require("./bacdaotao.model");
+const KhoaHoc = require("./khoahoc.model");
+const MoHinhDaoTao = require("./mohinhdaotao.model");
+const TrangThaiHocTap = require("./trangthaihoctap.model");
 
 const sequelize = Connect_MySQL.ConnectDB();
 
@@ -12,6 +19,9 @@ class SinhVien extends Model {
       throw new Error(error);
     }
   };
+  createImageUrl = () =>{
+
+  }
 }
 
 SinhVien.init ({
@@ -47,6 +57,48 @@ SinhVien.init ({
    },
    so_cmnd:{
      type: DataTypes.CHAR(20),
+   },
+   ma_dan_toc:{
+     type: DataTypes.INTEGER,
+     references:{
+      model:DanToc,
+      key:"ma_dan_toc",
+     }
+   },
+   ma_khoa:{
+    type: DataTypes.INTEGER,
+     references:{
+      model:Khoa,
+      key:"ma_khoa",
+     }
+   },
+   ma_mo_hinh_dao_tao:{
+    type: DataTypes.INTEGER,
+     references:{
+      model:MoHinhDaoTao,
+      key:"ma_mo_hinh_dao_tao",
+     }
+   },
+   ma_bac_dao_tao:{
+    type: DataTypes.INTEGER,
+     references:{
+      model:BacDaoTao,
+      key:"ma_bac_dao_tao",
+     }
+   },
+   ma_khoa_hoc:{
+    type: DataTypes.INTEGER,
+     references:{
+      model:KhoaHoc,
+      key:"ma_khoa_hoc",
+     }
+   },
+   ma_trang_thai_hoc_tap:{
+    type: DataTypes.INTEGER,
+     references:{
+      model:TrangThaiHocTap,
+      key:"ma_trang_thai_hoc_tap",
+     }
    }
   }, {
     sequelize,
@@ -54,6 +106,4 @@ SinhVien.init ({
     timestamps:false,
     freezeTableName:true
   })
-
-SinhVien.sync({ alter: true });
 module.exports = SinhVien;

@@ -26,5 +26,4 @@ BacDaoTao.init({
     timestamps:false,
     freezeTableName:true
   });
-BacDaoTao.sync({ alter: true });
 module.exports= BacDaoTao;

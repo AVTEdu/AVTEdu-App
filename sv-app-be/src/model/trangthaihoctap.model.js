@@ -24,5 +24,4 @@ TrangThaiHocTap.init({
     timestamps:false,
     freezeTableName:true
   });
-TrangThaiHocTap.sync({ alter: true });
 module.exports= TrangThaiHocTap;
