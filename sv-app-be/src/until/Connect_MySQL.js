@@ -7,35 +7,41 @@ require('dotenv').config();
 // const DatabaseUsername= process.env.DATABASE_USERNAME  ;
 // const DatabasePassword= process.env.DATABASE_PASSWORD  ;
 
-const DatabaseName=   "sinhviendb";
-const DatabaseUsername=  "root";
-const DatabasePassword= "sapassword";
+const DatabaseName = "sinhviendb";
+const DatabaseUsername = "root";
+const DatabasePassword = "sapassword";
 
-const CheckDB = () =>{
+const CheckDB = () => {
     mysql.createConnection({
-        user     : DatabaseUsername,
-        password : DatabasePassword
+        user: DatabaseUsername,
+        password: DatabasePassword
     }).then((connection) => {
         connection.query(`CREATE DATABASE IF NOT EXISTS ${DatabaseName};`);
     });
 }
+<<<<<<< HEAD
 const ConnectDB = () =>{
     const sequelize= new Sequelize(
+=======
+const ConnectDB = () => {
+    CheckDB();
+    const sequelize = new Sequelize(
+>>>>>>> main
         `${DatabaseName}`,
         `${DatabaseUsername}`,
         `${DatabasePassword}`,
         {
-            host:'localhost',
-            dialect:'mysql',
+            host: 'localhost',
+            dialect: 'mysql',
             // logging: false,
         }
     );
-    
+
     sequelize.authenticate().then(() => {
         console.log('Connection has been established successfully.');
-     }).catch((error) => {
+    }).catch((error) => {
         console.error('Unable to connect to the database: ', error);
-     });   
+    });
     return sequelize;
 
 }

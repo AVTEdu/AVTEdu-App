@@ -8,13 +8,21 @@ const SinhVien = require('./src/model/sinhvien.model')
 
 const PORT = process.env.PORT || 9090
 
+<<<<<<< HEAD
 const  homeRouter = require('./src/router/home.router');
 const Connect_MySQL = require('./src/until/Connect_MySQL');
 Connect_MySQL.CheckDB();
 Connect_MySQL.ConnectDB();
+=======
+const homeRouter = require('./src/router/home.router');
+const ConnectDB = require('./src/until/Connect_MySQL');
+
+
+ConnectDB();
+>>>>>>> main
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-app.use("/",homeRouter);
+app.use("/", homeRouter);
 
 // Catch 404 Errors and forward them to error handler
 app.use((req, res, next) => {
@@ -34,6 +42,6 @@ app.use((err, req, res, next) => {
     },
   });
 });
-server.listen(PORT, function(){
-    console.log(`Server is listening in port ${PORT}`);
+server.listen(PORT, function () {
+  console.log(`Server is listening in port ${PORT}`);
 })
