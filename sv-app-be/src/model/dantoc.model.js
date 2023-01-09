@@ -24,5 +24,4 @@ DanToc.init({
     timestamps:false,
     freezeTableName:true
   });
-DanToc.sync({ alter: true });
 module.exports= DanToc;

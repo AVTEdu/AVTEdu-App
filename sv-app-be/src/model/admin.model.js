@@ -21,6 +21,13 @@ Admin.init({
     password:{
         type: DataTypes.STRING,
         allowNull:false
+    },
+    ma_khoa:{
+        type:DataTypes.INTEGER,
+        references:{
+            model:Khoa,
+            key:'ma_khoa',
+        }
     }
 },{
     sequelize,
@@ -28,14 +35,5 @@ Admin.init({
     timestamps:false,
     freezeTableName:true
   });
-Admin.hasMany(Khoa,{
-    onDelete: 'RESTRICT',
-    onUpdate: 'RESTRICT',
-    foreignKey:{
-        name:'ma_khoa',
-        type:DataTypes.INTEGER,
-        allowNull:false
-    }
-});
-Admin.sync({ alter: true });
+Admin.hasMany(Khoa);
 module.exports = Admin;
