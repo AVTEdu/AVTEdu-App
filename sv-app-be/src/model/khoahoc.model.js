@@ -32,5 +32,4 @@ KhoaHoc.init({
     timestamps:false,
     freezeTableName:true
   });
-KhoaHoc.sync({ alter: true });
 module.exports= KhoaHoc;

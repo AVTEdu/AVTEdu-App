@@ -17,13 +17,12 @@ TonGiao.init({
     },
     mo_ta:{
         type: DataTypes.STRING,
-    },
+    }
 },{
     sequelize,
     modelName:'ton_giao',
     timestamps:false,
     freezeTableName:true
   });
-TonGiao.sync({ alter: true });
 module.exports= TonGiao;
 

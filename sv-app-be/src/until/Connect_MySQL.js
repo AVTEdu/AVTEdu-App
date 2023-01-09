@@ -36,10 +36,10 @@ const ConnectDB = () => {
     }).catch((error) => {
         console.error('Unable to connect to the database: ', error);
     });
+    
     return sequelize;
 
 }
-ConnectDB();
 module.exports = {
     ConnectDB,
     CheckDB

@@ -8,8 +8,8 @@ class MoHinhDaoTao extends Model{};
 MoHinhDaoTao.init({
     ma_mo_hinh_dao_tao:{
         type: DataTypes.INTEGER,
-        allowNull: false,
         primaryKey: true,
+        allowNull:false
     },
     ten_mo_hinh_dao_tao:{
         type: DataTypes.STRING,
@@ -18,12 +18,10 @@ MoHinhDaoTao.init({
     mo_ta:{
         type: DataTypes.STRING,
     },
-    timestamps: false,
 },{
     sequelize,
     modelName:'mo_hinh_dao_tao',
     timestamps:false,
     freezeTableName:true
   });
-MoHinhDaoTao.sync({ alter: true });
 module.exports= MoHinhDaoTao;

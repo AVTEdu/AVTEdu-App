@@ -1,11 +1,13 @@
 const SinhVien = require("../model/sinhvien.model");
 const bcrypt = require("bcryptjs");
+const Khoa = require("../model/khoa.model");
+const TonGiao = require("../model/tongiao.model");
 
 
 
 const createSinhVien = async (req, res, next) => {
     try {
-      console.log("AAAAAAAAA");
+      console.log("----------------createSinhVien-----------------------------");
       const { ma,ten,ngay_sinh,email,gioitinh,hktt,password,sdt,so_cmnd } = req.body;
       // Check if there is a user with the same user
       const foundUser = await SinhVien.findOne({ where: { ma_sinh_vien:`${ma}` } });
@@ -36,6 +38,46 @@ const createSinhVien = async (req, res, next) => {
       next(error);
     }
   };
+  const createKhoa= async (req, res, next) =>{
+    try {
+      const {ma,ten,mota}= req.body;
+      // const foundKhoa= await Khoa.findOne({ where: { ma_khoa:`${ma}` } });
+      // if(foundKhoa){
+      //   return res
+      //     .status(403)
+      //     .json({ error: { message: "Mã đã được sử dụng." } });
+      // }
+      const newKhoa = await Khoa.create({
+        ma_khoa:ma,
+        ten_khoa:ten,
+        mo_ta:mota,
+      });
+      return res.status(201).json({ success: true, newKhoa });
+    } catch (error) {
+      next(error);
+    }
+  }
+const createTonGiao = async (req,res,next) =>{
+  try {
+    const {ma,ten,mota}= req.body;
+    // const foundKhoa= await Khoa.findOne({ where: { ma_khoa:`${ma}` } });
+    // if(foundKhoa){
+    //   return res
+    //     .status(403)
+    //     .json({ error: { message: "Mã đã được sử dụng." } });
+    // }
+    const newTonGiao = await TonGiao.create({
+      ma_ton_giao:ma,
+      ten_ton_giao:ten,
+      mo_ta:mota
+    });
+    return res.status(201).json({ success: true, newTonGiao });
+  } catch (error) {
+    next(error);
+  }
+}
 module.exports = {
-    createSinhVien
+    createSinhVien,
+    createKhoa,
+    createTonGiao
 };
