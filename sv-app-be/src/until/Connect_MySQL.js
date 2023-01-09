@@ -20,7 +20,6 @@ const CheckDB = () => {
     });
 }
 const ConnectDB = () => {
-    CheckDB();
     const sequelize = new Sequelize(
         `${DatabaseName}`,
         `${DatabaseUsername}`,
@@ -43,4 +42,5 @@ const ConnectDB = () => {
 }
 module.exports = {
     ConnectDB,
-    CheckDB};
+    CheckDB
+};

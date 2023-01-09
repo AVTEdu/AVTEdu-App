@@ -1,28 +1,60 @@
 import React from "react";
-// import "../css/login.css";
 import "../assets/css/login.css"
 import bg from '../assets/img/login_img/bg02.jpg';
 import Logo2 from '../assets/img/login_img/logo2.png';
+import { useState, useContext } from "react";
+import { AuthContext } from "../services/contexts/AuthContext"
 
 
 export const Login = () => {
+    const { loginUser } = useContext(AuthContext)
+
+    const [loginForm, setLoginForm] = useState({
+        ma: '',
+        password: '',
+    })
+    const { ma, password } = loginForm
+
+    const [alert, setAlert] = useState(null)
+
+    const onChangeLoginForm = event =>
+        setLoginForm({ ...loginForm, [event.target.name]: event.target.value })
+
+    const login = async event => {
+        event.preventDefault()
+        window.alert('test')
+        try {
+
+            const loginData = await loginUser(loginForm)
+            if (!loginData.success) {
+                setAlert({ type: 'danger', message: loginData.message })
+                setTimeout(() => setAlert(null), 5000)
+            }
+
+        } catch (error) {
+            console.log(error)
+        }
+    }
     return (
         <div className="limiter">
             <div className="container-login100">
                 <div className="wrap-login100">
-                    <form className="login100-form validate-form" role="form" action="" method="post"><input name="__RequestVerificationToken" type="hidden" defaultValue="" />
+                    <form className="login100-form validate-form" onSubmit={login}>
+                        <input type="hidden" defaultValue="" />
                         <img style={{ width: '130px', marginRight: 'auto', marginLeft: 'auto', display: 'block' }} alt="AVTEdu" src={Logo2} />
                         <br />
                         <h3 style={{ textAlign: 'center', color: 'rgb(0, 0, 0)', textTransform: 'uppercase', fontSize: '20px', fontWeight: 'bold', marginBottom: '10px' }}>Dành cho người học</h3>
                         <div className="wrap-input100 validate-input txtemail" data-validate="MSSV có dạng: 31200000121">
-                            <input name="username" className="input100" id="txtusername" autofocus="true" required="true" type="text"
-                                defaultValue data-val-required="The username field is required." data-val="true" placeholder="Mã số sinh viên" />
+                            <input className="input100" id="txtma" type="text" name="ma"
+                                value={ma}
+                                onChange={onChangeLoginForm} placeholder="Mã số sinh viên" />
                             <span className="focus-input100" />
                             {/* <span className="label-input100">Mã số sinh viên</span> */}
                         </div>
                         <div className="wrap-input100 validate-input uselocalaccount" data-validate="Mật khẩu không được để trống">
-                            <input name="password" className="input100" id="password" required="true" type="password"
-                                data-val-required="The password field is required." data-val="true" placeholder="Mật khẩu" />
+                            <input name="password" className="input100" id="password" type="password"
+                                value={password}
+                                onChange={onChangeLoginForm} placeholder="Mật khẩu" />
                             <span className="focus-input100" />
                             {/* <span className="label-input100">Mật khẩu</span> */}
                         </div>
