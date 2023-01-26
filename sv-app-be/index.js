@@ -16,17 +16,13 @@ const Admin = require('./src/model/admin.model');
 
 const PORT = process.env.PORT || 9090
 
-<<<<<<< HEAD
 const homeRouter = require('./src/router/home.router');
-=======
-const  homeRouter = require('./src/router/home.router');
->>>>>>> 5c9f8b2df97263c970dcc8e01faab63e207a9a3a
-const Connect_MySQL = require('./src/until/Connect_MySQL');
-Connect_MySQL.CheckDB();
-Connect_MySQL.ConnectDB();
+const { ConnectDB } = require('./src/config/Connect_MySQL');
+ConnectDB().getInstance();
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use("/", homeRouter);
+
 SinhVien.sync({alter:true});
 Khoa.sync();
 BacDaoTao.sync();

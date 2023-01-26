@@ -7,7 +7,8 @@ const {
     signRefreshToken,
     verifyRefreshToken,
   } = require("../helpers/jwt.service");
- 
+
+//Hàm đăng nhập sinh viên
 const signIn = async (req,res,next) =>{
     console.log(req.body);
     try {
@@ -20,6 +21,7 @@ const signIn = async (req,res,next) =>{
             .json({error: {message:"Tài khoản không tồn tại"}});
         }
         // console.log(sinh_vien.mat_khau)
+        //Check mật khẩu đã mã hoá 
         const isValid = await sinh_vien.isValidPassword(password);
          if (!( isValid)) {
              return res
@@ -27,7 +29,9 @@ const signIn = async (req,res,next) =>{
             .json({ error: { message: "Tài khoản hoặc mật khẩu không khớp !!!" } });
         }
         console.log("Đã đăng nhập");
+        //Tạo accessToken
         const accessToken = await JWT.sign(ma,process.env.ACCESS_TOKEN_SECRET);
+        //Tạo refeshToken
         const refreshToken = await JWT.sign(ma,process.env.REFRESH_TOKEN_SECRET)
         res.setHeader("authorization", accessToken);
         res.setHeader("refreshToken", refreshToken);
