@@ -1,7 +1,7 @@
 const Redis = require('ioredis');
 const fs = require('fs');
 require('dotenv').config();
-
+//Hàm tạo kết nối redis
 const client = new Redis({
     host:process.env.REDIS_CONNECT_URL,
     port:process.env.REDIS_CONNECT_PORT,

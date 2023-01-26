@@ -4,12 +4,12 @@ const Khoa = require("../model/khoa.model");
 const TonGiao = require("../model/tongiao.model");
 
 
-
+//Hàm tạo sinh viên bằng admin
 const createSinhVien = async (req, res, next) => {
     try {
       console.log("----------------createSinhVien-----------------------------");
       const { ma,ten,ngay_sinh,email,gioitinh,hktt,password,sdt,so_cmnd } = req.body;
-      // Check if there is a user with the same user
+      // Check có sinh viên nào trùng không
       const foundUser = await SinhVien.findOne({ where: { ma_sinh_vien:`${ma}` } });
       if (foundUser)
         return res
@@ -21,7 +21,7 @@ const createSinhVien = async (req, res, next) => {
       const passwordHashed = await bcrypt.hash(password, salt);
       // Re-assign password hashed
       const newPassword = passwordHashed;
-      // Create a new user
+      //Tạo sinh viên mới
       const newUser = await SinhVien.create({
         ma_sinh_vien:ma,
         ho_ten_sinh_vien:ten,
@@ -38,6 +38,7 @@ const createSinhVien = async (req, res, next) => {
       next(error);
     }
   };
+// Hàm tạo khoa mới
   const createKhoa= async (req, res, next) =>{
     try {
       const {ma,ten,mota}= req.body;
@@ -57,6 +58,7 @@ const createSinhVien = async (req, res, next) => {
       next(error);
     }
   }
+//Hàm tạo tôn giáo mới
 const createTonGiao = async (req,res,next) =>{
   try {
     const {ma,ten,mota}= req.body;
@@ -76,6 +78,7 @@ const createTonGiao = async (req,res,next) =>{
     next(error);
   }
 }
+//Hàm tạo 
 module.exports = {
     createSinhVien,
     createKhoa,

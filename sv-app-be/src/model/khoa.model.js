@@ -1,8 +1,11 @@
 const {Sequelize, DataTypes,Model} = require("sequelize");
-const Connect_MySQL = require("../until/Connect_MySQL");
+const { ConnectDB } = require("../config/Connect_MySQL");
+const Admin = require("./admin.model");
 
-
-const sequelize = Connect_MySQL.ConnectDB();
+const sequelize = ConnectDB().getInstance();
+/*
+*Model Khoa
+*/
 
 class Khoa extends Model {};
 

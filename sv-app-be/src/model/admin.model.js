@@ -1,8 +1,8 @@
 const {Sequelize, DataTypes, Model} = require("sequelize");
-const Connect_MySQL = require("../until/Connect_MySQL");
+const { ConnectDB } = require("../config/Connect_MySQL");
 const Khoa = require("./khoa.model");
 
-const sequelize =  Connect_MySQL.ConnectDB();
+const sequelize = ConnectDB().getInstance();
 /*
 *Model Admin
 */
@@ -22,18 +22,18 @@ Admin.init({
         type: DataTypes.STRING,
         allowNull:false
     },
+    //Khoá ngoại của Khoa tới Admin
     ma_khoa:{
-        type:DataTypes.INTEGER,
-        references:{
-            model:Khoa,
-            key:'ma_khoa',
+        type: DataTypes.INTEGER,
+        references: {
+            model: Khoa,
+            key: 'ma_khoa'
+            }
         }
-    }
 },{
     sequelize,
     modelName:'admin',
     timestamps:false,
     freezeTableName:true
   });
-Admin.hasMany(Khoa);
 module.exports = Admin;
