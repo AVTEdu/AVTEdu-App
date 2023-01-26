@@ -20,7 +20,7 @@ const signAccessToken = async (userId) => {
     });
   });
 };
-//Kiểm tra token đăng nhập
+//Kiểm tra token đăng nhập3
 const verifyAccessToken = (req, res, next) => {
   const Authorization = req.headers["authorization"];
   if (!req.headers["authorization"]) {
