@@ -9,40 +9,40 @@ require('dotenv').config();
 
 const DatabaseName = "sinhviendb";
 const DatabaseUsername = "root";
-const DatabasePassword = "sapassword";
+const DatabasePassword = "Sapassword_123";
 
-const ConnectDB = (function(){
+const ConnectDB = (function () {
     var instance;
-    function init(){
+    function init() {
         const CheckDB_Promise = new Promise((resolve, reject) => {
             mysql.createConnection({
                 user: DatabaseUsername,
                 password: DatabasePassword
-        }).then((connection) => {
-        connection.query(`CREATE DATABASE IF NOT EXISTS ${DatabaseName};`);
-        });
+            }).then((connection) => {
+                connection.query(`CREATE DATABASE IF NOT EXISTS ${DatabaseName};`);
+            });
         });
         CheckDB_Promise
-        .then((err) => console.log(err));
+            .then((err) => console.log(err));
         const sequelize = new Sequelize(
             `${DatabaseName}`,
             `${DatabaseUsername}`,
             `${DatabasePassword}`,
-                {
-                    host: 'localhost',
-                    dialect: 'mysql',
-                    logging: false,
-                }
-            );
-            sequelize.authenticate().then(() => {
-                console.log('Connection has been established successfully.');
-            }).catch((error) => {
-                console.error('Unable to connect to the database: ', error);
-            });
-            return sequelize;
-        }
+            {
+                host: 'localhost',
+                dialect: 'mysql',
+                logging: false,
+            }
+        );
+        sequelize.authenticate().then(() => {
+            console.log('Connection has been established successfully.');
+        }).catch((error) => {
+            console.error('Unable to connect to the database: ', error);
+        });
+        return sequelize;
+    }
     return {
-        getInstance : function(){
+        getInstance: function () {
             if (!instance) instance = init();
             return instance;
         }
