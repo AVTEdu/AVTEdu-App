@@ -1,4 +1,4 @@
-const {Sequelize, DataTypes, Model} = require("sequelize");
+const { Sequelize, DataTypes, Model } = require("sequelize");
 const { ConnectDB } = require("../config/Connect_MySQL");
 const Khoa = require("./khoa.model");
 
@@ -6,34 +6,34 @@ const sequelize = ConnectDB().getInstance();
 /*
 *Model Admin
 */
-class Admin extends Model {};
+class Admin extends Model { };
 
 Admin.init({
-    ma_admin:{
+    ma_admin: {
         type: DataTypes.INTEGER,
         allowNull: false,
         primaryKey: true,
     },
-    username:{
+    username: {
         type: DataTypes.STRING,
-        allowNull:false,
+        allowNull: false,
     },
-    password:{
+    password: {
         type: DataTypes.STRING,
-        allowNull:false
+        allowNull: false
     },
     //Khoá ngoại của Khoa tới Admin
-    ma_khoa:{
-        type: DataTypes.INTEGER,
-        references: {
-            model: Khoa,
-            key: 'ma_khoa'
-            }
-        }
-},{
+    // ma_khoa:{
+    //     type: DataTypes.INTEGER,
+    //     references: {
+    //         model: Khoa,
+    //         key: 'ma_khoa'
+    //         }
+    //     }
+}, {
     sequelize,
-    modelName:'admin',
-    timestamps:false,
-    freezeTableName:true
-  });
+    modelName: 'admin',
+    timestamps: false,
+    freezeTableName: true
+});
 module.exports = Admin;
