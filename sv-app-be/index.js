@@ -16,10 +16,12 @@ const Admin = require('./src/model/admin.model');
 const cors = require('cors');
 const morgan = require('morgan');
 
+
 const PORT = process.env.PORT || 9090
 
 const homeRouter = require('./src/router/home.router');
 const { ConnectDB } = require('./src/config/mysql.config');
+
 ConnectDB().getInstance();
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
@@ -33,7 +35,16 @@ app.use(morgan('dev'));
 
 
 SinhVien.sync();
-TrangThaiHocTap.sync({ alter: true });
+TrangThaiHocTap.sync();
+Khoa.sync();
+BacDaoTao.sync();
+DanToc.sync();
+KhoaHoc.sync();
+MoHinhDaoTao.sync();
+TonGiao.sync();
+TrangThaiHocTap.sync();
+Admin.sync();
+SinhVien.sync();
 
 // Catch 404 Errors and forward them to error handler
 app.use((req, res, next) => {
@@ -53,6 +64,15 @@ app.use((err, req, res, next) => {
     },
   });
 });
+
+// app.use(function (req, res, next) {
+//   res.setHeader('Access-Control-Allow-Origin', '*');
+//   res.setHeader('Access-Control-Allow-Methods', 'GET,POST,PUT,PATCH,DELETE,OPTIONS');
+//   res.setHeader('Access-Control-Expose-Headers', 'X-Requested-With,content-type');
+//   res.setHeader('Access-Control-Allow-Credentials', true);
+//   next();
+// })
+
 server.listen(PORT, function () {
   console.log(`Server is listening in port ${PORT}`);
 })

@@ -6,6 +6,7 @@ const sequelize = ConnectDB().getInstance();
 /*
 *Model Admin
 */
+
 class Admin extends Model {
     //Các mỗi quan hệ của bảng Admin
     static associate(models){
@@ -15,35 +16,31 @@ class Admin extends Model {
     
 };
 Admin.init({
-    ma_admin:{
+    ma_admin: {
         type: DataTypes.INTEGER,
         allowNull: false,
         primaryKey: true,
     },
-    username:{
+    username: {
         type: DataTypes.STRING,
-        allowNull:false,
+        allowNull: false,
     },
-    password:{
+    password: {
         type: DataTypes.STRING,
-        allowNull:false
+        allowNull: false
     },
     //Khoá ngoại của Khoa tới Admin
-    ma_khoa:{
-        type: DataTypes.INTEGER,
-        references: {
-            model:'khoa',
-            key: 'ma_khoa',
-            }
-        }
-},{
+    // ma_khoa:{
+    //     type: DataTypes.INTEGER,
+    //     references: {
+    //         model: Khoa,
+    //         key: 'ma_khoa'
+    //         }
+    //     }
+}, {
     sequelize,
-    modelName:'admin',
-    timestamps:false,
-    freezeTableName:true
-  });
-// Admin.belongsTo(Khoa,{foreignKey: 'ma_khoa', as: 'khoa'})
-Admin.associate = (models) =>{
-    Admin.hasOne(Khoa,{as:'khoa',foreignKey:'ma_khoa'});
-}
+    modelName: 'admin',
+    timestamps: false,
+    freezeTableName: true
+});
 module.exports = Admin;
