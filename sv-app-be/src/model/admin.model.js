@@ -1,13 +1,19 @@
 const {Sequelize, DataTypes, Model} = require("sequelize");
-const { ConnectDB } = require("../config/Connect_MySQL");
+const { ConnectDB } = require("../config/mysql.config");
 const Khoa = require("./khoa.model");
 
 const sequelize = ConnectDB().getInstance();
 /*
 *Model Admin
 */
-class Admin extends Model {};
-
+class Admin extends Model {
+    //Các mỗi quan hệ của bảng Admin
+    static associate(models){
+        //Tạo mối quan hệ đến bảng Khoa
+        Admin.hasOne(Khoa,{as:'khoa'});
+    }
+    
+};
 Admin.init({
     ma_admin:{
         type: DataTypes.INTEGER,
@@ -26,8 +32,8 @@ Admin.init({
     ma_khoa:{
         type: DataTypes.INTEGER,
         references: {
-            model: Khoa,
-            key: 'ma_khoa'
+            model:'khoa',
+            key: 'ma_khoa',
             }
         }
 },{
@@ -36,4 +42,8 @@ Admin.init({
     timestamps:false,
     freezeTableName:true
   });
+// Admin.belongsTo(Khoa,{foreignKey: 'ma_khoa', as: 'khoa'})
+Admin.associate = (models) =>{
+    Admin.hasOne(Khoa,{as:'khoa',foreignKey:'ma_khoa'});
+}
 module.exports = Admin;

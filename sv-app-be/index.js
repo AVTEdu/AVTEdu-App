@@ -13,25 +13,28 @@ const MoHinhDaoTao = require('./src/model/mohinhdaotao.model');
 const TonGiao = require('./src/model/tongiao.model');
 const TrangThaiHocTap = require('./src/model/trangthaihoctap.model');
 const Admin = require('./src/model/admin.model');
+const cors = require('cors');
+const morgan = require('morgan');
 
 const PORT = process.env.PORT || 9090
 
 const homeRouter = require('./src/router/home.router');
-const { ConnectDB } = require('./src/config/Connect_MySQL');
+const { ConnectDB } = require('./src/config/mysql.config');
 ConnectDB().getInstance();
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use("/", homeRouter);
+const corsConfig = {
+  credentials: true,
+  origin: true,
+};
+app.use(cors(corsConfig));
+app.use(morgan('dev'));
 
-SinhVien.sync({alter:true});
-Khoa.sync();
-BacDaoTao.sync();
-DanToc.sync();
-KhoaHoc.sync();
-MoHinhDaoTao.sync();
-TonGiao.sync();
-TrangThaiHocTap.sync();
-Admin.sync();
+
+SinhVien.sync();
+TrangThaiHocTap.sync({ alter: true });
+
 // Catch 404 Errors and forward them to error handler
 app.use((req, res, next) => {
   const err = new Error("Not Found");

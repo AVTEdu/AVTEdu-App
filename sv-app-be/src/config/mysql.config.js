@@ -31,7 +31,7 @@ const ConnectDB = (function(){
                 {
                     host: 'localhost',
                     dialect: 'mysql',
-                    logging: false,
+                    // logging: false,
                 }
             );
             sequelize.authenticate().then(() => {
