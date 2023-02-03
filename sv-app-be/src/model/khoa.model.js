@@ -1,5 +1,5 @@
 const {Sequelize, DataTypes,Model} = require("sequelize");
-const { ConnectDB } = require("../config/Connect_MySQL");
+const { ConnectDB } = require("../config/mysql.config");
 const Admin = require("./admin.model");
 
 const sequelize = ConnectDB().getInstance();
@@ -7,7 +7,13 @@ const sequelize = ConnectDB().getInstance();
 *Model Khoa
 */
 
-class Khoa extends Model {};
+class Khoa extends Model {
+    //Các mỗi quan hệ của bảng Khoa
+    static associate(models){
+        //Tạo mối quan hệ đến bảng Admin
+        Khoa.belongsTo(Admin,{as:'admin'});
+    }
+};
 
 Khoa.init({
     ma_khoa:{
@@ -29,4 +35,5 @@ Khoa.init({
     timestamps:false,
     freezeTableName:true
   });
-module.exports = Khoa;
+Khoa.hasOne(Admin,{foreignKey: 'ma_khoa', as: 'khoa'})
+module.exports =Khoa;

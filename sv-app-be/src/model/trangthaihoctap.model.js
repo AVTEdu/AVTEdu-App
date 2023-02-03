@@ -1,5 +1,6 @@
 const {Sequelize, DataTypes, Model} = require("sequelize");
-const { ConnectDB } = require("../config/Connect_MySQL");
+const { ConnectDB } = require("../config/mysql.config");
+const SinhVien = require("./sinhvien.model");
 
 const sequelize = ConnectDB().getInstance();
 
@@ -28,4 +29,5 @@ TrangThaiHocTap.init({
     timestamps:false,
     freezeTableName:true
   });
+
 module.exports= TrangThaiHocTap;

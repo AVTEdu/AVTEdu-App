@@ -43,7 +43,7 @@ const signIn = async (req,res,next) =>{
     }
 }
 
-  const refreshToken = async (req, res, next) => {
+const refreshToken = async (req, res, next) => {
     try {
       const { refreshToken } = req.body;
       if (!refreshToken) {
@@ -57,7 +57,9 @@ const signIn = async (req,res,next) =>{
     } catch (error) {
       next(error);
     }
-  };
+};
+
+
 
 module.exports = {
     signIn};

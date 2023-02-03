@@ -1,6 +1,6 @@
 const { Sequelize, DataTypes, Model } = require("sequelize");
 const bcrypt = require("bcryptjs");
-const { ConnectDB } = require("../config/Connect_MySQL");
+const { ConnectDB } = require("../config/mysql.config");
 const DanToc = require("./dantoc.model");
 const Khoa = require("./khoa.model");
 const MoHinhDaoTao = require("./mohinhdaotao.model");
@@ -9,6 +9,7 @@ const KhoaHoc = require("./khoahoc.model");
 const TrangThaiHocTap = require("./trangthaihoctap.model");
 
 const sequelize = ConnectDB().getInstance();
+
 
 /*
 *Model Sinh Viên
@@ -23,7 +24,7 @@ class SinhVien extends Model {
     }
   };
   createImageUrl = () =>{
-
+      
   }
 }
 SinhVien.init ({
@@ -67,6 +68,7 @@ SinhVien.init ({
       key:"ma_dan_toc",
      }
    },
+   //Tạo khoá ngoại của bảng Khoa
    ma_khoa:{
     type: DataTypes.INTEGER,
      references:{
@@ -74,6 +76,7 @@ SinhVien.init ({
       key:"ma_khoa",
      }
    },
+   //Tạo khoá ngoại của bảng Mô hình đào tạo 
    ma_mo_hinh_dao_tao:{
     type: DataTypes.INTEGER,
      references:{
@@ -81,6 +84,7 @@ SinhVien.init ({
       key:"ma_mo_hinh_dao_tao",
      }
    },
+   //Tạo khoá ngoại của bảng Bậc Đào Tạo
    ma_bac_dao_tao:{
     type: DataTypes.INTEGER,
      references:{
@@ -88,18 +92,12 @@ SinhVien.init ({
       key:"ma_bac_dao_tao",
      }
    },
+   //Tạo khoá ngoại của bảng Khoá Học
    ma_khoa_hoc:{
     type: DataTypes.INTEGER,
      references:{
       model:KhoaHoc,
       key:"ma_khoa_hoc",
-     }
-   },
-   ma_trang_thai_hoc_tap:{
-    type: DataTypes.INTEGER,
-     references:{
-      model:TrangThaiHocTap,
-      key:"ma_trang_thai_hoc_tap",
      }
    }
   }, {
@@ -108,4 +106,7 @@ SinhVien.init ({
     timestamps:false,
     freezeTableName:true
   })
+SinhVien.belongsTo(TrangThaiHocTap,{foreignKey:"ma_trang_thai"});
+TrangThaiHocTap.hasOne(SinhVien,{foreignKey:"ma_trang_thai"});
+
 module.exports = SinhVien;
