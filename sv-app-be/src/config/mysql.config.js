@@ -9,7 +9,7 @@ require('dotenv').config();
 
 const DatabaseName = "sinhviendb";
 const DatabaseUsername = "root";
-const DatabasePassword = "Sapassword_123";
+const DatabasePassword = "sapassword";
 
 const ConnectDB = (function () {
     var instance;
