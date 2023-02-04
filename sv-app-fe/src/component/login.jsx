@@ -5,6 +5,9 @@ import "../assets/css/login.css"
 import bg from '../assets/img/login_img/bg02.jpg';
 import Logo2 from '../assets/img/login_img/logo2.png';
 import axios from "../api/axios";
+import axiosClient from "../api/axiosClient";
+import signinAPI from "../api/signinAPI";
+import Cookies from "js-cookie";
 
 
 // import { AuthContext } from "../services/contexts/AuthContext"
@@ -34,16 +37,17 @@ export const Login = () => {
         //console.log(user, pwd);
 
         try {
-            const res = await axios.post(LOGIN_URL,
-                JSON.stringify({ user, pwd }),
-                {
-                    headers: { 'Content-Type': 'application/json' },
-                    withCredentials: true
-                });
+            const res = await signinAPI.signIn({
+                ma:user1,
+                password:password,
+            });
             console.log(JSON.stringify(res?.data));
+            localStorage.setItem("user", JSON.stringify(res.data.user));
+            Cookies.set("token", res.data.accessToken);
+            Cookies.set("refreshToken", res.data.refreshToken);
             const accessToken = res?.data?.accessToken;
-            const roles = res?.data?.roles;
-            setAuth({ user, pwd, roles, accessToken });
+            // const roles = res?.data?.roles;
+            setAuth({ user, pwd, accessToken ,});
             setUser('');
             setPwd('');
             setSuccess(true);

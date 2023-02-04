@@ -23,29 +23,33 @@ const homeRouter = require('./src/router/home.router');
 const { ConnectDB } = require('./src/config/mysql.config');
 
 ConnectDB().getInstance();
+const corsConfig = {
+  credentials: true,
+  origin:true,
+};
+//Hiện kết quả request trên termail
+app.use(morgan('dev'));
+app.use(cors(corsConfig));
 //Chặn lỗi CORS policy
-app.use(function(req, res, next) {
-  var allowedOrigins = [   'http://localhost:3000' ];
-  var origin = req.headers.origin;
-  if (allowedOrigins.indexOf(origin) > -1) {
-    res.header("Access-Control-Allow-Origin", origin);
-  }
-  res.header("Access-Control-Allow-Credentials", "true");
-  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-  next();
-});
+// app.use(function(req, res, next) {
+//   var allowedOrigins = [   'http://localhost:3000' ];
+//   var origin = req.headers.origin;
+//   if (allowedOrigins.indexOf(origin) > -1) {
+//     res.header("Access-Control-Allow-Origin", origin);
+//   }
+//   res.header("Access-Control-Allow-Credentials", "true");
+//   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+//   next();
+// });
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+app.use(express.static("controller/public"));
 app.use("/", homeRouter);
-// const corsConfig = {
-//   credentials: true,
-//   origin:['http://localhost:3000']
-// };
 
-// app.use(cors(corsConfig));
-//Hiện kết quả request trên termail
-app.use(morgan('dev'));
+
+
+
 
 
 SinhVien.sync();

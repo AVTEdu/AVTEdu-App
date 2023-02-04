@@ -28,13 +28,14 @@ const signIn = async (req,res,next) =>{
             .status(403)
             .json({ error: { message: "Tài khoản hoặc mật khẩu không khớp !!!" } });
         }
-        console.log("Đã đăng nhập");
+        console.log("-----------------------Đã đăng nhập--------------------------");
         //Tạo accessToken
         const accessToken = await JWT.sign(ma,process.env.ACCESS_TOKEN_SECRET);
         //Tạo refeshToken
         const refreshToken = await JWT.sign(ma,process.env.REFRESH_TOKEN_SECRET)
         res.setHeader("authorization", accessToken);
         res.setHeader("refreshToken", refreshToken);
+        console.log(sinh_vien);
         return res
         .status(200)
         .json({ success: true,accessToken,refreshToken, sinh_vien });
@@ -58,7 +59,6 @@ const refreshToken = async (req, res, next) => {
       next(error);
     }
 };
-
 
 
 module.exports = {
