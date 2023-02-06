@@ -23,7 +23,7 @@ export const Login = () => {
 
     const navigate = useNavigate();
     const location = useLocation();
-    const from = location.state?.from?.pathname || "/dkhp";
+    const from = location.state?.from?.pathname || "/trang-chu";
 
     const userRef = useRef();
     const errRef = useRef();
@@ -129,7 +129,7 @@ export const Login = () => {
                                 </button>
                             </div>
                             <div className="text-center p-t-35 p-b-20 uselocalaccount">
-                                <a className="txt2" id="GoogleLogin" href="../AdminLogin">
+                                <a className="txt2" id="" href="../AdminLogin">
 
                                     <span>Nhấn vào đây để đăng nhập dưới quyền quản trị viên</span>
                                 </a>
