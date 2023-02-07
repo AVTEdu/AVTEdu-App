@@ -1,19 +1,26 @@
 const {Sequelize, DataTypes, Model} = require("sequelize");
 const { ConnectDB } = require("../config/mysql.config");
 
-
 const sequelize = ConnectDB().getInstance();
 
-class MonHoc extends Model {}
+class HocKi extends Model {}
 
-MonHoc.init({
-    ma_mon_hoc:{
+HocKi.init({
+    ma_hoc_ki:{
         type:DataTypes.INTEGER,
         primaryKey:true,
         allowNull:false
     },
-    ten_mon_hoc:{
-        type:DataTypes.STRING,
+    nam_hoc_bat_dau:{
+        type:DataTypes.INTEGER,
+        allowNull:false
+    },
+    nam_hoc_ket_thuc:{
+        type:DataTypes.INTEGER,
+        allowNull:false
+    },
+    thu_tu_hoc_ki:{
+        type:DataTypes.INTEGER,
         allowNull:false
     },
     mo_ta:{
@@ -29,8 +36,8 @@ MonHoc.init({
     // },
 },{
     sequelize,
-    modelName:'mon_hoc',
+    modelName:'hoc_ki',
     timestamps:false,
     freezeTableName:true 
 });
-module.exports=MonHoc;
+module.exports=HocKi;

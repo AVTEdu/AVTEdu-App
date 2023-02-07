@@ -1,18 +1,17 @@
 const {Sequelize, DataTypes, Model} = require("sequelize");
 const { ConnectDB } = require("../config/mysql.config");
 
-
 const sequelize = ConnectDB().getInstance();
 
-class MonHoc extends Model {}
+class LoaiPhongHoc extends Model {}
 
-MonHoc.init({
-    ma_mon_hoc:{
+LoaiPhongHoc.init({
+    ma_loai_phong_hoc:{
         type:DataTypes.INTEGER,
         primaryKey:true,
         allowNull:false
     },
-    ten_mon_hoc:{
+    ten_loai_phong_hoc:{
         type:DataTypes.STRING,
         allowNull:false
     },
@@ -29,8 +28,8 @@ MonHoc.init({
     // },
 },{
     sequelize,
-    modelName:'mon_hoc',
+    modelName:'loai_phong_hoc',
     timestamps:false,
     freezeTableName:true 
 });
-module.exports=MonHoc;
+module.exports=LoaiPhongHoc;
