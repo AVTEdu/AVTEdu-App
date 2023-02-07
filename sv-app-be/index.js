@@ -23,6 +23,7 @@ const PORT = process.env.PORT || 9090
 const homeRouter = require('./src/router/home.router');
 const { ConnectDB } = require('./src/config/mysql.config');
 
+
 ConnectDB().getInstance();
 const corsConfig = {
   credentials: true,
