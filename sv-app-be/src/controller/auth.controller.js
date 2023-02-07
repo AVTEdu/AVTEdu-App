@@ -13,7 +13,6 @@ const { createUserWithEmailAndPassword,
   sendEmailVerification } = require("firebase/auth");
 const { defaultAuth } = require("../config/firebase.config");
 const { use } = require("../router/auth.router");
-const Admin = require("../model/admin.model");
 
 
 //Hàm đăng nhập sinh viên
@@ -57,39 +56,6 @@ const signIn = async (req,res,next) =>{
         return res
         .status(200)
         .json({ success: true,accessToken,refreshToken, sinh_vien });
-    } catch (error) {
-        next(error);
-    }
-}
-//Hàm đăng nhập admin
-const signInAdmin = async (req,res,next) =>{
-    console.log(req.body);
-    try {
-        const {ma,password}= req.body;
-        const admin = await Admin.findOne({ where: { ma_admin:`${ma}` } });
-        if(!ma){
-            return res
-            .status(403)
-            .json({error: {message:"Tài khoản không tồn tại"}});
-        }
-        // console.log(sinh_vien.mat_khau)
-        //Check mật khẩu đã mã hoá 
-        const isValid = await admin.isValidPassword(password);
-         if (!( isValid)) {
-             return res
-            .status(403)
-            .json({ error: { message: "Tài khoản hoặc mật khẩu không khớp !!!" } });
-        }
-        console.log("-----------------------Đã đăng nhập--------------------------");
-        //Tạo accessToken
-        const accessToken = await signAccessToken(ma);
-        //Tạo refeshToken
-        const refreshToken = await signRefreshToken(ma);
-        res.setHeader("authorization", accessToken);
-        res.setHeader("refreshToken", refreshToken);
-        return res
-        .status(200)
-        .json({ success: true,accessToken,refreshToken, admin });
     } catch (error) {
         next(error);
     }
@@ -175,85 +141,9 @@ const Logout = async (req, res, next) => {
     next(error);
   }
 };
-///Đổi mật khẩu đang lỗi
-const ChangePassword = async (req, res, next) => {
-  try {
-    const { password, reEnterPassword, newPassword } = req.body;
-    console.log(req.payload);
-    // Check if there is a user with the same user
-    const foundUser = await User.findOne({ _id: req.payload.userId });
-    if (!foundUser)
-      return res
-        .status(403)
-        .json({ error: { message: "Người dùng chưa đăng nhập!!!" } });
-    //Check password co ton tai khong
-    const isValid = await foundUser.isValidPassword(password);
-    if (!isValid) {
-      return res
-        .status(403)
-        .json({ error: { message: "Password Không Đúng " } });
-    }
-    //Check password co giong khong
-    if (password !== reEnterPassword) {
-      return res
-        .status(403)
-        .json({ error: { message: "Password Nhập Sai!!!" } });
-    }
-    // Generate a salt
-    const salt = await bcrypt.genSalt(10);
-    // Generate a password hash (salt + hash)
-    const passwordHashed = await bcrypt.hash(newPassword, salt);
-    // Re-assign password hashed
-    const newChangePassword = passwordHashed;
-    //Change Password
-    foundUser.password = newChangePassword;
-    await foundUser.save();
-    return res.status(200).json({ success: true });
-  } catch (error) {
-    next(error);
-  }
-};
-////Quên mật khẩu- Đang lỗi 
-const forgotPassword = async (req, res, next) => {
-  try {
-    const { phone, code, Password, reEnterPassword } = req.body;
-    if (Password !== reEnterPassword) {
-      return res
-        .status(403)
-        .send([{ message: "Password and reEnterpassword Không giống nhau " }]);
-    }
-    const result = await verifyOtp(phone, code);
-    if (result) {
-      const FoundUser = await User.findOne({ phone });
-      // Generate a salt
-      const salt = await bcrypt.genSalt(10);
-      // Generate a password hash (salt + hash)
-      const passwordHashed = await bcrypt.hash(Password, salt);
-      // Re-assign password hashed
-      const newChangePassword = passwordHashed;
-      //Change Password
-      FoundUser.password = newChangePassword;
-      await FoundUser.save();
-      res
-        .status(200)
-        .send([{ message: "Password đã được cập nhật ", FoundUser }]);
-    } else {
-      res.status(400).send([
-        {
-          msg: "Code is used or expired",
-          param: "otp",
-        },
-      ]);
-    }
-  } catch (error) {
-    next(error);
-  }
-};
 module.exports = {
     signIn,
     refreshToken,
     AuthercationEmail,
     CheckVerificationEmail,
-    Logout,
-    signInAdmin
-  };
+    Logout};

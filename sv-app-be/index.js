@@ -22,18 +22,6 @@ const PORT = process.env.PORT || 9090
 
 const homeRouter = require('./src/router/home.router');
 const { ConnectDB } = require('./src/config/mysql.config');
-const ChuyenNganhHocPhan = require('./src/model/chuyennganhhocphan.model');
-const HocKi = require('./src/model/hocki.model');
-const LopHocPhan = require('./src/model/lophocphan.model');
-const HocPhan = require('./src/model/hocphan.model');
-const LoaiPhongHoc = require('./src/model/loaiphonghoc.model');
-const PhanCongLopHocPhan = require('./src/model/phanconglophocphan.model');
-const PhongHoc = require('./src/model/phonghoc.model');
-const ThoiKhoaBieu = require('./src/model/thoikhoabieu.model');
-const ThoiKhoaBieuSinhVien = require('./src/model/thoikhoabieusinhvien.model');
-const GiangVien = require('./src/model/giangvien.model');
-const MonHoc = require('./src/model/monhoc.model');
-const ChuyenNganh = require('./src/model/chuyennganh.models');
 
 
 ConnectDB().getInstance();
@@ -66,7 +54,7 @@ app.use("/", homeRouter);
 
 
 
-// SinhVien.sync();
+SinhVien.sync();
 TrangThaiHocTap.sync();
 Khoa.sync();
 BacDaoTao.sync();
@@ -76,19 +64,7 @@ MoHinhDaoTao.sync();
 TonGiao.sync();
 TrangThaiHocTap.sync();
 Admin.sync();
-MonHoc.sync();
 SinhVien.sync();
-HocKi.sync({alter:true});
-HocPhan.sync();
-LopHocPhan.sync();
-ChuyenNganh.sync();
-LoaiPhongHoc.sync();
-PhanCongLopHocPhan.sync();
-PhongHoc.sync();
-ThoiKhoaBieu.sync();
-ThoiKhoaBieuSinhVien.sync();
-ChuyenNganhHocPhan.sync();
-GiangVien.sync();
 
 // Catch 404 Errors and forward them to error handler
 app.use((req, res, next) => {

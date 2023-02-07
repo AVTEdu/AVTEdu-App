@@ -99,27 +99,6 @@ SinhVien.init({
       model: KhoaHoc,
       key: "ma_khoa_hoc",
     }
-  },
-  ma_chuyen_nganh:{
-    type:DataTypes.INTEGER,
-    references:{
-      model:'chuyen_nganh',
-      key:'ma_chuyen_nganh'
-    }
-  },
-  ma_ton_giao:{
-    type:DataTypes.INTEGER,
-    references:{
-      model:'ton_giao',
-      key:'ma_ton_giao'
-    }
-  },
-  ma_trang_thai:{
-    type:DataTypes.INTEGER,
-    references:{
-      model:'trang_thai_hoc_tap',
-      key:'ma_trang_thai_hoc_tap'
-    }
   }
 }, {
   sequelize,
