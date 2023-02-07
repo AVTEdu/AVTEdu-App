@@ -4,19 +4,30 @@ const { ConnectDB } = require("../config/mysql.config");
 
 const sequelize = ConnectDB().getInstance();
 
-class MonHoc extends Model {}
+class PhongHoc extends Model {}
 
-MonHoc.init({
-    ma_mon_hoc:{
+PhongHoc.init({
+    ma_phong_hoc:{
         type:DataTypes.INTEGER,
         primaryKey:true,
         allowNull:false
     },
-    ten_mon_hoc:{
+    ten_day_nha:{
         type:DataTypes.STRING,
         allowNull:false
     },
-    mo_ta:{
+    ten_phong_hoc:{
+        type:DataTypes.STRING,
+        allowNull:false
+    },
+    ma_loai_phong:{
+        type:DataTypes.INTEGER,
+        references:{
+            model:'loai_phong_hoc',
+            key:"ma_loai_phong_hoc"
+        }
+    },
+    ghi_chu:{
         type:DataTypes.STRING,
     },
     //Tạo khoá ngoại khoa
@@ -29,8 +40,8 @@ MonHoc.init({
     // },
 },{
     sequelize,
-    modelName:'mon_hoc',
+    modelName:'phong_hoc',
     timestamps:false,
     freezeTableName:true 
 });
-module.exports=MonHoc;
+module.exports=PhongHoc;

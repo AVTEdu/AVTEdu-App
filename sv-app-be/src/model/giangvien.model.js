@@ -37,7 +37,7 @@ GiangVien.init({
     }
 },{
     sequelize,
-    modelName:'chuyen_nganh',
+    modelName:'giang_vien',
     timestamps:false,
     freezeTableName:true 
 });

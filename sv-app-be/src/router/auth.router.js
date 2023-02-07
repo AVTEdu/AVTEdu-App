@@ -17,4 +17,7 @@ router
 router
   .route("/logout")
   .post(AuthController.Logout);
+router
+  .route("/signinAdmin")
+  .post(AuthController.signInAdmin);
 module.exports = router;
