@@ -1,26 +1,22 @@
-const Redis = require('ioredis');
-const fs = require('fs');
-require('dotenv').config();
-//Hàm tạo kết nối redis
-const client = new Redis({
-    host:process.env.REDIS_CONNECT_URL,
-    port:process.env.REDIS_CONNECT_PORT,
-    password:process.env.REDIS_CONNECT_PASSWORD,
-    connectTimeout: 10000
+const redis = require("redis");
+const client = redis.createClient({
+  port: 6379,
+  host: "127.0.0.1",
 });
-client.ping((err, pong) => {
-  console.log(pong);
-});
-client.on("error", (error) => {
-  if(err = "ETIMEDOUT"){
-    return;
-  }
-  console.log(error);
-});
-client.on("connect", (error) => {
-  console.log("connected");
-});
-client.on("ready", (error) => {
-  console.log("Redis to ready");
-});
+
+  client.ping((err, pong) => {
+    console.log(pong);
+  });
+  client.on("error", (error) => {
+    console.log(error);
+  });
+  client.on("connect", (error) => {
+    console.log("connected");
+  });
+  client.on("ready", (error) => {
+    console.log("Redis to ready");
+  });
+
+
+
 module.exports = client;
