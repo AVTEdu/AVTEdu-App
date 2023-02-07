@@ -1,26 +1,24 @@
 const JWT = require("jsonwebtoken");
 const client = require("../helpers/connect_redis");
-const dotenv = require("dotenv").config();
-//Tạo access token lúc đăng nhập
+require("dotenv").config();
+const ref = "secret";
+const halo = "halo";
 const signAccessToken = async (userId) => {
   return new Promise((resolve, reject) => {
     const payload = {
       userId,
     };
-    //Mã bí mật 
-    const secret = process.env.ACCESS_TOKEN_SECRET;
-    //Token tồn tại trong 5 giờ
+    const secret = halo;
+    console.log(secret);
     const options = {
       expiresIn: "5h",
     };
-    //Hàm tạo token
     JWT.sign(payload, secret, options, (err, token) => {
       if (err) reject(err);
       resolve(token);
     });
   });
 };
-//Kiểm tra token đăng nhập3
 const verifyAccessToken = (req, res, next) => {
   const Authorization = req.headers["authorization"];
   if (!req.headers["authorization"]) {
@@ -29,7 +27,7 @@ const verifyAccessToken = (req, res, next) => {
   // const authHeader = Authorization;
   // const bearerToken = authHeader.split(' ');
   // const token = bearerToken[1];
-  JWT.verify(Authorization, process.env.ACCESS_TOKEN_SECRET, (err, payload) => {
+  JWT.verify(Authorization, halo, (err, payload) => {
     if (err) {
       if (err.name === "JsonWebTokenError") {
         return res.status(403).json({ error: { message: "Unauthorized" } });
@@ -47,7 +45,7 @@ const signRefreshToken = async (userId) => {
     const payload = {
       userId,
     };
-    const secret = "secret";
+    const secret = ref;
     const options = {
       expiresIn: "1y",
     };
@@ -70,7 +68,7 @@ const verifyRefreshToken = (refreshToken) => {
   return new Promise((resolve, reject) => {
     JWT.verify(
       refreshToken,
-      "secret",
+      ref,
       (err, payload) => {
         if (err) {
           return reject(err);

@@ -1,4 +1,5 @@
 require('dotenv').config();
+require('./src/helpers/connect_redis');
 const http = require('http');
 const express = require('express');
 const { route } = require('./src/router/home.router');
