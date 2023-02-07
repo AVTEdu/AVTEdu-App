@@ -1,5 +1,5 @@
 const {Sequelize, DataTypes, Model} = require("sequelize");
-const { ConnectDB } = require("../config/Connect_MySQL");
+const { ConnectDB } = require("../config/mysql.config");
 
 const sequelize = ConnectDB().getInstance();
 

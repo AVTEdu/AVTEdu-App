@@ -1,5 +1,6 @@
 const {Sequelize, DataTypes, Model} = require("sequelize");
 const { ConnectDB } = require("../config/mysql.config");
+const bcrypt = require("bcryptjs");
 const Khoa = require("./khoa.model");
 
 const sequelize = ConnectDB().getInstance();
@@ -8,11 +9,13 @@ const sequelize = ConnectDB().getInstance();
 */
 
 class Admin extends Model {
-    //Các mỗi quan hệ của bảng Admin
-    static associate(models){
-        //Tạo mối quan hệ đến bảng Khoa
-        Admin.hasOne(Khoa,{as:'khoa'});
-    }
+    isValidPassword = async function (newPassword) {
+        try {
+          return await bcrypt.compare(newPassword, this.mat_khau);
+        } catch (error) {
+          throw new Error(error);
+        }
+    };
     
 };
 Admin.init({
@@ -25,18 +28,18 @@ Admin.init({
         type: DataTypes.STRING,
         allowNull: false,
     },
-    password: {
+    mat_khau: {
         type: DataTypes.STRING,
         allowNull: false
     },
-    //Khoá ngoại của Khoa tới Admin
-    // ma_khoa:{
-    //     type: DataTypes.INTEGER,
-    //     references: {
-    //         model: Khoa,
-    //         key: 'ma_khoa'
-    //         }
-    //     }
+    // Khoá ngoại của Khoa tới Admin
+    ma_khoa:{
+        type: DataTypes.INTEGER,
+        references: {
+            model: 'khoa',
+            key: 'ma_khoa'
+            }
+        }
 }, {
     sequelize,
     modelName: 'admin',
