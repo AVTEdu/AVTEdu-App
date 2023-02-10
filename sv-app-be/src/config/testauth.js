@@ -3,6 +3,7 @@ const client = require("../helpers/connect_redis");
 const { signAccessToken, signRefreshToken, verifyAccessToken, verifyRefreshToken } = require("../helpers/jwt.service");
 const { defaultAuth } = require("./firebase.config");
 const redis = require("redis");
+const SinhVien = require("../model/sinhvien.model");
 const email = "vietanh6jk@gmail.com";
 const password = "123456a"
 const actionCodeSettings = {
@@ -83,6 +84,16 @@ const actionCodeSettings = {
 //         }).catch((error) => {
 //         console.error(error);
 //         });
-
-
-
+async() => {
+const foundSinhVien = await SinhVien.findOne({ where: { ma_sinh_vien:`${ma}` } });
+        if (!foundSinhVien)
+            return res
+            .status(403)
+            .json({ error: { message: "Không tìm thấy sinh viên" } });
+        console.log("Đã tìm thấy sv")
+        const nien_khoa = function(result,error){
+            console.log(foundSinhVien.ngay_vao_truong);
+            const nam_bat_dau = foundSinhVien.ngay_vao_truong.getYear();
+            console.log(nam_bat_dau);
+        }
+    }

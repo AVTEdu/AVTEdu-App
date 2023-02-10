@@ -68,6 +68,10 @@ SinhVien.init({
       key: "ma_dan_toc",
     }
   },
+  nien_khoa:{
+    type: DataTypes.STRING,
+    allowNull:false,
+  },
   //Tạo khoá ngoại của bảng Khoa
   ma_khoa: {
     type: DataTypes.INTEGER,

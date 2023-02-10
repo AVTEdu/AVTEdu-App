@@ -10,6 +10,12 @@ const ChuyenNganh = require("../model/chuyennganh.models");
 const ChuyenNganhHocPhan = require("../model/chuyennganhhocphan.model");
 const HocKi = require("../model/hocki.model");
 const LopHocPhan = require("../model/lophocphan.model");
+const PhanCongLopHocPhan = require("../model/phanconglophocphan.model");
+const ThoiKhoaBieu = require("../model/thoikhoabieu.model");
+const LoaiPhongHoc = require("../model/loaiphonghoc.model");
+const PhongHoc = require("../model/phonghoc.model");
+const KetQuaHocTap = require("../model/ketquahoctap.model");
+const ThoiKhoaBieuSinhVien = require("../model/thoikhoabieusinhvien.model");
 
 
 //Hàm tạo sinh viên bằng admin
@@ -278,7 +284,156 @@ const createLopHocPhan= async (req,res,next) =>{
     next(error);
   }
 }
-
+const createPhanCongLopHocPhan= async (req,res,next) =>{
+  try {
+    const {ma,loai,nhom_th_pt,sl_sv_pt,ma_giang_vien,ma_lop_hoc_phan,ghi_chu}= req.body;
+    const foundPhanCongLopHocPhan= await PhanCongLopHocPhan.findOne({ where: { ma_phan_cong:`${ma}` } });
+    if(foundPhanCongLopHocPhan){
+      return res
+        .status(403)
+        .json({ error: { message: "Mã phân công lớp học phần đã tồn tại ." } });
+    }
+    const newPhanCongLopHocPhan = await PhanCongLopHocPhan.create({
+      ma_phan_cong:ma,
+      loai_hoc_phan_phu_trach:loai,
+      nhom_thuc_hanh_phu_trach:nhom_th_pt,
+      so_luong_sv_phu_trach:sl_sv_pt,
+      ma_giang_vien:ma_giang_vien,
+      ma_lop_hoc_phan:ma_lop_hoc_phan,
+      ghi_chu:ghi_chu
+    });
+    return res.status(201).json({ success: true, newPhanCongLopHocPhan});
+  } catch (error) {
+    next(error);
+  }
+}
+const createThoiKhoaBieu= async (req,res,next) =>{
+  try {
+    const {ma,loai,ngay_hoc_trong_tuan,nhom_thuc_hanh,thoi_gian_bat_dau,thoi_gian_ket_thuc,tiet_hoc_bat_dau,tiet_hoc_ket_thuc,ma_lop_hoc_phan,ma_phong_hoc,ghi_chu}= req.body;
+    const foundThoiKhoaBieu= await ThoiKhoaBieu.findOne({ where: { ma_thoi_khoa_bieu:`${ma}` } });
+    if(foundThoiKhoaBieu){
+      return res
+        .status(403)
+        .json({ error: { message: "Mã thời khoá biểu đã tồn tại ." } });
+    }
+    const newThoiKhoaBieu = await ThoiKhoaBieu.create({
+      ma_thoi_khoa_bieu:ma,
+      loai_hoc_phan:loai,
+      ngay_hoc_trong_tuan:ngay_hoc_trong_tuan,
+      nhom_thuc_hanh:nhom_thuc_hanh,
+      thoi_gian_bat_dau:thoi_gian_bat_dau,
+      thoi_gian_ket_thuc:thoi_gian_ket_thuc,
+      tiet_hoc_bat_dau:tiet_hoc_bat_dau,
+      tiet_hoc_ket_thuc:tiet_hoc_ket_thuc,
+      ma_lop_hoc_phan:ma_lop_hoc_phan,
+      ma_phong_hoc:ma_phong_hoc,
+      ghi_chu:ghi_chu
+    });
+    return res.status(201).json({ success: true, newThoiKhoaBieu});
+  } catch (error) {
+    next(error);
+  }
+}
+const createLoaiPhongHoc= async (req,res,next) =>{
+  try {
+    const {ma,ten,mo_ta}= req.body;
+    const foundLoaiPhongHoc= await LoaiPhongHoc.findOne({ where: { ma_loai_phong_hoc:`${ma}` } });
+    if(foundLoaiPhongHoc){
+      return res
+        .status(403)
+        .json({ error: { message: "Mã loại phòng học đã tồn tại ." } });
+    }
+    const newLoaiPhongHoc = await LoaiPhongHoc.create({
+      ma_loai_phong_hoc:ma,
+      ten_loai_phong_hoc:ten,
+      mo_ta:mo_ta
+    });
+    return res.status(201).json({ success: true, newLoaiPhongHoc});
+  } catch (error) {
+    next(error);
+  }
+}
+const createPhongHoc= async (req,res,next) =>{
+  try {
+    const {ma,ten_day_nha,ten_phong_hoc,ma_loai_phong_hoc,ghi_chu}= req.body;
+    const foundPhongHoc= await PhongHoc.findOne({ where: { ma_phong_hoc:`${ma}` } });
+    if(foundPhongHoc){
+      return res
+        .status(403)
+        .json({ error: { message: "Mã phòng học đã tồn tại ." } });
+    }
+    const newPhongHoc = await PhongHoc.create({
+      ma_phong_hoc:ma,
+      ten_day_nha:ten_day_nha,
+      ten_phong_hoc:ten_phong_hoc,
+      ma_loai_phong_hoc:ma_loai_phong_hoc,
+      ghi_chu:ghi_chu
+    });
+    return res.status(201).json({ success: true, newPhongHoc});
+  } catch (error) {
+    next(error);
+  }
+}
+const createBangDiem= async (req,res,next) =>{
+  try {
+    const {ma,tk1,tk2,tk3,tk4,tk5,th1,th2,th3,th4,th5,gk,ck,tk_he4,tk_he10,diem_chu,xep_loai,ghi_chu,ma_sinh_vien,ma_lop_hoc_phan,
+      tinh_trang_hoc_tap,ngay_dang_ki}= req.body;
+    const foundBangDiem= await KetQuaHocTap.findOne({ where: { ma_ket_qua_hoc_tap:`${ma}` } });
+    if(foundBangDiem){
+      return res
+        .status(403)
+        .json({ error: { message: "Mã kết quả học tập đã tồn tại ." } });
+    }
+    const newBangDiem = await KetQuaHocTap.create({
+      ma_ket_qua_hoc_tap:ma,
+      diem_tk_1:tk1,
+      diem_tk_2:tk2,
+      diem_tk_3:tk3,
+      diem_tk_4:tk4,
+      diem_tk_4:tk4,
+      diem_th_1:th1,
+      diem_th_2:th2,
+      diem_th_3:th3,
+      diem_th_4:th4,
+      diem_th_5:th5,
+      diem_gk:gk,
+      diem_ck:ck,
+      diem_tk_hs_4:tk_he4,
+      diem_tk_hs_10:tk_he10,
+      diem_chu:diem_chu,
+      xep_loai:xep_loai,
+      ghi_chu:ghi_chu,
+      ma_sinh_vien:ma_sinh_vien,
+      ma_lop_hoc_phan:ma_lop_hoc_phan,
+      tinh_trang_hoc_tap:tinh_trang_hoc_tap,
+      ngay_dang_ki:ngay_dang_ki,
+    });
+    return res.status(201).json({ success: true, newBangDiem});
+  } catch (error) {
+    next(error);
+  }
+}
+const createThoiKhoaBieuSinhVien = async (req,res,next) =>{
+  try {
+    const {ma,loai_ngay_hoc,ma_sinh_vien,ma_thoi_khoa_bieu,ghi_chu}= req.body;
+    const foundThoiKhoaBieuSinhVien= await ThoiKhoaBieuSinhVien.findOne({ where: { ma:`${ma}` } });
+    if(foundThoiKhoaBieuSinhVien){
+      return res
+        .status(403)
+        .json({ error: { message: "Mã thời khoá biểu sinh viên đã tồn tại ." } });
+    }
+    const newThoiKhoaBieuSV = await ThoiKhoaBieuSinhVien.create({
+      ma:ma,
+      loai_ngay_hoc:loai_ngay_hoc,
+      ma_sinh_vien:ma_sinh_vien,
+      ma_thoi_khoa_bieu:ma_thoi_khoa_bieu,
+      ghi_chu:ghi_chu
+    });
+    return res.status(201).json({ success: true, newThoiKhoaBieuSV});
+  } catch (error) {
+    next(error);
+  }
+}
 module.exports = {
     createSinhVien,
     createKhoa,
@@ -291,4 +446,10 @@ module.exports = {
     createGiangVien,
     createHocKi,
     createLopHocPhan,
+    createPhanCongLopHocPhan,
+    createThoiKhoaBieu,
+    createLoaiPhongHoc,
+    createPhongHoc,
+    createBangDiem,
+    createThoiKhoaBieuSinhVien
 };
