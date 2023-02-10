@@ -35,4 +35,22 @@ router
 router
   .route("/createLopHocPhan")
   .post(AdminController.createLopHocPhan); 
+router
+  .route("/createPhanCongLopHocPhan")
+  .post(AdminController.createPhanCongLopHocPhan);
+router
+  .route("/createThoiKhoaBieu")
+  .post(AdminController.createThoiKhoaBieu);
+router
+  .route("/createLoaiPhongHoc")
+  .post(AdminController.createLoaiPhongHoc);
+router
+  .route("/createPhongHoc")
+  .post(AdminController.createPhongHoc);
+router
+  .route("/createBangDiem")
+  .post(AdminController.createBangDiem);
+router
+  .route("/createThoiKhoaBieuSinhVien")
+  .post(AdminController.createThoiKhoaBieuSinhVien);
 module.exports = router;

@@ -20,13 +20,13 @@ MonHoc.init({
         type:DataTypes.STRING,
     },
     //Tạo khoá ngoại khoa
-    // ma_khoa:{
-    //     type:DataTypes.INTEGER,
-    //     references:{
-    //         model:"khoa",
-    //         key:"ma_khoa"
-    //     }
-    // },
+    ma_khoa:{
+        type:DataTypes.INTEGER,
+        references:{
+            model:"khoa",
+            key:"ma_khoa"
+        }
+    },
 },{
     sequelize,
     modelName:'mon_hoc',
