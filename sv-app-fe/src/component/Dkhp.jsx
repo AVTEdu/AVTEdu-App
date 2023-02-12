@@ -1,4 +1,4 @@
-import React from "react";
+import { useContext, React, useState, useEffect } from "react";
 import '../assets/css/main.css'
 import '../assets/css/tooltipster.bundle.css'
 import '../assets/css/style.css'
@@ -11,10 +11,31 @@ import '../assets/css/components.min.css'
 import '../assets/css/profile.min.css'
 import '../assets/css/toastr.min.css'
 import Sidenavbar from "./Sidenavbar";
+import axios from "axios";
+import axiosClient from "../api/axiosClient";
 
 
+export default function Dkhp() {
 
-export const Dkhp = () => {
+    const [hocKiState, setHocKiState] = useState(null);
+
+    useEffect(() => {
+        const activeHocKi = async () => {
+            try {
+                const res = await axiosClient.get("/userRequest/getHocKiSinhVien").then((response) => {
+                    setHocKiState(response.data);
+                });
+                console.log(res);
+            } catch (error) {
+                console.log(error.message)
+            }
+        };
+        activeHocKi();
+    }, []);
+
+    if (!hocKiState) return null;
+
+
     return (
         <div className="wrapper">
 
@@ -46,19 +67,12 @@ export const Dkhp = () => {
                                                     <div className="col-md-2"></div>
                                                     <div className="form-group  col-md-4">
                                                         <div>
-                                                            <select className="form-control" id="cboIDDotDangKy" name="cboIDDotDangKy" placeholder="Chọn đợt đăng ký"><option value="">Chọn đợt đăng ký</option>
-                                                                <option value="45">HK3 (2022-2023)</option>
-                                                                <option value="44">HK2 (2022-2023)</option>
-                                                                <option value="43">HK1 (2022-2023)</option>
-                                                                <option value="42">HK3 (2021-2022)</option>
-                                                                <option value="41">HK2 (2021-2022)</option>
-                                                                <option value="40">HK1 (2021-2022)</option>
-                                                                <option value="39">HK3 (2020-2021)</option>
-                                                                <option value="38">HK2 (2020-2021)</option>
-                                                                <option value="37">HK1 (2020-2021)</option>
-                                                                <option value="36">HK3 (2019-2020)</option>
-                                                                <option value="35">HK2 (2019-2020)</option>
-                                                                <option value="34">HK1 (2019-2020)</option>
+                                                            <select className="form-control" id="cboIDDotDangKy" name="cboIDDotDangKy"
+                                                                placeholder="Chọn đợt đăng ký">
+                                                                <option value="">Chọn đợt đăng ký</option>
+                                                                {hocKiState.map((hk) =>
+                                                                    <option>HK{hk.dsHocKi.thu_tu_hoc_ki} ({hk.nam_hoc_bat_dau}-{hk.nam_hoc_ket_thuc})</option>
+                                                                )}
                                                             </select>
                                                         </div>
                                                         <div className="clearfix"></div>

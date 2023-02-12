@@ -1,4 +1,4 @@
-import React from "react";
+import { useContext, React, useState, useEffect } from "react";
 import '../assets/css/trangchu.css'
 import Sidenavbar from "./Sidenavbar";
 import lichTheoTuan from '../assets/img/trangchu_img/lichTheoTuan.png'
@@ -9,8 +9,12 @@ import nhacNho from '../assets/img/trangchu_img/nhacNho.png'
 import phieuThuTongHop from '../assets/img/trangchu_img/phieuThuTongHop.png'
 import thanhToanTrucTuyen from '../assets/img/trangchu_img/thanhToanTrucTuyen.png'
 import traCuuCongNo from '../assets/img/trangchu_img/traCuuCongNo.png'
+import axios from "axios";
 
 export const TrangChu = () => {
+    // const _ma = localStorage.getItem("user");
+    // console.log(_ma);
+
     return (
         // <div className="trangchu-demo">
         //     <Sidenavbar />

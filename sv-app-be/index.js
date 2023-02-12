@@ -41,7 +41,7 @@ const KetQuaHocTap = require('./src/model/ketquahoctap.model');
 ConnectDB().getInstance();
 const corsConfig = {
   credentials: true,
-  origin:true,
+  origin: true,
 };
 //Hiện kết quả request trên termail
 app.use(morgan('dev'));
@@ -80,7 +80,7 @@ MoHinhDaoTao.sync();
 TonGiao.sync();
 TrangThaiHocTap.sync();
 Admin.sync();
-MonHoc.sync({alter:true});
+MonHoc.sync();
 SinhVien.sync();
 HocKi.sync();
 HocPhan.sync();
@@ -105,12 +105,23 @@ app.use((err, req, res, next) => {
   const error = app.get("env") === "development" ? err : {};
   const status = err.status || 500;
 
+  // res.setHeader('Access-Control-Allow-Origin', '*');
+  // res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT,PATCH, DELETE');
+
+  // res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type,a_custom_header'); //notice here carefully
+
+  // res.setHeader('Access-Control-Allow-Credentials', true);
+  // next();
+
   // response to client
   return res.status(status).json({
     error: {
       message: error.message,
     },
   });
+
+
+
 });
 
 // app.use(function (req, res, next) {
