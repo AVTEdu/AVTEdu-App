@@ -19,15 +19,20 @@ const signAccessToken = async (userId) => {
   });
 };
 const verifyAccessToken = (req, res, next) => {
-  console.log(req.cookies)
-  const Authorization = req.cookies['authorization'];
-  if (!req.cookies["authorization"]) {
-    return res.status(403).json({ error: { message: "Unauthorized!!!!" } });
-  }
+  const authHeaders = req.headers["authorization"];
+
+  const token = authHeaders && authHeaders.split(" ")[1];
+
+  // if (!req.cookies["authorization"]) {
+  //   return res.status(403).json({ error: { message: "Unauthorized!!!!" } });
+  // }
   // const authHeader = Authorization;
   // const bearerToken = authHeader.split(' ');
   // const token = bearerToken[1];
-  JWT.verify(Authorization,halo,(err, payload) => {
+  
+  console.log('token:'+token)
+  
+  JWT.verify(token, halo, (err, payload) => {
     if (err) {
       if (err.name === "JsonWebTokenError") {
         return res.status(403).json({ error: { message: "Unauthorized" } });
@@ -66,22 +71,18 @@ const signRefreshToken = async (userId) => {
 };
 const verifyRefreshToken = (refreshToken) => {
   return new Promise((resolve, reject) => {
-    JWT.verify(
-      refreshToken,
-      ref,
-      (err, payload) => {
-        if (err) {
-          return reject(err);
-        }
-        client.get(payload.userId, (err, reply) => {
-          if (err) return reject(err);
-          if (refreshToken === reply) {
-            return resolve(payload);
-          }
-          return reject(err);
-        });
+    JWT.verify(refreshToken, ref, (err, payload) => {
+      if (err) {
+        return reject(err);
       }
-    );
+      client.get(payload.userId, (err, reply) => {
+        if (err) return reject(err);
+        if (refreshToken === reply) {
+          return resolve(payload);
+        }
+        return reject(err);
+      });
+    });
   });
 };
 module.exports = {
