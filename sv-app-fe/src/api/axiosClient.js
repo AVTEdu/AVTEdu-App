@@ -26,7 +26,9 @@ axiosClient.setLocalAccessToken = async (accessToken, refToken) => {
 
 axiosClient.interceptors.request.use(
   function (config) {
-    config.headers.authorization = Cookies.get("token");
+    // config.headers.authorization = Cookies.get("token");
+    config.headers.authorization = `Bearer ${Cookies.get("token")}`;
+
     return config;
   },
   function (error) {
@@ -49,7 +51,6 @@ axiosClient.interceptors.response.use(
     if (status === 401) {
       if (data.error.message === "jwt expired") {
         console.log("trường hợp Token hết hạn");
-
         const { accessToken, refToken } = await axiosClient.refreshToken();
         console.log(accessToken + "dong 63" + refToken);
         if (accessToken) {
