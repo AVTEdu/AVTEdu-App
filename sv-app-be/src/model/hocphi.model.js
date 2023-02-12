@@ -47,4 +47,4 @@ HocPhi.init({
     timestamps:false,
     freezeTableName:true 
 });
-module.exports=HocPhan;
+module.exports=HocPhi;
