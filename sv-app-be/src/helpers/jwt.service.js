@@ -9,7 +9,6 @@ const signAccessToken = async (userId) => {
       userId,
     };
     const secret = halo;
-    console.log(secret);
     const options = {
       expiresIn: "5h",
     };
@@ -20,14 +19,15 @@ const signAccessToken = async (userId) => {
   });
 };
 const verifyAccessToken = (req, res, next) => {
-  const Authorization = req.headers["authorization"];
-  if (!req.headers["authorization"]) {
+  console.log(req.cookies)
+  const Authorization = req.cookies['authorization'];
+  if (!req.cookies["authorization"]) {
     return res.status(403).json({ error: { message: "Unauthorized!!!!" } });
   }
   // const authHeader = Authorization;
   // const bearerToken = authHeader.split(' ');
   // const token = bearerToken[1];
-  JWT.verify(Authorization, halo, (err, payload) => {
+  JWT.verify(Authorization,halo,(err, payload) => {
     if (err) {
       if (err.name === "JsonWebTokenError") {
         return res.status(403).json({ error: { message: "Unauthorized" } });

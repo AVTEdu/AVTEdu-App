@@ -16,6 +16,7 @@ const TrangThaiHocTap = require('./src/model/trangthaihoctap.model');
 const Admin = require('./src/model/admin.model');
 const cors = require('cors');
 const morgan = require('morgan');
+const cookieParser = require('cookie-parser');
 
 
 const PORT = process.env.PORT || 9090
@@ -60,7 +61,9 @@ app.use(cors(corsConfig));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(express.static("controller/public"));
+app.use(cookieParser());
 app.use("/", homeRouter);
+
 
 
 
