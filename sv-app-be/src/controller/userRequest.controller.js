@@ -8,6 +8,7 @@ const LopHocPhan = require("../model/lophocphan.model");
 const ThoiKhoaBieuSinhVien = require("../model/thoikhoabieusinhvien.model");
 const { createThoiKhoaBieuSinhVien } = require("./admin.controller");
 const { verifyRefreshToken } = require("../helpers/jwt.service");
+const HocPhi = require("../model/hocphi.model");
 
 const sequelize = ConnectDB().getInstance();
 
@@ -106,39 +107,49 @@ const getChiTietHocPhan =  async (req,res,next) =>{
 const DangKiHocPhan =  async (req,res,next) =>{
   try {
      //Mã lớp học phần 
-      const {ma} = req.body;
+      const {ma,trang_thai_dang_ki} = req.body;
       const foundLopHocPhan = await LopHocPhan.findOne({ where: { ma_hoc_phan:`${ma}` } });
-      if (!foundLopHocPhan)
+      if (!foundLopHocPhan){
           return res
           .status(403)
           .json({ error: { message: "Không tìm thấy lớp học phần" } });   
-      const ThoiKhoabieu = sequelize.query(`select tkb.* 
+      }    
+      const ThoiKhoabieu = await  sequelize.query(`select tkb.* 
                                             from sinhviendb.lop_hoc_phan as lhp
                                             left join sinhviendb.thoi_khoa_bieu as tkb  on lhp.ma_lop_hoc_phan = tkb.ma_lop_hoc_phan
-                                            where lhp.ma_lop_hoc_phan = 1`,{type: QueryTypes.SELECT});
-      if(!ThoiKhoabieu)
+                                            where lhp.ma_lop_hoc_phan = 1`,{type: QueryTypes.SELECT});                                 
+      if(!ThoiKhoabieu){
           return res
           .status(403)
           .json({ error: { message: "Không tìm thấy thời khoá biểu " } }); 
-        console.log(req.payload.userId);
+        }
         const foundSinhVien = await SinhVien.findOne({ where: { ma_sinh_vien:req.payload.userId } });
-        if (!foundSinhVien)
+        if (!foundSinhVien){
             return res
             .status(403)
-            .json({ error: { message: "Không tìm thấy sinh viên" } });      
-        const ma_tkb_sv = await ThoiKhoaBieuSinhVien.max('ma');
-        if(foundLopHocPhan.so_luong_dang_ki_toi_da === foundLopHocPhan.so_luong_dang_ki_hien_tai)
+            .json({ error: { message: "Không tìm thấy sinh viên" } });
+        }      
+        if(foundLopHocPhan.so_luong_dang_ki_toi_da === foundLopHocPhan.so_luong_dang_ki_hien_tai){
             return res
             .status(403)
             .json({ error: { message: "Lớp đã đủ số lượng sinh viên đăng kí " } }); 
+        }
+        const ma_tkb_sv = await ThoiKhoaBieuSinhVien.max('ma');  
         const createTKBSinhVien  = await ThoiKhoaBieuSinhVien.create({
-              ma:ma_tkb_sv,
+              ma:ma_tkb_sv+1,
               loai_ngay_hoc:"Thứ",
               ma_sinh_vien:foundSinhVien.ma_sinh_vien,
               ma_thoi_khoa_bieu:ThoiKhoabieu.ma_thoi_khoa_bieu,
               ghi_chu:"...."
         })
-        res.status(201).json({ success: true,createTKBSinhVien});
+        const ma_hoc_phi = await HocPhi.max('ma_hoc_phi')
+        const createHocPhi = await HocPhi.create({
+          ma_hoc_phi:ma_hoc_phi,
+          noi_dung_thu:"Tiền học phí",
+          trang_thai_dang_ki:trang_thai_dang_ki,
+
+        })
+        res.status(201).json({ success: true});
   } catch (error) {
     next(error);
   }

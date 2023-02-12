@@ -11,8 +11,8 @@ ThoiKhoaBieuSinhVien.init({
         primaryKey:true,
         allowNull:false
     },
-    loai_ngay_Hoc:{
-        type:DataTypes.DATE,
+    loai_ngay_hoc:{
+        type:DataTypes.STRING,
     },
     ma_sinh_vien:{
         type:DataTypes.INTEGER,
