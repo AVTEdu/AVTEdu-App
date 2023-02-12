@@ -1,5 +1,6 @@
 const express = require("express");
 const AuthController = require("../controller/auth.controller");
+const { verifyAccessToken } = require("../helpers/jwt.service");
 const router = express.Router();
 
 router
@@ -13,11 +14,11 @@ router
   .post(AuthController.AuthercationEmail);
 router
   .route("/checkVerificationEmail")
-  .get(AuthController.AuthercationEmail);
+  .get(verifyAccessToken,AuthController.CheckVerificationEmail);
 router
   .route("/logout")
-  .post(AuthController.Logout);
+  .delete(AuthController.Logout);
 router
   .route("/signinAdmin")
-  .post(AuthController.signInAdmin);
+  .get(AuthController.signInAdmin);
 module.exports = router;

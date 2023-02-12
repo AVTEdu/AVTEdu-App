@@ -2,13 +2,18 @@ const { Op } = require("sequelize");
 const { ConnectDB } = require("../config/mysql.config");
 const HocKi = require("../model/hocki.model");
 const SinhVien = require("../model/sinhvien.model");
-
+const {QueryTypes} = require('sequelize');
+const HocPhan = require("../model/hocphan.model");
+const LopHocPhan = require("../model/lophocphan.model");
+const ThoiKhoaBieuSinhVien = require("../model/thoikhoabieusinhvien.model");
+const { createThoiKhoaBieuSinhVien } = require("./admin.controller");
+const { verifyRefreshToken } = require("../helpers/jwt.service");
 
 const sequelize = ConnectDB().getInstance();
 
 const getHocKiSinhVien =  async (req,res,next) =>{
     try {
-        const {ma} = req.body;
+        const ma = req.payload.userId;
         const foundSinhVien = await SinhVien.findOne({ where: { ma_sinh_vien:`${ma}` } });
         if (!foundSinhVien)
             return res
@@ -24,15 +29,15 @@ const getHocKiSinhVien =  async (req,res,next) =>{
       next(error);
     }
   }
-  const getMonHocSinhVienChuaHoc =  async (req,res,next) =>{
+const getMonHocSinhVienChuaHoc =  async (req,res,next) =>{
     try {
-        const {ma} = req.body;
+      const ma = req.payload.userId;
         const foundSinhVien = await SinhVien.findOne({ where: { ma_sinh_vien:`${ma}` } });
         if (!foundSinhVien)
             return res
             .status(403)
             .json({ error: { message: "Không tìm thấy sinh viên" } });
-            sequelize.query(`select distinct sv.ma_sinh_vien,sv.ho_ten_sinh_vien,mh.ma_mon_hoc,mh.ten_mon_hoc
+            sequelize.query(`select sv.ma_sinh_vien,sv.ho_ten_sinh_vien,mh.ma_mon_hoc,mh.ten_mon_hoc,hp.ma_hoc_phan,hp.so_tin_chi_ly_thuyet,hp.so_tin_chi_thuc_hanh,hp.hoc_phan_bat_buoc,hp.ma_mon_tien_quyet,hp.ma_mon_song_hanh
                               from sinhviendb.sinh_vien as sv
                               left join sinhviendb.chuyen_nganh as cn on sv.ma_chuyen_nganh = cn.ma_chuyen_nganh
                               left join sinhviendb.chuyen_nganh_hoc_phan as cnhp on cn.ma_chuyen_nganh = cnhp.ma_chuyen_nganh
@@ -45,7 +50,7 @@ const getHocKiSinhVien =  async (req,res,next) =>{
                               (select ma_sinh_vien from sinhviendb.ket_qua_hoc_tap as kqht 
                               left join sinhviendb.lop_hoc_phan as lhp on kqht.ma_lop_hoc_phan = lhp.ma_lop_hoc_phan
                               left join sinhviendb.hoc_phan as hp on hp.ma_hoc_phan = lhp.ma_hoc_phan
-                              where hp.ma_hoc_phan = lhp.ma_hoc_phan)`)
+                              where hp.ma_hoc_phan = lhp.ma_hoc_phan)`,{type: QueryTypes.SELECT})
             .then(function(results) {
               return res.status(201).json({ success: true,results});
             })
@@ -53,9 +58,112 @@ const getHocKiSinhVien =  async (req,res,next) =>{
       next(error);
     }
   }
+const getLopHocPhanByHocPhan =  async (req,res,next) =>{
+    try {
+        //Mã học phần
+        const {ma} = req.body;
+        const foundHocPhan = await HocPhan.findOne({ where: { ma_hoc_phan:`${ma}` } });
+        if (!foundHocPhan)
+            return res
+            .status(403)
+            .json({ error: { message: "Không tìm thấy học phần" } });
+        sequelize.query(`select mh.ten_mon_hoc,lhp.trang_thai,lhp.ma_lop_hoc_phan,lhp.ten_lop_hoc_phan,lhp.so_luong_dang_ki_hien_tai,lhp.so_luong_dang_ki_toi_da
+                         from sinhviendb.hoc_phan as hp
+                         left join sinhviendb.lop_hoc_phan as lhp on hp.ma_hoc_phan = lhp.ma_hoc_phan
+                         left join sinhviendb.mon_hoc as mh on hp.ma_mon_hoc = mh.ma_mon_hoc
+                         where hp.ma_hoc_phan = 1`,{type: QueryTypes.SELECT})
+                         .then(function(results) {
+                          return res.status(201).json({ success: true,results});
+                        })
+    } catch (error) {
+      next(error);
+    }
+}
+const getChiTietHocPhan =  async (req,res,next) =>{
+  try {
+    //Mã lớp học phần
+      const {ma} = req.body;
+      const foundHocPhan = await HocPhan.findOne({ where: { ma_hoc_phan:`${ma}` } });
+      if (!foundHocPhan)
+          return res
+          .status(403)
+          .json({ error: { message: "Không tìm thấy  học phần" } });
+      sequelize.query(`select lhp.trang_thai,lhp.so_luong_dang_ki_toi_da,pclhp.loai_hoc_phan_phu_trach,tkb.ngay_hoc_trong_tuan,tkb.tiet_hoc_bat_dau,tkb.tiet_hoc_ket_thuc,ph.ten_day_nha,ph.ten_phong_hoc,gv.ten_giang_vien,tkb.thoi_gian_bat_dau,tkb.thoi_gian_ket_thuc
+                        from sinhviendb.hoc_phan as hp
+                        left join sinhviendb.lop_hoc_phan as lhp on hp.ma_hoc_phan = lhp.ma_lop_hoc_phan
+                        left join sinhviendb.phan_cong_lop_hoc_phan as pclhp on lhp.ma_lop_hoc_phan = pclhp.ma_lop_hoc_phan
+                        left join sinhviendb.giang_vien as gv on pclhp.ma_giang_vien = gv.ma_giang_vien
+                        left join sinhviendb.thoi_khoa_bieu as tkb on tkb.ma_lop_hoc_phan = lhp.ma_hoc_phan
+                        left join sinhviendb.phong_hoc as ph on tkb.ma_phong_hoc = ph.ma_phong_hoc
+                        where hp.ma_hoc_phan = 1`,{type: QueryTypes.SELECT})
+                       .then(function(results) {
+                        return res.status(201).json({ success: true,results});
+                      })
+  } catch (error) {
+    next(error);
+  }
+}
+const DangKiHocPhan =  async (req,res,next) =>{
+  try {
+     //Mã lớp học phần 
+      const {ma} = req.body;
+      const foundLopHocPhan = await LopHocPhan.findOne({ where: { ma_hoc_phan:`${ma}` } });
+      if (!foundLopHocPhan)
+          return res
+          .status(403)
+          .json({ error: { message: "Không tìm thấy lớp học phần" } });   
+      const ThoiKhoabieu = sequelize.query(`select tkb.* 
+                                            from sinhviendb.lop_hoc_phan as lhp
+                                            left join sinhviendb.thoi_khoa_bieu as tkb  on lhp.ma_lop_hoc_phan = tkb.ma_lop_hoc_phan
+                                            where lhp.ma_lop_hoc_phan = 1`,{type: QueryTypes.SELECT});
+      if(!ThoiKhoabieu)
+          return res
+          .status(403)
+          .json({ error: { message: "Không tìm thấy thời khoá biểu " } }); 
+        console.log(req.payload.userId);
+        const foundSinhVien = await SinhVien.findOne({ where: { ma_sinh_vien:req.payload.userId } });
+        if (!foundSinhVien)
+            return res
+            .status(403)
+            .json({ error: { message: "Không tìm thấy sinh viên" } });      
+        const ma_tkb_sv = await ThoiKhoaBieuSinhVien.max('ma');
+        if(foundLopHocPhan.so_luong_dang_ki_toi_da === foundLopHocPhan.so_luong_dang_ki_hien_tai)
+            return res
+            .status(403)
+            .json({ error: { message: "Lớp đã đủ số lượng sinh viên đăng kí " } }); 
+        const createTKBSinhVien  = await ThoiKhoaBieuSinhVien.create({
+              ma:ma_tkb_sv,
+              loai_ngay_hoc:"Thứ",
+              ma_sinh_vien:foundSinhVien.ma_sinh_vien,
+              ma_thoi_khoa_bieu:ThoiKhoabieu.ma_thoi_khoa_bieu,
+              ghi_chu:"...."
+        })
+        res.status(201).json({ success: true,createTKBSinhVien});
+  } catch (error) {
+    next(error);
+  }
+}
+const getThongTinSinhvien =   async (req,res,next) =>{
+  try {
+      const userId = req.payload.userId;
+      const foundSinhVien = await SinhVien.findOne({ where: { ma_sinh_vien:req.payload.userId } });
+        if (!foundSinhVien)
+            return res
+            .status(403)
+            .json({ error: { message: "Không tìm thấy sinh viên" } });   
+        res.status(201).json({ success: true,foundSinhVien});
+  } catch (error) {
+    next(error);
+  }
+}
+
 
 
   module.exports ={
     getHocKiSinhVien,
     getMonHocSinhVienChuaHoc,
+    getLopHocPhanByHocPhan,
+    getChiTietHocPhan,
+    DangKiHocPhan,
+    getThongTinSinhvien,
   }
