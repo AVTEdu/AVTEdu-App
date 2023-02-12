@@ -1,6 +1,5 @@
 import React from "react";
 import { useState, useEffect, useRef, useContext } from "react";
-import AuthContext from '../services/contexts/AuthProvider';
 import "../assets/css/login.css"
 import bg from '../assets/img/login_img/bg02.jpg';
 import Logo2 from '../assets/img/login_img/logo2.png';
@@ -50,8 +49,12 @@ export const Login = () => {
                 ma: user,
                 password: pwd,
             });
-            console.log(JSON.stringify(res?.data));
-            localStorage.setItem("user", JSON.stringify(res.data.user));
+            //console.log(JSON.stringify(res?.data));
+            //localStorage.setItem("user", JSON.stringify(res.data));
+            localStorage.setItem("user", JSON.stringify(res.data.sinh_vien.ma_sinh_vien));
+            //console.log(JSON.parse(localStorage.getItem("user")?.email));
+            const _ma = localStorage.getItem("user");
+            console.log(_ma)
             Cookies.set("token", res.data.accessToken);
             Cookies.set("refreshToken", res.data.refreshToken);
             const accessToken = res?.data?.accessToken;

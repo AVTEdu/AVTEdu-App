@@ -40,7 +40,7 @@ const KetQuaHocTap = require('./src/model/ketquahoctap.model');
 ConnectDB().getInstance();
 const corsConfig = {
   credentials: true,
-  origin:true,
+  origin: true,
 };
 //Hiện kết quả request trên termail
 app.use(morgan('dev'));
@@ -77,8 +77,8 @@ MoHinhDaoTao.sync();
 TonGiao.sync();
 TrangThaiHocTap.sync();
 Admin.sync();
-MonHoc.sync({alter:true});
-SinhVien.sync();
+MonHoc.sync({ alter: true });
+SinhVien.sync({ alter: true });
 HocKi.sync();
 HocPhan.sync();
 LopHocPhan.sync();
