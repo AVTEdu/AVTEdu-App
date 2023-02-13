@@ -3,11 +3,9 @@ import { useState, useEffect, useRef, useContext } from "react";
 import "../assets/css/login.css"
 import bg from '../assets/img/login_img/bg02.jpg';
 import Logo2 from '../assets/img/login_img/logo2.png';
-import axios from "../api/axios";
 import axiosClient from "../api/axiosClient";
 import signinAPI from "../api/signinAPI";
 import Cookies from "js-cookie";
-import { Dkhp } from '../component/Dkhp';
 import useAuth from "../services/hooks/useAuth";
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 

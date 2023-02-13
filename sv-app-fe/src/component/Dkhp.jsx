@@ -11,12 +11,17 @@ import "../assets/css/components.min.css";
 import "../assets/css/profile.min.css";
 import "../assets/css/toastr.min.css";
 import Sidenavbar from "./Sidenavbar";
-import axios from "axios";
-import axiosClient from "../api/axiosClient";
 import dkhpAPI from "../api/dkhpAPI";
+import axiosClient from "../api/axiosClient";
 
 export default function Dkhp() {
   const [hocKiState, setHocKiState] = useState(null);
+  const [monChuaDangKy, setMonChuaDangKy] = useState(null);
+  const [itemNamHocBatDau, setItemNamHocBatDau] = useState();
+  const [maHocPhan, setMaHocPhan] = useState();
+  const [dsToanBoLopHocPhan, setDsToanBoLopHocPhan] = useState();
+  let sttMonChuaDK = 1;
+  const namHienTai = new Date().getFullYear();
 
   useEffect(() => {
     const activeHocKi = async () => {
@@ -31,9 +36,50 @@ export default function Dkhp() {
     activeHocKi();
   }, []);
 
+  const activeLopHocPhanByHocPhan = async () => {
+    try {
+      console.log(maHocPhan);
+      const res = await dkhpAPI.getLopHocPhanByHocPhan({
+        ma: maHocPhan
+      });
+      console.log(res.data);
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
+
+  function activeLopHocPhanByHocPhan2() {
+    axiosClient
+      .get("http://localhost:4000/userRequest/getLopHocPhanByHocPhan", {
+        ma: maHocPhan
+      })
+      .then((response) => {
+        console.log(response.data);
+      });
+  }
+
+
   if (!hocKiState) return null;
 
-  console.log(hocKiState);
+
+  async function activeMonChuaDK(e) {
+    try {
+      const res = await dkhpAPI.getToanBoMonHocChuaDangKy();
+      console.log(res.data);
+      setMonChuaDangKy(res.data);
+      //setItemNamHocBatDau(e.target.value)
+      var selectElementDotDangKy = document.querySelector('#cboIDDotDangKy').value;
+      selectElementDotDangKy === 'Chọn đợt đăng ký' ? setItemNamHocBatDau('') :
+        setItemNamHocBatDau(selectElementDotDangKy);
+    } catch (error) {
+      console.log(error.message);
+    }
+  }
+
+
+
+
+
 
   return (
     <div className="wrapper">
@@ -70,15 +116,20 @@ export default function Dkhp() {
                           <div className="col-md-2"></div>
                           <div className="form-group  col-md-4">
                             <div>
+
                               <select
                                 className="form-control"
                                 id="cboIDDotDangKy"
                                 name="cboIDDotDangKy"
                                 placeholder="Chọn đợt đăng ký"
+                                // value={itemNamHocBatDau}
+                                // onChange={activeMonChuaDK}
+                                onChange={activeMonChuaDK}
+
                               >
                                 <option value="">Chọn đợt đăng ký</option>
                                 {hocKiState["dsHocKi"].map((hk) => (
-                                  <option key={hk.id}>
+                                  <option key={hk.id} value={hk.nam_hoc_bat_dau} >
                                     HK{hk.thu_tu_hoc_ki} ({hk.nam_hoc_bat_dau} -
                                     {hk.nam_hoc_ket_thuc})
                                   </option>
@@ -133,737 +184,163 @@ export default function Dkhp() {
                         </div>
                         <div className="clearfix"></div>
                       </div>
-                      <div className="gr-table" id="monHPChoDangKy">
-                        <div
-                          className="border-scroll"
-                          style={{ overflow: "hidden", outline: "none" }}
-                          tabIndex="0"
-                        >
-                          <div id="box_monhocphan_chodangky">
-                            <h3
-                              className="title-table"
-                              lang="mhpchodangky-tabletitle"
-                            >
-                              Môn học/học phần đang chờ đăng ký
-                            </h3>
-                            <div className="table-responsive">
-                              <table
-                                className="table-pointer table-custom table table-bordered text-center"
-                                width="100%"
-                                role="grid"
-                                id="dkHocPhan"
-                              >
-                                <thead>
-                                  <tr role="row">
-                                    <td style={{ width: "40px" }}></td>
-                                    <th lang="dkhp-stt">STT</th>
-                                    <th lang="dkhp-malhp">Mã học phần</th>
-                                    <th lang="dkhp-tenmh">
-                                      Tên môn học/học phần
-                                    </th>
-                                    <th lang="dkhp-tc">TC</th>
-                                    <th lang="dkhp-batbuoc">Bắt buộc</th>
+                      <div>
+                        {
+                          monChuaDangKy ? (itemNamHocBatDau !== '' ?
+                            (namHienTai >= Number(itemNamHocBatDau) ?
+                              <div className="gr-table" id="monHPChoDangKy">
+                                <div
+                                  className="border-scroll"
+                                  style={{ overflow: "hidden", outline: "none" }}
+                                  tabIndex="0"
+                                >
+                                  <div id="box_monhocphan_chodangky">
+                                    <h3
+                                      className="title-table"
+                                      lang="mhpchodangky-tabletitle"
+                                    >
+                                      Môn học/học phần đang chờ đăng ký
+                                    </h3>
+                                    <div className="table-responsive">
+                                      <table
+                                        className="table-pointer table-custom table table-bordered text-center"
+                                        width="100%"
+                                        role="grid"
+                                        id="dkHocPhan"
+                                      >
+                                        <thead>
+                                          <tr role="row">
+                                            <td style={{ width: "40px" }}></td>
+                                            <th lang="dkhp-stt">STT</th>
+                                            <th lang="dkhp-malhp">Mã học phần</th>
+                                            <th lang="dkhp-tenmh">
+                                              Tên môn học/học phần
+                                            </th>
+                                            <th lang="dkhp-tc">TC</th>
+                                            <th lang="dkhp-batbuoc">Bắt buộc</th>
 
-                                    <th lang="dkhp-hoctruoctienquyetsonghanh">
-                                      học phần: học trước (a),
-                                      <br />
-                                      tiên quyết (b),
-                                      <br />
-                                      song hành (c)
-                                    </th>
-                                  </tr>
-                                </thead>
-                                <tbody>
-                                  <tr
-                                    data-id="3194"
-                                    data-mamh="003194"
-                                    data-mahpduochoc="4203003194"
-                                  >
-                                    <td className="text-center">
-                                      <div>
-                                        <label
-                                          className="mt-radio"
-                                          style={{ paddingLeft: "17px" }}
-                                        >
-                                          <input
-                                            id="rdoMonHocChoDangKy"
-                                            name="rdoMonHocChoDangKy"
-                                            type="radio"
-                                            value="3194"
-                                          />
-                                          <span></span>
-                                        </label>
-                                      </div>
-                                    </td>
-                                    <td>1</td>
-                                    <td>4203003194</td>
-                                    <td className="text-left">Hội họa</td>
-                                    <td>3</td>
-                                    <td>
-                                      <div>
-                                        <div className="no-check"></div>
-                                      </div>
-                                    </td>
-                                    <td></td>
-                                  </tr>
-                                  <tr
-                                    data-id="3203"
-                                    data-mamh="003203"
-                                    data-mahpduochoc="4203003203"
-                                  >
-                                    <td className="text-center">
-                                      <div>
-                                        <label
-                                          className="mt-radio"
-                                          style={{ paddingLeft: "17px" }}
-                                        >
-                                          <input
-                                            id="rdoMonHocChoDangKy"
-                                            name="rdoMonHocChoDangKy"
-                                            type="radio"
-                                            value="3203"
-                                          />
-                                          <span></span>
-                                        </label>
-                                      </div>
-                                    </td>
-                                    <td>2</td>
-                                    <td>4203003203</td>
-                                    <td className="text-left">
-                                      Âm nhạc – Nhạc lý và Guitar căn bản
-                                    </td>
-                                    <td>3</td>
-                                    <td>
-                                      <div>
-                                        <div className="no-check"></div>
-                                      </div>
-                                    </td>
-                                    <td></td>
-                                  </tr>
-                                  <tr
-                                    data-id="3325"
-                                    data-mamh="003325"
-                                    data-mahpduochoc="4203003325"
-                                  >
-                                    <td className="text-center">
-                                      <div>
-                                        <label
-                                          className="mt-radio"
-                                          style={{ paddingLeft: "17px" }}
-                                        >
-                                          <input
-                                            id="rdoMonHocChoDangKy"
-                                            name="rdoMonHocChoDangKy"
-                                            type="radio"
-                                            value="3325"
-                                          />
-                                          <span></span>
-                                        </label>
-                                      </div>
-                                    </td>
-                                    <td>3</td>
-                                    <td>4203003325</td>
-                                    <td className="text-left">
-                                      Tâm lý học đại cương
-                                    </td>
-                                    <td>3</td>
-                                    <td>
-                                      <div>
-                                        <div className="no-check"></div>
-                                      </div>
-                                    </td>
-                                    <td></td>
-                                  </tr>
-                                  <tr
-                                    data-id="10665"
-                                    data-mamh="010665"
-                                    data-mahpduochoc="4203010665"
-                                  >
-                                    <td className="text-center">
-                                      <div>
-                                        <label
-                                          className="mt-radio"
-                                          style={{ paddingLeft: "17px" }}
-                                        >
-                                          <input
-                                            id="rdoMonHocChoDangKy"
-                                            name="rdoMonHocChoDangKy"
-                                            type="radio"
-                                            value="10665"
-                                          />
-                                          <span></span>
-                                        </label>
-                                      </div>
-                                    </td>
-                                    <td>4</td>
-                                    <td>4203010665</td>
-                                    <td className="text-left">
-                                      Cơ sở văn hóa Việt Nam
-                                    </td>
-                                    <td>3</td>
-                                    <td>
-                                      <div>
-                                        <div className="no-check"></div>
-                                      </div>
-                                    </td>
-                                    <td></td>
-                                  </tr>
-                                  <tr
-                                    data-id="3193"
-                                    data-mamh="003193"
-                                    data-mahpduochoc="4203003193"
-                                  >
-                                    <td className="text-center">
-                                      <div>
-                                        <label
-                                          className="mt-radio"
-                                          style={{ paddingLeft: "17px" }}
-                                        >
-                                          <input
-                                            id="rdoMonHocChoDangKy"
-                                            name="rdoMonHocChoDangKy"
-                                            type="radio"
-                                            value="3193"
-                                          />
-                                          <span></span>
-                                        </label>
-                                      </div>
-                                    </td>
-                                    <td>5</td>
-                                    <td>4203003193</td>
-                                    <td className="text-left">Toán ứng dụng</td>
-                                    <td>3</td>
-                                    <td>
-                                      <div>
-                                        <div className="no-check"></div>
-                                      </div>
-                                    </td>
-                                    <td></td>
-                                  </tr>
-                                  <tr
-                                    data-id="3320"
-                                    data-mamh="003320"
-                                    data-mahpduochoc="4203003320"
-                                  >
-                                    <td className="text-center">
-                                      <div>
-                                        <label
-                                          className="mt-radio"
-                                          style={{ paddingLeft: "17px" }}
-                                        >
-                                          <input
-                                            id="rdoMonHocChoDangKy"
-                                            name="rdoMonHocChoDangKy"
-                                            type="radio"
-                                            value="3320"
-                                          />
-                                          <span></span>
-                                        </label>
-                                      </div>
-                                    </td>
-                                    <td>6</td>
-                                    <td>4203003320</td>
-                                    <td className="text-left">
-                                      Phương pháp tính
-                                    </td>
-                                    <td>3</td>
-                                    <td>
-                                      <div>
-                                        <div className="no-check"></div>
-                                      </div>
-                                    </td>
-                                    <td></td>
-                                  </tr>
-                                  <tr
-                                    data-id="3395"
-                                    data-mamh="003395"
-                                    data-mahpduochoc="4203003395"
-                                  >
-                                    <td className="text-center">
-                                      <div>
-                                        <label
-                                          className="mt-radio"
-                                          style={{ paddingLeft: "17px" }}
-                                        >
-                                          <input
-                                            id="rdoMonHocChoDangKy"
-                                            name="rdoMonHocChoDangKy"
-                                            type="radio"
-                                            value="3395"
-                                          />
-                                          <span></span>
-                                        </label>
-                                      </div>
-                                    </td>
-                                    <td>7</td>
-                                    <td>4203003395</td>
-                                    <td className="text-left">Logic học</td>
-                                    <td>3</td>
-                                    <td>
-                                      <div>
-                                        <div className="no-check"></div>
-                                      </div>
-                                    </td>
-                                    <td></td>
-                                  </tr>
-                                  <tr
-                                    data-id="1076"
-                                    data-mamh="001076"
-                                    data-mahpduochoc="4203001076"
-                                  >
-                                    <td className="text-center">
-                                      <div>
-                                        <label
-                                          className="mt-radio"
-                                          style={{ paddingLeft: "17px" }}
-                                        >
-                                          <input
-                                            id="rdoMonHocChoDangKy"
-                                            name="rdoMonHocChoDangKy"
-                                            type="radio"
-                                            value="1076"
-                                          />
-                                          <span></span>
-                                        </label>
-                                      </div>
-                                    </td>
-                                    <td>8</td>
-                                    <td>4203001076</td>
-                                    <td className="text-left">
-                                      Tương tác người máy
-                                    </td>
-                                    <td>3</td>
-                                    <td>
-                                      <div>
-                                        <div className="no-check"></div>
-                                      </div>
-                                    </td>
-                                    <td>
-                                      <div>
-                                        <div className="tooltip tooltipstered">
-                                          002137{" "}
-                                          <span className="cl-red">(a)</span>
-                                        </div>
-                                      </div>
-                                    </td>
-                                  </tr>
-                                  <tr
-                                    data-id="3196"
-                                    data-mamh="003196"
-                                    data-mahpduochoc="4203003196"
-                                  >
-                                    <td className="text-center">
-                                      <div>
-                                        <label
-                                          className="mt-radio"
-                                          style={{ paddingLeft: "17px" }}
-                                        >
-                                          <input
-                                            id="rdoMonHocChoDangKy"
-                                            name="rdoMonHocChoDangKy"
-                                            type="radio"
-                                            value="3196"
-                                          />
-                                          <span></span>
-                                        </label>
-                                      </div>
-                                    </td>
-                                    <td>9</td>
-                                    <td>4203003196</td>
-                                    <td className="text-left">
-                                      Giao tiếp kinh doanh
-                                    </td>
-                                    <td>3</td>
-                                    <td>
-                                      <div>
-                                        <div className="no-check"></div>
-                                      </div>
-                                    </td>
-                                    <td></td>
-                                  </tr>
-                                  <tr
-                                    data-id="3197"
-                                    data-mamh="003197"
-                                    data-mahpduochoc="4203003197"
-                                  >
-                                    <td className="text-center">
-                                      <div>
-                                        <label
-                                          className="mt-radio"
-                                          style={{ paddingLeft: "17px" }}
-                                        >
-                                          <input
-                                            id="rdoMonHocChoDangKy"
-                                            name="rdoMonHocChoDangKy"
-                                            type="radio"
-                                            value="3197"
-                                          />
-                                          <span></span>
-                                        </label>
-                                      </div>
-                                    </td>
-                                    <td>10</td>
-                                    <td>4203003197</td>
-                                    <td className="text-left">
-                                      Kỹ năng xây dựng kế hoạch
-                                    </td>
-                                    <td>3</td>
-                                    <td>
-                                      <div>
-                                        <div className="no-check"></div>
-                                      </div>
-                                    </td>
-                                    <td></td>
-                                  </tr>
-                                  <tr
-                                    data-id="3206"
-                                    data-mamh="003206"
-                                    data-mahpduochoc="4203003206"
-                                  >
-                                    <td className="text-center">
-                                      <div>
-                                        <label
-                                          className="mt-radio"
-                                          style={{ paddingLeft: "17px" }}
-                                        >
-                                          <input
-                                            id="rdoMonHocChoDangKy"
-                                            name="rdoMonHocChoDangKy"
-                                            type="radio"
-                                            value="3206"
-                                          />
-                                          <span></span>
-                                        </label>
-                                      </div>
-                                    </td>
-                                    <td>11</td>
-                                    <td>4203003206</td>
-                                    <td className="text-left">
-                                      Môi trường và con người
-                                    </td>
-                                    <td>3</td>
-                                    <td>
-                                      <div>
-                                        <div className="no-check"></div>
-                                      </div>
-                                    </td>
-                                    <td></td>
-                                  </tr>
-                                  <tr
-                                    data-id="3436"
-                                    data-mamh="003436"
-                                    data-mahpduochoc="4203003436"
-                                  >
-                                    <td className="text-center">
-                                      <div>
-                                        <label
-                                          className="mt-radio"
-                                          style={{ paddingLeft: "17px" }}
-                                        >
-                                          <input
-                                            id="rdoMonHocChoDangKy"
-                                            name="rdoMonHocChoDangKy"
-                                            type="radio"
-                                            value="3436"
-                                          />
-                                          <span></span>
-                                        </label>
-                                      </div>
-                                    </td>
-                                    <td>12</td>
-                                    <td>4203003436</td>
-                                    <td className="text-left">
-                                      Thương mại điện tử
-                                    </td>
-                                    <td>3</td>
-                                    <td>
-                                      <div>
-                                        <div className="no-check"></div>
-                                      </div>
-                                    </td>
-                                    <td></td>
-                                  </tr>
-                                  <tr
-                                    data-id="3442"
-                                    data-mamh="003442"
-                                    data-mahpduochoc="4203003442"
-                                  >
-                                    <td className="text-center">
-                                      <div>
-                                        <label
-                                          className="mt-radio"
-                                          style={{ paddingLeft: "17px" }}
-                                        >
-                                          <input
-                                            id="rdoMonHocChoDangKy"
-                                            name="rdoMonHocChoDangKy"
-                                            type="radio"
-                                            value="3442"
-                                          />
-                                          <span></span>
-                                        </label>
-                                      </div>
-                                    </td>
-                                    <td>13</td>
-                                    <td>4203003442</td>
-                                    <td className="text-left">
-                                      Lập trình GUI với Qt Framework
-                                    </td>
-                                    <td>4</td>
-                                    <td>
-                                      <div>
-                                        <div className="no-check"></div>
-                                      </div>
-                                    </td>
-                                    <td>
-                                      <div>
-                                        <div className="tooltip tooltipstered">
-                                          003848{" "}
-                                          <span className="cl-red">(a)</span>
-                                        </div>
-                                      </div>
-                                    </td>
-                                  </tr>
-                                  <tr
-                                    data-id="868"
-                                    data-mamh="000868"
-                                    data-mahpduochoc="4203000868"
-                                  >
-                                    <td className="text-center">
-                                      <div>
-                                        <label
-                                          className="mt-radio"
-                                          style={{ paddingLeft: "17px" }}
-                                        >
-                                          <input
-                                            id="rdoMonHocChoDangKy"
-                                            name="rdoMonHocChoDangKy"
-                                            type="radio"
-                                            value="868"
-                                          />
-                                          <span></span>
-                                        </label>
-                                      </div>
-                                    </td>
-                                    <td>14</td>
-                                    <td>4203000868</td>
-                                    <td className="text-left">
-                                      Kỹ thuật điện tử
-                                    </td>
-                                    <td>3</td>
-                                    <td>
-                                      <div>
-                                        <div className="no-check"></div>
-                                      </div>
-                                    </td>
-                                    <td></td>
-                                  </tr>
-                                  <tr
-                                    data-id="2031"
-                                    data-mamh="002031"
-                                    data-mahpduochoc="4203002031"
-                                  >
-                                    <td className="text-center">
-                                      <div>
-                                        <label
-                                          className="mt-radio"
-                                          style={{ paddingLeft: "17px" }}
-                                        >
-                                          <input
-                                            id="rdoMonHocChoDangKy"
-                                            name="rdoMonHocChoDangKy"
-                                            type="radio"
-                                            value="2031"
-                                          />
-                                          <span></span>
-                                        </label>
-                                      </div>
-                                    </td>
-                                    <td>15</td>
-                                    <td>4203002031</td>
-                                    <td className="text-left">
-                                      Lập trình phân tích dữ liệu 1
-                                    </td>
-                                    <td>3</td>
-                                    <td>
-                                      <div>
-                                        <div className="no-check"></div>
-                                      </div>
-                                    </td>
-                                    <td>
-                                      <div>
-                                        <div className="tooltip tooltipstered">
-                                          000941{" "}
-                                          <span className="cl-red">(a)</span>
-                                        </div>
-                                      </div>
-                                    </td>
-                                  </tr>
-                                  <tr
-                                    data-id="2349"
-                                    data-mamh="002349"
-                                    data-mahpduochoc="4203002349"
-                                  >
-                                    <td className="text-center">
-                                      <div>
-                                        <label
-                                          className="mt-radio"
-                                          style={{ paddingLeft: "17px" }}
-                                        >
-                                          <input
-                                            id="rdoMonHocChoDangKy"
-                                            name="rdoMonHocChoDangKy"
-                                            type="radio"
-                                            value="2349"
-                                          />
-                                          <span></span>
-                                        </label>
-                                      </div>
-                                    </td>
-                                    <td>16</td>
-                                    <td>4203002349</td>
-                                    <td className="text-left">
-                                      Lập trình phân tán với công nghệ .NET
-                                    </td>
-                                    <td>3</td>
-                                    <td>
-                                      <div>
-                                        <div className="no-check"></div>
-                                      </div>
-                                    </td>
-                                    <td>
-                                      <div>
-                                        <div className="tooltip tooltipstered">
-                                          002044{" "}
-                                          <span className="cl-red">(a)</span>
-                                        </div>
-                                      </div>
-                                    </td>
-                                  </tr>
-                                  <tr
-                                    data-id="2329"
-                                    data-mamh="002329"
-                                    data-mahpduochoc="4203002329"
-                                  >
-                                    <td className="text-center">
-                                      <div>
-                                        <label
-                                          className="mt-radio"
-                                          style={{ paddingLeft: "17px" }}
-                                        >
-                                          <input
-                                            id="rdoMonHocChoDangKy"
-                                            name="rdoMonHocChoDangKy"
-                                            type="radio"
-                                            value="2329"
-                                          />
-                                          <span></span>
-                                        </label>
-                                      </div>
-                                    </td>
-                                    <td>17</td>
-                                    <td>4203002329</td>
-                                    <td className="text-left">
-                                      Nhập môn dữ liệu lớn
-                                    </td>
-                                    <td>3</td>
-                                    <td>
-                                      <div>
-                                        <div className="no-check"></div>
-                                      </div>
-                                    </td>
-                                    <td>
-                                      <div>
-                                        <div className="tooltip tooltipstered">
-                                          001146{" "}
-                                          <span className="cl-red">(a)</span>
-                                        </div>
-                                      </div>
-                                    </td>
-                                  </tr>
-                                  <tr
-                                    data-id="2330"
-                                    data-mamh="002330"
-                                    data-mahpduochoc="4203002330"
-                                  >
-                                    <td className="text-center">
-                                      <div>
-                                        <label
-                                          className="mt-radio"
-                                          style={{ paddingLeft: "17px" }}
-                                        >
-                                          <input
-                                            id="rdoMonHocChoDangKy"
-                                            name="rdoMonHocChoDangKy"
-                                            type="radio"
-                                            value="2330"
-                                          />
-                                          <span></span>
-                                        </label>
-                                      </div>
-                                    </td>
-                                    <td>18</td>
-                                    <td>4203002330</td>
-                                    <td className="text-left">
-                                      Lập trình phân tích dữ liệu 2
-                                    </td>
-                                    <td>3</td>
-                                    <td>
-                                      <div>
-                                        <div className="no-check"></div>
-                                      </div>
-                                    </td>
-                                    <td>
-                                      <div>
-                                        <div className="tooltip tooltipstered">
-                                          001146,003451{" "}
-                                          <span className="cl-red">(a)</span>
-                                        </div>
-                                      </div>
-                                    </td>
-                                  </tr>
-                                  <tr
-                                    data-id="2027"
-                                    data-mamh="002027"
-                                    data-mahpduochoc="4203002027"
-                                  >
-                                    <td className="text-center">
-                                      <div>
-                                        <label
-                                          className="mt-radio"
-                                          style={{ paddingLeft: "17px" }}
-                                        >
-                                          <input
-                                            id="rdoMonHocChoDangKy"
-                                            name="rdoMonHocChoDangKy"
-                                            type="radio"
-                                            value="2027"
-                                          />
-                                          <span></span>
-                                        </label>
-                                      </div>
-                                    </td>
-                                    <td>19</td>
-                                    <td>4203002027</td>
-                                    <td className="text-left">
-                                      Chứng chỉ TOEIC 450
-                                    </td>
-                                    <td>0</td>
-                                    <td>
-                                      <div>
-                                        <div className="check"></div>
-                                      </div>
-                                    </td>
-                                    <td></td>
-                                  </tr>
-                                </tbody>
-                              </table>
-                            </div>
+                                            <th lang="dkhp-hoctruoctienquyetsonghanh">
+                                              học phần: học trước (a),
+                                              <br />
+                                              tiên quyết (b),
+                                              <br />
+                                              song hành (c)
+                                            </th>
+                                          </tr>
+                                        </thead>
+                                        <tbody>
+                                          {monChuaDangKy["results"].map((mh) =>
+                                            <tr
+                                              id="rowHocPhan"
+                                              value={mh.ma_hoc_phan}
+                                            >
+                                              <td className="text-center">
+                                                <div>
+                                                  <label
+                                                    className="mt-radio"
+                                                    style={{ paddingLeft: "17px" }}
+                                                  >
+                                                    <input
+                                                      id="rdoMonHocChoDangKy"
+                                                      name="rdoMonHocChoDangKy"
+                                                      type="radio"
+                                                      value={mh.ma_hoc_phan}
+                                                      // onClick={activeLopHocPhanByHocPhan}
+                                                      onChange={event => {
+                                                        setMaHocPhan(event.target.value)
+                                                        activeLopHocPhanByHocPhan2()
+                                                      }}
+                                                    />
+                                                    <span></span>
+                                                  </label>
+                                                </div>
+                                              </td>
+                                              <td>{sttMonChuaDK++}</td>
+                                              <td>{mh.ma_hoc_phan}</td>
+                                              <td className="text-left">{mh.ten_mon_hoc}</td>
+                                              <td>{mh.so_tin_chi_ly_thuyet}</td>
+                                              <td>
+                                                <div>
+                                                  {
+                                                    Number(mh.hoc_phan_bat_buoc) === 1 ?
+                                                      <div className="check"></div> :
+                                                      <div className="no-check"></div>
+                                                  }
+                                                </div>
+                                              </td>
+                                              <td></td>
+                                            </tr>
+                                          )}
+                                        </tbody>
+                                      </table>
+                                    </div>
 
-                            <br />
-                            <br />
+                                    <br />
+                                    <br />
+                                  </div>
+                                </div>
+                              </div> : <div className="gr-table" id="monHPChoDangKy">
+                                <div
+                                  className="border-scroll"
+                                  style={{ overflow: "hidden", outline: "none" }}
+                                  tabIndex="0"
+                                >
+                                  <div id="box_monhocphan_chodangky">
+                                    <h3
+                                      className="title-table"
+                                      lang="mhpchodangky-tabletitle"
+                                    >
+                                      Môn học/học phần đang chờ đăng ký
+                                    </h3>
+                                    <div className="table-responsive">
+                                      <table
+                                        className="table-pointer table-custom table table-bordered text-center"
+                                        width="100%"
+                                        role="grid"
+                                        id="dkHocPhan"
+                                      >
+                                        <thead>
+                                          <tr role="row">
+                                            <td style={{ width: "40px" }}></td>
+                                            <th lang="dkhp-stt">STT</th>
+                                            <th lang="dkhp-malhp">Mã học phần</th>
+                                            <th lang="dkhp-tenmh">
+                                              Tên môn học/học phần
+                                            </th>
+                                            <th lang="dkhp-tc">TC</th>
+                                            <th lang="dkhp-batbuoc">Bắt buộc</th>
+
+                                            <th lang="dkhp-hoctruoctienquyetsonghanh">
+                                              học phần: học trước (a),
+                                              <br />
+                                              tiên quyết (b),
+                                              <br />
+                                              song hành (c)
+                                            </th>
+                                          </tr>
+                                        </thead>
+                                        <tbody>
+                                          <tr>
+                                            <td
+                                              colSpan="7"
+                                              className="text-center bold"
+                                              style={{ fontSize: "16px" }}
+                                            >
+                                              Chưa đến đợt đăng ký
+                                            </td>
+                                          </tr>
+                                        </tbody>
+                                      </table>
+                                    </div>
+
+                                    <br />
+                                    <br />
+                                  </div>
+                                </div>
+                              </div>) : <div>
+                            </div>) : <div>
                           </div>
-                        </div>
+                        }
                       </div>
 
                       <div className="row" id="lopHPChoDangKy">
@@ -1085,6 +562,6 @@ export default function Dkhp() {
           </div>
         </div>
       </div>
-    </div>
+    </div >
   );
 }
