@@ -21,6 +21,7 @@ export default function Dkhp() {
   const [maHocPhan, setMaHocPhan] = useState();
   const [dsToanBoLopHocPhan, setDsToanBoLopHocPhan] = useState();
   let sttMonChuaDK = 1;
+  let sttLHPChoDK = 1;
   const namHienTai = new Date().getFullYear();
 
   useEffect(() => {
@@ -36,25 +37,24 @@ export default function Dkhp() {
     activeHocKi();
   }, []);
 
-  const activeLopHocPhanByHocPhan = async () => {
-    try {
-      console.log(maHocPhan);
-      const res = await dkhpAPI.getLopHocPhanByHocPhan(maHocPhan);
-      console.log(res.data);
-    } catch (error) {
-      console.log(error.message);
-    }
-  };
+  useEffect(() => {
+    const activeLopHocPhanByHocPhan = async () => {
+      try {
+        const res = await dkhpAPI.getLopHocPhanByHocPhan(maHocPhan);
+        console.log(res.data);
+        //console.log(maHocPhan);
+        setDsToanBoLopHocPhan(res.data);
+      } catch (error) {
+        console.log(error.message);
+      }
+    };
+    activeLopHocPhanByHocPhan();
+  }, [maHocPhan])
 
-  function activeLopHocPhanByHocPhan2() {
-    axiosClient
-      .get("http://localhost:4000/userRequest/getLopHocPhanByHocPhan", {
-        ma: maHocPhan
-      })
-      .then((response) => {
-        console.log(response.data);
-      });
-  }
+
+
+
+
 
 
   if (!hocKiState) return null;
@@ -246,7 +246,6 @@ export default function Dkhp() {
                                                       // onClick={activeLopHocPhanByHocPhan}
                                                       onChange={event => {
                                                         setMaHocPhan(event.target.value)
-                                                        activeLopHocPhanByHocPhan()
                                                       }}
                                                     />
                                                     <span></span>
@@ -342,33 +341,160 @@ export default function Dkhp() {
                       </div>
 
                       <div className="row" id="lopHPChoDangKy">
+                        {
+                          dsToanBoLopHocPhan ?
+                            <div className="col-md-6">
+                              <div className="gr-table">
+                                <div className="border-scroll" style={{ maxHeight: '370px', overflow: 'hidden', outline: 'none' }} tabIndex={1}>
+                                  <div id="box_lophocphan_chodangky">
+                                    <h3 className="title-table" lang="lhpchodangky-tabletitle">Lớp học phần chờ đăng ký</h3>
+                                    <div className="text-right" style={{ marginBottom: '10px', marginTop: '18px' }}>
+                                      <label><input id="checkLichTrung" name="checkLichTrung" type="checkbox" defaultValue="true" /><input name="checkLichTrung" type="hidden" defaultValue="false" /><b><span className="text-uppercase" style={{ color: 'red', marginLeft: '5px !important', marginRight: '10px !important' }} lang="lhpchodangky-lhpkhongtrunglich">HIỂN THỊ LỚP học phần KHÔNG TRÙNG LỊCH</span></b></label>
+                                    </div>
+                                    <div className="table-responsive">
+                                      <table id="table_lhpchodangky" className="table-pointer table-dkhp table-custom table table-bordered text-center no-footer dtr-inline" width="100%" role="grid">
+                                        <thead>
+                                          <tr role="row">
+                                            <th lang="sv-stt">STT</th>
+                                            <th lang="dkhp-thongtinlhp">Thông tin lớp học phần</th>
+                                            <th lang="dkhp-dadangky">Đã đăng ký</th>
+                                          </tr>
+                                        </thead>
+                                        <tbody>
+                                          {
+                                            dsToanBoLopHocPhan["results"].map((dsLhp) =>
+                                              <tr className onclick="SelectLopHocPhanChoDangKy(this)"
+                                                data-guidlhp="YoTNTIVY7ETHQn3fphM4Zg">
+                                                <td style={{ width: '40px' }}>{sttLHPChoDK++}</td>
+                                                <td className="text-left">
+                                                  <div className="name">{dsLhp.ten_mon_hoc}</div>
+                                                  <div>
+                                                    <span lang="dkhp-trangthai">Trạng thái</span>: <span className="cl-red">
+                                                      {dsLhp.trang_thai === 1 ? 'Có thể đăng ký' : 'Đã khóa'}</span><br />
+                                                    <span lang="dkhp-malhp">Mã lớp  học phần</span>: {dsLhp.ma_lop_hoc_phan}
+                                                  </div>
+                                                </td>
+                                                <td>
+                                                  {dsLhp.so_luong_dang_ki_hien_tai} / {dsLhp.so_luong_dang_ki_toi_da}
+                                                </td>
+                                              </tr>)
+
+                                          }
+                                        </tbody>
+                                      </table>
+                                    </div>
+                                    <br />
+                                    <br />
+                                  </div>
+                                </div>
+                              </div>
+                            </div> : <div></div>}
                         <div className="col-md-6">
                           <div className="gr-table">
-                            <div
-                              className="border-scroll"
-                              style={{
-                                maxHeight: "370px",
-                                overflow: "hidden",
-                                outline: "none",
-                              }}
-                              tabIndex="1"
-                            >
-                              <div id="box_lophocphan_chodangky"></div>
+                            <div className="border-scroll" tabIndex={2} style={{ overflow: 'hidden', outline: 'none' }}>
+                              <div id="box_chitietlophocphan_chodangky">
+                                <style dangerouslySetInnerHTML={{ __html: "\n    #tbChiTietDKHP .tr-active-nhom {\n        background-color: #ffee4a;\n        color: #003f65 !important;\n    }\n    /*#tbChiTietDKHP  .tr-active {\n        background-color: #ffeb3b52 !important;\n    }*/\n" }} />
+                                <h3 className="title-table" lang="ctlhpchodangky-tabletitle">Chi tiết lớp học phần</h3>
+                                <div className="text-right" style={{ marginBottom: '5px' }}>
+                                  <button onclick="XemLichTrung(this)" className="btn btn--m block first" style={{ backgroundColor: '#ec9e0f', color: '#fff' }} lang="dkhp-xemlichtrungButton">Xem lịch trùng</button>
+                                </div>
+                                <table id="tbChiTietDKHP" className="table-pointer table-dkhp table-custom table table-bordered text-center no-footer dtr-inline" width="100%" role="grid">
+                                  <thead>
+                                    <tr role="row">
+                                      <th>
+                                        <p><span lang="dkhp-trangthai">Trạng thái</span>: <span style={{ color: 'red', fontWeight: 'bold' }}>Đã khóa</span></p>
+                                      </th>
+                                      <th lang="dkhp-nhom">Nhóm</th>
+                                      <th>
+                                        <div>
+                                          <span><span lang="dkhp-sisomax">Sĩ số tối đa</span>: 160</span>
+                                        </div>
+                                      </th>
+                                    </tr>
+                                  </thead>
+                                  <tbody>
+                                    <tr className="tr-active tr-chitietlichdangky" onclick="SelectChiTietLopHocPhan(this)" data-guididdk="H4lGTjINM6SMvnKB0CjIHQ" data-nhomth data-chonnhom="true">
+                                      <td className="text-left">
+                                        <div><span lang="dkhp-lichhoc">Lịch học</span>: <b>LT   - Chủ Nhật   (Tiết 1  -&gt; 3 )</b></div>
+                                        <p><span lang="dkhp-coso">Cơ sở</span>: <b>Cơ sở 1 (Thành phố Hồ Chí Minh)</b></p>
+                                        <p><span lang="dkhp-daynha">Dãy nhà</span>: <b>A (CS1)</b></p>
+                                        <p><span lang="dkhp-phong">Phòng</span>: <b>A2.01</b></p>
+                                      </td>
+                                      <td />
+                                      <td className="text-left">
+                                        <div className="name"><span lang="dkhp-gv">GV</span>: TS Lê Trọng Ngọc</div>
+                                        11/09/2022 - 11/09/2022
+                                      </td>
+                                    </tr>
+                                    <tr className="tr-active tr-chitietlichdangky" onclick="SelectChiTietLopHocPhan(this)" data-guididdk="H4lGTjINM6SMvnKB0CjIHQ" data-nhomth data-chonnhom="true">
+                                      <td className="text-left">
+                                        <div><span lang="dkhp-lichhoc">Lịch học</span>: <b>LT   - Chủ Nhật   (Tiết 1  -&gt; 3 )</b></div>
+                                        <p><span lang="dkhp-coso">Cơ sở</span>: <b>Cơ sở 1 (Thành phố Hồ Chí Minh)</b></p>
+                                        <p><span lang="dkhp-daynha">Dãy nhà</span>: <b>Trực tuyến</b></p>
+                                        <p><span lang="dkhp-phong">Phòng</span>: <b>Trực tuyến 174</b></p>
+                                      </td>
+                                      <td />
+                                      <td className="text-left">
+                                        <div className="name"><span lang="dkhp-gv">GV</span>: TS Lê Trọng Ngọc</div>
+                                        18/09/2022 - 27/11/2022
+                                      </td>
+                                    </tr>
+                                    <tr className="tr-active-nhom tr-chitietlichdangky" onclick="SelectChiTietLopHocPhan(this)" data-guididdk="H4lGTjINM6SMvnKB0CjIHQ" data-nhomth={1} data-chonnhom="true">
+                                      <td className="text-left">
+                                        <div><span lang="dkhp-lichhoc">Lịch học</span>: <b>TH   - Thứ 7  (Tiết 1  -&gt; 3 )</b></div>
+                                        <p><span lang="dkhp-coso">Cơ sở</span>: <b>Cơ sở 1 (Thành phố Hồ Chí Minh)</b></p>
+                                        <p><span lang="dkhp-daynha">Dãy nhà</span>: <b>H (CS1)</b></p>
+                                        <p><span lang="dkhp-phong">Phòng</span>: <b>H4.2.1</b></p>
+                                      </td>
+                                      <td>1</td>
+                                      <td className="text-left">
+                                        <div className="name"><span lang="dkhp-gv">GV</span>: TS Lê Trọng Ngọc</div>
+                                        10/09/2022 - 19/11/2022
+                                        <p><span lang="siso-nhom">Sĩ số</span>: 19/30</p>
+                                      </td>
+                                    </tr>
+                                    <tr className=" tr-chitietlichdangky" onclick="SelectChiTietLopHocPhan(this)" data-guididdk="H4lGTjINM6SMvnKB0CjIHQ" data-nhomth={2} data-chonnhom="true">
+                                      <td className="text-left">
+                                        <div><span lang="dkhp-lichhoc">Lịch học</span>: <b>TH   - Thứ 7  (Tiết 4  -&gt; 6 )</b></div>
+                                        <p><span lang="dkhp-coso">Cơ sở</span>: <b>Cơ sở 1 (Thành phố Hồ Chí Minh)</b></p>
+                                        <p><span lang="dkhp-daynha">Dãy nhà</span>: <b>H (CS1)</b></p>
+                                        <p><span lang="dkhp-phong">Phòng</span>: <b>H4.2.1</b></p>
+                                      </td>
+                                      <td>2</td>
+                                      <td className="text-left">
+                                        <div className="name"><span lang="dkhp-gv">GV</span>: TS Lê Trọng Ngọc</div>
+                                        10/09/2022 - 19/11/2022
+                                        <p><span lang="siso-nhom">Sĩ số</span>: 32/32</p>
+                                      </td>
+                                    </tr>
+                                    <tr className=" tr-chitietlichdangky" onclick="SelectChiTietLopHocPhan(this)" data-guididdk="H4lGTjINM6SMvnKB0CjIHQ" data-nhomth={3} data-chonnhom="true">
+                                      <td className="text-left">
+                                        <div><span lang="dkhp-lichhoc">Lịch học</span>: <b>TH   - Thứ 7  (Tiết 7  -&gt; 9 )</b></div>
+                                        <p><span lang="dkhp-coso">Cơ sở</span>: <b>Cơ sở 1 (Thành phố Hồ Chí Minh)</b></p>
+                                        <p><span lang="dkhp-daynha">Dãy nhà</span>: <b>H (CS1)</b></p>
+                                        <p><span lang="dkhp-phong">Phòng</span>: <b>H4.1</b></p>
+                                      </td>
+                                      <td>3</td>
+                                      <td className="text-left">
+                                        <div className="name"><span lang="dkhp-gv">GV</span>: TS Lê Trọng Ngọc</div>
+                                        10/09/2022 - 19/11/2022
+                                        <p><span lang="siso-nhom">Sĩ số</span>: 28/30</p>
+                                      </td>
+                                    </tr>
+                                  </tbody>
+                                </table>
+                                <div className="text-center has-2btn">
+                                  <div>
+                                    <p className="bold" lang="ctlhpchodangky-lhpcochianhom">Lớp học phần có chia nhóm thực hành, vui lòng chọn lịch có nhóm.</p>
+                                  </div>
+                                  <br />
+                                  <button onclick="DangKyHocPhan(this)" className="btn btn--m block first" style={{ width: '100px' }} lang="dkhp-dangkyButton">Đăng ký</button>
+                                </div>
+                              </div>
                             </div>
                           </div>
                         </div>
-                        <div className="col-md-6">
-                          <div className="gr-table">
-                            <div
-                              className="border-scroll"
-                              tabIndex="2"
-                              style={{ overflow: "hidden", outline: "none" }}
-                            >
-                              <div id="box_chitietlophocphan_chodangky"></div>
-                            </div>
-                          </div>
-                        </div>
-                        <div id="EndLopHPChoDangKy"></div>
+                        <div id="EndLopHPChoDangKy" />
                       </div>
 
                       <div className="gr-table" id="box_monHocPhan_DaDangKy">
