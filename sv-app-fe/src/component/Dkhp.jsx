@@ -39,9 +39,7 @@ export default function Dkhp() {
   const activeLopHocPhanByHocPhan = async () => {
     try {
       console.log(maHocPhan);
-      const res = await dkhpAPI.getLopHocPhanByHocPhan({
-        ma: maHocPhan
-      });
+      const res = await dkhpAPI.getLopHocPhanByHocPhan(maHocPhan);
       console.log(res.data);
     } catch (error) {
       console.log(error.message);
@@ -248,7 +246,7 @@ export default function Dkhp() {
                                                       // onClick={activeLopHocPhanByHocPhan}
                                                       onChange={event => {
                                                         setMaHocPhan(event.target.value)
-                                                        activeLopHocPhanByHocPhan2()
+                                                        activeLopHocPhanByHocPhan()
                                                       }}
                                                     />
                                                     <span></span>
