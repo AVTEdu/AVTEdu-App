@@ -1,9 +1,9 @@
 import axiosClient from "./axiosClient";
 
 const dkhpAPI = {
-    getHocKi() {
+    getHocKi(maHp) {
         const url = "/userRequest/getHocKiSinhVien";
-        return axiosClient.get(url);
+        return axiosClient.put(url,{ma:maHp});
   }
 
 };

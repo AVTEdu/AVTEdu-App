@@ -14,11 +14,11 @@ router
 //Api này lấy tất cả lớp học phần đang có của học phần cần mã học phần 
 router
   .route("/getLopHocPhanByHocPhan")
-  .get(userRequestController.getLopHocPhanByHocPhan);
+  .put(userRequestController.getLopHocPhanByHocPhan);
 //Api này lấy chi tiết lớp học phần đang chọn cần mã lớp học phần   
 router
   .route("/getChiTietHocPhan")
-  .get(userRequestController.getChiTietHocPhan);
+  .put(userRequestController.getChiTietHocPhan);
 //Api này đăng kí học phần đang chọn cần mã lớp học phần      
 router
   .route("/dangKiHocPhan")
