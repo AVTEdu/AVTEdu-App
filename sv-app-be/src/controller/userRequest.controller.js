@@ -227,6 +227,33 @@ const getDanhSachHocPhi = async (req,res,next) =>{
     next(error);
   }
 }
+const getMonDaDangKiTrongHocKi = async (req,res,next) =>{
+  try {
+    const {ma} = req.body
+    const foundSinhVien = await SinhVien.findOne({
+      where: { ma_sinh_vien: req.payload.userId },
+    });
+    if (!foundSinhVien) {
+      return res
+        .status(403)
+        .json({ error: { message: "Không tìm thấy sinh viên" } });
+    }
+    const dsMonDaDangKiTrongHocKi= await sequelize.query(`select hp.ma_hoc_phan,mh.ten_mon_hoc,lhp.ten_lop_hoc_phan,hpp.so_tin_chi_ly_thuyet,hpp.so_tin_chi_thuc_hanh,pclhp.nhom_thuc_hanh_phu_trach,hp.so_tien,hp.trang_thai,hp.trang_thai_dang_ki,lhp.trang_thai
+                                                    from sinhviendb.sinh_vien as sv
+                                                    left join sinhviendb.hoc_phi_sinh_vien as hpsv on sv.ma_sinh_vien = hpsv.ma_sinh_vien
+                                                    left join sinhviendb.hoc_phi as hp on hp.ma_hoc_phi = hpsv.ma_hoc_phi
+                                                    left join sinhviendb.hoc_phan as hpp on hpp.ma_hoc_phan = hp.ma_hoc_phan
+                                                    left join sinhviendb.lop_hoc_phan as lhp on hpp.ma_hoc_phan = lhp.ma_hoc_phan
+                                                    left join sinhviendb.hoc_ki as hk on lhp.ma_hoc_ki = hk.ma_hoc_ki
+                                                    left join sinhviendb.mon_hoc as mh on mh.ma_mon_hoc = hpp.ma_mon_hoc
+                                                    left join sinhviendb.phan_cong_lop_hoc_phan as pclhp on pclhp.ma_lop_hoc_phan = lhp.ma_lop_hoc_phan
+                                                    where sv.ma_sinh_vien = '${req.payload.userId}' and hk.ma_hoc_ki = '${ma}'
+                                                    group by hp.ma_hoc_phan `,{ type: QueryTypes.SELECT })
+    res.status(201).json({ success: true, dsMonDaDangKiTrongHocKi });
+  } catch (error) {
+    next(error);
+  }
+}
 module.exports = {
   getHocKiSinhVien,
   getMonHocSinhVienChuaHoc,
