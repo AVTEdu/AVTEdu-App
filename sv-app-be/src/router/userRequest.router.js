@@ -32,5 +32,9 @@ router
 router
   .route("/getThongTinSinhVien")
   .get(verifyAccessToken, userRequestController.getThongTinSinhvien);
+//Api này lấy công nợ của sinh viên đang đăng nhập  
+router
+  .route("/getDanhSachHocPhi")
+  .get(verifyAccessToken, userRequestController.getDanhSachHocPhi);  
 
 module.exports = router;

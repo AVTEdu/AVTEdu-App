@@ -10,6 +10,7 @@ const { createThoiKhoaBieuSinhVien } = require("./admin.controller");
 const { verifyRefreshToken } = require("../helpers/jwt.service");
 const HocPhi = require("../model/hocphi.model");
 const responseHanlder = require("../handlers/response.handler");
+const HocPhiSinhVien = require("../model/hocphisinhvien.model");
 
 const sequelize = ConnectDB().getInstance();
 
@@ -160,12 +161,33 @@ const DangKiHocPhan = async (req, res, next) => {
     })
     const ma_hoc_phi = await HocPhi.max('ma_hoc_phi')
     const createHocPhi = await HocPhi.create({
-      ma_hoc_phi: ma_hoc_phi,
+      ma_hoc_phi: ma_hoc_phi + 1,
       noi_dung_thu: "Tiền học phí",
       trang_thai_dang_ki: trang_thai_dang_ki,
-
+      so_tien: so_tien,
+      mien_giam: mien_giam,
+      so_tien_da_nop: 0,
+      cong_no: so_tien,
+      trang_thai: 1,
+      ma_hoc_phan: foundLopHocPhan.ma_hoc_phan,
+    });
+    const updateSVHT = await LopHocPhan.update(
+      {
+        so_luong_dang_ki_hien_tai: `${
+          foundLopHocPhan.so_luong_dang_ki_hien_tai + 1
+        }`,
+      },
+      { where: { ma_lop_hoc_phan: `${foundLopHocPhan.ma_lop_hoc_phan}` } }
+    );
+    const ma_hoc_phi_sinh_vien = await HocPhiSinhVien.max('ma_hoc_phi_sinh_vien')
+    const createHocPhiSinhVien  =  await HocPhiSinhVien.create({
+      ma_hoc_phi_sinh_vien:ma_hoc_phi_sinh_vien,
+      ma_hoc_phi:ma_hoc_phi,
+      ma_sinh_vien:foundSinhVien.ma_sinh_vien
     })
-    res.status(201).json({ success: true });
+    res
+      .status(201)
+      .json({ success: true, createTKBSinhVien, createHocPhi, updateSVHT ,createHocPhiSinhVien});
   } catch (error) {
     next(error);
   }
@@ -183,7 +205,26 @@ const getThongTinSinhvien = async (req, res, next) => {
     next(error);
   }
 };
-
+const getDanhSachHocPhi = async (req,res,next) =>{
+  try {
+    const foundSinhVien = await SinhVien.findOne({
+      where: { ma_sinh_vien: req.payload.userId },
+    });
+    if (!foundSinhVien) {
+      return res
+        .status(403)
+        .json({ error: { message: "Không tìm thấy sinh viên" } });
+    }
+    const  dsHocPhiSinhVien= await sequelize.query(`select hp.*
+                    from sinhviendb.sinh_vien as sv
+                    left join sinhviendb.hoc_phi_sinh_vien as hpsv on sv.ma_sinh_vien = hpsv.ma_sinh_vien
+                    left join sinhviendb.hoc_phi as hp on hp.ma_hoc_phi = hpsv.ma_hoc_phi
+                    where sv.ma_sinh_vien = '${req.payload.userId}'`,{ type: QueryTypes.SELECT })
+    res.status(201).json({ success: true, dsHocPhiSinhVien });
+  } catch (error) {
+    next(error);
+  }
+}
 module.exports = {
   getHocKiSinhVien,
   getMonHocSinhVienChuaHoc,
@@ -191,4 +232,5 @@ module.exports = {
   getChiTietHocPhan,
   DangKiHocPhan,
   getThongTinSinhvien,
+  getDanhSachHocPhi,
 }
