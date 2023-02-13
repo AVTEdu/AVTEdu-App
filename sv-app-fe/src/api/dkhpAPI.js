@@ -11,9 +11,9 @@ const dkhpAPI = {
   }
   ,
   //Trong 1 học phần sẽ có nhiều lớp
-  getLopHocPhanByHocPhan() {
+  getLopHocPhanByHocPhan(maHp) {
     const url = "/userRequest/getLopHocPhanByHocPhan";
-    return axiosClient.get(url);
+    return axiosClient.put(url, { ma: maHp });
   }
 
 };
