@@ -56,9 +56,7 @@ const getMonHocSinhVienChuaHoc = async (req, res, next) => {
                               left join sinhviendb.lop_hoc_phan as lhp on kqht.ma_lop_hoc_phan = lhp.ma_lop_hoc_phan
                               left join sinhviendb.hoc_phan as hp on hp.ma_hoc_phan = lhp.ma_hoc_phan
                               where hp.ma_hoc_phan = lhp.ma_hoc_phan)
-                              group by hp.ma_hoc_phan`,
-        { type: QueryTypes.SELECT }
-      )
+                              group by hp.ma_hoc_phan`, { type: QueryTypes.SELECT })
       .then(function (results) {
         return res.status(201).json({ success: true, results });
       });
@@ -83,7 +81,7 @@ const getLopHocPhanByHocPhan = async (req, res, next) => {
                          from sinhviendb.hoc_phan as hp
                          left join sinhviendb.lop_hoc_phan as lhp on hp.ma_hoc_phan = lhp.ma_hoc_phan
                          left join sinhviendb.mon_hoc as mh on hp.ma_mon_hoc = mh.ma_mon_hoc
-                         where hp.ma_hoc_phan = 1`,
+                         where hp.ma_hoc_phan = '${ma}'`,
         { type: QueryTypes.SELECT }
       )
       .then(function (results) {
