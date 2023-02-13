@@ -53,7 +53,8 @@ const getMonHocSinhVienChuaHoc = async (req, res, next) => {
                               (select ma_sinh_vien from sinhviendb.ket_qua_hoc_tap as kqht 
                               left join sinhviendb.lop_hoc_phan as lhp on kqht.ma_lop_hoc_phan = lhp.ma_lop_hoc_phan
                               left join sinhviendb.hoc_phan as hp on hp.ma_hoc_phan = lhp.ma_hoc_phan
-                              where hp.ma_hoc_phan = lhp.ma_hoc_phan)`, { type: QueryTypes.SELECT })
+                              where hp.ma_hoc_phan = lhp.ma_hoc_phan)
+                              group by hp.ma_hoc_phan`, { type: QueryTypes.SELECT })
       .then(function (results) {
         return res.status(201).json({ success: true, results });
       })
