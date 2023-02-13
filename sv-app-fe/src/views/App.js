@@ -3,7 +3,7 @@
 import '../views/App.scss';
 import { Login } from "../component/login";
 import { LoginAdmin } from "../component/admin/LoginAdmin";
-import { Dkhp } from '../component/Dkhp';
+import Dkhp from '../component/Dkhp';
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import Layout from '../component/Layout';
 import RequireAuth from '../component/RequireAuth';

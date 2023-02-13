@@ -4,7 +4,7 @@ import './styles/global.scss';
 import App from './views/App';
 import reportWebVitals from './reportWebVitals';
 // import 'bootstrap/dist/css/bootstrap.min.css';
-import { AuthProvider } from './services/contexts/AuthProvider';
+import { AuthProvider } from './services/contexts/AuthContext';
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
