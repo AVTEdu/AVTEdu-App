@@ -29,9 +29,7 @@ const verifyAccessToken = (req, res, next) => {
   // const authHeader = Authorization;
   // const bearerToken = authHeader.split(' ');
   // const token = bearerToken[1];
-
   console.log("token", token);
-
   JWT.verify(token, halo, (err, payload) => {
     if (err) {
       if (err.name === "JsonWebTokenError") {
