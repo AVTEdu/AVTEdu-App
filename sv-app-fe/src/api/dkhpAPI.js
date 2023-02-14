@@ -14,6 +14,11 @@ const dkhpAPI = {
   getLopHocPhanByHocPhan(maHp) {
     const url = "/userRequest/getLopHocPhanByHocPhan";
     return axiosClient.put(url, { ma: maHp });
+  },
+
+  getChiTietLopHocPhan(maLopHp) {
+    const url = "/userRequest/getChiTietHocPhan";
+    return axiosClient.put(url, { ma: maLopHp });
   }
 
 };
