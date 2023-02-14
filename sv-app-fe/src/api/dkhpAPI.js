@@ -14,6 +14,7 @@ const dkhpAPI = {
   getLopHocPhanByHocPhan(maHp) {
     const url = "/userRequest/getLopHocPhanByHocPhan";
     return axiosClient.put(url, { ma: maHp });
+
   }
 
 };
