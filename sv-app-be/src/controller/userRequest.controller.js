@@ -105,7 +105,7 @@ const getChiTietLopHocPhan = async (req, res, next) => {
         .json({ error: { message: "Không tìm thấy  học phần" } });
     sequelize
       .query(
-        `select lhp.trang_thai,pclhp.so_luong_sv_phu_trach,pclhp.loai_hoc_phan_phu_trach,tkb.ngay_hoc_trong_tuan,tkb.tiet_hoc_bat_dau,tkb.tiet_hoc_ket_thuc,ph.ten_day_nha,ph.ten_phong_hoc,gv.ten_giang_vien,tkb.thoi_gian_bat_dau,tkb.thoi_gian_ket_thu,pclhp.ma_phan_cong
+        `select lhp.trang_thai,pclhp.so_luong_sv_phu_trach,pclhp.loai_hoc_phan_phu_trach,tkb.ngay_hoc_trong_tuan,tkb.tiet_hoc_bat_dau,tkb.tiet_hoc_ket_thuc,ph.ten_day_nha,ph.ten_phong_hoc,gv.ten_giang_vien,tkb.thoi_gian_bat_dau,tkb.thoi_gian_ket_thuc,pclhp.ma_phan_cong
         from sinhviendb.hoc_phan as hp
         left join sinhviendb.lop_hoc_phan as lhp on hp.ma_hoc_phan = lhp.ma_lop_hoc_phan
         left join sinhviendb.phan_cong_lop_hoc_phan as pclhp on lhp.ma_lop_hoc_phan = pclhp.ma_lop_hoc_phan
@@ -118,7 +118,7 @@ const getChiTietLopHocPhan = async (req, res, next) => {
         return res.status(201).json({ success: true, results });
       })
   } catch (error) {
-    next(error);
+    console.log(error)
   }
 }
 const DangKiHocPhan = async (req, res, next) => {
