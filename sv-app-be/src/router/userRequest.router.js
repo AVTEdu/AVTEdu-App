@@ -20,7 +20,10 @@ router
   .route("/getChiTietHocPhan")
   .put(userRequestController.getChiTietHocPhan);
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> parent of 96aa3b1... update getChiTietLopHocPhan and add getMonDangKiTrongKiNay
 
 >>>>>>> parent of 96aa3b1... update getChiTietLopHocPhan and add getMonDangKiTrongKiNay
 //Api này đăng kí học phần đang chọn cần mã lớp học phần      
@@ -30,6 +33,18 @@ router
 //Api này lấy những thông tin của sinh viên đang đăng nhập  
 router
   .route("/getThongTinSinhVien")
+<<<<<<< HEAD
   .get(verifyAccessToken,userRequestController.getThongTinSinhvien);    
+=======
+  .get(verifyAccessToken, userRequestController.getThongTinSinhvien);
+//Api này lấy công nợ của sinh viên đang đăng nhập  
+router
+  .route("/getDanhSachHocPhi")
+  .get(verifyAccessToken, userRequestController.getDanhSachHocPhi); 
+//Api này lấy những môn đã đăng kí trong 1 học kì của sinh viên đang đăng nhập cần mã học kì  
+router
+  .route("/getMonDaDangKiTrongHocKi")
+  .get(verifyAccessToken, userRequestController.getMonDaDangKiTrongHocKi);     
+>>>>>>> parent of 96aa3b1... update getChiTietLopHocPhan and add getMonDangKiTrongKiNay
 
 module.exports = router;
