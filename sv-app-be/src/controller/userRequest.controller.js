@@ -11,7 +11,10 @@ const { verifyRefreshToken } = require("../helpers/jwt.service");
 const HocPhi = require("../model/hocphi.model");
 const responseHanlder = require("../handlers/response.handler");
 const HocPhiSinhVien = require("../model/hocphisinhvien.model");
+<<<<<<< HEAD
 const PhanCongLopHocPhan = require("../model/phanconglophocphan.model");
+=======
+>>>>>>> vietanh
 
 const sequelize = ConnectDB().getInstance();
 
@@ -154,6 +157,7 @@ const DangKiHocPhan =  async (req,res,next) =>{
     const { ma, trang_thai_dang_ki,so_tien,mien_giam } = req.body;
     const foundLopHocPhan = await LopHocPhan.findOne({ where: { ma_lop_hoc_phan: `${ma}` } });
     console.log(ma)
+
     if (!foundLopHocPhan) {
       return res
         .status(403)
@@ -163,7 +167,9 @@ const DangKiHocPhan =  async (req,res,next) =>{
                                             from sinhviendb.lop_hoc_phan as lhp
                                             left join sinhviendb.phan_cong_lop_hoc_phan as pclhp on lhp.ma_lop_hoc_phan = pclhp.ma_lop_hoc_phan
                                             left join sinhviendb.thoi_khoa_bieu as tkb on tkb.ma_phan_cong_lop_hoc_phan = pclhp.ma_phan_cong
+
                                             where lhp.ma_lop_hoc_phan = '${ma}'`, { type: QueryTypes.SELECT });
+
     if (!ThoiKhoabieu) {
       return res
         .status(403)
