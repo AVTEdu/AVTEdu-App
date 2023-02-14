@@ -19,6 +19,10 @@ router
 router
   .route("/getChiTietHocPhan")
   .put(userRequestController.getChiTietHocPhan);
+<<<<<<< HEAD
+=======
+
+>>>>>>> parent of 96aa3b1... update getChiTietLopHocPhan and add getMonDangKiTrongKiNay
 //Api này đăng kí học phần đang chọn cần mã lớp học phần      
 router
   .route("/dangKiHocPhan")
