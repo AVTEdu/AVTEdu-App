@@ -11,10 +11,7 @@ const { verifyRefreshToken } = require("../helpers/jwt.service");
 const HocPhi = require("../model/hocphi.model");
 const responseHanlder = require("../handlers/response.handler");
 const HocPhiSinhVien = require("../model/hocphisinhvien.model");
-<<<<<<< HEAD
 const PhanCongLopHocPhan = require("../model/phanconglophocphan.model");
-=======
->>>>>>> vietanh
 
 const sequelize = ConnectDB().getInstance();
 
@@ -85,26 +82,6 @@ const getLopHocPhanByHocPhan = async (req, res, next) => {
                          from sinhviendb.hoc_phan as hp
                          left join sinhviendb.lop_hoc_phan as lhp on hp.ma_hoc_phan = lhp.ma_hoc_phan
                          left join sinhviendb.mon_hoc as mh on hp.ma_mon_hoc = mh.ma_mon_hoc
-<<<<<<< HEAD
-                         where hp.ma_hoc_phan = 1`,{type: QueryTypes.SELECT})
-                         .then(function(results) {
-                          return res.status(201).json({ success: true,results});
-                        })
-    } catch (error) {
-      next(error);
-    }
-}
-const getChiTietHocPhan =  async (req,res,next) =>{
-  try {
-    //Mã lớp học phần
-      const {ma} = req.body;
-      const foundHocPhan = await HocPhan.findOne({ where: { ma_hoc_phan:`${ma}` } });
-      if (!foundHocPhan)
-          return res
-          .status(403)
-          .json({ error: { message: "Không tìm thấy  học phần" } });
-      sequelize.query(`select lhp.trang_thai,lhp.so_luong_dang_ki_toi_da,pclhp.loai_hoc_phan_phu_trach,tkb.ngay_hoc_trong_tuan,tkb.tiet_hoc_bat_dau,tkb.tiet_hoc_ket_thuc,ph.ten_day_nha,ph.ten_phong_hoc,gv.ten_giang_vien,tkb.thoi_gian_bat_dau,tkb.thoi_gian_ket_thuc
-=======
                          where hp.ma_hoc_phan = '${ma}'`,
         { type: QueryTypes.SELECT }
       )
@@ -115,12 +92,12 @@ const getChiTietHocPhan =  async (req,res,next) =>{
     next(error);
   }
 };
-const getChiTietHocPhan = async (req, res, next) => {
+const getChiTietLopHocPhan = async (req, res, next) => {
   try {
     //Mã lớp học phần
     const { ma } = req.body;
-    const foundHocPhan = await HocPhan.findOne({
-      where: { ma_hoc_phan: `${ma}` },
+    const foundHocPhan = await LopHocPhan.findOne({
+      where: { ma_lop_hoc_phan: `${ma}` },
     });
     if (!foundHocPhan)
       return res
@@ -128,40 +105,42 @@ const getChiTietHocPhan = async (req, res, next) => {
         .json({ error: { message: "Không tìm thấy  học phần" } });
     sequelize
       .query(
-        `select lhp.trang_thai,lhp.so_luong_dang_ki_toi_da,pclhp.loai_hoc_phan_phu_trach,tkb.ngay_hoc_trong_tuan,tkb.tiet_hoc_bat_dau,tkb.tiet_hoc_ket_thuc,ph.ten_day_nha,ph.ten_phong_hoc,gv.ten_giang_vien,tkb.thoi_gian_bat_dau,tkb.thoi_gian_ket_thuc
->>>>>>> parent of 96aa3b1... update getChiTietLopHocPhan and add getMonDangKiTrongKiNay
-                        from sinhviendb.hoc_phan as hp
-                        left join sinhviendb.lop_hoc_phan as lhp on hp.ma_hoc_phan = lhp.ma_lop_hoc_phan
-                        left join sinhviendb.phan_cong_lop_hoc_phan as pclhp on lhp.ma_lop_hoc_phan = pclhp.ma_lop_hoc_phan
-                        left join sinhviendb.giang_vien as gv on pclhp.ma_giang_vien = gv.ma_giang_vien
-                        left join sinhviendb.thoi_khoa_bieu as tkb on tkb.ma_lop_hoc_phan = lhp.ma_hoc_phan
-                        left join sinhviendb.phong_hoc as ph on tkb.ma_phong_hoc = ph.ma_phong_hoc
-<<<<<<< HEAD
-                        where hp.ma_hoc_phan = 1`,{type: QueryTypes.SELECT})
-                       .then(function(results) {
-                        return res.status(201).json({ success: true,results});
-                      })
-=======
-                        where hp.ma_hoc_phan = 1`, { type: QueryTypes.SELECT })
+        `select lhp.trang_thai,pclhp.so_luong_sv_phu_trach,pclhp.loai_hoc_phan_phu_trach,tkb.ngay_hoc_trong_tuan,tkb.tiet_hoc_bat_dau,tkb.tiet_hoc_ket_thuc,ph.ten_day_nha,ph.ten_phong_hoc,gv.ten_giang_vien,tkb.thoi_gian_bat_dau,tkb.thoi_gian_ket_thu,pclhp.ma_phan_cong
+        from sinhviendb.hoc_phan as hp
+        left join sinhviendb.lop_hoc_phan as lhp on hp.ma_hoc_phan = lhp.ma_lop_hoc_phan
+        left join sinhviendb.phan_cong_lop_hoc_phan as pclhp on lhp.ma_lop_hoc_phan = pclhp.ma_lop_hoc_phan
+        left join sinhviendb.giang_vien as gv on pclhp.ma_giang_vien = gv.ma_giang_vien
+        left join sinhviendb.thoi_khoa_bieu as tkb on tkb.ma_phan_cong_lop_hoc_phan = pclhp.ma_phan_cong
+        left join sinhviendb.phong_hoc as ph on tkb.ma_phong_hoc = ph.ma_phong_hoc
+        where lhp.ma_lop_hoc_phan = '${ma}'
+        group by pclhp.ma_phan_cong`, { type: QueryTypes.SELECT })
       .then(function (results) {
         return res.status(201).json({ success: true, results });
       })
->>>>>>> parent of 96aa3b1... update getChiTietLopHocPhan and add getMonDangKiTrongKiNay
   } catch (error) {
     next(error);
   }
 }
-const DangKiHocPhan =  async (req,res,next) =>{
+const DangKiHocPhan = async (req, res, next) => {
   try {
     //Mã lớp học phần 
-    const { ma, trang_thai_dang_ki,so_tien,mien_giam } = req.body;
-    const foundLopHocPhan = await LopHocPhan.findOne({ where: { ma_lop_hoc_phan: `${ma}` } });
-    console.log(ma)
-
+    const { ma,ma_hoc_ki,trang_thai_dang_ki,so_tien,mien_giam } = req.body;
+    const foundPCLopHocPhan = await PhanCongLopHocPhan.findOne({ where: { ma_phan_cong: `${ma}` } });
+    if (!foundPCLopHocPhan) {
+      return res
+        .status(403)
+        .json({ error: { message: "Không tìm thấy phân công lớp học phần" } });
+    }
+    const foundLopHocPhan = await LopHocPhan.findOne({ where: { ma_lop_hoc_phan: `${foundPCLopHocPhan.ma_lop_hoc_phan}` } });
     if (!foundLopHocPhan) {
       return res
         .status(403)
         .json({ error: { message: "Không tìm thấy lớp học phần" } });
+    }
+    if (ma_hoc_ki != foundLopHocPhan.ma_hoc_ki) {
+      return res
+        .status(403)
+        .json({ error: { message: "Học kì trong lớp học phần và học kì đang chọn không trùng nhau" } });
     }
     const ThoiKhoabieu = await sequelize.query(`select tkb.* 
                                             from sinhviendb.lop_hoc_phan as lhp
@@ -193,7 +172,7 @@ const DangKiHocPhan =  async (req,res,next) =>{
       ma: ma_tkb_sv + 1,
       loai_ngay_hoc: "Thứ",
       ma_sinh_vien: foundSinhVien.ma_sinh_vien,
-      ma_thoi_khoa_bieu: foundThoiKhoaBieu.ma_thoi_khoa_bieu,
+      ma_thoi_khoa_bieu: ThoiKhoabieu.ma_thoi_khoa_bieu,
       ghi_chu: "...."
     })
     const ma_hoc_phi = await HocPhi.max('ma_hoc_phi')
@@ -218,7 +197,7 @@ const DangKiHocPhan =  async (req,res,next) =>{
     );
     const ma_hoc_phi_sinh_vien = await HocPhiSinhVien.max('ma_hoc_phi_sinh_vien')
     const createHocPhiSinhVien  =  await HocPhiSinhVien.create({
-      ma_hoc_phi_sinh_vien:ma_hoc_phi_sinh_vien+1,
+      ma_hoc_phi_sinh_vien:ma_hoc_phi_sinh_vien,
       ma_hoc_phi:ma_hoc_phi,
       ma_sinh_vien:foundSinhVien.ma_sinh_vien
     })
@@ -226,8 +205,7 @@ const DangKiHocPhan =  async (req,res,next) =>{
       .status(201)
       .json({ success: true, createTKBSinhVien, createHocPhi, updateSVHT ,createHocPhiSinhVien});
   } catch (error) {
-    console.log(error)
-    next(error)
+    next(error);
   }
 }
 const getThongTinSinhvien = async (req, res, next) => {
@@ -259,12 +237,11 @@ const getDanhSachHocPhi = async (req,res,next) =>{
                     left join sinhviendb.hoc_phi as hp on hp.ma_hoc_phi = hpsv.ma_hoc_phi
                     where sv.ma_sinh_vien = '${req.payload.userId}'`,{ type: QueryTypes.SELECT })
     res.status(201).json({ success: true, dsHocPhiSinhVien });
->>>>>>> parent of 96aa3b1... update getChiTietLopHocPhan and add getMonDangKiTrongKiNay
   } catch (error) {
     next(error);
   }
 }
-const getThongTinSinhvien =   async (req,res,next) =>{
+const getMonDaDangKiTrongHocKi = async (req,res,next) =>{
   try {
     const {ma} = req.body
     const foundSinhVien = await SinhVien.findOne({
@@ -291,26 +268,13 @@ const getThongTinSinhvien =   async (req,res,next) =>{
     next(error);
   }
 }
-<<<<<<< HEAD
-
-
-
-  module.exports ={
-    getHocKiSinhVien,
-    getMonHocSinhVienChuaHoc,
-    getLopHocPhanByHocPhan,
-    getChiTietHocPhan,
-    DangKiHocPhan,
-    getThongTinSinhvien,
-  }
-=======
 module.exports = {
   getHocKiSinhVien,
   getMonHocSinhVienChuaHoc,
   getLopHocPhanByHocPhan,
-  getChiTietHocPhan,
+  getChiTietLopHocPhan,
   DangKiHocPhan,
   getThongTinSinhvien,
   getDanhSachHocPhi,
+  getMonDaDangKiTrongHocKi,
 }
->>>>>>> parent of 96aa3b1... update getChiTietLopHocPhan and add getMonDangKiTrongKiNay
