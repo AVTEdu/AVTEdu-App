@@ -493,6 +493,7 @@ const thanhToanHocPhiSinhVien = async (req,res,next) =>{
     next(error);
   }
 }
+
 module.exports = {
     createSinhVien,
     createKhoa,
@@ -510,5 +511,7 @@ module.exports = {
     createLoaiPhongHoc,
     createPhongHoc,
     createBangDiem,
-    createThoiKhoaBieuSinhVien
+    createThoiKhoaBieuSinhVien,
+    thanhToanHocPhiSinhVien,
+    getHocPhiChuaNopSinhVien
 };

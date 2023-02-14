@@ -11,6 +11,7 @@ const { verifyRefreshToken } = require("../helpers/jwt.service");
 const HocPhi = require("../model/hocphi.model");
 const responseHanlder = require("../handlers/response.handler");
 const HocPhiSinhVien = require("../model/hocphisinhvien.model");
+const PhanCongLopHocPhan = require("../model/phanconglophocphan.model");
 
 const sequelize = ConnectDB().getInstance();
 
@@ -104,7 +105,7 @@ const getChiTietLopHocPhan = async (req, res, next) => {
         .json({ error: { message: "Không tìm thấy  học phần" } });
     sequelize
       .query(
-        `select lhp.trang_thai,pclhp.so_luong_sv_phu_trach,pclhp.loai_hoc_phan_phu_trach,tkb.ngay_hoc_trong_tuan,tkb.tiet_hoc_bat_dau,tkb.tiet_hoc_ket_thuc,ph.ten_day_nha,ph.ten_phong_hoc,gv.ten_giang_vien,tkb.thoi_gian_bat_dau,tkb.thoi_gian_ket_thuc
+        `select lhp.trang_thai,pclhp.so_luong_sv_phu_trach,pclhp.loai_hoc_phan_phu_trach,tkb.ngay_hoc_trong_tuan,tkb.tiet_hoc_bat_dau,tkb.tiet_hoc_ket_thuc,ph.ten_day_nha,ph.ten_phong_hoc,gv.ten_giang_vien,tkb.thoi_gian_bat_dau,tkb.thoi_gian_ket_thu,pclhp.ma_phan_cong
         from sinhviendb.hoc_phan as hp
         left join sinhviendb.lop_hoc_phan as lhp on hp.ma_hoc_phan = lhp.ma_lop_hoc_phan
         left join sinhviendb.phan_cong_lop_hoc_phan as pclhp on lhp.ma_lop_hoc_phan = pclhp.ma_lop_hoc_phan
@@ -123,14 +124,23 @@ const getChiTietLopHocPhan = async (req, res, next) => {
 const DangKiHocPhan = async (req, res, next) => {
   try {
     //Mã lớp học phần 
-    const { ma, trang_thai_dang_ki,so_tien,mien_giam } = req.body;
-    const foundLopHocPhan = await LopHocPhan.findOne({ where: { ma_lop_hoc_phan: `${ma}` } });
-    console.log(ma)
-
+    const { ma,ma_hoc_ki,trang_thai_dang_ki,so_tien,mien_giam } = req.body;
+    const foundPCLopHocPhan = await PhanCongLopHocPhan.findOne({ where: { ma_phan_cong: `${ma}` } });
+    if (!foundPCLopHocPhan) {
+      return res
+        .status(403)
+        .json({ error: { message: "Không tìm thấy phân công lớp học phần" } });
+    }
+    const foundLopHocPhan = await LopHocPhan.findOne({ where: { ma_lop_hoc_phan: `${foundPCLopHocPhan.ma_lop_hoc_phan}` } });
     if (!foundLopHocPhan) {
       return res
         .status(403)
         .json({ error: { message: "Không tìm thấy lớp học phần" } });
+    }
+    if (ma_hoc_ki != foundLopHocPhan.ma_hoc_ki) {
+      return res
+        .status(403)
+        .json({ error: { message: "Học kì trong lớp học phần và học kì đang chọn không trùng nhau" } });
     }
     const ThoiKhoabieu = await sequelize.query(`select tkb.* 
                                             from sinhviendb.lop_hoc_phan as lhp
