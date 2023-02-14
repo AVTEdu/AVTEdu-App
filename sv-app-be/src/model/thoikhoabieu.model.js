@@ -37,11 +37,11 @@ ThoiKhoaBieu.init({
         type:DataTypes.INTEGER,
         allowNull:false,
     },
-    ma_lop_hoc_phan:{
+    ma_phan_cong_lop_hoc_phan:{
         type:DataTypes.INTEGER,
         references:{
-            model:'lop_hoc_phan',
-            key:'ma_lop_hoc_phan'
+            model:'phan_cong_lop_hoc_phan',
+            key:'ma_phan_cong'
         }
     },
     ma_phong_hoc:{
