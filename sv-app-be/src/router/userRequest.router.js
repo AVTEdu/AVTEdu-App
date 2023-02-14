@@ -17,8 +17,8 @@ router
   .put(userRequestController.getLopHocPhanByHocPhan);
 //Api này lấy chi tiết lớp học phần đang chọn cần mã lớp học phần   
 router
-  .route("/getChiTietHocPhan")
-  .put(userRequestController.getChiTietHocPhan);
+  .route("/getChiTietLopHocPhan")
+  .put(userRequestController.getChiTietLopHocPhan);
 
 //Api này đăng kí học phần đang chọn cần mã phân công lớp học phần và mã học kì đang chọn     
 router
