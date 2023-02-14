@@ -16,6 +16,7 @@ const LoaiPhongHoc = require("../model/loaiphonghoc.model");
 const PhongHoc = require("../model/phonghoc.model");
 const KetQuaHocTap = require("../model/ketquahoctap.model");
 const ThoiKhoaBieuSinhVien = require("../model/thoikhoabieusinhvien.model");
+const HocPhi = require("../model/hocphi.model");
 
 
 //Hàm tạo sinh viên bằng admin
@@ -434,6 +435,65 @@ const createThoiKhoaBieuSinhVien = async (req,res,next) =>{
     next(error);
   }
 }
+const getHocPhiChuaNopSinhVien = async (req,res,next) =>{
+  try {
+    const {ma_sinh_vien,ma_hoc_phi,so_tien} = req.body
+    const foundSinhVien = await SinhVien.findOne({
+      where: { ma_sinh_vien: `${ma_sinh_vien}` },
+    });
+    if (!foundSinhVien) {
+      return res
+        .status(403)
+        .json({ error: { message: "Không tìm thấy sinh viên" } });
+    }
+    const foundHocPhi = await HocPhi.findOne({
+      where: { ma_hoc_phi:`${ma_hoc_phi}` },
+    });
+    if (!foundHocPhi) {
+      return res
+        .status(403)
+        .json({ error: { message: "Không tìm thấy học phí" } });
+    }
+    const updateHocPhi = await HocPhi.update({
+      so_tien_da_nop: `${so_tien}`,
+    },
+    { where: { ma_hoc_phi: `${ma_hoc_phi}` } }
+  );
+    return res.status(201).json({ success: true, updateHocPhi});
+  } catch (error) {
+    next(error);
+  }
+}
+const thanhToanHocPhiSinhVien = async (req,res,next) =>{
+  try {
+    const {ma_sinh_vien,ma_hoc_phi,so_tien} = req.body
+    const foundSinhVien = await SinhVien.findOne({
+      where: { ma_sinh_vien: `${ma_sinh_vien}` },
+    });
+    if (!foundSinhVien) {
+      return res
+        .status(403)
+        .json({ error: { message: "Không tìm thấy sinh viên" } });
+    }
+    const foundHocPhi = await HocPhi.findOne({
+      where: { ma_hoc_phi:`${ma_hoc_phi}` },
+    });
+    if (!foundHocPhi) {
+      return res
+        .status(403)
+        .json({ error: { message: "Không tìm thấy học phí" } });
+    }
+    const updateHocPhi = await HocPhi.update({
+      so_tien_da_nop: `${so_tien}`,
+    },
+    { where: { ma_hoc_phi: `${ma_hoc_phi}` } }
+  );
+    return res.status(201).json({ success: true, updateHocPhi});
+  } catch (error) {
+    next(error);
+  }
+}
+
 module.exports = {
     createSinhVien,
     createKhoa,
@@ -451,5 +511,7 @@ module.exports = {
     createLoaiPhongHoc,
     createPhongHoc,
     createBangDiem,
-    createThoiKhoaBieuSinhVien
+    createThoiKhoaBieuSinhVien,
+    thanhToanHocPhiSinhVien,
+    getHocPhiChuaNopSinhVien
 };
