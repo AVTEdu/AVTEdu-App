@@ -35,6 +35,6 @@ router
 //Api này lấy những môn đã đăng kí trong 1 học kì của sinh viên đang đăng nhập cần mã học kì  
 router
   .route("/getMonDaDangKiTrongHocKi")
-  .get(verifyAccessToken, userRequestController.getMonDaDangKiTrongHocKi);
+  .put(verifyAccessToken, userRequestController.getMonDaDangKiTrongHocKi);
 
 module.exports = router;

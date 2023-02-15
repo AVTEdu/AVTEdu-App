@@ -42,35 +42,6 @@ export default function Dkhp() {
     activeHocKi();
   }, []);
 
-
-  useEffect(() => {
-    const activeLopHocPhanByHocPhan = async () => {
-      try {
-        const res = await dkhpAPI.getLopHocPhanByHocPhan(maHocPhan);
-        // console.log(res.data);
-        //console.log(maHocPhan);
-        setDsToanBoLopHocPhan(res.data);
-      } catch (error) {
-        console.log(error.message);
-      }
-    };
-    activeLopHocPhanByHocPhan();
-  }, [maHocPhan])
-
-  useEffect(() => {
-    console.log(maLopHocPhan);
-    const activeChiTietLopHocPhan = async () => {
-      try {
-        const res = await dkhpAPI.getChiTietLopHocPhan(maLopHocPhan);
-        //console.log(res.data);
-        setChiTietLopHP(res.data);
-      } catch (error) {
-        console.log(error.message);
-      }
-    };
-    activeChiTietLopHocPhan();
-  }, [maLopHocPhan])
-
   useEffect(() => {
     const activeDSHocPhanDaDangKyTrongKyNay = async () => {
       try {
@@ -82,6 +53,33 @@ export default function Dkhp() {
     };
     activeDSHocPhanDaDangKyTrongKyNay();
   }, [maHocKi])
+
+  useEffect(() => {
+    const activeLopHocPhanByHocPhan = async () => {
+      try {
+        const res = await dkhpAPI.getLopHocPhanByHocPhan(maHocPhan);
+        setDsToanBoLopHocPhan(res.data);
+      } catch (error) {
+        console.log(error.message);
+      }
+    };
+    activeLopHocPhanByHocPhan();
+  }, [maHocPhan])
+
+  useEffect(() => {
+    const activeChiTietLopHocPhan = async () => {
+      try {
+        console.log(maLopHocPhan);
+        const res = await dkhpAPI.getChiTietLopHocPhan(maLopHocPhan);
+
+        setChiTietLopHP(res.data);
+      } catch (error) {
+        console.log(error.message);
+      }
+    };
+    activeChiTietLopHocPhan();
+  }, [maLopHocPhan])
+
 
   if (!hocKiState) return null;
 
@@ -97,7 +95,6 @@ export default function Dkhp() {
       if (selectElementDotDangKy === '') {
         setDsToanBoLopHocPhan('');
         setChiTietLopHP('');
-        setHpDaDangKy('');
       }
     } catch (error) {
       console.log(error.message);
@@ -457,7 +454,7 @@ export default function Dkhp() {
                                     </thead>
                                     <tbody>
                                       {
-                                        chiTietLopHP["results"].map((ctlhp => {
+                                        chiTietLopHP["results"].map((ctlhp) =>
                                           <tr className="tr-active tr-chitietlichdangky" onClick={SelectChiTietLopHocPhan}>
                                             <td className="text-left">
                                               <div><span >Lịch học</span>: <b> {ctlhp.ngay_hoc_trong_tuan}   (Tiết {ctlhp.tiet_hoc_bat_dau}  -&gt; {ctlhp.tiet_hoc_ket_thuc} )</b></div>
@@ -471,7 +468,7 @@ export default function Dkhp() {
                                               {ctlhp.thoi_gian_bat_dau} - {ctlhp.thoi_gian_ket_thuc}
                                             </td>
                                           </tr>
-                                        }))
+                                        )
                                       }
                                     </tbody>
                                   </table>
@@ -490,9 +487,10 @@ export default function Dkhp() {
                         }
                       </div>
 
-                      {
-                        hpDaDangKy ? <>
-                          <div className="gr-table" id="box_monHocPhan_DaDangKy">
+
+                      <div className="gr-table" id="box_monHocPhan_DaDangKy">
+                        {
+                          hpDaDangKy?.dsMonDaDangKiTrongHocKi.length > 0 ? <>
                             <h3
                               className="title-table"
                               lang="dangkyhocphan-lhpdadangkytabletitle"
@@ -537,52 +535,8 @@ export default function Dkhp() {
                                   </tr>
                                 </thead>
                                 <tbody>
-                                  {/* <tr>
-                                    <td
-                                      colSpan="6"
-                                      className="text-center bold"
-                                      style={{ fontSize: "16px" }}
-                                    >
-                                      Tổng
-                                    </td>
-
-                                    <td
-                                      className="text-center bold"
-                                      style={{ fontSize: "16px" }}
-                                    >
-                                      10
-                                    </td>
-                                    <td
-                                      className="text-center bold"
-                                      style={{ fontSize: "16px" }}
-                                    ></td>
-                                    <td
-                                      className="text-center bold"
-                                      style={{ fontSize: "16px" }}
-                                    ></td>
-                                    <td
-                                      className="text-center bold"
-                                      style={{ fontSize: "16px" }}
-                                    ></td>
-                                    <td
-                                      className="text-center bold"
-                                      style={{ fontSize: "16px" }}
-                                    ></td>
-                                    <td
-                                      className="text-center bold"
-                                      style={{ fontSize: "16px" }}
-                                    ></td>
-                                    <td
-                                      className="text-center bold"
-                                      style={{ fontSize: "16px" }}
-                                    ></td>
-                                    <td
-                                      className="text-center bold"
-                                      style={{ fontSize: "16px" }}
-                                    ></td>
-                                  </tr> */}
                                   {
-                                    hpDaDangKy["results"].map((hpDaDk => {
+                                    hpDaDangKy["dsMonDaDangKiTrongHocKi"].map((hpDaDk) =>
                                       <tr>
                                         <td>
                                           <button
@@ -628,14 +582,16 @@ export default function Dkhp() {
                                         <td>Chưa set</td>
                                         <td>Chưa set</td>
                                       </tr>
-                                    }))
+                                    )
                                   }
                                 </tbody>
                               </table>
                             </div>
+                          </> : <div>
+
                           </div>
-                        </> : <div></div>
-                      }
+                        }
+                      </div>
                     </div>
                   </div>
                 </div>
