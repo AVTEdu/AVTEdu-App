@@ -1,4 +1,5 @@
 import { React, useState, useEffect } from "react";
+import { format } from "date-fns"
 import "../assets/css/main.css";
 import "../assets/css/tooltipster.bundle.css";
 import "../assets/css/style.css";
@@ -24,6 +25,7 @@ export default function Dkhp() {
   const [hpDaDangKy, setHpDaDangKy] = useState();
   const [maHocKi, setMahocKi] = useState();
   const [maPhanCongLopHocPhan, setMaPhanCongLopHocPhan] = useState();
+  const [trangThaiLopHocPhan, setTrangThaiLopHocPhan] = useState();
   let sttMonChuaDK = 1;
   let sttLHPChoDK = 1;
   let sttHocPhanDaDangKy = 1;
@@ -56,6 +58,7 @@ export default function Dkhp() {
 
   useEffect(() => {
     const activeLopHocPhanByHocPhan = async () => {
+      setChiTietLopHP('');
       try {
         const res = await dkhpAPI.getLopHocPhanByHocPhan(maHocPhan);
         setDsToanBoLopHocPhan(res.data);
@@ -69,7 +72,6 @@ export default function Dkhp() {
   useEffect(() => {
     const activeChiTietLopHocPhan = async () => {
       try {
-        console.log(maLopHocPhan);
         const res = await dkhpAPI.getChiTietLopHocPhan(maLopHocPhan);
 
         setChiTietLopHP(res.data);
@@ -105,7 +107,18 @@ export default function Dkhp() {
     setMaLopHocPhan(id);
   }
 
-  function DangKyHocPhan() {
+  async function DangKyHocPhan(e) {
+
+    try {
+
+      const res = await dkhpAPI.dangKiHocPhan(maLopHocPhan, maHocKi, trangThaiLopHocPhan, "1860000", "0");
+      console.log(res.data);
+      const res2 = await dkhpAPI.getHocPhanDaDangKyTrongKynay(maHocKi);
+      setHpDaDangKy(res2.data);
+    } catch (error) {
+      alert('Đăng ký không thành công');
+      console.log(error.message);
+    }
 
   }
 
@@ -455,14 +468,14 @@ export default function Dkhp() {
                                     <tbody>
                                       {
                                         chiTietLopHP["results"].map((ctlhp) =>
-                                          <tr className="tr-active tr-chitietlichdangky" onClick={SelectChiTietLopHocPhan}>
+                                          <tr className="tr-active tr-chitietlichdangky" onClick={(e) => (ctlhp.trang_thai === 1 ? setTrangThaiLopHocPhan('Đăng ký mới') : setTrangThaiLopHocPhan(''))}>
                                             <td className="text-left">
                                               <div><span >Lịch học</span>: <b> {ctlhp.ngay_hoc_trong_tuan}   (Tiết {ctlhp.tiet_hoc_bat_dau}  -&gt; {ctlhp.tiet_hoc_ket_thuc} )</b></div>
                                               <p><span >Cơ sở</span>: <b>Cơ sở 1 (Thành phố Hồ Chí Minh)</b></p>
                                               <p><span >Dãy nhà</span>: <b>{ctlhp.ten_day_nha} (CS1)</b></p>
                                               <p><span >Phòng</span>: <b>{ctlhp.ten_phong_hoc}</b></p>
                                             </td>
-                                            <td />
+                                            <td>{ctlhp.loai_hoc_phan_phu_trach === 1 ? 'TH' : 'LT'}</td>
                                             <td className="text-left">
                                               <div className="name"><span lang="dkhp-gv">GV</span>: {ctlhp.ten_giang_vien}</div>
                                               {ctlhp.thoi_gian_bat_dau} - {ctlhp.thoi_gian_ket_thuc}
@@ -477,7 +490,7 @@ export default function Dkhp() {
                                       <p className="bold" lang="ctlhpchodangky-lhpcochianhom">Lớp học phần có chia nhóm thực hành, vui lòng chọn lịch có nhóm.</p>
                                     </div> */}
                                     <br />
-                                    <button onclick={DangKyHocPhan} className="btn btn--m block first" style={{ width: '100px' }} lang="dkhp-dangkyButton">Đăng ký</button>
+                                    <button onClick={DangKyHocPhan} className="btn btn--m block first" style={{ width: '100px' }} lang="dkhp-dangkyButton">Đăng ký</button>
                                   </div>
                                 </div>
                               </div>
