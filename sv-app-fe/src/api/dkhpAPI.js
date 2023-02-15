@@ -17,13 +17,17 @@ const dkhpAPI = {
   },
 
   getChiTietLopHocPhan(maLopHp) {
-    const url = "/userRequest/getChiTietHocPhan";
+    const url = "/userRequest/getChiTietLopHocPhan";
     return axiosClient.put(url, { ma: maLopHp });
   },
 
   getHocPhanDaDangKyTrongKynay(maHocKi) {
     const url = "/userRequest/getMonDaDangKiTrongHocKi";
-    return axiosClient.post(url, { ma: maHocKi });
+    return axiosClient.put(url, { ma: maHocKi });
+  },
+  dangKiHocPhan(maLHP, maHK, trangThaiLHP, soTien, mienGiam) {
+    const url = "/userRequest/dangKiHocPhan";
+    return axiosClient.post(url, { ma: maLHP, ma_hoc_ki: maHK, trang_thai_dang_ki: trangThaiLHP, so_tien: soTien, mien_giam: mienGiam });
   }
 
 };
