@@ -10,7 +10,7 @@ router.use("/admin", AdminsRouter);
 const userRequest = require("./userRequest.router");
 router.use("/userRequest", userRequest);
 
-router.get('/hello',function(req,res){
+router.get('/hello', function (req, res) {
     res.send("Hello cac ban");
 })
 

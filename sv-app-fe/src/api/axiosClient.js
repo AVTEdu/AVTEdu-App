@@ -28,7 +28,6 @@ axiosClient.interceptors.request.use(
   function (config) {
     // config.headers.authorization = Cookies.get("token");
     config.headers.authorization = `Bearer ${Cookies.get("token")}`;
-
     return config;
   },
   function (error) {
