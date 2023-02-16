@@ -17,8 +17,17 @@ const dkhpAPI = {
   },
 
   getChiTietLopHocPhan(maLopHp) {
-    const url = "/userRequest/getChiTietHocPhan";
+    const url = "/userRequest/getChiTietLopHocPhan";
     return axiosClient.put(url, { ma: maLopHp });
+  },
+
+  getHocPhanDaDangKyTrongKynay(maHocKi) {
+    const url = "/userRequest/getMonDaDangKiTrongHocKi";
+    return axiosClient.put(url, { ma: maHocKi });
+  },
+  dangKiHocPhan(maPCLHP, maHK, trangThaiLHP, soTien, mienGiam) {
+    const url = "/userRequest/dangKiHocPhan";
+    return axiosClient.post(url, { ma: maPCLHP, ma_hoc_ki: maHK, trang_thai_dang_ki: trangThaiLHP, so_tien: soTien, mien_giam: mienGiam });
   }
 
 };

@@ -53,4 +53,7 @@ router
 router
   .route("/createThoiKhoaBieuSinhVien")
   .post(AdminController.createThoiKhoaBieuSinhVien);
+router
+  .route("/thanhToanHocPhiSinhVien")
+  .put(AdminController.thanhToanHocPhiSinhVien);  
 module.exports = router;
