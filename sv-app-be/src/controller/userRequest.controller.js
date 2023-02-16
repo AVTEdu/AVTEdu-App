@@ -122,8 +122,10 @@ const getChiTietLopHocPhan = async (req, res, next) => {
         return res.status(201).json({ success: true, results });
       })
   } catch (error) {
+
     console.log(error);
     next(error);
+
   }
 }
 const DangKiHocPhan = async (req, res, next) => {
