@@ -25,9 +25,9 @@ const dkhpAPI = {
     const url = "/userRequest/getMonDaDangKiTrongHocKi";
     return axiosClient.put(url, { ma: maHocKi });
   },
-  dangKiHocPhan(maLHP, maHK, trangThaiLHP, soTien, mienGiam) {
+  dangKiHocPhan(maPCLHP, maHK, trangThaiLHP, soTien, mienGiam) {
     const url = "/userRequest/dangKiHocPhan";
-    return axiosClient.post(url, { ma: maLHP, ma_hoc_ki: maHK, trang_thai_dang_ki: trangThaiLHP, so_tien: soTien, mien_giam: mienGiam });
+    return axiosClient.post(url, { ma: maPCLHP, ma_hoc_ki: maHK, trang_thai_dang_ki: trangThaiLHP, so_tien: soTien, mien_giam: mienGiam });
   }
 
 };

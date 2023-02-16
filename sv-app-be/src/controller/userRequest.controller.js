@@ -12,6 +12,9 @@ const HocPhi = require("../model/hocphi.model");
 const responseHanlder = require("../handlers/response.handler");
 const HocPhiSinhVien = require("../model/hocphisinhvien.model");
 const PhanCongLopHocPhan = require("../model/phanconglophocphan.model");
+const { getWeekDates } = require("../helpers/date.validate");
+const KetQuaHocTap = require("../model/ketquahoctap.model");
+const { findAll } = require("../model/hocki.model");
 
 const sequelize = ConnectDB().getInstance();
 
@@ -52,11 +55,10 @@ const getMonHocSinhVienChuaHoc = async (req, res, next) => {
                               left join sinhviendb.hoc_ki as hk on lhp.ma_hoc_ki = hk.ma_hoc_ki
                               left join sinhviendb.mon_hoc as mh on hp.ma_mon_hoc = mh.ma_mon_hoc
                               where sv.ma_sinh_vien = '${ma}'
-                              and  sv.ma_sinh_vien not in 
-                              (select ma_sinh_vien from sinhviendb.ket_qua_hoc_tap as kqht 
+                              and  hp.ma_hoc_phan not in (
+                              select lhp.ma_hoc_phan from sinhviendb.ket_qua_hoc_tap as kqht 
                               left join sinhviendb.lop_hoc_phan as lhp on kqht.ma_lop_hoc_phan = lhp.ma_lop_hoc_phan
-                              left join sinhviendb.hoc_phan as hp on hp.ma_hoc_phan = lhp.ma_hoc_phan
-                              where hp.ma_hoc_phan = lhp.ma_hoc_phan)
+                              where kqht.ma_sinh_vien = '${ma}')
                               group by hp.ma_hoc_phan`, { type: QueryTypes.SELECT })
       .then(function (results) {
         return res.status(201).json({ success: true, results });
@@ -120,12 +122,13 @@ const getChiTietLopHocPhan = async (req, res, next) => {
         return res.status(201).json({ success: true, results });
       })
   } catch (error) {
+    console.log(error);
     next(error);
   }
 }
 const DangKiHocPhan = async (req, res, next) => {
   try {
-    //Mã lớp học phần 
+    //Mã phân công lớp học phần 
     const { ma, ma_hoc_ki, trang_thai_dang_ki, so_tien, mien_giam } = req.body;
     const foundPCLopHocPhan = await PhanCongLopHocPhan.findOne({ where: { ma_phan_cong: `${ma}` } });
     if (!foundPCLopHocPhan) {
@@ -178,17 +181,21 @@ const DangKiHocPhan = async (req, res, next) => {
       ghi_chu: "...."
     })
     const ma_hoc_phi = await HocPhi.max('ma_hoc_phi')
-    const createHocPhi = await HocPhi.create({
-      ma_hoc_phi: ma_hoc_phi + 1,
-      noi_dung_thu: "Tiền học phí",
-      trang_thai_dang_ki: trang_thai_dang_ki,
-      so_tien: so_tien,
-      mien_giam: mien_giam,
-      so_tien_da_nop: 0,
-      cong_no: so_tien,
-      trang_thai: 1,
-      ma_hoc_phan: foundLopHocPhan.ma_hoc_phan,
-    });
+    const createHocPhi= await HocPhi.findOne({where:{ma_hoc_phan: foundLopHocPhan.ma_hoc_phan}});
+    if(!createHocPhi){
+      
+      createHocPhi = await HocPhi.create({
+        ma_hoc_phi: ma_hoc_phi + 1,
+        noi_dung_thu: "Tiền học phí",
+        trang_thai_dang_ki: trang_thai_dang_ki,
+        so_tien: so_tien,
+        mien_giam: mien_giam,
+        so_tien_da_nop: 0,
+        cong_no: so_tien,
+        trang_thai: 1,
+        ma_hoc_phan: foundLopHocPhan.ma_hoc_phan,
+      });
+    }
     const updateSVHT = await LopHocPhan.update(
       {
         so_luong_dang_ki_hien_tai: `${foundLopHocPhan.so_luong_dang_ki_hien_tai + 1
@@ -196,16 +203,49 @@ const DangKiHocPhan = async (req, res, next) => {
       },
       { where: { ma_lop_hoc_phan: `${foundLopHocPhan.ma_lop_hoc_phan}` } }
     );
+
     const ma_hoc_phi_sinh_vien = await HocPhiSinhVien.max('ma_hoc_phi_sinh_vien')
-    const createHocPhiSinhVien = await HocPhiSinhVien.create({
-      ma_hoc_phi_sinh_vien: ma_hoc_phi_sinh_vien,
+    const createHocPhiSinhVien = await HocPhiSinhVien.findOne({where:{ma_hoc_phi: ma_hoc_phi}})
+    if(!createHocPhiSinhVien){
+       createHocPhiSinhVien = await HocPhiSinhVien.create({
+      ma_hoc_phi_sinh_vien: ma_hoc_phi_sinh_vien+1,
       ma_hoc_phi: ma_hoc_phi,
       ma_sinh_vien: foundSinhVien.ma_sinh_vien
+    })}
+    const ma_bang_diem = await KetQuaHocTap.max('ma_ket_qua_hoc_tap')
+    const createBangDiem  = await KetQuaHocTap.findOne({where:{[Op.and]:[{ma_sinh_vien:foundSinhVien.ma_sinh_vien},{ma_lop_hoc_phan:foundLopHocPhan.ma_lop_hoc_phan}]}});
+    console.log(createBangDiem)
+    if(!createBangDiem){
+      createBangDiem = await KetQuaHocTap.create({
+      ma_ket_qua_hoc_tap:ma_bang_diem+1,
+      diem_tk_1:null,
+      diem_tk_2:null,
+      diem_tk_3:null,
+      diem_tk_4:null,
+      diem_tk_5:null,
+      diem_th_1:null,
+      diem_th_2:null,
+      diem_th_3:null,
+      diem_th_4:null,
+      diem_th_5:null,
+      diem_gk:null,
+      diem_ck:null,
+      diem_tk_hs_4:null,
+      diem_tk_hs_10:null,
+      diem_chu:null,
+      xep_loai:null,
+      ghi_chu:null,
+      ma_sinh_vien:foundSinhVien.ma_sinh_vien,
+      ma_lop_hoc_phan:foundLopHocPhan.ma_lop_hoc_phan,
+      tinh_trang_hoc_tap:null,
+      ngay_dang_ki:new Date(),
     })
+  }
     res
       .status(201)
-      .json({ success: true, createTKBSinhVien, createHocPhi, updateSVHT, createHocPhiSinhVien });
+      .json({ success: true, createTKBSinhVien, createHocPhi, updateSVHT, createHocPhiSinhVien ,createBangDiem});
   } catch (error) {
+    console.log(error);
     next(error);
   }
 }
@@ -244,7 +284,8 @@ const getDanhSachHocPhi = async (req, res, next) => {
 }
 const getMonDaDangKiTrongHocKi = async (req, res, next) => {
   try {
-    const { ma } = req.body
+    const { ma } = req.body;
+    console.log("đã đến đây ");
     const foundSinhVien = await SinhVien.findOne({
       where: { ma_sinh_vien: req.payload.userId },
     });
@@ -269,6 +310,18 @@ const getMonDaDangKiTrongHocKi = async (req, res, next) => {
                                                     hp.trang_thai_dang_ki,lhp.trang_thai `, { type: QueryTypes.SELECT })
     res.status(201).json({ success: true, dsMonDaDangKiTrongHocKi });
   } catch (error) {
+    console.log(error);
+    next(error);
+  }
+}
+const getThoiKhoaBieuSinhVienTrongMotTuan = async (req, res, next) => {
+  try {
+    const {ngay} = req.body;
+    const tuan = getWeekDates(new Date(ngay));
+    const Thu2 = tuan[0];
+    res.status(201).json({ success: true, Thu2});
+  } catch (error) {
+    console.log(error);
     next(error);
   }
 }
@@ -281,4 +334,5 @@ module.exports = {
   getThongTinSinhvien,
   getDanhSachHocPhi,
   getMonDaDangKiTrongHocKi,
+  getThoiKhoaBieuSinhVienTrongMotTuan,
 }
