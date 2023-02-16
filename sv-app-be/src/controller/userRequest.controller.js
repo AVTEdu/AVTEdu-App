@@ -70,7 +70,7 @@ const getMonHocSinhVienChuaHoc = async (req, res, next) => {
 const getLopHocPhanByHocPhan = async (req, res, next) => {
   try {
     //Mã học phần
-    const { ma } = req.body;
+    const { ma,ma_hoc_ki } = req.body;
     const foundHocPhan = await HocPhan.findOne({
       where: { ma_hoc_phan: `${ma}` },
     });
@@ -78,13 +78,21 @@ const getLopHocPhanByHocPhan = async (req, res, next) => {
       return res
         .status(403)
         .json({ error: { message: "Không tìm thấy học phần" } });
+    const foundHocKi = await HocKi.findOne({
+      where: { ma_hoc_ki: `${ma_hoc_ki}` },
+    })    
+    if (!foundHocKi)
+      return res
+        .status(403)
+        .json({ error: { message: "Không tìm thấy học kì" } });
     sequelize
       .query(
-        `select mh.ten_mon_hoc,lhp.trang_thai,lhp.ma_lop_hoc_phan,lhp.ten_lop_hoc_phan,lhp.so_luong_dang_ki_hien_tai,lhp.so_luong_dang_ki_toi_da
-                         from sinhviendb.hoc_phan as hp
-                         left join sinhviendb.lop_hoc_phan as lhp on hp.ma_hoc_phan = lhp.ma_hoc_phan
-                         left join sinhviendb.mon_hoc as mh on hp.ma_mon_hoc = mh.ma_mon_hoc
-                         where hp.ma_hoc_phan = '${ma}'`,
+        `select mh.ten_mon_hoc,lhp.trang_thai,lhp.ma_lop_hoc_phan,lhp.ten_lop_hoc_phan,lhp.so_luong_dang_ki_hien_tai,lhp.so_luong_dang_ki_toi_da,hk.ma_hoc_ki
+        from sinhviendb.hoc_phan as hp
+        left join sinhviendb.lop_hoc_phan as lhp on hp.ma_hoc_phan = lhp.ma_hoc_phan
+        left join sinhviendb.mon_hoc as mh on hp.ma_mon_hoc = mh.ma_mon_hoc
+        left join sinhviendb.hoc_ki as hk on lhp.ma_hoc_ki = hk.ma_hoc_ki
+         where hp.ma_hoc_phan = '${ma}' and hk.ma_hoc_ki = '${ma_hoc_ki}'`,
         { type: QueryTypes.SELECT }
       )
       .then(function (results) {
@@ -122,10 +130,8 @@ const getChiTietLopHocPhan = async (req, res, next) => {
         return res.status(201).json({ success: true, results });
       })
   } catch (error) {
-
     console.log(error);
     next(error);
-
   }
 }
 const DangKiHocPhan = async (req, res, next) => {
