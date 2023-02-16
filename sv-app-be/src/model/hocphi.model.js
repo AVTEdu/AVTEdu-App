@@ -22,7 +22,7 @@ HocPhi.init({
         type:DataTypes.BIGINT,
     },
     mien_giam:{
-        type:DataTypes.BOOLEAN,
+        type:DataTypes.BIGINT,
     },
     so_tien_da_nop:{
         type:DataTypes.BIGINT,

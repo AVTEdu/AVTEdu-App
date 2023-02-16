@@ -91,7 +91,7 @@ ChuyenNganh.sync();
 LoaiPhongHoc.sync();
 PhanCongLopHocPhan.sync();
 PhongHoc.sync();
-ThoiKhoaBieu.sync({alter:true});
+ThoiKhoaBieu.sync();
 ThoiKhoaBieuSinhVien.sync();
 ChuyenNganhHocPhan.sync();
 GiangVien.sync();
