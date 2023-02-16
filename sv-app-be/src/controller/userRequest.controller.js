@@ -115,7 +115,9 @@ const getChiTietLopHocPhan = async (req, res, next) => {
         left join sinhviendb.thoi_khoa_bieu as tkb on tkb.ma_phan_cong_lop_hoc_phan = pclhp.ma_phan_cong
         left join sinhviendb.phong_hoc as ph on tkb.ma_phong_hoc = ph.ma_phong_hoc
         where lhp.ma_lop_hoc_phan = '${ma}'
-        group by pclhp.ma_phan_cong`, { type: QueryTypes.SELECT })
+        group by pclhp.ma_phan_cong,lhp.trang_thai,pclhp.so_luong_sv_phu_trach,pclhp.loai_hoc_phan_phu_trach,
+        tkb.ngay_hoc_trong_tuan,tkb.tiet_hoc_bat_dau,tkb.tiet_hoc_ket_thuc,ph.ten_day_nha,ph.ten_phong_hoc,
+        gv.ten_giang_vien,tkb.thoi_gian_bat_dau,tkb.thoi_gian_ket_thuc`, { type: QueryTypes.SELECT })
       .then(function (results) {
         return res.status(201).json({ success: true, results });
       })
@@ -302,7 +304,10 @@ const getMonDaDangKiTrongHocKi = async (req, res, next) => {
                                                     left join sinhviendb.mon_hoc as mh on mh.ma_mon_hoc = hpp.ma_mon_hoc
                                                     left join sinhviendb.phan_cong_lop_hoc_phan as pclhp on pclhp.ma_lop_hoc_phan = lhp.ma_lop_hoc_phan
                                                     where sv.ma_sinh_vien = '${req.payload.userId}' and hk.ma_hoc_ki = '${ma}'
-                                                    group by hp.ma_hoc_phan `, { type: QueryTypes.SELECT })
+                                                    group by hp.ma_hoc_phan,mh.ten_mon_hoc,lhp.ten_lop_hoc_phan,
+                                                    hpp.so_tin_chi_ly_thuyet,hpp.so_tin_chi_thuc_hanh,
+                                                    pclhp.nhom_thuc_hanh_phu_trach,hp.so_tien,hp.trang_thai,
+                                                    hp.trang_thai_dang_ki,lhp.trang_thai `, { type: QueryTypes.SELECT })
     res.status(201).json({ success: true, dsMonDaDangKiTrongHocKi });
   } catch (error) {
     console.log(error);
