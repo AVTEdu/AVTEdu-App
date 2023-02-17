@@ -195,7 +195,6 @@ const DangKiHocPhan = async (req, res, next) => {
         .status(403)
         .json({ error: { message: "Lớp đã đủ số lượng sinh viên đăng kí " } });
     }
-    console.log(ThoiKhoabieu[0].ma_thoi_khoa_bieu)
     const ma_tkb_sv = await ThoiKhoaBieuSinhVien.max('ma');
     let createTKBSinhVien = await ThoiKhoaBieuSinhVien.findOne({where:{[Op.and]:[{ma_sinh_vien:foundSinhVien.ma_sinh_vien},{ma_thoi_khoa_bieu:ThoiKhoabieu[0].ma_thoi_khoa_bieu}]}})
     if(!createTKBSinhVien)
@@ -207,7 +206,7 @@ const DangKiHocPhan = async (req, res, next) => {
       ghi_chu: "...."
     })
     const ma_hoc_phi = await HocPhi.max('ma_hoc_phi')
-    let createHocPhi= await HocPhi.findOne({where:{ma_hoc_phan: foundLopHocPhan.ma_hoc_phan}});
+    let createHocPhi= await HocPhi.findOne({where:{ma_phan_cong_lop_hoc_phan:ma}});
     if(!createHocPhi){
       createHocPhi = await HocPhi.create({
         ma_hoc_phi: ma_hoc_phi + 1,
@@ -218,7 +217,7 @@ const DangKiHocPhan = async (req, res, next) => {
         so_tien_da_nop: 0,
         cong_no: so_tien,
         trang_thai: 1,
-        ma_hoc_phan: foundLopHocPhan.ma_hoc_phan,
+        ma_phan_cong_lop_hoc_phan:ma,
       });
     }
     const updateSVHT = await LopHocPhan.update(
