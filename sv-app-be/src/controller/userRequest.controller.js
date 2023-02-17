@@ -175,8 +175,7 @@ const DangKiHocPhan = async (req, res, next) => {
                                             from sinhviendb.lop_hoc_phan as lhp
                                             left join sinhviendb.phan_cong_lop_hoc_phan as pclhp on lhp.ma_lop_hoc_phan = pclhp.ma_lop_hoc_phan
                                             left join sinhviendb.thoi_khoa_bieu as tkb on tkb.ma_phan_cong_lop_hoc_phan = pclhp.ma_phan_cong
-
-                                            where lhp.ma_lop_hoc_phan = '${ma}'`, { type: QueryTypes.SELECT });
+                                            where tkb.ma_phan_cong_lop_hoc_phan = '${ma}'`, { type: QueryTypes.SELECT });
 
     if (!ThoiKhoabieu) {
       return res
@@ -196,8 +195,9 @@ const DangKiHocPhan = async (req, res, next) => {
         .status(403)
         .json({ error: { message: "Lớp đã đủ số lượng sinh viên đăng kí " } });
     }
+    console.log(ThoiKhoabieu[0].ma_thoi_khoa_bieu)
     const ma_tkb_sv = await ThoiKhoaBieuSinhVien.max('ma');
-    let createTKBSinhVien = await ThoiKhoaBieuSinhVien.findOne({where:{[Op.and]:[{ma_sinh_vien:foundSinhVien.ma_sinh_vien},{ma_thoi_khoa_bieu:ThoiKhoabieu.ma_thoi_khoa_bieu}]}})
+    let createTKBSinhVien = await ThoiKhoaBieuSinhVien.findOne({where:{[Op.and]:[{ma_sinh_vien:foundSinhVien.ma_sinh_vien},{ma_thoi_khoa_bieu:ThoiKhoabieu[0].ma_thoi_khoa_bieu}]}})
     if(!createTKBSinhVien)
      createTKBSinhVien = await ThoiKhoaBieuSinhVien.create({
       ma: ma_tkb_sv + 1,
