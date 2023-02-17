@@ -34,11 +34,11 @@ HocPhi.init({
         type:DataTypes.STRING,
     },
     //Tạo khoá ngoại khoa
-    ma_hoc_phan:{
+    ma_phan_cong_lop_hoc_phan:{
         type:DataTypes.INTEGER,
         references:{
-            model:"hoc_phan",
-            key:"ma_hoc_phan"
+            model:"phan_cong_lop_hoc_phan",
+            key:"ma_phan_cong"
         }
     },
 },{
