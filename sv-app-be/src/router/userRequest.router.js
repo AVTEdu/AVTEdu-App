@@ -15,7 +15,7 @@ router
 router
   .route("/getLopHocPhanByHocPhan")
   .put(userRequestController.getLopHocPhanByHocPhan);
-//Api này lấy chi tiết lớp học phần đang chọn cần mã lớp học phần   
+//Api này lấy chi tiết lớp học phần đang chọn cần mã lớp học phần  
 router
   .route("/getChiTietLopHocPhan")
   .put(userRequestController.getChiTietLopHocPhan);

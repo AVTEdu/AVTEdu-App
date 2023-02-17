@@ -17,25 +17,39 @@ const KetQuaHocTap = require("../model/ketquahoctap.model");
 const { findAll } = require("../model/hocki.model");
 
 const sequelize = ConnectDB().getInstance();
-
+/** 
+ * Hàm này dùng để lấy học kì sinh viên từ sinh viên đang đăng nhập hiện tại
+ * @returns: Tất cả học kì theo thuộc tính niên khoá của sinh vien
+ * @private:Private
+ * @Vietanh6jk
+*/
 const getHocKiSinhVien = async (req, res, next) => {
   try {
+    //Lấy mã từ acessToken của sinh viên đang đang nhập 
     const ma = req.payload.userId;
+    //Tìm kiếm sinh viên xem có sinh viên có trong database không
     const foundSinhVien = await SinhVien.findOne({ where: { ma_sinh_vien: `${ma}` } });
     if (!foundSinhVien)
+      //Nếu không có sinh viên đẩy ra lỗi 403 
       return res
         .status(403)
         .json({ error: { message: "Không tìm thấy sinh viên" } });
+    //Thuộc tính niên khoá của sinh viển     
     const nien_khoa = foundSinhVien.nien_khoa;
+    //lấy năm bắt đầu từ bằng cấch lấy 4 chữ số đầu
     const nam_bat_dau = await nien_khoa.substring(0, 4);
+    //Lấy năm kết thúc từ bằng cách lấy 4 chữ số sau dấu "-"
     const nam_ket_thuc = await nien_khoa.substring(5);
+    //Tìm kiếm danh sách học kì từ năm bắt đầu đến năm kết thúc
     const dsHocKi = await HocKi.findAll({ where: { nam_hoc_bat_dau: { [Op.gte]: `${nam_bat_dau}` }, nam_hoc_ket_thuc: { [Op.lte]: `${nam_ket_thuc}` } } });
-
+    //Đưa ra kết quả tìm thấy bằng mã 200 và success:true
     return res.status(201).json({ success: true, nam_bat_dau, nam_ket_thuc, dsHocKi });
   } catch (error) {
+    //Bắt lỗi khi chạy hàm và đưa ra trạng thái 
     next(error);
   }
 }
+
 const getMonHocSinhVienChuaHoc = async (req, res, next) => {
   try {
     const ma = req.payload.userId;
@@ -99,6 +113,7 @@ const getLopHocPhanByHocPhan = async (req, res, next) => {
         return res.status(201).json({ success: true, results });
       });
   } catch (error) {
+    
     next(error);
   }
 };
@@ -109,6 +124,7 @@ const getChiTietLopHocPhan = async (req, res, next) => {
     const foundHocPhan = await LopHocPhan.findOne({
       where: { ma_lop_hoc_phan: `${ma}` },
     });
+    console.log(ma);
     if (!foundHocPhan)
       return res
         .status(403)
@@ -130,7 +146,7 @@ const getChiTietLopHocPhan = async (req, res, next) => {
         return res.status(201).json({ success: true, results });
       })
   } catch (error) {
-    console.log(error);
+    console.log(error)
     next(error);
   }
 }
@@ -181,7 +197,9 @@ const DangKiHocPhan = async (req, res, next) => {
         .json({ error: { message: "Lớp đã đủ số lượng sinh viên đăng kí " } });
     }
     const ma_tkb_sv = await ThoiKhoaBieuSinhVien.max('ma');
-    const createTKBSinhVien = await ThoiKhoaBieuSinhVien.create({
+    let createTKBSinhVien = await ThoiKhoaBieuSinhVien.findOne({where:{[Op.and]:[{ma_sinh_vien:foundSinhVien.ma_sinh_vien},{ma_lop_hoc_phan:foundLopHocPhan.ma_lop_hoc_phan}]}})
+    if(!createTKBSinhVien)
+     createTKBSinhVien = await ThoiKhoaBieuSinhVien.create({
       ma: ma_tkb_sv + 1,
       loai_ngay_hoc: "Thứ",
       ma_sinh_vien: foundSinhVien.ma_sinh_vien,
@@ -189,9 +207,8 @@ const DangKiHocPhan = async (req, res, next) => {
       ghi_chu: "...."
     })
     const ma_hoc_phi = await HocPhi.max('ma_hoc_phi')
-    const createHocPhi= await HocPhi.findOne({where:{ma_hoc_phan: foundLopHocPhan.ma_hoc_phan}});
+    let createHocPhi= await HocPhi.findOne({where:{ma_hoc_phan: foundLopHocPhan.ma_hoc_phan}});
     if(!createHocPhi){
-      
       createHocPhi = await HocPhi.create({
         ma_hoc_phi: ma_hoc_phi + 1,
         noi_dung_thu: "Tiền học phí",
@@ -213,7 +230,7 @@ const DangKiHocPhan = async (req, res, next) => {
     );
 
     const ma_hoc_phi_sinh_vien = await HocPhiSinhVien.max('ma_hoc_phi_sinh_vien')
-    const createHocPhiSinhVien = await HocPhiSinhVien.findOne({where:{ma_hoc_phi: ma_hoc_phi}})
+    let createHocPhiSinhVien = await HocPhiSinhVien.findOne({where:{ma_hoc_phi: ma_hoc_phi}})
     if(!createHocPhiSinhVien){
        createHocPhiSinhVien = await HocPhiSinhVien.create({
       ma_hoc_phi_sinh_vien: ma_hoc_phi_sinh_vien+1,
@@ -221,8 +238,7 @@ const DangKiHocPhan = async (req, res, next) => {
       ma_sinh_vien: foundSinhVien.ma_sinh_vien
     })}
     const ma_bang_diem = await KetQuaHocTap.max('ma_ket_qua_hoc_tap')
-    const createBangDiem  = await KetQuaHocTap.findOne({where:{[Op.and]:[{ma_sinh_vien:foundSinhVien.ma_sinh_vien},{ma_lop_hoc_phan:foundLopHocPhan.ma_lop_hoc_phan}]}});
-    console.log(createBangDiem)
+    let createBangDiem  = await KetQuaHocTap.findOne({where:{[Op.and]:[{ma_sinh_vien:foundSinhVien.ma_sinh_vien},{ma_lop_hoc_phan:foundLopHocPhan.ma_lop_hoc_phan}]}});
     if(!createBangDiem){
       createBangDiem = await KetQuaHocTap.create({
       ma_ket_qua_hoc_tap:ma_bang_diem+1,
