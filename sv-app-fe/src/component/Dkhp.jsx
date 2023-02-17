@@ -61,7 +61,7 @@ export default function Dkhp() {
   useEffect(() => {
     const activeLopHocPhanByHocPhan = async () => {
       setChiTietLopHP('');
-      console.log(maHocPhan + "  " + maHocKi);
+      setMaLopHocPhan('');
       try {
         const res = await dkhpAPI.getLopHocPhanByHocPhan(maHocPhan, maHocKi);
         setDsToanBoLopHocPhan(res.data);
@@ -73,6 +73,7 @@ export default function Dkhp() {
   }, [maHocPhan])
 
   useEffect(() => {
+    console.log('ma lop hoc phan co thay doi:' + maLopHocPhan)
     const activeChiTietLopHocPhan = async () => {
       try {
         const res = await dkhpAPI.getChiTietLopHocPhan(maLopHocPhan);
@@ -132,6 +133,18 @@ export default function Dkhp() {
   function SelectChiTietLopHocPhan() {
 
   }
+
+  function SelectedRowOf_Table_lhpchodangky() {
+    var index, table = document.getElementById("table_lhpchodangky");
+    for (var i = 0; i < table.rows.length; i++) {
+      table.rows[i].onClick = function () {
+        index = this.rowIndex;
+        this.classList.toggle("selected");
+        console.log(index);
+      }
+    }
+  }
+  SelectedRowOf_Table_lhpchodangky();
 
 
 

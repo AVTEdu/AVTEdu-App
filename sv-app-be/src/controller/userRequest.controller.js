@@ -84,7 +84,7 @@ const getMonHocSinhVienChuaHoc = async (req, res, next) => {
 const getLopHocPhanByHocPhan = async (req, res, next) => {
   try {
     //Mã học phần
-    const { ma,ma_hoc_ki } = req.body;
+    const { ma, ma_hoc_ki } = req.body;
     const foundHocPhan = await HocPhan.findOne({
       where: { ma_hoc_phan: `${ma}` },
     });
@@ -94,7 +94,7 @@ const getLopHocPhanByHocPhan = async (req, res, next) => {
         .json({ error: { message: "Không tìm thấy học phần" } });
     const foundHocKi = await HocKi.findOne({
       where: { ma_hoc_ki: `${ma_hoc_ki}` },
-    })    
+    })
     if (!foundHocKi)
       return res
         .status(403)
@@ -113,7 +113,7 @@ const getLopHocPhanByHocPhan = async (req, res, next) => {
         return res.status(201).json({ success: true, results });
       });
   } catch (error) {
-    
+
     next(error);
   }
 };
@@ -197,18 +197,18 @@ const DangKiHocPhan = async (req, res, next) => {
     }
     console.log(ThoiKhoabieu[0].ma_thoi_khoa_bieu)
     const ma_tkb_sv = await ThoiKhoaBieuSinhVien.max('ma');
-    let createTKBSinhVien = await ThoiKhoaBieuSinhVien.findOne({where:{[Op.and]:[{ma_sinh_vien:foundSinhVien.ma_sinh_vien},{ma_thoi_khoa_bieu:ThoiKhoabieu[0].ma_thoi_khoa_bieu}]}})
-    if(!createTKBSinhVien)
-     createTKBSinhVien = await ThoiKhoaBieuSinhVien.create({
-      ma: ma_tkb_sv + 1,
-      loai_ngay_hoc: "Thứ",
-      ma_sinh_vien: foundSinhVien.ma_sinh_vien,
-      ma_thoi_khoa_bieu: ThoiKhoabieu.ma_thoi_khoa_bieu,
-      ghi_chu: "...."
-    })
+    let createTKBSinhVien = await ThoiKhoaBieuSinhVien.findOne({ where: { [Op.and]: [{ ma_sinh_vien: foundSinhVien.ma_sinh_vien }, { ma_thoi_khoa_bieu: ThoiKhoabieu[0].ma_thoi_khoa_bieu }] } })
+    if (!createTKBSinhVien)
+      createTKBSinhVien = await ThoiKhoaBieuSinhVien.create({
+        ma: ma_tkb_sv + 1,
+        loai_ngay_hoc: "Thứ",
+        ma_sinh_vien: foundSinhVien.ma_sinh_vien,
+        ma_thoi_khoa_bieu: ThoiKhoabieu[0].ma_thoi_khoa_bieu,
+        ghi_chu: "...."
+      })
     const ma_hoc_phi = await HocPhi.max('ma_hoc_phi')
-    let createHocPhi= await HocPhi.findOne({where:{ma_hoc_phan: foundLopHocPhan.ma_hoc_phan}});
-    if(!createHocPhi){
+    let createHocPhi = await HocPhi.findOne({ where: { ma_hoc_phan: foundLopHocPhan.ma_hoc_phan } });
+    if (!createHocPhi) {
       createHocPhi = await HocPhi.create({
         ma_hoc_phi: ma_hoc_phi + 1,
         noi_dung_thu: "Tiền học phí",
@@ -230,44 +230,45 @@ const DangKiHocPhan = async (req, res, next) => {
     );
 
     const ma_hoc_phi_sinh_vien = await HocPhiSinhVien.max('ma_hoc_phi_sinh_vien')
-    let createHocPhiSinhVien = await HocPhiSinhVien.findOne({where:{ma_hoc_phi: ma_hoc_phi}})
-    if(!createHocPhiSinhVien){
-       createHocPhiSinhVien = await HocPhiSinhVien.create({
-      ma_hoc_phi_sinh_vien: ma_hoc_phi_sinh_vien+1,
-      ma_hoc_phi: ma_hoc_phi,
-      ma_sinh_vien: foundSinhVien.ma_sinh_vien
-    })}
+    let createHocPhiSinhVien = await HocPhiSinhVien.findOne({ where: { ma_hoc_phi: ma_hoc_phi } })
+    if (!createHocPhiSinhVien) {
+      createHocPhiSinhVien = await HocPhiSinhVien.create({
+        ma_hoc_phi_sinh_vien: ma_hoc_phi_sinh_vien + 1,
+        ma_hoc_phi: ma_hoc_phi,
+        ma_sinh_vien: foundSinhVien.ma_sinh_vien
+      })
+    }
     const ma_bang_diem = await KetQuaHocTap.max('ma_ket_qua_hoc_tap')
-    let createBangDiem  = await KetQuaHocTap.findOne({where:{[Op.and]:[{ma_sinh_vien:foundSinhVien.ma_sinh_vien},{ma_lop_hoc_phan:foundLopHocPhan.ma_lop_hoc_phan}]}});
-    if(!createBangDiem){
+    let createBangDiem = await KetQuaHocTap.findOne({ where: { [Op.and]: [{ ma_sinh_vien: foundSinhVien.ma_sinh_vien }, { ma_lop_hoc_phan: foundLopHocPhan.ma_lop_hoc_phan }] } });
+    if (!createBangDiem) {
       createBangDiem = await KetQuaHocTap.create({
-      ma_ket_qua_hoc_tap:ma_bang_diem+1,
-      diem_tk_1:null,
-      diem_tk_2:null,
-      diem_tk_3:null,
-      diem_tk_4:null,
-      diem_tk_5:null,
-      diem_th_1:null,
-      diem_th_2:null,
-      diem_th_3:null,
-      diem_th_4:null,
-      diem_th_5:null,
-      diem_gk:null,
-      diem_ck:null,
-      diem_tk_hs_4:null,
-      diem_tk_hs_10:null,
-      diem_chu:null,
-      xep_loai:null,
-      ghi_chu:null,
-      ma_sinh_vien:foundSinhVien.ma_sinh_vien,
-      ma_lop_hoc_phan:foundLopHocPhan.ma_lop_hoc_phan,
-      tinh_trang_hoc_tap:null,
-      ngay_dang_ki:new Date(),
-    })
-  }
+        ma_ket_qua_hoc_tap: ma_bang_diem + 1,
+        diem_tk_1: null,
+        diem_tk_2: null,
+        diem_tk_3: null,
+        diem_tk_4: null,
+        diem_tk_5: null,
+        diem_th_1: null,
+        diem_th_2: null,
+        diem_th_3: null,
+        diem_th_4: null,
+        diem_th_5: null,
+        diem_gk: null,
+        diem_ck: null,
+        diem_tk_hs_4: null,
+        diem_tk_hs_10: null,
+        diem_chu: null,
+        xep_loai: null,
+        ghi_chu: null,
+        ma_sinh_vien: foundSinhVien.ma_sinh_vien,
+        ma_lop_hoc_phan: foundLopHocPhan.ma_lop_hoc_phan,
+        tinh_trang_hoc_tap: null,
+        ngay_dang_ki: new Date(),
+      })
+    }
     res
       .status(201)
-      .json({ success: true, createTKBSinhVien, createHocPhi, updateSVHT, createHocPhiSinhVien ,createBangDiem});
+      .json({ success: true, createTKBSinhVien, createHocPhi, updateSVHT, createHocPhiSinhVien, createBangDiem });
   } catch (error) {
     console.log(error);
     next(error);
@@ -340,10 +341,10 @@ const getMonDaDangKiTrongHocKi = async (req, res, next) => {
 }
 const getThoiKhoaBieuSinhVienTrongMotTuan = async (req, res, next) => {
   try {
-    const {ngay} = req.body;
+    const { ngay } = req.body;
     const tuan = getWeekDates(new Date(ngay));
     const Thu2 = tuan[0];
-    res.status(201).json({ success: true, Thu2});
+    res.status(201).json({ success: true, Thu2 });
   } catch (error) {
     console.log(error);
     next(error);
