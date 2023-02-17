@@ -197,7 +197,7 @@ const DangKiHocPhan = async (req, res, next) => {
         .json({ error: { message: "Lớp đã đủ số lượng sinh viên đăng kí " } });
     }
     const ma_tkb_sv = await ThoiKhoaBieuSinhVien.max('ma');
-    let createTKBSinhVien = await ThoiKhoaBieuSinhVien.findOne({where:{[Op.and]:[{ma_sinh_vien:foundSinhVien.ma_sinh_vien},{ma_lop_hoc_phan:foundLopHocPhan.ma_lop_hoc_phan}]}})
+    let createTKBSinhVien = await ThoiKhoaBieuSinhVien.findOne({where:{[Op.and]:[{ma_sinh_vien:foundSinhVien.ma_sinh_vien},{ma_thoi_khoa_bieu:ThoiKhoabieu.ma_thoi_khoa_bieu}]}})
     if(!createTKBSinhVien)
      createTKBSinhVien = await ThoiKhoaBieuSinhVien.create({
       ma: ma_tkb_sv + 1,
