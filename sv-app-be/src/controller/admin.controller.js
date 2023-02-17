@@ -310,7 +310,7 @@ const createPhanCongLopHocPhan= async (req,res,next) =>{
 }
 const createThoiKhoaBieu= async (req,res,next) =>{
   try {
-    const {ma,loai,ngay_hoc_trong_tuan,nhom_thuc_hanh,thoi_gian_bat_dau,thoi_gian_ket_thuc,tiet_hoc_bat_dau,tiet_hoc_ket_thuc,ma_lop_hoc_phan,ma_phong_hoc,ghi_chu}= req.body;
+    const {ma,loai,ngay_hoc_trong_tuan,nhom_thuc_hanh,thoi_gian_bat_dau,thoi_gian_ket_thuc,tiet_hoc_bat_dau,tiet_hoc_ket_thuc,ma_phan_cong_lop_hoc_phan,ma_phong_hoc,ghi_chu}= req.body;
     const foundThoiKhoaBieu= await ThoiKhoaBieu.findOne({ where: { ma_thoi_khoa_bieu:`${ma}` } });
     if(foundThoiKhoaBieu){
       return res
@@ -326,7 +326,7 @@ const createThoiKhoaBieu= async (req,res,next) =>{
       thoi_gian_ket_thuc:thoi_gian_ket_thuc,
       tiet_hoc_bat_dau:tiet_hoc_bat_dau,
       tiet_hoc_ket_thuc:tiet_hoc_ket_thuc,
-      ma_lop_hoc_phan:ma_lop_hoc_phan,
+      ma_phan_cong_lop_hoc_phan:ma_phan_cong_lop_hoc_phan,
       ma_phong_hoc:ma_phong_hoc,
       ghi_chu:ghi_chu
     });
