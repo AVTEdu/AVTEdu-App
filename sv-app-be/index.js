@@ -96,7 +96,7 @@ ThoiKhoaBieuSinhVien.sync();
 ChuyenNganhHocPhan.sync();
 GiangVien.sync();
 KetQuaHocTap.sync();
-HocPhi.sync();
+HocPhi.sync({alter:true});
 HocPhiSinhVien.sync();
 // Catch 404 Errors and forward them to error handler
 app.use((req, res, next) => {
