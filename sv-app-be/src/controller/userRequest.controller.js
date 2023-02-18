@@ -133,7 +133,7 @@ const getChiTietLopHocPhan = async (req, res, next) => {
       .query(
         `select lhp.trang_thai,pclhp.so_luong_sv_phu_trach,pclhp.loai_hoc_phan_phu_trach,tkb.ngay_hoc_trong_tuan,tkb.tiet_hoc_bat_dau,tkb.tiet_hoc_ket_thuc,ph.ten_day_nha,ph.ten_phong_hoc,gv.ten_giang_vien,tkb.thoi_gian_bat_dau,tkb.thoi_gian_ket_thuc,pclhp.ma_phan_cong
         from sinhviendb.hoc_phan as hp
-        left join sinhviendb.lop_hoc_phan as lhp on hp.ma_hoc_phan = lhp.ma_lop_hoc_phan
+        left join sinhviendb.lop_hoc_phan as lhp on hp.ma_hoc_phan = lhp.ma_hoc_phan
         left join sinhviendb.phan_cong_lop_hoc_phan as pclhp on lhp.ma_lop_hoc_phan = pclhp.ma_lop_hoc_phan
         left join sinhviendb.giang_vien as gv on pclhp.ma_giang_vien = gv.ma_giang_vien
         left join sinhviendb.thoi_khoa_bieu as tkb on tkb.ma_phan_cong_lop_hoc_phan = pclhp.ma_phan_cong
@@ -195,7 +195,6 @@ const DangKiHocPhan = async (req, res, next) => {
         .status(403)
         .json({ error: { message: "Lớp đã đủ số lượng sinh viên đăng kí " } });
     }
-    console.log(ThoiKhoabieu[0].ma_thoi_khoa_bieu)
     const ma_tkb_sv = await ThoiKhoaBieuSinhVien.max('ma');
     let createTKBSinhVien = await ThoiKhoaBieuSinhVien.findOne({ where: { [Op.and]: [{ ma_sinh_vien: foundSinhVien.ma_sinh_vien }, { ma_thoi_khoa_bieu: ThoiKhoabieu[0].ma_thoi_khoa_bieu }] } })
     if (!createTKBSinhVien)
@@ -207,7 +206,7 @@ const DangKiHocPhan = async (req, res, next) => {
         ghi_chu: "...."
       })
     const ma_hoc_phi = await HocPhi.max('ma_hoc_phi')
-    let createHocPhi = await HocPhi.findOne({ where: { ma_hoc_phan: foundLopHocPhan.ma_hoc_phan } });
+    let createHocPhi = await HocPhi.findOne({ where: { ma_lop_hoc_phan: foundLopHocPhan.ma_lop_hoc_phan } });
     if (!createHocPhi) {
       createHocPhi = await HocPhi.create({
         ma_hoc_phi: ma_hoc_phi + 1,
@@ -218,7 +217,7 @@ const DangKiHocPhan = async (req, res, next) => {
         so_tien_da_nop: 0,
         cong_no: so_tien,
         trang_thai: 1,
-        ma_hoc_phan: foundLopHocPhan.ma_hoc_phan,
+        ma_lop_hoc_phan: foundLopHocPhan.ma_lop_hoc_phan,
       });
     }
     const updateSVHT = await LopHocPhan.update(
@@ -228,13 +227,13 @@ const DangKiHocPhan = async (req, res, next) => {
       },
       { where: { ma_lop_hoc_phan: `${foundLopHocPhan.ma_lop_hoc_phan}` } }
     );
-
+    console.log(ma_hoc_ki);
     const ma_hoc_phi_sinh_vien = await HocPhiSinhVien.max('ma_hoc_phi_sinh_vien')
     let createHocPhiSinhVien = await HocPhiSinhVien.findOne({ where: { ma_hoc_phi: ma_hoc_phi } })
     if (!createHocPhiSinhVien) {
       createHocPhiSinhVien = await HocPhiSinhVien.create({
         ma_hoc_phi_sinh_vien: ma_hoc_phi_sinh_vien + 1,
-        ma_hoc_phi: ma_hoc_phi,
+        ma_hoc_phi: ma_hoc_phi + 1,
         ma_sinh_vien: foundSinhVien.ma_sinh_vien
       })
     }
@@ -297,10 +296,13 @@ const getDanhSachHocPhi = async (req, res, next) => {
         .status(403)
         .json({ error: { message: "Không tìm thấy sinh viên" } });
     }
-    const dsHocPhiSinhVien = await sequelize.query(`select hp.*
+    const dsHocPhiSinhVien = await sequelize.query(`select hp.*,mh.ten_mon_hoc,hpp.ma_hoc_phan
                     from sinhviendb.sinh_vien as sv
                     left join sinhviendb.hoc_phi_sinh_vien as hpsv on sv.ma_sinh_vien = hpsv.ma_sinh_vien
                     left join sinhviendb.hoc_phi as hp on hp.ma_hoc_phi = hpsv.ma_hoc_phi
+                    left join sinhviendb.lop_hoc_phan as lhp on hp.ma_lop_hoc_phan = lhp.ma_lop_hoc_phan
+                    left join sinhviendb.hoc_phan as hpp on lhp.ma_hoc_phan = hpp.ma_hoc_phan
+                    left join sinhviendb.mon_hoc as mh on hpp.ma_mon_hoc = mh.ma_mon_hoc
                     where sv.ma_sinh_vien = '${req.payload.userId}'`, { type: QueryTypes.SELECT })
     res.status(201).json({ success: true, dsHocPhiSinhVien });
   } catch (error) {
@@ -310,7 +312,6 @@ const getDanhSachHocPhi = async (req, res, next) => {
 const getMonDaDangKiTrongHocKi = async (req, res, next) => {
   try {
     const { ma } = req.body;
-    console.log("đã đến đây ");
     const foundSinhVien = await SinhVien.findOne({
       where: { ma_sinh_vien: req.payload.userId },
     });
@@ -319,20 +320,22 @@ const getMonDaDangKiTrongHocKi = async (req, res, next) => {
         .status(403)
         .json({ error: { message: "Không tìm thấy sinh viên" } });
     }
-    const dsMonDaDangKiTrongHocKi = await sequelize.query(`select hp.ma_hoc_phan,mh.ten_mon_hoc,lhp.ten_lop_hoc_phan,hpp.so_tin_chi_ly_thuyet,hpp.so_tin_chi_thuc_hanh,pclhp.nhom_thuc_hanh_phu_trach,hp.so_tien,hp.trang_thai,hp.trang_thai_dang_ki,lhp.trang_thai
-                                                    from sinhviendb.sinh_vien as sv
-                                                    left join sinhviendb.hoc_phi_sinh_vien as hpsv on sv.ma_sinh_vien = hpsv.ma_sinh_vien
-                                                    left join sinhviendb.hoc_phi as hp on hp.ma_hoc_phi = hpsv.ma_hoc_phi
-                                                    left join sinhviendb.hoc_phan as hpp on hpp.ma_hoc_phan = hp.ma_hoc_phan
-                                                    left join sinhviendb.lop_hoc_phan as lhp on hpp.ma_hoc_phan = lhp.ma_hoc_phan
-                                                    left join sinhviendb.hoc_ki as hk on lhp.ma_hoc_ki = hk.ma_hoc_ki
-                                                    left join sinhviendb.mon_hoc as mh on mh.ma_mon_hoc = hpp.ma_mon_hoc
-                                                    left join sinhviendb.phan_cong_lop_hoc_phan as pclhp on pclhp.ma_lop_hoc_phan = lhp.ma_lop_hoc_phan
-                                                    where sv.ma_sinh_vien = '${req.payload.userId}' and hk.ma_hoc_ki = '${ma}'
-                                                    group by hp.ma_hoc_phan,mh.ten_mon_hoc,lhp.ten_lop_hoc_phan,
-                                                    hpp.so_tin_chi_ly_thuyet,hpp.so_tin_chi_thuc_hanh,
-                                                    pclhp.nhom_thuc_hanh_phu_trach,hp.so_tien,hp.trang_thai,
-                                                    hp.trang_thai_dang_ki,lhp.trang_thai `, { type: QueryTypes.SELECT })
+    const dsMonDaDangKiTrongHocKi = await sequelize.query(`select lhp.ma_hoc_phan,mh.ten_mon_hoc,lhp.ten_lop_hoc_phan,hpp.so_tin_chi_ly_thuyet,hpp.so_tin_chi_thuc_hanh,pclhp.nhom_thuc_hanh_phu_trach,hp.so_tien,hp.trang_thai,hp.trang_thai_dang_ki,lhp.trang_thai
+    from sinhviendb.sinh_vien as sv
+    left join sinhviendb.hoc_phi_sinh_vien as hpsv on sv.ma_sinh_vien = hpsv.ma_sinh_vien
+    left join sinhviendb.hoc_phi as hp on hp.ma_hoc_phi = hpsv.ma_hoc_phi
+    left join sinhviendb.phan_cong_lop_hoc_phan as pclhp on pclhp.ma_lop_hoc_phan = hp.ma_phan_cong_lop_hoc_phan
+    left join sinhviendb.lop_hoc_phan as lhp on pclhp.ma_lop_hoc_phan = lhp.ma_lop_hoc_phan
+    left join sinhviendb.hoc_phan as hpp on hpp.ma_hoc_phan = lhp.ma_hoc_phan
+    left join sinhviendb.hoc_ki as hk on lhp.ma_hoc_ki = hk.ma_hoc_ki
+    left join sinhviendb.mon_hoc as mh on mh.ma_mon_hoc = hpp.ma_mon_hoc
+    left join sinhviendb.thoi_khoa_bieu as tkb on tkb.ma_phan_cong_lop_hoc_phan = pclhp.ma_phan_cong
+    left join sinhviendb.thoi_khoa_bieu_sinh_vien as tkbsv on tkbsv.ma_thoi_khoa_bieu = tkb.ma_thoi_khoa_bieu
+    where sv.ma_sinh_vien = '${req.payload.userId}' and hk.ma_hoc_ki = '${ma}' and pclhp.nhom_thuc_hanh_phu_trach =0
+    group by pclhp.ma_phan_cong,mh.ten_mon_hoc,lhp.ten_lop_hoc_phan,
+     hpp.so_tin_chi_ly_thuyet,hpp.so_tin_chi_thuc_hanh,
+    pclhp.nhom_thuc_hanh_phu_trach,hp.so_tien,hp.trang_thai,
+    hp.trang_thai_dang_ki,lhp.trang_thai `, { type: QueryTypes.SELECT })
     res.status(201).json({ success: true, dsMonDaDangKiTrongHocKi });
   } catch (error) {
     console.log(error);
@@ -350,6 +353,49 @@ const getThoiKhoaBieuSinhVienTrongMotTuan = async (req, res, next) => {
     next(error);
   }
 }
+const getChiTietHocPhanDaDangKi = async (req, res, next) => {
+  try {
+    const { ma } = req.body;
+    const dsMonDaDangKiTrongHocKi = await sequelize.query(`select lhp.ma_hoc_phan,mh.ten_mon_hoc,lhp.ten_lop_hoc_phan,hpp.so_tin_chi_ly_thuyet,hpp.so_tin_chi_thuc_hanh,pclhp.nhom_thuc_hanh_phu_trach,hp.so_tien,hp.trang_thai,hp.trang_thai_dang_ki,lhp.trang_thai
+    from sinhviendb.sinh_vien as sv
+    left join sinhviendb.hoc_phi_sinh_vien as hpsv on sv.ma_sinh_vien = hpsv.ma_sinh_vien
+    left join sinhviendb.hoc_phi as hp on hp.ma_hoc_phi = hpsv.ma_hoc_phi
+    left join sinhviendb.phan_cong_lop_hoc_phan as pclhp on pclhp.ma_lop_hoc_phan = hp.ma_phan_cong_lop_hoc_phan
+    left join sinhviendb.lop_hoc_phan as lhp on pclhp.ma_lop_hoc_phan = lhp.ma_lop_hoc_phan
+    left join sinhviendb.hoc_phan as hpp on hpp.ma_hoc_phan = lhp.ma_hoc_phan
+    left join sinhviendb.hoc_ki as hk on lhp.ma_hoc_ki = hk.ma_hoc_ki
+    left join sinhviendb.mon_hoc as mh on mh.ma_mon_hoc = hpp.ma_mon_hoc
+    left join sinhviendb.thoi_khoa_bieu as tkb on tkb.ma_phan_cong_lop_hoc_phan = pclhp.ma_phan_cong
+    left join sinhviendb.thoi_khoa_bieu_sinh_vien as tkbsv on tkbsv.ma_thoi_khoa_bieu = tkb.ma_thoi_khoa_bieu
+    where lhp.ma_lop_hoc_phan = '${ma}'
+    group by pclhp.ma_phan_cong,mh.ten_mon_hoc,lhp.ten_lop_hoc_phan,
+     hpp.so_tin_chi_ly_thuyet,hpp.so_tin_chi_thuc_hanh,
+    pclhp.nhom_thuc_hanh_phu_trach,hp.so_tien,hp.trang_thai,
+    hp.trang_thai_dang_ki,lhp.trang_thai `, { type: QueryTypes.SELECT })
+    res.status(201).json({ success: true, dsMonDaDangKiTrongHocKi });
+  } catch (error) {
+    console.log(error);
+    next(error);
+  }
+}
+const HuyHocPhanDaDangKi = async (req, res, next) => {
+  try {
+    const { ma } = req.body;
+    const foundPCLopHocPhan = await PhanCongLopHocPhan.findOne({ where: { ma_lop_hoc_phan: `${ma}` } });
+    if (!foundPCLopHocPhan) {
+      return res
+        .status(403)
+        .json({ error: { message: "Không tìm thấy phân công lớp học phần" } });
+    }
+
+
+    res.status(201).json({ success: true, dsMonDaDangKiTrongHocKi });
+  } catch (error) {
+    console.log(error);
+    next(error);
+  }
+}
+
 module.exports = {
   getHocKiSinhVien,
   getMonHocSinhVienChuaHoc,
