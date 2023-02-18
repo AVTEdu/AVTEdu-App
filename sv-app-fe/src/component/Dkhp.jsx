@@ -13,6 +13,13 @@ import "../assets/css/profile.min.css";
 import "../assets/css/toastr.min.css";
 import Sidenavbar from "./Sidenavbar";
 import dkhpAPI from "../api/dkhpAPI";
+import Table from "@material-ui/core/Table";
+import TableBody from "@material-ui/core/TableBody";
+import TableCell from "@material-ui/core/TableCell";
+import TableContainer from "@material-ui/core/TableContainer";
+import TableHead from "@material-ui/core/TableHead";
+import TableRow from "@material-ui/core/TableRow";
+import TableScrollbar from 'react-table-scrollbar';
 
 export default function Dkhp() {
   const [hocKiState, setHocKiState] = useState(null);
@@ -26,6 +33,7 @@ export default function Dkhp() {
   const [maHocKi, setMahocKi] = useState();
   const [maPhanCongLopHocPhan, setMaPhanCongLopHocPhan] = useState();
   const [trangThaiLopHocPhan, setTrangThaiLopHocPhan] = useState();
+  const [selectedDsToanBoLopHP, setSelectedDsToanBoLopHP] = useState([]);
   let sttMonChuaDK = 1;
   let sttLHPChoDK = 1;
   let sttHocPhanDaDangKy = 1;
@@ -61,7 +69,7 @@ export default function Dkhp() {
   useEffect(() => {
     const activeLopHocPhanByHocPhan = async () => {
       setChiTietLopHP('');
-      console.log(maHocPhan + "  " + maHocKi);
+      setMaLopHocPhan('');
       try {
         const res = await dkhpAPI.getLopHocPhanByHocPhan(maHocPhan, maHocKi);
         setDsToanBoLopHocPhan(res.data);
@@ -73,6 +81,7 @@ export default function Dkhp() {
   }, [maHocPhan])
 
   useEffect(() => {
+    console.log('ma lop hoc phan co thay doi:' + maLopHocPhan)
     const activeChiTietLopHocPhan = async () => {
       try {
         const res = await dkhpAPI.getChiTietLopHocPhan(maLopHocPhan);
@@ -107,8 +116,12 @@ export default function Dkhp() {
     }
   }
 
-  function selectLopHocPhan(id, e) {
+  const isSelectedDsToanBoLopHP = row => selectedDsToanBoLopHP.indexOf(row.ma_lop_hoc_phan) !== -1;
+
+  const selectLopHocPhan = (e, dsLhp, id) => {
     setMaLopHocPhan(id);
+    let newSelected = [dsLhp.ma_lop_hoc_phan];
+    setSelectedDsToanBoLopHP(newSelected);
   }
 
   async function DangKyHocPhan(e) {
@@ -132,6 +145,7 @@ export default function Dkhp() {
   function SelectChiTietLopHocPhan() {
 
   }
+
 
 
 
@@ -412,36 +426,46 @@ export default function Dkhp() {
                                       <label><input id="checkLichTrung" name="checkLichTrung" type="checkbox" defaultValue="true" /><input name="checkLichTrung" type="hidden" defaultValue="false" /><b><span className="text-uppercase" style={{ color: 'red', marginLeft: '5px !important', marginRight: '10px !important' }} lang="lhpchodangky-lhpkhongtrunglich">HIỂN THỊ LỚP học phần KHÔNG TRÙNG LỊCH</span></b></label>
                                     </div>
                                     <div className="table-responsive">
-                                      <table id="table_lhpchodangky" className="table-pointer table-dkhp table-custom table table-bordered text-center no-footer dtr-inline" width="100%" role="grid">
-                                        <thead>
-                                          <tr role="row">
-                                            <th lang="sv-stt">STT</th>
-                                            <th lang="dkhp-thongtinlhp">Thông tin lớp học phần</th>
-                                            <th lang="dkhp-dadangky">Đã đăng ký</th>
-                                          </tr>
-                                        </thead>
-                                        <tbody>
-                                          {
-                                            dsToanBoLopHocPhan["results"].map((dsLhp) =>
-                                              <tr id={"maLHP" + dsLhp.ma_lop_hoc_phan}
-                                                onClick={(e) => selectLopHocPhan(dsLhp.ma_lop_hoc_phan, e)}
-                                              >
-                                                <td style={{ width: '40px' }}>{sttLHPChoDK++}</td>
-                                                <td className="text-left">
-                                                  <div className="name">{dsLhp.ten_mon_hoc}</div>
-                                                  <div>
-                                                    <span lang="dkhp-trangthai">Trạng thái</span>: <span className="cl-red">
-                                                      {dsLhp.trang_thai === 1 ? 'Có thể đăng ký' : 'Đã khóa'}</span><br />
-                                                    <span lang="dkhp-malhp">Mã lớp  học phần</span>: {dsLhp.ma_lop_hoc_phan}
-                                                  </div>
-                                                </td>
-                                                <td>
-                                                  {dsLhp.so_luong_dang_ki_hien_tai} / {dsLhp.so_luong_dang_ki_toi_da}
-                                                </td>
-                                              </tr>)
-                                          }
-                                        </tbody>
-                                      </table>
+                                      <TableContainer>
+                                        <Table id="table_lhpchodangky" className="table-pointer table-dkhp table-custom table table-bordered text-center no-footer dtr-inline" width="100%" role="grid">
+                                          <TableHead>
+                                            <TableRow role="row">
+                                              <TableCell lang="sv-stt">STT</TableCell>
+                                              <TableCell lang="dkhp-thongtinlhp">Thông tin lớp học phần</TableCell>
+                                              <TableCell lang="dkhp-dadangky">Đã đăng ký</TableCell>
+                                            </TableRow>
+                                          </TableHead>
+                                          <TableBody>
+
+                                            {dsToanBoLopHocPhan["results"].map((dsLhp) => {
+
+                                              return (
+                                                <TableRow
+                                                  id={"maLHP" + dsLhp.ma_lop_hoc_phan}
+                                                  key={dsLhp.ma_lop_hoc_phan}
+                                                  hover
+                                                  onClick={(e) => selectLopHocPhan(e, dsLhp, dsLhp.ma_lop_hoc_phan)}
+                                                  selectedDsToanBoLopHP={isSelectedDsToanBoLopHP(dsLhp)}
+                                                >
+                                                  <TableCell style={{ width: '40px' }} component="th" scope="row">{sttLHPChoDK++}</TableCell>
+                                                  <TableCell className="text-left" >
+                                                    <div className="name">{dsLhp.ten_mon_hoc}</div>
+                                                    <div>
+                                                      <span lang="dkhp-trangthai">Trạng thái</span>: <span className="cl-red">
+                                                        {dsLhp.trang_thai === 1 ? 'Có thể đăng ký' : 'Đã khóa'}</span><br />
+                                                      <span lang="dkhp-malhp">Mã lớp  học phần</span>: {dsLhp.ma_lop_hoc_phan}
+                                                    </div>
+                                                  </TableCell>
+                                                  <TableCell>
+                                                    {dsLhp.so_luong_dang_ki_hien_tai} / {dsLhp.so_luong_dang_ki_toi_da}
+                                                  </TableCell>
+
+                                                </TableRow>
+                                              );
+                                            })}
+                                          </TableBody>
+                                        </Table>
+                                      </TableContainer>
                                     </div>
                                     <br />
                                     <br />
