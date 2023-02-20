@@ -12,7 +12,7 @@ const HocPhi = require("../model/hocphi.model");
 const responseHanlder = require("../handlers/response.handler");
 const HocPhiSinhVien = require("../model/hocphisinhvien.model");
 const PhanCongLopHocPhan = require("../model/phanconglophocphan.model");
-const { getWeekDates } = require("../helpers/date.validate");
+const { getWeekDates, getWeekDay, fomartDateToFE } = require("../helpers/date.validate");
 const KetQuaHocTap = require("../model/ketquahoctap.model");
 const { findAll } = require("../model/hocki.model");
 
@@ -50,37 +50,51 @@ const getHocKiSinhVien = async (req, res, next) => {
   }
 }
 
+/** 
+ * Hàm này dùng để lấy tất cả môn chưa học từ sinh viên đang đăng nhập hiện tại
+ * @returns: Tất cả môn sinh viên chưa học qua từ  sinh viên đăng nhập hiên tại
+ * @private:Private
+ * @Vietanh6jk
+*/
 const getMonHocSinhVienChuaHoc = async (req, res, next) => {
   try {
+    // Lấy mã sinh viên từ thông tin payload
     const ma = req.payload.userId;
+    // Tìm kiếm sinh viên với mã sinh viên này
     const foundSinhVien = await SinhVien.findOne({ where: { ma_sinh_vien: `${ma}` } });
+    // Nếu không tìm thấy sinh viên, trả về lỗi
     if (!foundSinhVien)
       return res
         .status(403)
         .json({ error: { message: "Không tìm thấy sinh viên" } });
+
+    // Thực hiện truy vấn để lấy danh sách các môn học chưa được sinh viên học
     sequelize
       .query(
-        `select  sv.ma_sinh_vien,sv.ho_ten_sinh_vien,mh.ma_mon_hoc,mh.ten_mon_hoc,hp.ma_hoc_phan,hp.so_tin_chi_ly_thuyet,hp.so_tin_chi_thuc_hanh,hp.hoc_phan_bat_buoc,hp.ma_mon_tien_quyet,hp.ma_mon_song_hanh
-                              from sinhviendb.sinh_vien as sv
-                              left join sinhviendb.chuyen_nganh as cn on sv.ma_chuyen_nganh = cn.ma_chuyen_nganh
-                              left join sinhviendb.chuyen_nganh_hoc_phan as cnhp on cn.ma_chuyen_nganh = cnhp.ma_chuyen_nganh
-                              left join sinhviendb.hoc_phan as hp on cnhp.ma_hoc_phan = hp.ma_hoc_phan
-                              left join sinhviendb.lop_hoc_phan as lhp on hp.ma_hoc_phan = lhp.ma_hoc_phan
-                              left join sinhviendb.hoc_ki as hk on lhp.ma_hoc_ki = hk.ma_hoc_ki
-                              left join sinhviendb.mon_hoc as mh on hp.ma_mon_hoc = mh.ma_mon_hoc
-                              where sv.ma_sinh_vien = '${ma}'
-                              and  hp.ma_hoc_phan not in (
-                              select lhp.ma_hoc_phan from sinhviendb.ket_qua_hoc_tap as kqht 
-                              left join sinhviendb.lop_hoc_phan as lhp on kqht.ma_lop_hoc_phan = lhp.ma_lop_hoc_phan
-                              where kqht.ma_sinh_vien = '${ma}')
-                              group by hp.ma_hoc_phan`, { type: QueryTypes.SELECT })
+        `select sv.ma_sinh_vien,sv.ho_ten_sinh_vien,mh.ma_mon_hoc,mh.ten_mon_hoc,hp.ma_hoc_phan,hp.so_tin_chi_ly_thuyet,hp.so_tin_chi_thuc_hanh,hp.hoc_phan_bat_buoc,hp.ma_mon_tien_quyet,hp.ma_mon_song_hanh
+         from sinhviendb.sinh_vien as sv
+         left join sinhviendb.chuyen_nganh as cn on sv.ma_chuyen_nganh = cn.ma_chuyen_nganh
+         left join sinhviendb.chuyen_nganh_hoc_phan as cnhp on cn.ma_chuyen_nganh = cnhp.ma_chuyen_nganh
+         left join sinhviendb.hoc_phan as hp on cnhp.ma_hoc_phan = hp.ma_hoc_phan
+         left join sinhviendb.lop_hoc_phan as lhp on hp.ma_hoc_phan = lhp.ma_hoc_phan
+         left join sinhviendb.hoc_ki as hk on lhp.ma_hoc_ki = hk.ma_hoc_ki
+         left join sinhviendb.mon_hoc as mh on hp.ma_mon_hoc = mh.ma_mon_hoc
+         where sv.ma_sinh_vien = '${ma}'
+         and  hp.ma_hoc_phan not in (
+            select lhp.ma_hoc_phan from sinhviendb.ket_qua_hoc_tap as kqht 
+            left join sinhviendb.lop_hoc_phan as lhp on kqht.ma_lop_hoc_phan = lhp.ma_lop_hoc_phan
+            where kqht.ma_sinh_vien = '${ma}'
+         )
+         group by hp.ma_hoc_phan`, { type: QueryTypes.SELECT })
       .then(function (results) {
+        // Trả về danh sách các môn học chưa được sinh viên học
         return res.status(201).json({ success: true, results });
       });
   } catch (error) {
     next(error);
   }
 };
+
 const getLopHocPhanByHocPhan = async (req, res, next) => {
   try {
     //Mã học phần
@@ -133,7 +147,7 @@ const getChiTietLopHocPhan = async (req, res, next) => {
       .query(
         `select lhp.trang_thai,pclhp.so_luong_sv_phu_trach,pclhp.loai_hoc_phan_phu_trach,tkb.ngay_hoc_trong_tuan,tkb.tiet_hoc_bat_dau,tkb.tiet_hoc_ket_thuc,ph.ten_day_nha,ph.ten_phong_hoc,gv.ten_giang_vien,tkb.thoi_gian_bat_dau,tkb.thoi_gian_ket_thuc,pclhp.ma_phan_cong
         from sinhviendb.hoc_phan as hp
-        left join sinhviendb.lop_hoc_phan as lhp on hp.ma_hoc_phan = lhp.ma_lop_hoc_phan
+        left join sinhviendb.lop_hoc_phan as lhp on hp.ma_hoc_phan = lhp.ma_hoc_phan
         left join sinhviendb.phan_cong_lop_hoc_phan as pclhp on lhp.ma_lop_hoc_phan = pclhp.ma_lop_hoc_phan
         left join sinhviendb.giang_vien as gv on pclhp.ma_giang_vien = gv.ma_giang_vien
         left join sinhviendb.thoi_khoa_bieu as tkb on tkb.ma_phan_cong_lop_hoc_phan = pclhp.ma_phan_cong
@@ -344,9 +358,26 @@ const getMonDaDangKiTrongHocKi = async (req, res, next) => {
 const getThoiKhoaBieuSinhVienTrongMotTuan = async (req, res, next) => {
   try {
     const {ngay} = req.body;
+    let result= [];
     const tuan = getWeekDates(new Date(ngay));
-    const Thu2 = tuan[0];
-    res.status(201).json({ success: true, Thu2});
+    let i =0;
+    for (const day of tuan){
+      let dayOfWeeek = day.wod;
+      console.log(i+":"+dayOfWeeek +"+"+ day.date +"+"+req.payload.userId+"+"+result);
+      ++i;
+      let ngayHoc= await sequelize.query(`select tkb.*
+      from sinhviendb.sinh_vien as sv 
+      left join sinhviendb.thoi_khoa_bieu_sinh_vien as tkbsv on tkbsv.ma_sinh_vien = sv.ma_sinh_vien
+      left join sinhviendb.thoi_khoa_bieu as tkb on tkbsv.ma_thoi_khoa_bieu = tkb.ma_thoi_khoa_bieu
+      left join sinhviendb.phan_cong_lop_hoc_phan as pclhp on tkb.ma_phan_cong_lop_hoc_phan = pclhp.ma_phan_cong
+      left join sinhviendb.lop_hoc_phan as lhp on pclhp.ma_lop_hoc_phan = lhp.ma_lop_hoc_phan
+      left join sinhviendb.hoc_phan as hp on lhp.ma_hoc_phan = hp.ma_hoc_phan
+      left join sinhviendb.mon_hoc as mh on hp.ma_mon_hoc = mh.ma_mon_hoc
+      where tkb.thoi_gian_bat_dau <= '${day.date}' and tkb.thoi_gian_ket_thuc >= '${day.date}' and tkb.ngay_hoc_trong_tuan ='${dayOfWeeek}' and sv.ma_sinh_vien ='${req.payload.userId}'; `, 
+      { type: QueryTypes.SELECT })
+      result.push({Thu:getWeekDay(day.originDay),Ngay:fomartDateToFE(day.originDay),TKB:ngayHoc});
+    }
+    res.status(201).json({ success: true, result});
   } catch (error) {
     console.log(error);
     next(error);
