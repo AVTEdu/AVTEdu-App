@@ -14,7 +14,7 @@ router
   .post(AuthController.AuthercationEmail);
 router
   .route("/checkVerificationEmail")
-  .get(verifyAccessToken,AuthController.CheckVerificationEmail);
+  .get(verifyAccessToken, AuthController.CheckVerificationEmail);
 router
   .route("/logout")
   .delete(AuthController.Logout);
