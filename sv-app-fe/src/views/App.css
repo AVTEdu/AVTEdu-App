@@ -37,20 +37,3 @@
     transform: rotate(360deg);
   }
 }
-
-* {
-  box-sizing: border-box;
-  margin    : 0;
-  padding   : 0;
-}
-
-.qlhp,
-.qlk,
-.qllhp,
-.qluser,
-.qlph,
-.qltkb {
-  display    : flex;
-  margin-left: 260px;
-  font-size  : 2rem;
-}
