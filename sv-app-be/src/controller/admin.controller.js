@@ -17,6 +17,9 @@ const PhongHoc = require("../model/phonghoc.model");
 const KetQuaHocTap = require("../model/ketquahoctap.model");
 const ThoiKhoaBieuSinhVien = require("../model/thoikhoabieusinhvien.model");
 const HocPhi = require("../model/hocphi.model");
+const BacDaoTao = require("../model/bacdaotao.model");
+const DanToc = require("../model/dantoc.model");
+const HocPhiSinhVien = require("../model/hocphisinhvien.model");
 
 
 //Hàm tạo sinh viên bằng admin
@@ -494,24 +497,5 @@ const thanhToanHocPhiSinhVien = async (req,res,next) =>{
   }
 }
 
-module.exports = {
-    createSinhVien,
-    createKhoa,
-    createTonGiao,
-    createAdmin,
-    createMonHoc,
-    createHocPhan,
-    createChuyenNganh,
-    createChuyenNganhHocPhan,
-    createGiangVien,
-    createHocKi,
-    createLopHocPhan,
-    createPhanCongLopHocPhan,
-    createThoiKhoaBieu,
-    createLoaiPhongHoc,
-    createPhongHoc,
-    createBangDiem,
-    createThoiKhoaBieuSinhVien,
-    thanhToanHocPhiSinhVien,
-    getHocPhiChuaNopSinhVien
-};
+
+
