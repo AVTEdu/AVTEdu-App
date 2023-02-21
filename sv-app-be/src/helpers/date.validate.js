@@ -9,7 +9,7 @@ function getWeekDates(date) {
     // Lặp qua 7 ngày trong tuần và lấy ngày của mỗi ngày
     for (let i = 0; i < 7; i++) {
       let day = new Date(firstDay.getFullYear(), firstDay.getMonth(), firstDay.getDate() + i);
-      days.push(getWeekDay(day),fomartDate(day));
+      days.push({date:fomartDate(day),wod:day.getDay(),originDay:day});
     }
   
     return days;
@@ -20,7 +20,11 @@ function getWeekDates(date) {
     return formatter.format(date);
  } 
  function fomartDate(date){
-    const dateFormat = 'dd/MM/yyyy';
+    const dateFormat = 'yyyy-MM-dd';
     return format(date,dateFormat)
  }
-module.exports ={ getWeekDates };
+ function fomartDateToFE(date){
+   const dateFormat = 'dd/MM/yyyy';
+   return format(date,dateFormat)
+}
+module.exports ={ getWeekDates ,getWeekDay,fomartDate,fomartDateToFE};
