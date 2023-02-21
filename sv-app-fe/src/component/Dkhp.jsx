@@ -13,6 +13,13 @@ import "../assets/css/profile.min.css";
 import "../assets/css/toastr.min.css";
 import Sidenavbar from "./Sidenavbar";
 import dkhpAPI from "../api/dkhpAPI";
+import Table from "@material-ui/core/Table";
+import TableBody from "@material-ui/core/TableBody";
+import TableCell from "@material-ui/core/TableCell";
+import TableContainer from "@material-ui/core/TableContainer";
+import TableHead from "@material-ui/core/TableHead";
+import TableRow from "@material-ui/core/TableRow";
+import TableScrollbar from 'react-table-scrollbar';
 
 export default function Dkhp() {
   const [hocKiState, setHocKiState] = useState(null);
@@ -26,6 +33,7 @@ export default function Dkhp() {
   const [maHocKi, setMahocKi] = useState();
   const [maPhanCongLopHocPhan, setMaPhanCongLopHocPhan] = useState();
   const [trangThaiLopHocPhan, setTrangThaiLopHocPhan] = useState();
+  const [selectedDsToanBoLopHP, setSelectedDsToanBoLopHP] = useState([]);
   let sttMonChuaDK = 1;
   let sttLHPChoDK = 1;
   let sttHocPhanDaDangKy = 1;
@@ -47,6 +55,8 @@ export default function Dkhp() {
   useEffect(() => {
     const activeDSHocPhanDaDangKyTrongKyNay = async () => {
       try {
+        setDsToanBoLopHocPhan('');
+        setChiTietLopHP('');
         const res = await dkhpAPI.getHocPhanDaDangKyTrongKynay(maHocKi);
         setHpDaDangKy(res.data);
       } catch (error) {
@@ -59,8 +69,9 @@ export default function Dkhp() {
   useEffect(() => {
     const activeLopHocPhanByHocPhan = async () => {
       setChiTietLopHP('');
+      setMaLopHocPhan('');
       try {
-        const res = await dkhpAPI.getLopHocPhanByHocPhan(maHocPhan);
+        const res = await dkhpAPI.getLopHocPhanByHocPhan(maHocPhan, maHocKi);
         setDsToanBoLopHocPhan(res.data);
       } catch (error) {
         console.log(error.message);
@@ -70,6 +81,7 @@ export default function Dkhp() {
   }, [maHocPhan])
 
   useEffect(() => {
+    console.log('ma lop hoc phan co thay doi:' + maLopHocPhan)
     const activeChiTietLopHocPhan = async () => {
       try {
         const res = await dkhpAPI.getChiTietLopHocPhan(maLopHocPhan);
@@ -89,6 +101,7 @@ export default function Dkhp() {
   async function activeMonChuaDK(e) {
     try {
       setMahocKi(e.target.value);
+
       const res = await dkhpAPI.getToanBoMonHocChuaDangKy();
       setMonChuaDangKy(res.data);
       var selectElementDotDangKy = document.querySelector('#cboIDDotDangKy').value;
@@ -103,18 +116,25 @@ export default function Dkhp() {
     }
   }
 
-  function selectLopHocPhan(id, e) {
+  const isSelectedDsToanBoLopHP = row => selectedDsToanBoLopHP.indexOf(row.ma_lop_hoc_phan) !== -1;
+
+  const selectLopHocPhan = (e, dsLhp, id) => {
     setMaLopHocPhan(id);
+    let newSelected = [dsLhp.ma_lop_hoc_phan];
+    setSelectedDsToanBoLopHP(newSelected);
   }
 
   async function DangKyHocPhan(e) {
-
+    console.log("ma phan cong: " + maPhanCongLopHocPhan);
+    console.log("ma hoc ki: " + maHocKi);
+    console.log(trangThaiLopHocPhan);
     try {
 
-      const res = await dkhpAPI.dangKiHocPhan(maLopHocPhan, maHocKi, trangThaiLopHocPhan, "1860000", "0");
+      const res = await dkhpAPI.dangKiHocPhan(maPhanCongLopHocPhan, maHocKi, trangThaiLopHocPhan, 1860000, 0);
       console.log(res.data);
-      const res2 = await dkhpAPI.getHocPhanDaDangKyTrongKynay(maHocKi);
-      setHpDaDangKy(res2.data);
+      // const res2 = await dkhpAPI.getHocPhanDaDangKyTrongKynay(maHocKi);
+      // setHpDaDangKy(res2.data);
+      alert('Đăng ký  thành công');
     } catch (error) {
       alert('Đăng ký không thành công');
       console.log(error.message);
@@ -125,6 +145,7 @@ export default function Dkhp() {
   function SelectChiTietLopHocPhan() {
 
   }
+
 
 
 
@@ -278,6 +299,7 @@ export default function Dkhp() {
                                           </tr>
                                         </thead>
                                         <tbody>
+
                                           {monChuaDangKy["results"].map((mh) =>
                                             <tr
                                               id="rowHocPhan"
@@ -298,6 +320,7 @@ export default function Dkhp() {
                                                       // onClick={activeLopHocPhanByHocPhan}
                                                       onChange={event => {
                                                         setMaHocPhan(event.target.value)
+
                                                       }}
                                                     />
                                                     <span></span>
@@ -391,10 +414,9 @@ export default function Dkhp() {
                           </div>
                         }
                       </div>
-
                       <div className="row" id="lopHPChoDangKy">
                         {
-                          dsToanBoLopHocPhan ?
+                          dsToanBoLopHocPhan ? (dsToanBoLopHocPhan?.results.length > 0 ?
                             <div className="col-md-6">
                               <div className="gr-table">
                                 <div className="border-scroll" style={{ maxHeight: '370px', overflow: 'hidden', outline: 'none' }} tabIndex={1}>
@@ -404,43 +426,54 @@ export default function Dkhp() {
                                       <label><input id="checkLichTrung" name="checkLichTrung" type="checkbox" defaultValue="true" /><input name="checkLichTrung" type="hidden" defaultValue="false" /><b><span className="text-uppercase" style={{ color: 'red', marginLeft: '5px !important', marginRight: '10px !important' }} lang="lhpchodangky-lhpkhongtrunglich">HIỂN THỊ LỚP học phần KHÔNG TRÙNG LỊCH</span></b></label>
                                     </div>
                                     <div className="table-responsive">
-                                      <table id="table_lhpchodangky" className="table-pointer table-dkhp table-custom table table-bordered text-center no-footer dtr-inline" width="100%" role="grid">
-                                        <thead>
-                                          <tr role="row">
-                                            <th lang="sv-stt">STT</th>
-                                            <th lang="dkhp-thongtinlhp">Thông tin lớp học phần</th>
-                                            <th lang="dkhp-dadangky">Đã đăng ký</th>
-                                          </tr>
-                                        </thead>
-                                        <tbody>
-                                          {
-                                            dsToanBoLopHocPhan["results"].map((dsLhp) =>
-                                              <tr id={"maLHP" + dsLhp.ma_lop_hoc_phan}
-                                                onClick={(e) => selectLopHocPhan(dsLhp.ma_lop_hoc_phan, e)}
-                                              >
-                                                <td style={{ width: '40px' }}>{sttLHPChoDK++}</td>
-                                                <td className="text-left">
-                                                  <div className="name">{dsLhp.ten_mon_hoc}</div>
-                                                  <div>
-                                                    <span lang="dkhp-trangthai">Trạng thái</span>: <span className="cl-red">
-                                                      {dsLhp.trang_thai === 1 ? 'Có thể đăng ký' : 'Đã khóa'}</span><br />
-                                                    <span lang="dkhp-malhp">Mã lớp  học phần</span>: {dsLhp.ma_lop_hoc_phan}
-                                                  </div>
-                                                </td>
-                                                <td>
-                                                  {dsLhp.so_luong_dang_ki_hien_tai} / {dsLhp.so_luong_dang_ki_toi_da}
-                                                </td>
-                                              </tr>)
-                                          }
-                                        </tbody>
-                                      </table>
+                                      <TableContainer>
+                                        <Table id="table_lhpchodangky" className="table-pointer table-dkhp table-custom table table-bordered text-center no-footer dtr-inline" width="100%" role="grid">
+                                          <TableHead>
+                                            <TableRow role="row">
+                                              <TableCell lang="sv-stt">STT</TableCell>
+                                              <TableCell lang="dkhp-thongtinlhp">Thông tin lớp học phần</TableCell>
+                                              <TableCell lang="dkhp-dadangky">Đã đăng ký</TableCell>
+                                            </TableRow>
+                                          </TableHead>
+                                          <TableBody>
+
+                                            {dsToanBoLopHocPhan["results"].map((dsLhp) => {
+
+                                              return (
+                                                <TableRow
+                                                  id={"maLHP" + dsLhp.ma_lop_hoc_phan}
+                                                  key={dsLhp.ma_lop_hoc_phan}
+                                                  hover
+                                                  onClick={(e) => selectLopHocPhan(e, dsLhp, dsLhp.ma_lop_hoc_phan)}
+                                                  selectedDsToanBoLopHP={isSelectedDsToanBoLopHP(dsLhp)}
+                                                >
+                                                  <TableCell style={{ width: '40px' }} component="th" scope="row">{sttLHPChoDK++}</TableCell>
+                                                  <TableCell className="text-left" >
+                                                    <div className="name">{dsLhp.ten_mon_hoc}</div>
+                                                    <div>
+                                                      <span lang="dkhp-trangthai">Trạng thái</span>: <span className="cl-red">
+                                                        {dsLhp.trang_thai === 1 ? 'Có thể đăng ký' : 'Đã khóa'}</span><br />
+                                                      <span lang="dkhp-malhp">Mã lớp  học phần</span>: {dsLhp.ma_lop_hoc_phan}
+                                                    </div>
+                                                  </TableCell>
+                                                  <TableCell>
+                                                    {dsLhp.so_luong_dang_ki_hien_tai} / {dsLhp.so_luong_dang_ki_toi_da}
+                                                  </TableCell>
+
+                                                </TableRow>
+                                              );
+                                            })}
+                                          </TableBody>
+                                        </Table>
+                                      </TableContainer>
                                     </div>
                                     <br />
                                     <br />
                                   </div>
                                 </div>
                               </div>
-                            </div> : <div></div>}
+                            </div> : <div> <h3 className="title-table">Học kỳ này chưa mở lớp</h3></div>) : <div></div>
+                        }
                         {
                           chiTietLopHP ? <> <div className="col-md-6">
                             <div className="gr-table">
@@ -449,7 +482,7 @@ export default function Dkhp() {
                                   <style dangerouslySetInnerHTML={{ __html: "\n    #tbChiTietDKHP .tr-active-nhom {\n        background-color: #ffee4a;\n        color: #003f65 !important;\n    }\n    /*#tbChiTietDKHP  .tr-active {\n        background-color: #ffeb3b52 !important;\n    }*/\n" }} />
                                   <h3 className="title-table" lang="ctlhpchodangky-tabletitle">Chi tiết lớp học phần</h3>
                                   <div className="text-right" style={{ marginBottom: '5px' }}>
-                                    <button onclick="XemLichTrung(this)" className="btn btn--m block first" style={{ backgroundColor: '#ec9e0f', color: '#fff' }} lang="dkhp-xemlichtrungButton">Xem lịch trùng</button>
+                                    <button onClick="XemLichTrung(this)" className="btn btn--m block first" style={{ backgroundColor: '#ec9e0f', color: '#fff' }} lang="dkhp-xemlichtrungButton">Xem lịch trùng</button>
                                   </div>
                                   <table id="tbChiTietDKHP" className="table-pointer table-dkhp table-custom table table-bordered text-center no-footer dtr-inline" width="100%" role="grid">
                                     <thead>
@@ -468,7 +501,10 @@ export default function Dkhp() {
                                     <tbody>
                                       {
                                         chiTietLopHP["results"].map((ctlhp) =>
-                                          <tr className="tr-active tr-chitietlichdangky" onClick={(e) => (ctlhp.trang_thai === 1 ? setTrangThaiLopHocPhan('Đăng ký mới') : setTrangThaiLopHocPhan(''))}>
+                                          <tr className="tr-active tr-chitietlichdangky" onClick={(e) => {
+                                            (ctlhp.trang_thai === 1 ? setTrangThaiLopHocPhan('Đăng ký mới') : setTrangThaiLopHocPhan(''))
+                                            setMaPhanCongLopHocPhan(ctlhp.ma_phan_cong)
+                                          }}>
                                             <td className="text-left">
                                               <div><span >Lịch học</span>: <b> {ctlhp.ngay_hoc_trong_tuan}   (Tiết {ctlhp.tiet_hoc_bat_dau}  -&gt; {ctlhp.tiet_hoc_ket_thuc} )</b></div>
                                               <p><span >Cơ sở</span>: <b>Cơ sở 1 (Thành phố Hồ Chí Minh)</b></p>
@@ -550,51 +586,52 @@ export default function Dkhp() {
                                 <tbody>
                                   {
                                     hpDaDangKy["dsMonDaDangKiTrongHocKi"].map((hpDaDk) =>
-                                      <tr>
-                                        <td>
-                                          <button
-                                            className="btn btn-sm btn-close"
-                                            data-idlhpdk="7623002"
-                                            data-guid="XtSz3Srj05-JLoWwpYueBA"
-                                            lang="dangkyhocphan-xem-button"
-                                          >
-                                            Xem
-                                          </button>
-                                        </td>
+                                      hpDaDk.nhom_thuc_hanh_phu_trach !== null ?
+                                        <><tr>
+                                          <td>
+                                            <button
+                                              className="btn btn-sm btn-close"
+                                              data-idlhpdk="7623002"
+                                              data-guid="XtSz3Srj05-JLoWwpYueBA"
+                                              lang="dangkyhocphan-xem-button"
+                                            >
+                                              Xem
+                                            </button>
+                                          </td>
 
-                                        <td>
-                                          <button
-                                            className="btn btn-sm btn-close"
-                                            data-idlhpdk="7623002"
-                                            data-guid="XtSz3Srj05-JLoWwpYueBA"
-                                            lang="dangkyhocphan-huy-button"
-                                          >
-                                            Hủy
-                                          </button>
-                                        </td>
+                                          <td>
+                                            <button
+                                              className="btn btn-sm btn-close"
+                                              data-idlhpdk="7623002"
+                                              data-guid="XtSz3Srj05-JLoWwpYueBA"
+                                              lang="dangkyhocphan-huy-button"
+                                            >
+                                              Hủy
+                                            </button>
+                                          </td>
 
-                                        <td>{sttHocPhanDaDangKy++}</td>
-                                        <td>{hpDaDk.ma_hoc_phan}</td>
-                                        <td className="text-left">
-                                          {hpDaDk.ten_mon_hoc}
-                                        </td>
-                                        <td>{hpDaDk.ten_lop_hoc_phan}</td>
-                                        <td>{hpDaDk.so_tin_chi_ly_thuyet}</td>
-                                        <td></td>
-                                        <td className="text-right">
-                                          <span>{hpDaDk.so_tien}</span>
-                                        </td>
-                                        <td>Chưa set</td>
-                                        {/* <td>
+                                          <td>{sttHocPhanDaDangKy++}</td>
+                                          <td>{hpDaDk.ma_hoc_phan}</td>
+                                          <td className="text-left">
+                                            {hpDaDk.ten_mon_hoc}
+                                          </td>
+                                          <td>{hpDaDk.ten_lop_hoc_phan}</td>
+                                          <td>{hpDaDk.so_tin_chi_ly_thuyet}</td>
+                                          <td>{hpDaDk.nhom_thuc_hanh_phu_trach}</td>
+                                          <td className="text-right">
+                                            <span>{hpDaDk.so_tien}</span>
+                                          </td>
+                                          <td>Chưa set</td>
+                                          {/* <td>
                                           <div>
                                             <div className="check"></div>
                                           </div>
                                         </td> */}
-                                        <td>Chưa set</td>
-                                        <td>{hpDaDk.trang_thai_dang_ki}</td>
-                                        <td>Chưa set</td>
-                                        <td>Chưa set</td>
-                                      </tr>
+                                          <td>Chưa set</td>
+                                          <td>{hpDaDk.trang_thai_dang_ki}</td>
+                                          <td>Chưa set</td>
+                                          <td>Chưa set</td>
+                                        </tr></> : <div></div>
                                     )
                                   }
                                 </tbody>
