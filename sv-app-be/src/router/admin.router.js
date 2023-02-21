@@ -1,59 +1,59 @@
 const express = require("express");
-const AdminController = require("../controller/admin.controller");
+const AdminCreateController = require("../controller/admin.controller/create.controller");
 const router = express.Router();
 
 router
   .route("/signup")
-  .post(AdminController.createSinhVien);
+  .post(AdminCreateController.createSinhVien);
 router
   .route("/createKhoa")
-  .post(AdminController.createKhoa);  
+  .post(AdminCreateController.createKhoa);  
 router
   .route("/createTonGiao")
-  .post(AdminController.createTonGiao);  
+  .post(AdminCreateController.createTonGiao);  
 router
   .route("/createAdmin")
-  .post(AdminController.createAdmin);
+  .post(AdminCreateController.createAdmin);
 router
   .route("/createMonHoc")
-  .post(AdminController.createMonHoc); 
+  .post(AdminCreateController.createMonHoc); 
 router
   .route("/createHocPhan")
-  .post(AdminController.createHocPhan); 
+  .post(AdminCreateController.createHocPhan); 
 router
   .route("/createChuyenNganh")
-  .post(AdminController.createChuyenNganh); 
+  .post(AdminCreateController.createChuyenNganh); 
 router
   .route("/createChuyenNganhHocPhan")
-  .post(AdminController.createChuyenNganhHocPhan); 
+  .post(AdminCreateController.createChuyenNganhHocPhan); 
 router
   .route("/createGiangVien")
-  .post(AdminController.createGiangVien); 
+  .post(AdminCreateController.createGiangVien); 
 router
   .route("/createHocKi")
-  .post(AdminController.createHocKi); 
+  .post(AdminCreateController.createHocKi); 
 router
   .route("/createLopHocPhan")
-  .post(AdminController.createLopHocPhan); 
+  .post(AdminCreateController.createLopHocPhan); 
 router
   .route("/createPhanCongLopHocPhan")
-  .post(AdminController.createPhanCongLopHocPhan);
+  .post(AdminCreateController.createPhanCongLopHocPhan);
 router
   .route("/createThoiKhoaBieu")
-  .post(AdminController.createThoiKhoaBieu);
+  .post(AdminCreateController.createThoiKhoaBieu);
 router
   .route("/createLoaiPhongHoc")
-  .post(AdminController.createLoaiPhongHoc);
+  .post(AdminCreateController.createLoaiPhongHoc);
 router
   .route("/createPhongHoc")
-  .post(AdminController.createPhongHoc);
+  .post(AdminCreateController.createPhongHoc);
 router
   .route("/createBangDiem")
-  .post(AdminController.createBangDiem);
+  .post(AdminCreateController.createBangDiem);
 router
   .route("/createThoiKhoaBieuSinhVien")
-  .post(AdminController.createThoiKhoaBieuSinhVien);
-router
-  .route("/thanhToanHocPhiSinhVien")
-  .put(AdminController.thanhToanHocPhiSinhVien);  
+  .post(AdminCreateController.createThoiKhoaBieuSinhVien);
+// router
+//   .route("/thanhToanHocPhiSinhVien")
+//   .put(AdminCreateController.thanhToanHocPhiSinhVien);  
 module.exports = router;
