@@ -9,7 +9,7 @@ function momoPayment(props, client) {
   const orderInfo = `Thành viên ${client.tenkh} thực hiện thanh toán`;
   const amount = props.phi_san_pham + props.phi_van_chuyen - props.phi_giam;
   const redirectUrl = "localhost:3000/hello";
-  const ipnUrl = "localhost:3000/hello";
+  const ipnUrl = "localhost:3000/hello/camon";
   const requestType = 'captureWallet';
   const extraData = '';
 
@@ -50,21 +50,21 @@ function momoPayment(props, client) {
     signature: signature,
   });
 
-  const request = https.request(options, (response) => {
-    response.setEncoding('utf8');
-    response.on('data', (data) => {
-      console.log(data);
-    });
-    response.on('end', () => {
-      console.log('No more data');
-    });
-  });
+    const req = https.request(options, res => {
+            // console.log(`Status: ${res.statusCode}`);
+            // console.log(`Headers: ${JSON.stringify(res.headers)}`);
+            res.setEncoding('utf8');
+            res.on('data', (body) => {
+                // console.log('Body: ');
+                // console.log(body);
+                // console.log('payUrl: ');
+                // console.log(JSON.parse(body).payUrl);
+                resolve(body)
 
-  request.on('error', (error) => {
-    console.error(error);
-  });
-
-  request.write(data);
-  request.end();
-}
+            });
+            res.on('end', () => {
+                // console.log('No more data in response.');
+            });
+        })
+    }
 module.exports = {momoPayment};

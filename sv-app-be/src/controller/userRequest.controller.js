@@ -366,7 +366,7 @@ const getThoiKhoaBieuSinhVienTrongMotTuan = async (req, res, next) => {
       let dayOfWeeek = day.wod;
       console.log(i+":"+dayOfWeeek +"+"+ day.date +"+"+req.payload.userId+"+"+result);
       ++i;
-      let ngayHoc= await sequelize.query(`select tkb.*
+      let ngayHoc= await sequelize.query(`select tkb.*,mh.ten_mon_hoc,gv.ten_giang_vien,lhp.ten_lop_hoc_phan
       from sinhviendb.sinh_vien as sv 
       left join sinhviendb.thoi_khoa_bieu_sinh_vien as tkbsv on tkbsv.ma_sinh_vien = sv.ma_sinh_vien
       left join sinhviendb.thoi_khoa_bieu as tkb on tkbsv.ma_thoi_khoa_bieu = tkb.ma_thoi_khoa_bieu
@@ -374,6 +374,7 @@ const getThoiKhoaBieuSinhVienTrongMotTuan = async (req, res, next) => {
       left join sinhviendb.lop_hoc_phan as lhp on pclhp.ma_lop_hoc_phan = lhp.ma_lop_hoc_phan
       left join sinhviendb.hoc_phan as hp on lhp.ma_hoc_phan = hp.ma_hoc_phan
       left join sinhviendb.mon_hoc as mh on hp.ma_mon_hoc = mh.ma_mon_hoc
+      left join sinhviendb.giang_vien as gv on pclhp.ma_giang_vien = gv.ma_giang_vien 
       where tkb.thoi_gian_bat_dau <= '${day.date}' and tkb.thoi_gian_ket_thuc >= '${day.date}' and tkb.ngay_hoc_trong_tuan ='${dayOfWeeek}' and sv.ma_sinh_vien ='${req.payload.userId}'; `, 
       { type: QueryTypes.SELECT })
       result.push({Thu:getWeekDay(day.originDay),Ngay:fomartDateToFE(day.originDay),TKB:ngayHoc});
@@ -418,8 +419,7 @@ const HuyHocPhanDaDangKi = async (req, res, next) => {
         .status(403)
         .json({ error: { message: "Không tìm thấy phân công lớp học phần" } });
     }
-
-
+    
     res.status(201).json({ success: true, dsMonDaDangKiTrongHocKi });
   } catch (error) {
     console.log(error);

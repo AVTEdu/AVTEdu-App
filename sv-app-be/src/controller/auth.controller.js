@@ -75,7 +75,8 @@ const signInAdmin = async (req,res,next) =>{
         const accessToken = await signAccessToken(ma);
         //Tạo refeshToken
         const refreshToken = await signRefreshToken(ma);
-        await res.cookie('authorization', accessToken, { maxAge: 900000, httpOnly: true });
+        await res.cookie('authorization', accessToken, { maxAge: 900000, httpOnly: true});
+        await res.cookie('refreshToken', refreshToken, { maxAge: 1900000, httpOnly: true});
         return res
         .status(200)
         .json({ success: true,accessToken,refreshToken, admin });
