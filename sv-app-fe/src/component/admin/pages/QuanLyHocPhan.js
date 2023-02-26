@@ -2,7 +2,6 @@ import React from "react";
 import Sidebar from "../components/Sidebar";
 
 
-
 export const MonHoc = () => {
     return (
         <>
@@ -10,7 +9,7 @@ export const MonHoc = () => {
             <div className="qlhp">
                 <div>
                     <h2 style={{ fontWeight: "bold" }}>Thêm môn học</h2>
-                    <div className="container">
+                    <div className="container" style={{ backgroundColor: "#f2f2f2" }}>
                         <form>
                             <div className="row">
                                 <div className="col-25">
@@ -128,7 +127,7 @@ export const HocPhan = () => {
             <div className="qlhp">
                 <div>
                     <h2 style={{ fontWeight: "bold" }}>Thêm học phần</h2>
-                    <div className="container">
+                    <div className="container" style={{ backgroundColor: "#f2f2f2" }}>
                         <form>
                             <div className="row">
                                 <div className="col-25">

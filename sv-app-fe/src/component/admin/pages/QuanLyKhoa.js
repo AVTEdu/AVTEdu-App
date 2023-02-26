@@ -2,6 +2,7 @@ import React from "react";
 import Sidebar from "../components/Sidebar";
 
 
+
 export const Khoa = () => {
     return (
         <>
@@ -10,7 +11,7 @@ export const Khoa = () => {
                 <div>
                     <h2 style={{ fontWeight: "bold" }}>Thêm Khoa</h2>
                     <br />
-                    <div className="container">
+                    <div className="container" style={{ backgroundColor: "#f2f2f2" }}>
                         <form>
                             <div className="row">
                                 <div className="col-25">
@@ -56,7 +57,7 @@ export const ChuyenNganh = () => {
             <div className="qlk">
                 <div>
                     <h2 style={{ fontWeight: "bold" }}>Thêm Chuyên ngành</h2>
-                    <div className="container">
+                    <div className="container" style={{ backgroundColor: "#f2f2f2" }}>
                         <form>
                             <div className="row">
                                 <div className="col-25">

@@ -1,4 +1,4 @@
-import '../views/App.css';
+
 import { Login } from "../component/login";
 import { LoginAdmin } from "../component/admin/LoginAdmin";
 import { AdminApp } from "../component/admin/AdminApp";
@@ -13,7 +13,7 @@ import { HocKi, LopHocPhan, PhanCong } from '../component/admin/pages/QuanLyLopH
 import { Admin, GiangVien, SinhVien } from '../component/admin/pages/QuanLyNguoiDung';
 import { LoaiPhong, Phong } from '../component/admin/pages/QuanLyPhong';
 import { ThoiKhoaBieu } from '../component/admin/pages/QuanLyTKB';
-
+import XemLichHoc from "../component/XemLichHoc";
 
 
 function App() {
@@ -30,11 +30,13 @@ function App() {
           <Route path="AdminApp/*" element={<AdminApp />} />
           <Route path="unauthorized" element={<Unauthorized />} />
 
+
           {/* <Route element={<RequireAuth allowedRoles={[ROLES.USER]} />}>
           <Route path="dkhp" element={<Dkhp />} />
         </Route> */}
           <Route path="trang-chu" element={<TrangChu />} />
           <Route path="dkhp" element={<Dkhp />} />
+          <Route path="lich-theo-tuan" element={<XemLichHoc />} />
 
 
           {/* <Route path="*" element={<Missing />} /> */}

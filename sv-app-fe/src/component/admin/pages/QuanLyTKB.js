@@ -1,6 +1,7 @@
 import React from "react";
 import Sidebar from "../components/Sidebar";
 
+
 export const ThoiKhoaBieu = () => {
     return (
         <>
@@ -8,7 +9,7 @@ export const ThoiKhoaBieu = () => {
             <div className="qltkb">
                 <div>
                     <h2 style={{ fontWeight: "bold" }}>Thêm thời khóa biểu</h2>
-                    <div className="container">
+                    <div className="container" style={{ backgroundColor: "#f2f2f2" }}>
                         <form action="/action_page.php">
                             <div className="row">
                                 <div className="col-25">
