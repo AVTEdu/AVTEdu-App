@@ -1,6 +1,7 @@
 import React from "react";
 import Sidebar from "../components/Sidebar";
 
+
 export const Admin = () => {
     return (
         <>
@@ -8,7 +9,7 @@ export const Admin = () => {
             <div className="qluser">
                 <div>
                     <h2 style={{ fontWeight: "bold" }}>Tạo user Admin</h2>
-                    <div className="container">
+                    <div className="container" style={{ backgroundColor: "#f2f2f2" }}>
                         <form action="/action_page.php">
                             <div className="row">
                                 <div className="col-25">
@@ -91,7 +92,7 @@ export const GiangVien = () => {
             <div className="qluser">
                 <div>
                     <h2 style={{ fontWeight: "bold" }}>Tạo user giảng viên</h2>
-                    <div className="container">
+                    <div className="container" style={{ backgroundColor: "#f2f2f2" }}>
                         <form action="/action_page.php">
                             <div className="row">
                                 <div className="col-25">
@@ -216,7 +217,7 @@ export const SinhVien = () => {
             <div className="qllhp">
                 <div>
                     <h2 style={{ fontWeight: "bold" }}>Tạo user sinh viên</h2>
-                    <div className="container">
+                    <div className="container" style={{ backgroundColor: "#f2f2f2" }}>
                         <form action="/action_page.php">
                             <div className="row">
                                 <div className="col-25">

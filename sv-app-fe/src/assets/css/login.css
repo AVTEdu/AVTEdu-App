@@ -1,469 +1,574 @@
 * {
-	margin: 0px;
-	padding: 0px;
+	margin    : 0px;
+	padding   : 0px;
 	box-sizing: border-box;
 }
-*, ::after, ::before {
+
+*,
+::after,
+::before {
 	box-sizing: border-box;
 }
+
 body {
-	margin: 0;
-	font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";
-	font-size: 1rem;
-	font-weight: 400;
-	line-height: 1.5;
-	color: #212529;
-	text-align: left;
+	margin          : 0;
+	font-family     : -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+	font-size       : 1rem;
+	font-weight     : 400;
+	line-height     : 1.5;
+	color           : #212529;
+	text-align      : left;
 	background-color: #fff;
 }
+
 html {
-	font-family: sans-serif;
-	line-height: 1.15;
-	-webkit-text-size-adjust: 100%;
+	font-family                : sans-serif;
+	line-height                : 1.15;
+	-webkit-text-size-adjust   : 100%;
 	-webkit-tap-highlight-color: transparent;
 }
-body, html {
-	height: 100%;
+
+body,
+html {
+	height     : 100%;
 	font-family: "SVN-Poppins";
 }
+
 :root {
-	--blue:#007bff: ;
-	--indigo:#6610f2: ;
-	--purple:#6f42c1: ;
-	--pink:#e83e8c: ;
-	--red:#dc3545: ;
-	--orange:#fd7e14: ;
-	--yellow:#ffc107: ;
-	--green:#28a745: ;
-	--teal:#20c997: ;
-	--cyan:#17a2b8: ;
-	--white:#fff: ;
-	--gray:#6c757d: ;
-	--gray-dark:#343a40: ;
-	--primary:#007bff: ;
-	--secondary:#6c757d: ;
-	--success:#28a745: ;
-	--info:#17a2b8: ;
-	--warning:#ffc107: ;
-	--danger:#dc3545: ;
-	--light:#f8f9fa: ;
-	--dark:#343a40: ;
-	--breakpoint-xs:0: ;
-	--breakpoint-sm:576px: ;
-	--breakpoint-md:768px: ;
-	--breakpoint-lg:992px: ;
-	--breakpoint-xl:1200px: ;
-	--font-family-sans-serif:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji": ;
-	--font-family-monospace:SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace: ;
+	--blue                  : #007bff:;
+	--indigo                : #6610f2:;
+	--purple                : #6f42c1:;
+	--pink                  : #e83e8c:;
+	--red                   : #dc3545:;
+	--orange                : #fd7e14:;
+	--yellow                : #ffc107:;
+	--green                 : #28a745:;
+	--teal                  : #20c997:;
+	--cyan                  : #17a2b8:;
+	--white                 : #fff:;
+	--gray                  : #6c757d:;
+	--gray-dark             : #343a40:;
+	--primary               : #007bff:;
+	--secondary             : #6c757d:;
+	--success               : #28a745:;
+	--info                  : #17a2b8:;
+	--warning               : #ffc107:;
+	--danger                : #dc3545:;
+	--light                 : #f8f9fa:;
+	--dark                  : #343a40:;
+	--breakpoint-xs         : 0:;
+	--breakpoint-sm         : 576px:;
+	--breakpoint-md         : 768px:;
+	--breakpoint-lg         : 992px:;
+	--breakpoint-xl         : 1200px:;
+	--font-family-sans-serif: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji":;
+	--font-family-monospace : SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace:;
 }
+
 .limiter {
-	width: 100%;
+	width : 100%;
 	margin: 0 auto;
 }
+
 .fade {
 	transition: opacity .15s linear;
 }
+
 .modal {
 	position: fixed;
-	top: 0px;
-	left: 0px;
-	z-index: 1050;
-	display: none;
-	width: 100%;
-	height: 100%;
+	top     : 0px;
+	left    : 0px;
+	z-index : 1050;
+	display : none;
+	width   : 100%;
+	height  : 100%;
 	overflow: hidden;
-	outline: 0;
+	outline : 0;
 }
+
 :not(.show).fade {
 	opacity: 0;
 }
+
 iframe {
 	border: none !important;
 }
+
 button {
 	border-radius: 0;
 }
-button, input, optgroup, select, textarea {
-	margin: 0;
+
+button,
+input,
+optgroup,
+select,
+textarea {
+	margin     : 0;
 	font-family: inherit;
-	font-size: inherit;
+	font-size  : inherit;
 	line-height: inherit;
 }
+
 textarea {
 	overflow: auto;
-	resize: vertical;
+	resize  : vertical;
 }
+
 textarea {
 	outline: none;
-	border: none;
+	border : none;
 }
+
 .modal-dialog {
-	position: relative;
-	width: auto;
-	margin: .5rem;
+	position      : relative;
+	width         : auto;
+	margin        : .5rem;
 	pointer-events: none;
 }
+
 /* @media all and (min-width:576px) */
 .modal-dialog {
 	max-width: 500px;
-	margin: 1.75rem auto;
+	margin   : 1.75rem auto;
 }
+
 /* @media all and (min-width:992px) */
-.modal-lg, .modal-xl {
+.modal-lg,
+.modal-xl {
 	max-width: 800px;
 }
+
 .modal.fade .modal-dialog {
-	transition: -webkit-transform .3s ease-out;
-	transition: transform .3s ease-out;
-	transition: transform .3s ease-out, -webkit-transform .3s ease-out;
+	transition       : -webkit-transform .3s ease-out;
+	transition       : transform .3s ease-out;
+	transition       : transform .3s ease-out, -webkit-transform .3s ease-out;
 	-webkit-transform: translate(0, -50px);
-	transform: translate(0px, -50px);
+	transform        : translate(0px, -50px);
 }
+
 .modal-content {
-	position: relative;
-	display: -ms-flexbox;
-	display: flex;
+	position          : relative;
+	display           : -ms-flexbox;
+	display           : flex;
 	-ms-flex-direction: column;
-	flex-direction: column;
-	width: 100%;
-	pointer-events: auto;
-	background-color: #fff;
-	background-clip: padding-box;
-	border: 1px solid rgba(0, 0, 0, .2);
-	border-radius: .3rem;
-	outline: 0;
+	flex-direction    : column;
+	width             : 100%;
+	pointer-events    : auto;
+	background-color  : #fff;
+	background-clip   : padding-box;
+	border            : 1px solid rgba(0, 0, 0, .2);
+	border-radius     : .3rem;
+	outline           : 0;
 }
+
 .modal-header {
-	display: -ms-flexbox;
-	display: flex;
-	-ms-flex-align: start;
-	align-items: flex-start;
-	-ms-flex-pack: justify;
-	justify-content: space-between;
-	padding: 1rem 1rem;
-	border-bottom: 1px solid #dee2e6;
-	border-top-left-radius: calc(.3rem - 1px);
+	display                : -ms-flexbox;
+	display                : flex;
+	-ms-flex-align         : start;
+	align-items            : flex-start;
+	-ms-flex-pack          : justify;
+	justify-content        : space-between;
+	padding                : 1rem 1rem;
+	border-bottom          : 1px solid #dee2e6;
+	border-top-left-radius : calc(.3rem - 1px);
 	border-top-right-radius: calc(.3rem - 1px);
 }
+
 .modal-body {
 	position: relative;
 	-ms-flex: 1 1 auto;
-	flex: 1 1 auto;
-	padding: 1rem;
+	flex    : 1 1 auto;
+	padding : 1rem;
 }
-h1, h2, h3, h4, h5, h6 {
-	margin-top: 0px;
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+	margin-top   : 0px;
 	margin-bottom: 0.5rem;
 }
-.h1, .h2, .h3, .h4, .h5, .h6, h1, h2, h3, h4, h5, h6 {
+
+.h1,
+.h2,
+.h3,
+.h4,
+.h5,
+.h6,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
 	margin-bottom: 0.5rem;
-	font-weight: 500;
-	line-height: 1.2;
+	font-weight  : 500;
+	line-height  : 1.2;
 }
-.h3, h3 {
+
+.h3,
+h3 {
 	font-size: 1.75rem;
 }
-.h5, h5 {
+
+.h5,
+h5 {
 	font-size: 1.25rem;
 }
-h1, h2, h3, h4, h5, h6 {
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
 	margin: 0px;
 }
+
 a {
-	color: #007bff;
-	text-decoration: none;
+	color           : #007bff;
+	text-decoration : none;
 	background-color: transparent;
 }
+
 a {
-	font-family: "SVN-Poppins";
-	font-size: 14px;
-	line-height: 1.7;
-	color: #666666;
-	margin: 0px;
-	transition: all 0.4s;
+	font-family       : "SVN-Poppins";
+	font-size         : 14px;
+	line-height       : 1.7;
+	color             : #666666;
+	margin            : 0px;
+	transition        : all 0.4s;
 	-webkit-transition: all 0.4s;
-	-o-transition: all 0.4s;
-	-moz-transition: all 0.4s;
+	-o-transition     : all 0.4s;
+	-moz-transition   : all 0.4s;
 }
+
 .modal-title {
 	margin-bottom: 0px;
-	line-height: 1.5;
+	line-height  : 1.5;
 }
-button, input {
+
+button,
+input {
 	overflow: visible;
 }
-button, select {
+
+button,
+select {
 	text-transform: none;
 }
+
 button {
-	outline: none !important;
-	border: none;
+	outline   : none !important;
+	border    : none;
 	background: transparent;
 }
-[type=button], [type=reset], [type=submit], button {
+
+[type=button],
+[type=reset],
+[type=submit],
+button {
 	-webkit-appearance: button;
 }
+
 .close {
-	float: right;
-	font-size: 1.5rem;
+	float      : right;
+	font-size  : 1.5rem;
 	font-weight: 700;
 	line-height: 1;
-	color: #000;
+	color      : #000;
 	text-shadow: 0px 1px 0px #fff;
-	opacity: 0.5;
+	opacity    : 0.5;
 }
+
 button.close {
-	padding: 0;
+	padding         : 0;
 	background-color: transparent;
-	border: 0;
+	border          : 0;
 }
+
 .login100-form-btn {
-	display: -webkit-box;
-	display: -webkit-flex;
-	display: -moz-box;
-	display: -ms-flexbox;
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	padding: 0 20px;
-	width: 100%;
-	height: 50px;
-	border-radius: 10px;
-	background: #005f69;
-	font-family: "SVN-Poppins";
-	font-size: 16px;
-	color: #fff;
-	line-height: 1.2;
-	text-transform: uppercase;
-	letter-spacing: 1px;
+	display           : -webkit-box;
+	display           : -webkit-flex;
+	display           : -moz-box;
+	display           : -ms-flexbox;
+	display           : flex;
+	justify-content   : center;
+	align-items       : center;
+	padding           : 0 20px;
+	width             : 100%;
+	height            : 50px;
+	border-radius     : 10px;
+	background        : #005f69;
+	font-family       : "SVN-Poppins";
+	font-size         : 16px;
+	color             : #fff;
+	line-height       : 1.2;
+	text-transform    : uppercase;
+	letter-spacing    : 1px;
 	-webkit-transition: all 0.4s;
-	-o-transition: all 0.4s;
-	-moz-transition: all 0.4s;
-	transition: all 0.4s;
+	-o-transition     : all 0.4s;
+	-moz-transition   : all 0.4s;
+	transition        : all 0.4s;
 }
-[type=button]:not(:disabled), [type=reset]:not(:disabled), [type=submit]:not(:disabled), button:not(:disabled) {
+
+[type=button]:not(:disabled),
+[type=reset]:not(:disabled),
+[type=submit]:not(:disabled),
+button:not(:disabled) {
 	cursor: pointer;
 }
+
 .modal-header .close {
 	padding: 1rem 1rem;
-	margin: -1rem -1rem -1rem auto;
+	margin : -1rem -1rem -1rem auto;
 }
+
 .container-login100 {
-	width: 100%;
-	min-height: 100vh;
-	display: -webkit-box;
-	display: -webkit-flex;
-	display: -moz-box;
-	display: -ms-flexbox;
-	display: flex;
-	flex-wrap: wrap;
+	width          : 100%;
+	min-height     : 100vh;
+	display        : -webkit-box;
+	display        : -webkit-flex;
+	display        : -moz-box;
+	display        : -ms-flexbox;
+	display        : flex;
+	flex-wrap      : wrap;
 	justify-content: center;
-	align-items: center;
-	background: #f2f2f2;
+	align-items    : center;
+	background     : #f2f2f2;
 }
+
 .wrap-login100 {
-	width: 100%;
-	background: #fff;
-	overflow: hidden;
-	display: -webkit-box;
-	display: -webkit-flex;
-	display: -moz-box;
-	display: -ms-flexbox;
-	display: flex;
-	flex-wrap: wrap;
-	align-items: stretch;
+	width         : 100%;
+	background    : #fff;
+	overflow      : hidden;
+	display       : -webkit-box;
+	display       : -webkit-flex;
+	display       : -moz-box;
+	display       : -ms-flexbox;
+	display       : flex;
+	flex-wrap     : wrap;
+	align-items   : stretch;
 	flex-direction: row-reverse;
 }
+
 .login100-form {
-	width: 560px;
-	min-height: 100vh;
-	display: block;
+	width           : 560px;
+	min-height      : 100vh;
+	display         : block;
 	background-color: #f7f7f7;
-	padding: 40px 55px 55px 55px;
+	padding         : 40px 55px 55px 55px;
 }
+
 .login100-more {
-	width: calc(100% - 560px);
-	background-repeat: no-repeat;
-	background-size: cover;
+	width              : calc(100% - 560px);
+	background-repeat  : no-repeat;
+	background-size    : cover;
 	background-position: center;
-	position: relative;
-	z-index: 1;
+	position           : relative;
+	z-index            : 1;
 }
+
 .login100-more::before {
-	content: "";
-	display: block;
-	position: absolute;
-	z-index: -1;
-	width: 100%;
-	height: 100%;
-	top: 0px;
-	left: 0px;
-	background: rgba(0,0,0,0.1);
+	content   : "";
+	display   : block;
+	position  : absolute;
+	z-index   : -1;
+	width     : 100%;
+	height    : 100%;
+	top       : 0px;
+	left      : 0px;
+	background: rgba(0, 0, 0, 0.1);
 }
+
 input {
 	outline: none;
-	border: none;
+	border : none;
 }
+
 img {
 	vertical-align: middle;
-	border-style: none;
+	border-style  : none;
 }
+
 .wrap-input100 {
-	display: -webkit-box;
-	display: -webkit-flex;
-	display: -moz-box;
-	display: -ms-flexbox;
-	display: flex;
-	flex-wrap: wrap;
-	align-items: flex-end;
-	width: 100%;
-	height: 80px;
-	position: relative;
-	border: 1px solid #005180;
+	display      : -webkit-box;
+	display      : -webkit-flex;
+	display      : -moz-box;
+	display      : -ms-flexbox;
+	display      : flex;
+	flex-wrap    : wrap;
+	align-items  : flex-end;
+	width        : 100%;
+	height       : 80px;
+	position     : relative;
+	border       : 1px solid #005180;
 	border-radius: 10px;
 	margin-bottom: 10px;
 }
+
 .validate-input {
 	position: relative;
 }
+
 .txtemail::after {
-	content: attr(data-hd);
-	display: block;
-	position: absolute;
-	color: #555555;
-	z-index: 110;
-	top: 69%;
-	font-family: "SVN-Poppins";
-	font-size: 18px;
-	color: #555555;
-	line-height: 1.2;
+	content          : attr(data-hd);
+	display          : block;
+	position         : absolute;
+	color            : #555555;
+	z-index          : 110;
+	top              : 69%;
+	font-family      : "SVN-Poppins";
+	font-size        : 18px;
+	color            : #555555;
+	line-height      : 1.2;
 	-webkit-transform: translateY(-50%);
-	-moz-transform: translateY(-50%);
-	-ms-transform: translateY(-50%);
-	-o-transform: translateY(-50%);
-	transform: translateY(-50%);
-	right: 18px;
+	-moz-transform   : translateY(-50%);
+	-ms-transform    : translateY(-50%);
+	-o-transform     : translateY(-50%);
+	transform        : translateY(-50%);
+	right            : 18px;
 }
+
 .p-t-3 {
 	padding-top: 3px;
 }
+
 .p-b-32 {
 	padding-bottom: 32px;
 }
+
 .w-full {
 	width: 100%;
 }
+
 .flex-sb-m {
-	display: -webkit-box;
-	display: -webkit-flex;
-	display: -moz-box;
-	display: -ms-flexbox;
-	display: flex;
+	display        : -webkit-box;
+	display        : -webkit-flex;
+	display        : -moz-box;
+	display        : -ms-flexbox;
+	display        : flex;
 	justify-content: space-between;
 	-ms-align-items: center;
-	align-items: center;
+	align-items    : center;
 }
+
 .container-login100-form-btn {
-	width: 100%;
-	display: -webkit-box;
-	display: -webkit-flex;
-	display: -moz-box;
-	display: -ms-flexbox;
-	display: flex;
-	flex-wrap: wrap;
+	width          : 100%;
+	display        : -webkit-box;
+	display        : -webkit-flex;
+	display        : -moz-box;
+	display        : -ms-flexbox;
+	display        : flex;
+	flex-wrap      : wrap;
 	justify-content: center;
 }
+
 .text-center {
 	text-align: center !important;
 }
+
 .p-t-35 {
 	padding-top: 35px;
 }
+
 .p-b-20 {
 	padding-bottom: 20px;
 }
+
 .text-center {
 	text-align: center;
 }
+
 .txt2 {
 	text-decoration: none;
-	font-family: "SVN-Poppins";
-	font-weight: bold;
-	font-size: 14px;
-	line-height: 1.4;
-	color: #000000;
+	font-family    : "SVN-Poppins";
+	font-weight    : bold;
+	font-size      : 14px;
+	line-height    : 1.4;
+	color          : #000000;
 }
+
 #GoogleLogin {
 	display: inline-flex;
 }
+
 .google-icon {
 	margin-right: 5px;
 }
+
 svg {
-	overflow: hidden;
+	overflow      : hidden;
 	vertical-align: middle;
 }
+
 .txt1 {
 	text-decoration: none;
-	font-family: "SVN-Poppins";
-	font-size: 13px;
-	line-height: 1.4;
-	color: #000000;
+	font-family    : "SVN-Poppins";
+	font-size      : 13px;
+	line-height    : 1.4;
+	color          : #000000;
 }
+
 .input100 {
-	display: block;
-	width: 100%;
-	background: transparent;
-	font-family: "SVN-Poppins";
-	font-size: 18px;
-	color: #555555;
-	line-height: 1.2;
-	padding: 0 26px;
+	display      : block;
+	width        : 100%;
+	background   : transparent;
+	font-family  : "SVN-Poppins";
+	font-size    : 18px;
+	color        : #555555;
+	line-height  : 1.2;
+	padding      : 0 26px;
 	border-radius: 10px;
 }
+
 input.input100 {
-	height: 100%;
+	height            : 100%;
 	-webkit-transition: all 0.4s;
-	-o-transition: all 0.4s;
-	-moz-transition: all 0.4s;
-	transition: all 0.4s;
+	-o-transition     : all 0.4s;
+	-moz-transition   : all 0.4s;
+	transition        : all 0.4s;
 }
+
 .focus-input100 {
-	position: absolute;
-	display: block;
-	width: calc(100% + 2px);
-	height: calc(100% + 2px);
-	top: -1px;
-	left: -1px;
-	pointer-events: none;
-	border: 1px solid #005180;
-	border-radius: 10px;
-	visibility: hidden;
-	opacity: 0;
+	position          : absolute;
+	display           : block;
+	width             : calc(100% + 2px);
+	height            : calc(100% + 2px);
+	top               : -1px;
+	left              : -1px;
+	pointer-events    : none;
+	border            : 1px solid #005180;
+	border-radius     : 10px;
+	visibility        : hidden;
+	opacity           : 0;
 	-webkit-transition: all 0.4s;
-	-o-transition: all 0.4s;
-	-moz-transition: all 0.4s;
-	transition: all 0.4s;
-	-webkit-transform: scaleX(1.1) scaleY(1.3);
-	-moz-transform: scaleX(1.1) scaleY(1.3);
-	-ms-transform: scaleX(1.1) scaleY(1.3);
-	-o-transform: scaleX(1.1) scaleY(1.3);
-	transform: scaleX(1.1) scaleY(1.3);
+	-o-transition     : all 0.4s;
+	-moz-transition   : all 0.4s;
+	transition        : all 0.4s;
+	-webkit-transform : scaleX(1.1) scaleY(1.3);
+	-moz-transform    : scaleX(1.1) scaleY(1.3);
+	-ms-transform     : scaleX(1.1) scaleY(1.3);
+	-o-transform      : scaleX(1.1) scaleY(1.3);
+	transform         : scaleX(1.1) scaleY(1.3);
 }
+
 .label-input100 {
-	font-family: "SVN-Poppins";
-	font-size: 18px;
-	color: #999999;
-	line-height: 1.2;
-	display: block;
-	position: absolute;
-	pointer-events: none;
-	width: 100%;
-	padding-left: 24px;
-	left: 0px;
-	top: 30px;
+	font-family       : "SVN-Poppins";
+	font-size         : 18px;
+	color             : #999999;
+	line-height       : 1.2;
+	display           : block;
+	position          : absolute;
+	pointer-events    : none;
+	width             : 100%;
+	padding-left      : 24px;
+	left              : 0px;
+	top               : 30px;
 	-webkit-transition: all 0.4s;
-	-o-transition: all 0.4s;
-	-moz-transition: all 0.4s;
-	transition: all 0.4s;
+	-o-transition     : all 0.4s;
+	-moz-transition   : all 0.4s;
+	transition        : all 0.4s;
 }

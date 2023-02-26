@@ -2,6 +2,7 @@ import React from "react";
 import Sidebar from "../components/Sidebar";
 
 
+
 export const HocKi = () => {
     return (
         <>
@@ -9,7 +10,7 @@ export const HocKi = () => {
             <div className="qllhp">
                 <div>
                     <h2 style={{ fontWeight: "bold" }}>Thêm học kì mới</h2>
-                    <div className="container">
+                    <div className="container" style={{ backgroundColor: "#f2f2f2" }}>
                         <form action="/action_page.php">
                             <div className="row">
                                 <div className="col-25">
@@ -131,7 +132,7 @@ export const LopHocPhan = () => {
             <div className="qllhp">
                 <div>
                     <h2 style={{ fontWeight: "bold" }}>Thêm lớp học phần</h2>
-                    <div className="container">
+                    <div className="container" style={{ backgroundColor: "#f2f2f2" }}>
                         <form action="/action_page.php">
                             <div className="row">
                                 <div className="col-25">
@@ -289,7 +290,7 @@ export const PhanCong = () => {
             <div className="qllhp">
                 <div>
                     <h2 style={{ fontWeight: "bold" }}>Phân công lớp</h2>
-                    <div className="container">
+                    <div className="container" style={{ backgroundColor: "#f2f2f2" }}>
                         <form action="/action_page.php">
                             <div className="row">
                                 <div className="col-25">
