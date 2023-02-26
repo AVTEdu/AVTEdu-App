@@ -141,7 +141,7 @@ export const TrangChu = () => {
                         </div>
                         <div className="featured">
                             <div className="featured-item">
-                                <a href="/lich-theo-tuan.html" title="Lịch theo tuần" langid="menusinhvien-8-title">
+                                <a href="/lich-theo-tuan" title="Lịch theo tuần" langid="menusinhvien-8-title">
                                     <div className="box-df">
                                         <div className="icon">
                                             <img src={lichTheoTuan} alt="" />
