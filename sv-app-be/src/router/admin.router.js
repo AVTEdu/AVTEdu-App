@@ -1,59 +1,60 @@
 const express = require("express");
-const AdminController = require("../controller/admin.controller");
+const AdminCreateController = require("../controller/admin.controller/create.controller");
+const { verifyAccessToken } = require("../helpers/jwt.service");
 const router = express.Router();
 
 router
   .route("/signup")
-  .post(AdminController.createSinhVien);
+  .post(verifyAccessToken,AdminCreateController.createSinhVien);
 router
   .route("/createKhoa")
-  .post(AdminController.createKhoa);  
+  .post(verifyAccessToken,AdminCreateController.createKhoa);  
 router
   .route("/createTonGiao")
-  .post(AdminController.createTonGiao);  
+  .post(verifyAccessToken,AdminCreateController.createTonGiao);  
 router
   .route("/createAdmin")
-  .post(AdminController.createAdmin);
+  .post(verifyAccessToken,AdminCreateController.createAdmin);
 router
   .route("/createMonHoc")
-  .post(AdminController.createMonHoc); 
+  .post(verifyAccessToken,AdminCreateController.createMonHoc); 
 router
   .route("/createHocPhan")
-  .post(AdminController.createHocPhan); 
+  .post(verifyAccessToken,AdminCreateController.createHocPhan); 
 router
   .route("/createChuyenNganh")
-  .post(AdminController.createChuyenNganh); 
+  .post(verifyAccessToken,AdminCreateController.createChuyenNganh); 
 router
   .route("/createChuyenNganhHocPhan")
-  .post(AdminController.createChuyenNganhHocPhan); 
+  .post(verifyAccessToken,AdminCreateController.createChuyenNganhHocPhan); 
 router
   .route("/createGiangVien")
-  .post(AdminController.createGiangVien); 
+  .post(verifyAccessToken,AdminCreateController.createGiangVien); 
 router
   .route("/createHocKi")
-  .post(AdminController.createHocKi); 
+  .post(verifyAccessToken,AdminCreateController.createHocKi); 
 router
   .route("/createLopHocPhan")
-  .post(AdminController.createLopHocPhan); 
+  .post(verifyAccessToken,AdminCreateController.createLopHocPhan); 
 router
   .route("/createPhanCongLopHocPhan")
-  .post(AdminController.createPhanCongLopHocPhan);
+  .post(verifyAccessToken,AdminCreateController.createPhanCongLopHocPhan);
 router
   .route("/createThoiKhoaBieu")
-  .post(AdminController.createThoiKhoaBieu);
+  .post(verifyAccessToken,AdminCreateController.createThoiKhoaBieu);
 router
   .route("/createLoaiPhongHoc")
-  .post(AdminController.createLoaiPhongHoc);
+  .post(verifyAccessToken,AdminCreateController.createLoaiPhongHoc);
 router
   .route("/createPhongHoc")
-  .post(AdminController.createPhongHoc);
+  .post(verifyAccessToken,AdminCreateController.createPhongHoc);
 router
   .route("/createBangDiem")
-  .post(AdminController.createBangDiem);
+  .post(verifyAccessToken,AdminCreateController.createBangDiem);
 router
   .route("/createThoiKhoaBieuSinhVien")
-  .post(AdminController.createThoiKhoaBieuSinhVien);
-router
-  .route("/thanhToanHocPhiSinhVien")
-  .put(AdminController.thanhToanHocPhiSinhVien);  
+  .post(verifyAccessToken,AdminCreateController.createThoiKhoaBieuSinhVien);
+// router
+//   .route("/thanhToanHocPhiSinhVien")
+//   .put(AdminCreateController.thanhToanHocPhiSinhVien);  
 module.exports = router;

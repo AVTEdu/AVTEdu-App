@@ -422,6 +422,31 @@ const HuyHocPhanDaDangKi = async (req, res, next) => {
         .json({ error: { message: "Không tìm thấy phân công lớp học phần" } });
     }
 
+    res.status(201).json({ success: true, dsMonDaDangKiTrongHocKi });
+  } catch (error) {
+    console.log(error);
+    next(error);
+  }
+}
+const thanhToanHocPhiTrucTuyen = async (req, res, next) => {
+  try {
+    const { ma } = req.body;
+    async (req, res, next) => {
+      try {
+        const { ma } = req.body;
+        const foundPCLopHocPhan = await PhanCongLopHocPhan.findOne({ where: { ma_lop_hoc_phan: `${ma}` } });
+        if (!foundPCLopHocPhan) {
+          return res
+            .status(403)
+            .json({ error: { message: "Không tìm thấy phân công lớp học phần" } });
+        }
+
+        res.status(201).json({ success: true, dsMonDaDangKiTrongHocKi });
+      } catch (error) {
+        console.log(error);
+        next(error);
+      }
+    }
 
     res.status(201).json({ success: true, dsMonDaDangKiTrongHocKi });
   } catch (error) {
@@ -429,7 +454,6 @@ const HuyHocPhanDaDangKi = async (req, res, next) => {
     next(error);
   }
 }
-
 module.exports = {
   getHocKiSinhVien,
   getMonHocSinhVienChuaHoc,

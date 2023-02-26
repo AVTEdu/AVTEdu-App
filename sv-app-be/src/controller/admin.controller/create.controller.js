@@ -1,25 +1,23 @@
-const SinhVien = require("../model/sinhvien.model");
+
 const bcrypt = require("bcryptjs");
-const Khoa = require("../model/khoa.model");
-const TonGiao = require("../model/tongiao.model");
-const GiangVien = require("../model/giangvien.model");
-const Admin = require("../model/admin.model");
-const MonHoc = require("../model/monhoc.model");
-const HocPhan = require("../model/hocphan.model");
-const ChuyenNganh = require("../model/chuyennganh.models");
-const ChuyenNganhHocPhan = require("../model/chuyennganhhocphan.model");
-const HocKi = require("../model/hocki.model");
-const LopHocPhan = require("../model/lophocphan.model");
-const PhanCongLopHocPhan = require("../model/phanconglophocphan.model");
-const ThoiKhoaBieu = require("../model/thoikhoabieu.model");
-const LoaiPhongHoc = require("../model/loaiphonghoc.model");
-const PhongHoc = require("../model/phonghoc.model");
-const KetQuaHocTap = require("../model/ketquahoctap.model");
-const ThoiKhoaBieuSinhVien = require("../model/thoikhoabieusinhvien.model");
-const HocPhi = require("../model/hocphi.model");
-const BacDaoTao = require("../model/bacdaotao.model");
-const DanToc = require("../model/dantoc.model");
-const HocPhiSinhVien = require("../model/hocphisinhvien.model");
+const Admin = require("../../model/admin.model");
+const ChuyenNganh = require("../../model/chuyennganh.models");
+const ChuyenNganhHocPhan = require("../../model/chuyennganhhocphan.model");
+const GiangVien = require("../../model/giangvien.model");
+const HocKi = require("../../model/hocki.model");
+const HocPhan = require("../../model/hocphan.model");
+const KetQuaHocTap = require("../../model/ketquahoctap.model");
+const Khoa = require("../../model/khoa.model");
+const LoaiPhongHoc = require("../../model/loaiphonghoc.model");
+const LopHocPhan = require("../../model/lophocphan.model");
+const MonHoc = require("../../model/monhoc.model");
+const PhanCongLopHocPhan = require("../../model/phanconglophocphan.model");
+const PhongHoc = require("../../model/phonghoc.model");
+const SinhVien = require("../../model/sinhvien.model");
+const ThoiKhoaBieu = require("../../model/thoikhoabieu.model");
+const ThoiKhoaBieuSinhVien = require("../../model/thoikhoabieusinhvien.model");
+const TonGiao = require("../../model/tongiao.model");
+
 
 
 //Hàm tạo sinh viên bằng admin
@@ -394,7 +392,7 @@ const createBangDiem= async (req,res,next) =>{
       diem_tk_2:tk2,
       diem_tk_3:tk3,
       diem_tk_4:tk4,
-      diem_tk_4:tk4,
+      diem_tk_5:tk5,
       diem_th_1:th1,
       diem_th_2:th2,
       diem_th_3:th3,
@@ -438,64 +436,22 @@ const createThoiKhoaBieuSinhVien = async (req,res,next) =>{
     next(error);
   }
 }
-const getHocPhiChuaNopSinhVien = async (req,res,next) =>{
-  try {
-    const {ma_sinh_vien,ma_hoc_phi,so_tien} = req.body
-    const foundSinhVien = await SinhVien.findOne({
-      where: { ma_sinh_vien: `${ma_sinh_vien}` },
-    });
-    if (!foundSinhVien) {
-      return res
-        .status(403)
-        .json({ error: { message: "Không tìm thấy sinh viên" } });
-    }
-    const foundHocPhi = await HocPhi.findOne({
-      where: { ma_hoc_phi:`${ma_hoc_phi}` },
-    });
-    if (!foundHocPhi) {
-      return res
-        .status(403)
-        .json({ error: { message: "Không tìm thấy học phí" } });
-    }
-    const updateHocPhi = await HocPhi.update({
-      so_tien_da_nop: `${so_tien}`,
-    },
-    { where: { ma_hoc_phi: `${ma_hoc_phi}` } }
-  );
-    return res.status(201).json({ success: true, updateHocPhi});
-  } catch (error) {
-    next(error);
-  }
-}
-const thanhToanHocPhiSinhVien = async (req,res,next) =>{
-  try {
-    const {ma_sinh_vien,ma_hoc_phi,so_tien} = req.body
-    const foundSinhVien = await SinhVien.findOne({
-      where: { ma_sinh_vien: `${ma_sinh_vien}` },
-    });
-    if (!foundSinhVien) {
-      return res
-        .status(403)
-        .json({ error: { message: "Không tìm thấy sinh viên" } });
-    }
-    const foundHocPhi = await HocPhi.findOne({
-      where: { ma_hoc_phi:`${ma_hoc_phi}` },
-    });
-    if (!foundHocPhi) {
-      return res
-        .status(403)
-        .json({ error: { message: "Không tìm thấy học phí" } });
-    }
-    const updateHocPhi = await HocPhi.update({
-      so_tien_da_nop: `${so_tien}`,
-    },
-    { where: { ma_hoc_phi: `${ma_hoc_phi}` } }
-  );
-    return res.status(201).json({ success: true, updateHocPhi});
-  } catch (error) {
-    next(error);
-  }
-}
-
-
-
+module.exports = {
+    createSinhVien,
+    createKhoa,
+    createTonGiao,
+    createAdmin,
+    createMonHoc,
+    createHocPhan,
+    createChuyenNganh,
+    createChuyenNganhHocPhan,
+    createGiangVien,
+    createHocKi,
+    createLopHocPhan,
+    createPhanCongLopHocPhan,
+    createThoiKhoaBieu,
+    createLoaiPhongHoc,
+    createPhongHoc,
+    createBangDiem,
+    createThoiKhoaBieuSinhVien,
+};
