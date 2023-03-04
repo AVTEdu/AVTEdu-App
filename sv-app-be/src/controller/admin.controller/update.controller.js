@@ -23,21 +23,32 @@ const TrangThaiHocTap = require("../../model/trangthaihoctap.model");
 
 const updateSinhVien = async (req,res,next) =>{
     try {
-      const result = await SinhVien.findAll({limit:10});
+      const { ma,ten,ngay_sinh,email,gioitinh,hktt,sdt,so_cmnd} = req.body;
+      const result = await SinhVien.update({ 
+        ho_ten_sinh_vien:ten,
+        ngay_sinh,
+        email,
+        gioitinh,
+        ho_khau_thuong_tru:hktt,
+        so_dien_thoai:sdt,
+        so_cmnd},
+        {
+          where:{ma_sinh_vien:ma}
+        });
       return res.status(201).json({ success: true, result});
     } catch (error) {
       next(error);
     }
   }
-  const getDanhSachAdmin = async (req,res,next) =>{
-    try {
-      const result = await Admin.findAll({limit:10});
-      return res.status(201).json({ success: true, result});
-    } catch (error) {
-      next(error);
-    }
-  }
-  const getDanhSachBacDaoTao = async (req,res,next) =>{
+  // const getDanhSachAdmin = async (req,res,next) =>{
+  //   try {
+  //     const result = await Admin.findAll({limit:10});
+  //     return res.status(201).json({ success: true, result});
+  //   } catch (error) {
+  //     next(error);
+  //   }
+  // }
+  const updateBacDaoTao = async (req,res,next) =>{
     try {
       const result = await BacDaoTao.findAll({limit:10});
       return res.status(201).json({ success: true, result});
