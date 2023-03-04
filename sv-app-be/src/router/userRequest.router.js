@@ -40,5 +40,8 @@ router
 router
   .route("/getThoiKhoaBieuSinhVienTrongMotTuan")
   .put(verifyAccessToken, userRequestController.getThoiKhoaBieuSinhVienTrongMotTuan);
+  router
+  .route("/thanhToanHocPhiTrucTuyen")
+  .put(userRequestController.thanhToanHocPhiTrucTuyen);  
 
 module.exports = router;

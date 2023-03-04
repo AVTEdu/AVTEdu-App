@@ -11,7 +11,7 @@ const userRequest = require("./userRequest.router");
 router.use("/userRequest", userRequest);
 
 router.get('/hello', function (req, res) {
-    res.send("Hello cac ban");
+    res.send("Thanh toán thành công");
 })
 
 module.exports = router;
