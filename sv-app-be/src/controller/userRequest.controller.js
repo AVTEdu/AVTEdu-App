@@ -15,6 +15,7 @@ const PhanCongLopHocPhan = require("../model/phanconglophocphan.model");
 const { getWeekDates, getWeekDay, fomartDateToFE } = require("../helpers/date.validate");
 const KetQuaHocTap = require("../model/ketquahoctap.model");
 const { findAll } = require("../model/hocki.model");
+const { momoPayment } = require("../config/momo.config");
 
 const sequelize = ConnectDB().getInstance();
 /** 
@@ -431,24 +432,20 @@ const HuyHocPhanDaDangKi = async (req, res, next) => {
 const thanhToanHocPhiTrucTuyen = async (req, res, next) => {
   try {
     const { ma } = req.body;
-    async (req, res, next) => {
-      try {
-        const { ma } = req.body;
-        const foundPCLopHocPhan = await PhanCongLopHocPhan.findOne({ where: { ma_lop_hoc_phan: `${ma}` } });
-        if (!foundPCLopHocPhan) {
-          return res
-            .status(403)
-            .json({ error: { message: "Không tìm thấy phân công lớp học phần" } });
-        }
-
-        res.status(201).json({ success: true, dsMonDaDangKiTrongHocKi });
-      } catch (error) {
-        console.log(error);
-        next(error);
-      }
-    }
-
-    res.status(201).json({ success: true, dsMonDaDangKiTrongHocKi });
+    const so_tien = 168000;
+    const ma_hoc_phi = 1
+    const updateHocPhi = await HocPhi.update({
+      so_tien_da_nop: `${so_tien}`,
+    },
+    { where: { ma_hoc_phi: `${ma_hoc_phi}` } }
+  );
+    const res1 = await 
+    momoPayment("thanh toan hoc phi", "168000", (data) => {
+      console.log(data);
+      res.status(200).json({ success: true, data });
+  });
+      
+    res.status(200).json({ success: true, res1 });
   } catch (error) {
     console.log(error);
     next(error);
@@ -464,4 +461,5 @@ module.exports = {
   getDanhSachHocPhi,
   getMonDaDangKiTrongHocKi,
   getThoiKhoaBieuSinhVienTrongMotTuan,
+  thanhToanHocPhiTrucTuyen
 }
