@@ -28,8 +28,11 @@ const dkhpAPI = {
   dangKiHocPhan(maPCLHP, maHK, trangThaiLHP, soTien, mienGiam) {
     const url = "/userRequest/dangKiHocPhan";
     return axiosClient.post(url, { ma: maPCLHP, ma_hoc_ki: maHK, trang_thai_dang_ki: trangThaiLHP, so_tien: soTien, mien_giam: mienGiam });
+  },
+  getDanhSachHocPhi() {
+    const url = "/userRequest/getDanhSachHocPhi";
+    return axiosClient.get(url);
   }
-
 };
 
 export default dkhpAPI;

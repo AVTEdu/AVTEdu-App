@@ -2596,7 +2596,7 @@ li [class^=icon-].icon-large {
 }
 
 .btn {
-    outline: 0 !important
+    outline: 0
 }
 
 .btn:hover {

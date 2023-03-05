@@ -10,6 +10,9 @@ import phieuThuTongHop from '../assets/img/trangchu_img/phieuThuTongHop.png'
 import thanhToanTrucTuyen from '../assets/img/trangchu_img/thanhToanTrucTuyen.png'
 import traCuuCongNo from '../assets/img/trangchu_img/traCuuCongNo.png'
 import axios from "axios";
+import * as AiIcons from "react-icons/ai";
+import * as IoIcons from "react-icons/io";
+import * as RiIcons from "react-icons/ri";
 
 export const TrangChu = () => {
     // const _ma = localStorage.getItem("user");
@@ -93,8 +96,8 @@ export const TrangChu = () => {
                                                         <div className="number" style={{ width: '110px !important' }}>0</div>
                                                         <div className="text-runing" style={{ width: '100%', height: '51px' }}>
                                                         </div>
-                                                        <div className="icon-menu text-right">
-                                                            <i className="icon fa fa-bell-o" aria-hidden="true" />
+                                                        <div className="icon-menu text-right" style={{ fontSize: "30px" }}>
+                                                            <AiIcons.AiOutlineBell />
                                                         </div>
                                                     </div>
                                                     <div className="text-left">
@@ -108,8 +111,8 @@ export const TrangChu = () => {
                                                         <h3 className="name" lang="db-lichhoctuan">Lịch học trong tuần</h3>
                                                         <div className="desc clearfix">
                                                             <div className="number">0</div>
-                                                            <div className="icon-menu text-right">
-                                                                <i className="icon fa fa-calendar" aria-hidden="true" />
+                                                            <div className="icon-menu text-right" style={{ fontSize: "30px" }}>
+                                                                <RiIcons.RiCalendar2Fill />
                                                             </div>
                                                         </div>
                                                         <div className="text-left" lang="db-chitiet-button">
@@ -124,8 +127,8 @@ export const TrangChu = () => {
                                                         <h3 className="name" lang="db-lichthituan">Lịch thi trong tuần</h3>
                                                         <div className="desc clearfix">
                                                             <div className="number">0</div>
-                                                            <div className="icon-menu text-right">
-                                                                <i className="icon fa fa-calendar-check-o" aria-hidden="true" />
+                                                            <div className="icon-menu text-right" style={{ fontSize: "30px" }}>
+                                                                <RiIcons.RiCalendarTodoFill />
                                                             </div>
                                                         </div>
                                                         <div className="text-left" lang="db-chitiet-button">
@@ -171,7 +174,7 @@ export const TrangChu = () => {
                                 </a>
                             </div>
                             <div className="featured-item">
-                                <a href="/cong-no-sinh-vien.html" title="Tra cứu công nợ" langid="menusinhvien-20-title">
+                                <a href="/cong-no-sinh-vien" title="Tra cứu công nợ" langid="menusinhvien-20-title">
                                     <div className="box-df">
                                         <div className="icon">
                                             <img src={traCuuCongNo} alt="" />
@@ -181,7 +184,7 @@ export const TrangChu = () => {
                                 </a>
                             </div>
                             <div className="featured-item">
-                                <a href="/thanh-toan-truc-tuyen.html" title="Thanh toán trực tuyến" langid="menusinhvien-21-title">
+                                <a href="/thanh-toan-truc-tuyen" title="Thanh toán trực tuyến" langid="menusinhvien-21-title">
                                     <div className="box-df">
                                         <div className="icon">
                                             <img src={thanhToanTrucTuyen} alt="" />

@@ -8,7 +8,7 @@ export const SidebarData = [
     {
         title: "Quản lý khoa",
         // path: "/ql-khoa",
-        icon: <AiIcons.AiFillHome />,
+        icon: <AiIcons.AiFillHdd />,
         iconClosed: <RiIcons.RiArrowDownSFill />,
         iconOpened: <RiIcons.RiArrowUpSFill />,
 
@@ -16,12 +16,12 @@ export const SidebarData = [
             {
                 title: "Khoa",
                 path: "/ql-khoa/khoa",
-                icon: <IoIcons.IoIosPaper />,
+                icon: <IoIcons.IoIosRadioButtonOn />,
             },
             {
                 title: "Chuyên ngành",
                 path: "/ql-khoa/chuyen-nganh",
-                icon: <IoIcons.IoIosPaper />,
+                icon: <IoIcons.IoIosRadioButtonOn />,
             },
         ],
     },
@@ -36,13 +36,13 @@ export const SidebarData = [
             {
                 title: "Môn học",
                 path: "/ql-hocphan/mon-hoc",
-                icon: <IoIcons.IoIosPaper />,
+                icon: <IoIcons.IoIosRadioButtonOn />,
                 cName: "sub-nav",
             },
             {
                 title: "Học phần",
                 path: "/ql-hocphan/hoc-phan",
-                icon: <IoIcons.IoIosPaper />,
+                icon: <IoIcons.IoIosRadioButtonOn />,
                 cName: "sub-nav",
             },
         ],
@@ -50,7 +50,7 @@ export const SidebarData = [
     {
         title: "Quản lý lớp học phần",
         // path: "/ql-lophocphan",
-        icon: <IoIcons.IoIosPaper />,
+        icon: <RiIcons.RiBook3Fill />,
         iconClosed: <RiIcons.RiArrowDownSFill />,
         iconOpened: <RiIcons.RiArrowUpSFill />,
 
@@ -58,19 +58,19 @@ export const SidebarData = [
             {
                 title: "Học kỳ",
                 path: "/ql-lophocphan/hoc-ki",
-                icon: <IoIcons.IoIosPaper />,
+                icon: <IoIcons.IoIosRadioButtonOn />,
                 cName: "sub-nav",
             },
             {
                 title: "Lớp học phần",
                 path: "/ql-lophocphan/lop-hoc-phan",
-                icon: <IoIcons.IoIosPaper />,
+                icon: <IoIcons.IoIosRadioButtonOn />,
                 cName: "sub-nav",
             },
             {
                 title: "Phân công",
                 path: "/ql-lophocphan/phan-cong",
-                icon: <IoIcons.IoIosPaper />,
+                icon: <IoIcons.IoIosRadioButtonOn />,
                 cName: "sub-nav",
             },
         ],
@@ -78,7 +78,7 @@ export const SidebarData = [
     {
         title: "Quản lý phòng",
         // path: "/ql-phong",
-        icon: <FaIcons.FaEnvelopeOpenText />,
+        icon: <RiIcons.RiLuggageDepositFill />,
 
         iconClosed: <RiIcons.RiArrowDownSFill />,
         iconOpened: <RiIcons.RiArrowUpSFill />,
@@ -87,19 +87,19 @@ export const SidebarData = [
             {
                 title: "Loại phòng",
                 path: "/ql-phong/loai-phong",
-                icon: <IoIcons.IoIosPaper />,
+                icon: <IoIcons.IoIosRadioButtonOn />,
             },
             {
                 title: "Phòng",
                 path: "/ql-phong/phong",
-                icon: <IoIcons.IoIosPaper />,
+                icon: <IoIcons.IoIosRadioButtonOn />,
             },
         ],
     },
     {
         title: "Quản lý thời khóa biểu",
         // path: "/ql-tkb",
-        icon: <FaIcons.FaEnvelopeOpenText />,
+        icon: <IoIcons.IoIosCalendar />,
 
         iconClosed: <RiIcons.RiArrowDownSFill />,
         iconOpened: <RiIcons.RiArrowUpSFill />,
@@ -108,14 +108,14 @@ export const SidebarData = [
             {
                 title: "Thời khóa biểu",
                 path: "/ql-tkb/tkb",
-                icon: <IoIcons.IoIosPaper />,
+                icon: <IoIcons.IoIosRadioButtonOn />,
             },
         ],
     },
     {
         title: "Quản lý người dùng",
         // path: "/ql-user",
-        icon: <FaIcons.FaEnvelopeOpenText />,
+        icon: <IoIcons.IoIosPerson />,
 
         iconClosed: <RiIcons.RiArrowDownSFill />,
         iconOpened: <RiIcons.RiArrowUpSFill />,
@@ -124,17 +124,33 @@ export const SidebarData = [
             {
                 title: "Admin",
                 path: "/ql-user/admin",
-                icon: <IoIcons.IoIosPaper />,
+                icon: <IoIcons.IoIosRadioButtonOn />,
             },
             {
                 title: "Giảng viên",
                 path: "/ql-user/gv",
-                icon: <IoIcons.IoIosPaper />,
+                icon: <IoIcons.IoIosRadioButtonOn />,
             },
             {
                 title: "Sinh viên",
                 path: "/ql-user/sv",
-                icon: <IoIcons.IoIosPaper />,
+                icon: <IoIcons.IoIosRadioButtonOn />,
+            },
+        ],
+    },
+    {
+        title: "Quản lý Công nợ",
+        // path: "/ql-user",
+        icon: <RiIcons.RiMoneyDollarCircleFill />,
+
+        iconClosed: <RiIcons.RiArrowDownSFill />,
+        iconOpened: <RiIcons.RiArrowUpSFill />,
+
+        subNav: [
+            {
+                title: "Công nợ Phiếu thu",
+                path: "/ql-congno/ds-cno",
+                icon: <IoIcons.IoIosRadioButtonOn />,
             },
         ],
     },

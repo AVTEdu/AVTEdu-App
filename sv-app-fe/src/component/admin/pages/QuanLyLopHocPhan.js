@@ -287,7 +287,7 @@ export const PhanCong = () => {
     return (
         <>
             <Sidebar />
-            <div className="qllhp">
+            {/* <div className="qllhp">
                 <div>
                     <h2 style={{ fontWeight: "bold" }}>Phân công lớp</h2>
                     <div className="container" style={{ backgroundColor: "#f2f2f2" }}>
@@ -437,7 +437,8 @@ export const PhanCong = () => {
                             </tr>
                         </tbody></table>
                 </div>
-            </div>
+            </div> */}
+
         </>
     );
 };

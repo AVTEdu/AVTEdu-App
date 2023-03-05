@@ -13,8 +13,11 @@ import { HocKi, LopHocPhan, PhanCong } from '../component/admin/pages/QuanLyLopH
 import { Admin, GiangVien, SinhVien } from '../component/admin/pages/QuanLyNguoiDung';
 import { LoaiPhong, Phong } from '../component/admin/pages/QuanLyPhong';
 import { ThoiKhoaBieu } from '../component/admin/pages/QuanLyTKB';
+import { CongNo } from "../component/admin/pages/QuanLyCongNo";
 import XemLichHoc from "../component/XemLichHoc";
-
+import Sidebar from "../component/admin/components/Sidebar";
+import TraCuuCongNo from "../component/TraCuuCongNo";
+import ThanhToanTrucTuyen from "../component/ThanhToanTrucTuyen";
 
 function App() {
   return (
@@ -25,9 +28,10 @@ function App() {
       <Routes>
         <Route path="/" element={<Layout />}>
           <Route path="/" element={<Login />} />
+          <Route path="logoutAd" element={<LoginAdmin />} />
           <Route path="login" element={<Login />} />
           <Route path="AdminLogin" element={<LoginAdmin />} />
-          <Route path="AdminApp/*" element={<AdminApp />} />
+          <Route path="AdminApp" element={<AdminApp />} />
           <Route path="unauthorized" element={<Unauthorized />} />
 
 
@@ -37,14 +41,14 @@ function App() {
           <Route path="trang-chu" element={<TrangChu />} />
           <Route path="dkhp" element={<Dkhp />} />
           <Route path="lich-theo-tuan" element={<XemLichHoc />} />
+          <Route path="cong-no-sinh-vien" element={<TraCuuCongNo />} />
+          <Route path="thanh-toan-truc-tuyen" element={<ThanhToanTrucTuyen />} />
 
 
           {/* <Route path="*" element={<Missing />} /> */}
         </Route>
       </Routes>
       <Routes>
-
-
         <Route path='/ql-khoa/khoa' element={<Khoa />} />
         <Route path='/ql-khoa/chuyen-nganh' element={<ChuyenNganh />} />
 
@@ -63,7 +67,7 @@ function App() {
         <Route path='/ql-user/admin' element={<Admin />} />
         <Route path='/ql-user/gv' element={<GiangVien />} />
         <Route path='/ql-user/sv' element={<SinhVien />} />
-
+        <Route path='/ql-congno/ds-cno' element={<CongNo />} />
       </Routes>
     </>
   );
