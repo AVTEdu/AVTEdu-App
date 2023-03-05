@@ -1,16 +1,16 @@
 import { React, useState, useEffect } from "react";
 import { format } from "date-fns"
-import "../assets/css/main.css";
-import "../assets/css/tooltipster.bundle.css";
-import "../assets/css/style.css";
-import "../assets/css/base.css";
-import "../assets/css/responsive.css";
+// import "../assets/css/main.css";
+// import "../assets/css/tooltipster.bundle.css";
+// import "../assets/css/style.css";
+// import "../assets/css/base.css";
+// import "../assets/css/responsive.css";
 // import '../assets/css/chat.css'
 // import '../assets/css/switch.css'
-import "../assets/css/jquery-confirm.min.css";
-import "../assets/css/components.min.css";
-import "../assets/css/profile.min.css";
-import "../assets/css/toastr.min.css";
+// import "../assets/css/jquery-confirm.min.css";
+// import "../assets/css/components.min.css";
+// import "../assets/css/profile.min.css";
+// import "../assets/css/toastr.min.css";
 import Sidenavbar from "./Sidenavbar";
 import dkhpAPI from "../api/dkhpAPI";
 import Table from "@material-ui/core/Table";
@@ -590,10 +590,11 @@ export default function Dkhp() {
                                         <><tr>
                                           <td>
                                             <button
-                                              className="btn btn-sm btn-close"
+                                              className="btn-sm btn-close"
                                               data-idlhpdk="7623002"
                                               data-guid="XtSz3Srj05-JLoWwpYueBA"
                                               lang="dangkyhocphan-xem-button"
+                                              style={{}}
                                             >
                                               Xem
                                             </button>
@@ -601,7 +602,7 @@ export default function Dkhp() {
 
                                           <td>
                                             <button
-                                              className="btn btn-sm btn-close"
+                                              className="btn-sm btn-close"
                                               data-idlhpdk="7623002"
                                               data-guid="XtSz3Srj05-JLoWwpYueBA"
                                               lang="dangkyhocphan-huy-button"
