@@ -279,9 +279,8 @@ const DangKiHocPhan = async (req, res, next) => {
     }
     const updateSVHT = await LopHocPhan.update(
       {
-        so_luong_dang_ki_hien_tai: `${
-          foundLopHocPhan.so_luong_dang_ki_hien_tai + 1
-        }`,
+        so_luong_dang_ki_hien_tai: `${foundLopHocPhan.so_luong_dang_ki_hien_tai + 1
+          }`,
       },
       { where: { ma_lop_hoc_phan: `${foundLopHocPhan.ma_lop_hoc_phan}` } }
     );
@@ -437,14 +436,14 @@ const getThoiKhoaBieuSinhVienTrongMotTuan = async (req, res, next) => {
       let dayOfWeeek = day.wod;
       console.log(
         i +
-          ":" +
-          dayOfWeeek +
-          "+" +
-          day.date +
-          "+" +
-          req.payload.userId +
-          "+" +
-          result
+        ":" +
+        dayOfWeeek +
+        "+" +
+        day.date +
+        "+" +
+        req.payload.userId +
+        "+" +
+        result
       );
       ++i;
       let ngayHoc = await sequelize.query(
@@ -556,7 +555,7 @@ const xacNhanThanhToanTrucTuyen = async (req, res, next) => {
   try {
     const rslCode = Number.parseInt(req.query.resultCode);
     const orderId = req.query.orderInfo;
-    const ma_sinh_vien = orderId.substring(19) 
+    const ma_sinh_vien = orderId.substring(19)
     if (rslCode === 0 && ma_sinh_vien !== "0") {
       const updateHocPhi = await sequelize.query(
         `update hoc_phi
@@ -566,9 +565,9 @@ const xacNhanThanhToanTrucTuyen = async (req, res, next) => {
         where sinh_vien.ma_sinh_vien =${ma_sinh_vien} and hoc_phi.ma_hoc_phi <> 0 `,
         { type: QueryTypes.UPDATE }
       );
-      res.status(200).json({ success: true, msg:"Thanh toán thành công "+ma_sinh_vien});
-    }else{
-      res.status(400).json({ success: false, msg:"Thanh toán thất bại "+ma_sinh_vien});
+      res.status(200).json({ success: true, msg: "Thanh toán thành công " + ma_sinh_vien });
+    } else {
+      res.status(400).json({ success: false, msg: "Thanh toán thất bại " + ma_sinh_vien });
     }
   } catch (error) {
     console.log(error);
