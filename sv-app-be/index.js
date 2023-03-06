@@ -38,6 +38,7 @@ const ChuyenNganh = require('./src/model/chuyennganh.models');
 const KetQuaHocTap = require('./src/model/ketquahoctap.model');
 const HocPhi = require('./src/model/hocphi.model');
 const HocPhiSinhVien = require('./src/model/hocphisinhvien.model');
+const PhieuThu = require('./src/model/phieuthu.model');
 
 
 ConnectDB().getInstance();
@@ -98,6 +99,7 @@ GiangVien.sync();
 KetQuaHocTap.sync();
 HocPhi.sync({alter:true});
 HocPhiSinhVien.sync();
+PhieuThu.sync();
 // Catch 404 Errors and forward them to error handler
 app.use((req, res, next) => {
   const err = new Error("Not Found");
