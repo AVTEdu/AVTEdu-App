@@ -3,6 +3,7 @@ import { useState, useEffect, useRef, useContext } from "react";
 import "../assets/css/login.css"
 import bg from '../assets/img/login_img/bg02.jpg';
 import Logo2 from '../assets/img/login_img/logo2.png';
+import LoginSV1 from '../assets/img/logo_img/LoginSV1.png';
 import signinAPI from "../api/signinAPI";
 import Cookies from "js-cookie";
 import useAuth from "../services/hooks/useAuth";
@@ -85,14 +86,14 @@ export const Login = () => {
                     <div className="wrap-login100">
                         <form className="login100-form validate-form" onSubmit={handleSubmit}>
                             <input type="hidden" defaultValue="" />
-                            <img style={{ width: '130px', marginRight: 'auto', marginLeft: 'auto', display: 'block' }} alt="AVTEdu" src={Logo2} />
+                            <img style={{ width: '130px', marginRight: 'auto', marginLeft: 'auto', display: 'block' }} alt="AVTEdu" src={LoginSV1} />
                             <br />
                             <h3 style={{ textAlign: 'center', color: 'rgb(0, 0, 0)', textTransform: 'uppercase', fontSize: '20px', fontWeight: 'bold', marginBottom: '10px' }}>Dành cho người học</h3>
                             <div className="wrap-input100 validate-input txtemail" data-validate="MSSV có dạng: 31200000121">
                                 <input className="input100" id="username"
                                     type="text" placeholder="Mã số sinh viên"
                                     ref={userRef}
-                                    autoComplete="off"
+                                    // autoComplete="off"
                                     onChange={(e) => setUser(e.target.value)}
                                     value={user}
                                     required />

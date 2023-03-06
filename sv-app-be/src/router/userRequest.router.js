@@ -40,7 +40,7 @@ router
 router
   .route("/getThoiKhoaBieuSinhVienTrongMotTuan")
   .put(verifyAccessToken, userRequestController.getThoiKhoaBieuSinhVienTrongMotTuan);
-  router
+router
   .route("/thanhToanHocPhiTrucTuyen")
   .put(verifyAccessToken,userRequestController.thanhToanHocPhiTrucTuyen);  
 router

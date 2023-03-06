@@ -8,6 +8,9 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
 import TextField from '@mui/material/TextField';
+import * as AiIcons from "react-icons/ai";
+import * as IoIcons from "react-icons/io";
+import * as RiIcons from "react-icons/ri";
 
 export default function XemLichHoc() {
     const [ngayHoc, setNgayHoc] = useState("2023-02-28");//doi thanh ngay hien tai
@@ -123,17 +126,21 @@ export default function XemLichHoc() {
                                                     />
                                                 </LocalizationProvider>
                                                 {/* {console.log(thoiKhoaBieu)} */}
-                                                <a href="javascript:;" className="btn btn-action" id="btn_HienTai" onClick={getCurrentWeek}>
+                                                <a className="btn btn-action" id="btn_HienTai" onClick={getCurrentWeek} style={{ marginRight: "2px", marginLeft: "2px" }}>
+                                                    <RiIcons.RiCalendar2Fill style={{ marginRight: "4px" }} />
                                                     Hiện tại
                                                 </a>
-                                                <a href="javascript:;" className="btn btn-action" id="btn_InLich">
+                                                <a className="btn btn-action" id="btn_InLich" style={{ marginRight: "2px", marginLeft: "2px" }}>
+                                                    <RiIcons.RiPrinterFill style={{ marginRight: "4px" }} />
                                                     In lịch
                                                 </a>
-                                                <a href="javascript:;" className="btn btn-action" id="btn_TroVe" onClick={getPreviousWeek}>
+                                                <a className="btn btn-action" id="btn_TroVe" onClick={getPreviousWeek} style={{ marginRight: "2px", marginLeft: "2px" }}>
+                                                    <AiIcons.AiOutlineStepBackward style={{ marginRight: "4px" }} />
                                                     Trở về
                                                 </a>
-                                                <a href="javascript:;" className="btn btn-action" id="btn_Tiep" onClick={getNextWeek} >
+                                                <a className="btn btn-action" id="btn_Tiep" onClick={getNextWeek} style={{ marginRight: "2px", marginLeft: "2px" }} >
                                                     Tiếp
+                                                    <AiIcons.AiOutlineStepForward style={{ marginLeft: "4px" }} />
                                                 </a>
                                             </div>
                                         </div>
