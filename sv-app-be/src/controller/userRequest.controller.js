@@ -20,6 +20,7 @@ const {
 const KetQuaHocTap = require("../model/ketquahoctap.model");
 const { findAll } = require("../model/hocki.model");
 const { momoPayment } = require("../config/momo.config");
+const PhieuThu = require("../model/phieuthu.model");
 
 const sequelize = ConnectDB().getInstance();
 /**
@@ -275,6 +276,7 @@ const DangKiHocPhan = async (req, res, next) => {
         cong_no: so_tien,
         trang_thai: 1,
         ma_lop_hoc_phan: foundLopHocPhan.ma_lop_hoc_phan,
+        ma_phieu_thu: 0,
       });
     }
     const updateSVHT = await LopHocPhan.update(
@@ -284,8 +286,6 @@ const DangKiHocPhan = async (req, res, next) => {
       },
       { where: { ma_lop_hoc_phan: `${foundLopHocPhan.ma_lop_hoc_phan}` } }
     );
-    console.log(ma_hoc_ki);
-    console.log(ma_hoc_phi);
     const ma_hoc_phi_sinh_vien = await HocPhiSinhVien.max(
       "ma_hoc_phi_sinh_vien"
     );
@@ -564,11 +564,27 @@ const xacNhanThanhToanTrucTuyen = async (req, res, next) => {
         set hoc_phi.so_tien_da_nop = hoc_phi.so_tien
         where sinh_vien.ma_sinh_vien =${ma_sinh_vien} and hoc_phi.ma_hoc_phi <> 0 `,
         { type: QueryTypes.UPDATE }
+
       );
       res.status(200).json({ success: true, msg: "Thanh toán thành công " + ma_sinh_vien });
     } else {
       res.status(400).json({ success: false, msg: "Thanh toán thất bại " + ma_sinh_vien });
     }
+  } catch (error) {
+    console.log(error);
+    next(error);
+  }
+};
+const getPhieuThuCongNo = async (req, res, next) => {
+  try {
+    const ma_sinh_vien = req.payload.userId;
+    const findPhieuThu = sequelize.query(`select pt.*
+    from phieu_thu as pt 
+    left join hoc_phi as hp on hp.ma_phieu_thu = pt.ma_phieu_thu
+    left join hoc_phi_sinh_vien as hpsv on hpsv.ma_hoc_phi = hp.ma_hoc_phi
+    left join sinh_vien as sv on hpsv.ma_sinh_vien = sv.ma_sinh_vien
+    where sv.ma_sinh_vien = ${ma_sinh_vien}`, { type: QueryTypes.SELECT });
+    res.status(200).json({ success: true, findPhieuThu });
   } catch (error) {
     console.log(error);
     next(error);

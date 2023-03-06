@@ -34,7 +34,7 @@ function App() {
           <Route path="AdminLogin" element={<LoginAdmin />} />
           <Route path="AdminApp" element={<AdminApp />} />
           <Route path="unauthorized" element={<Unauthorized />} />
-          <Route path="/hello" element={<XacNhanThanhToan />} />
+          <Route path="/xac-nhan-thanh-toan" element={<XacNhanThanhToan />} />
 
 
           {/* <Route element={<RequireAuth allowedRoles={[ROLES.USER]} />}>

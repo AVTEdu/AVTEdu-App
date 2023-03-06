@@ -76,10 +76,9 @@ export default function XacNhanThanhToan() {
                                                     <style dangerouslySetInnerHTML={{ __html: "\n    .background-tr {\n        background-color: #f3f7f9;\n    }\n" }} />
                                                     <div style={{ fontSize: '15px' }}>
                                                         <p /><p><span style={{ color: '#e74c3c' }}><strong>Lưu ý:</strong></span> Với các giao dịch không thành công thì sau 30 phút hệ thống sẽ làm mới các khoản thu để sinh viên tiếp tục thanh toán.</p>  <p />
-                                                        <p lang="thanhtoanonline-huygiaodich">
+                                                        <p >
                                                             Để kiểm tra lại công nợ, vui lòng bấm <a href="/cong-no-sinh-vien" style={{ color: 'deepskyblue' }}>vào đây</a>.
                                                         </p>
-                                                        <p>Trở về trang chủ <a target="_blank" style={{ color: 'deepskyblue' }} href="/trang-chu">tại đây</a></p>
                                                     </div>
                                                 </div>
                                             </div>

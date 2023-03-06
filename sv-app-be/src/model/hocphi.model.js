@@ -42,6 +42,13 @@ HocPhi.init({
             key: "ma_lop_hoc_phan"
         }
     },
+    ma_phieu_thu:{
+        type:DataTypes.INTEGER,
+        references:{
+            model:'phieu_thu',
+            key:"ma_phieu_thu"
+        }
+    },
 }, {
     sequelize,
     modelName: 'hoc_phi',

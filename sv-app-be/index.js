@@ -97,9 +97,9 @@ ThoiKhoaBieuSinhVien.sync();
 ChuyenNganhHocPhan.sync();
 GiangVien.sync();
 KetQuaHocTap.sync();
-HocPhi.sync({alter:true});
+HocPhi.sync();
 HocPhiSinhVien.sync();
-PhieuThu.sync();
+PhieuThu.sync({alter:true});
 // Catch 404 Errors and forward them to error handler
 app.use((req, res, next) => {
   const err = new Error("Not Found");
