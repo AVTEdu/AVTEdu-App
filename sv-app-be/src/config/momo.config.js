@@ -8,7 +8,7 @@ function momoPayment(orderInfo,amount,callback){
     var secretKey = 'K951B6PE1waDMi640xX08PD3vg6EkVlz';
     var partnerCode = 'MOMO';
     var redirectUrl = 'http:localhost:4000/hello';
-    var ipnUrl = 'https://webhook.site/b3088a6a-2d17-4f8d-a383-71389a6c600b';
+    var ipnUrl = 'https://webhook.site/1ca0b64d-6179-491a-8c63-7b3ed0bb3257';
     var requestType = "payWithMethod";
     var orderId = partnerCode + new Date().getTime();
     var requestId = orderId;

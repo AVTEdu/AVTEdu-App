@@ -20,12 +20,9 @@ PhieuThu.init({
         type:DataTypes.DATEONLY,
         allowNull:false
     },
-    ma_hoc_phi:{
-        type:DataTypes.INTEGER,
-        references:{
-            model:'hoc_phi',
-            key:"ma_hoc_phi"
-        }
+    don_vi_thu:{
+        type:DataTypes.STRING,
+        allowNull:false
     },
     ghi_chu:{
         type:DataTypes.STRING,
