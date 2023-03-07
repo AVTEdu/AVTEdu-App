@@ -276,7 +276,7 @@ const DangKiHocPhan = async (req, res, next) => {
         cong_no: so_tien,
         trang_thai: 1,
         ma_lop_hoc_phan: foundLopHocPhan.ma_lop_hoc_phan,
-        ma_phieu_thu: 0,
+        ma_phieu_thu:null,
       });
     }
     const updateSVHT = await LopHocPhan.update(
@@ -579,7 +579,7 @@ const xacNhanThanhToanTrucTuyen = async (req, res, next) => {
         `update hoc_phi
         join hoc_phi_sinh_vien on hoc_phi.ma_hoc_phi = hoc_phi_sinh_vien.ma_hoc_phi
         join sinh_vien on sinh_vien.ma_sinh_vien = hoc_phi_sinh_vien.ma_sinh_vien
-        set hoc_phi.ma_phieu_thu = ${ma_phieu_thu}
+        set hoc_phi.ma_phieu_thu = ${ma_phieu_thu+1}
         where sinh_vien.ma_sinh_vien =${ma_sinh_vien} and hoc_phi.ma_hoc_phi <> 0 `,
         { type: QueryTypes.UPDATE }
 

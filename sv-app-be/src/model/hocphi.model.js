@@ -47,7 +47,8 @@ HocPhi.init({
         references:{
             model:'phieu_thu',
             key:"ma_phieu_thu"
-        }
+        },
+        allowNull:true
     },
 }, {
     sequelize,
