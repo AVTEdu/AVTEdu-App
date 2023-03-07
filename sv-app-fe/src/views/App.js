@@ -18,6 +18,7 @@ import XemLichHoc from "../component/XemLichHoc";
 import Sidebar from "../component/admin/components/Sidebar";
 import TraCuuCongNo from "../component/TraCuuCongNo";
 import ThanhToanTrucTuyen from "../component/ThanhToanTrucTuyen";
+import XacNhanThanhToan from "../component/XacNhanThanhToan";
 
 function App() {
   return (
@@ -33,6 +34,7 @@ function App() {
           <Route path="AdminLogin" element={<LoginAdmin />} />
           <Route path="AdminApp" element={<AdminApp />} />
           <Route path="unauthorized" element={<Unauthorized />} />
+          <Route path="/xac-nhan-thanh-toan" element={<XacNhanThanhToan />} />
 
 
           {/* <Route element={<RequireAuth allowedRoles={[ROLES.USER]} />}>

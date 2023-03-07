@@ -78,51 +78,65 @@ export default function TraCuuCongNo() {
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                    {dsHocPhi["dsHocPhiSinhVien"].map((dshp) => (
-                                                        <tr key={dshp.ma_hoc_phi}>
-                                                            <td>{sttDsHP++}</td>
-                                                            <td>{dshp.ma_hoc_phi}</td>
-                                                            <td className="text-left">{dshp.ten_mon_hoc}</td>
-                                                            <td className="text-left">{dshp.trang_thai_dang_ki}</td>
-                                                            <td className="text-right">
-                                                                <span>{dshp.so_tien}</span>
-                                                            </td>
-                                                            <td className="text-center">
-                                                                <span>{dshp.mien_giam}</span>
-                                                            </td>
-                                                            <td className="text-right">
-                                                                <span>{dshp.so_tien_da_nop}</span>
-                                                            </td>
-                                                            <td className="text-right">
-                                                                <span>{dshp.cong_no}</span>
-                                                            </td>
-                                                            <td className="text-center">
-                                                                <span>
-                                                                    {dshp.trang_thai === 1 ? 'Đã nộp' : 'Chưa nộp'}
-                                                                </span>
-                                                            </td>
-                                                            <p hidden>{tongSoTien = tongSoTien + dshp.so_tien}</p>
-                                                            <p hidden>{tongDaNop = tongDaNop + dshp.so_tien_da_nop}</p>
-                                                            <p hidden>{tongCongNo = tongCongNo + dshp.cong_no}</p>
-                                                        </tr>
-                                                    ))}
-                                                    <tr role="row" className="row-head">
-                                                        <td colSpan={4} className="uppercase"><span lang="congnosinhvien-total">Tổng</span>:</td>
-                                                        <td className="cl-red text-right">
-                                                            <span>{tongSoTien}</span>
-                                                        </td>
-                                                        <td className="cl-red text-right">
-                                                            <span />
-                                                        </td>
-                                                        <td className="cl-red text-right">
-                                                            <span>{tongDaNop}</span>
-                                                        </td>
-                                                        <td className="cl-red text-right">
-                                                            <span>{tongCongNo}</span>
-                                                        </td>
-                                                        <td>
-                                                        </td>
-                                                    </tr>
+                                                    {
+                                                        dsHocPhi?.dsHocPhiSinhVien.length > 0 && dsHocPhi ?
+                                                            <>
+                                                                {
+                                                                    dsHocPhi["dsHocPhiSinhVien"].map((dshp) => (
+                                                                        <tr key={dshp.ma_hoc_phi}>
+                                                                            <td>{sttDsHP++}</td>
+                                                                            <td>{dshp.ma_hoc_phi}</td>
+                                                                            <td className="text-left">{dshp.ten_mon_hoc}</td>
+                                                                            <td className="text-left">{dshp.trang_thai_dang_ki}</td>
+                                                                            <td className="text-right">
+                                                                                <span>{dshp.so_tien}</span>
+                                                                            </td>
+                                                                            <td className="text-center">
+                                                                                <span>{dshp.mien_giam}</span>
+                                                                            </td>
+                                                                            <td className="text-right">
+                                                                                <span>{dshp.so_tien_da_nop}</span>
+                                                                            </td>
+                                                                            <td className="text-right">
+                                                                                <span>{dshp.cong_no}</span>
+                                                                            </td>
+                                                                            <td className="text-center">
+                                                                                <span>
+                                                                                    {dshp.trang_thai === 1 ? 'Đã nộp' : 'Chưa nộp'}
+                                                                                </span>
+                                                                            </td>
+                                                                            <p hidden>{tongSoTien = tongSoTien + dshp.so_tien}</p>
+                                                                            <p hidden>{tongDaNop = tongDaNop + dshp.so_tien_da_nop}</p>
+                                                                            <p hidden>{tongCongNo = tongCongNo + dshp.cong_no}</p>
+                                                                        </tr>
+                                                                    ))
+                                                                }
+                                                                <tr role="row" className="row-head">
+                                                                    <td colSpan={4} className="uppercase"><span lang="congnosinhvien-total">Tổng</span>:</td>
+                                                                    <td className="cl-red text-right">
+                                                                        <span>{tongSoTien}</span>
+                                                                    </td>
+                                                                    <td className="cl-red text-right">
+                                                                        <span />
+                                                                    </td>
+                                                                    <td className="cl-red text-right">
+                                                                        <span>{tongDaNop}</span>
+                                                                    </td>
+                                                                    <td className="cl-red text-right">
+                                                                        <span>{tongCongNo}</span>
+                                                                    </td>
+                                                                    <td>
+                                                                    </td>
+                                                                </tr>
+                                                            </>
+
+                                                            : <tr className="row-head">
+                                                                <td colSpan={9} className="uppercase">
+                                                                    <span>Bạn là sinh viên mới à ? Mau đi đăng ký môn đi</span>
+                                                                </td>
+                                                            </tr>
+                                                    }
+
                                                 </tbody>
                                             </table>
                                         </div>

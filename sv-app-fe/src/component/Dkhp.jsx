@@ -628,7 +628,18 @@ export default function Dkhp() {
                                             <div className="check"></div>
                                           </div>
                                         </td> */}
-                                          <td>Chưa set</td>
+                                          <td>
+                                            {hpDaDk.trang_thai === 1 ?
+                                              <div>
+                                                <div className="no-check">
+                                                </div>
+                                              </div>
+                                              :
+                                              <div>
+                                                <div className="check"></div>
+                                              </div>
+                                            }
+                                          </td>
                                           <td>{hpDaDk.trang_thai_dang_ki}</td>
                                           <td>Chưa set</td>
                                           <td>Chưa set</td>
