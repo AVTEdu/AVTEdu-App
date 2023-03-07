@@ -11,7 +11,7 @@ import { MonHoc, HocPhan } from '../component/admin/pages/QuanLyHocPhan';
 import { Khoa, ChuyenNganh } from '../component/admin/pages/QuanLyKhoa';
 import { HocKi, LopHocPhan, PhanCong } from '../component/admin/pages/QuanLyLopHocPhan';
 import { Admin, GiangVien, SinhVien } from '../component/admin/pages/QuanLyNguoiDung';
-import { LoaiPhong, Phong } from '../component/admin/pages/QuanLyPhong';
+import { Phong } from '../component/admin/pages/QuanLyPhong';
 import { ThoiKhoaBieu } from '../component/admin/pages/QuanLyTKB';
 import { CongNo } from "../component/admin/pages/QuanLyCongNo";
 import XemLichHoc from "../component/XemLichHoc";
@@ -61,7 +61,6 @@ function App() {
         <Route path='/ql-lophocphan/lop-hoc-phan' element={<LopHocPhan />} />
         <Route path='/ql-lophocphan/phan-cong' element={<PhanCong />} />
 
-        <Route path='/ql-phong/loai-phong' element={<LoaiPhong />} />
         <Route path='/ql-phong/phong' element={<Phong />} />
 
         <Route path='/ql-tkb/tkb' element={<ThoiKhoaBieu />} />
