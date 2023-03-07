@@ -102,7 +102,7 @@ export default function TraCuuCongNo() {
                                                                             </td>
                                                                             <td className="text-center">
                                                                                 <span>
-                                                                                    {dshp.trang_thai === 1 ? 'Đã nộp' : 'Chưa nộp'}
+                                                                                    {dshp.trang_thai == 0 ? 'Đã nộp' : 'Chưa nộp'}
                                                                                 </span>
                                                                             </td>
                                                                             <p hidden>{tongSoTien = tongSoTien + dshp.so_tien}</p>
