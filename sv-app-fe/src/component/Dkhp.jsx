@@ -498,7 +498,7 @@ export default function Dkhp() {
                                         </th>
                                       </tr>
                                     </thead>
-                                    <tbody>
+                                    <tbody className="adminClassHover">
                                       {
                                         chiTietLopHP["results"].map((ctlhp) =>
                                           <tr className="tr-active tr-chitietlichdangky" onClick={(e) => {
