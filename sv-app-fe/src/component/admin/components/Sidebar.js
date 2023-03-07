@@ -7,6 +7,7 @@ import { SidebarData } from "./SidebarData";
 import SubMenu from "./SubMenu";
 import { IconContext } from "react-icons/lib";
 import Logomini from "../../../assets/img/logo_img/logo-mini.png";
+import { AdminApp } from "../AdminApp";
 
 const Nav = styled.div`
 background: #343a40;
@@ -75,7 +76,7 @@ const Sidebar = () => {
                 </Nav>
                 <SidebarNav sidebar={sidebar}>
                     <SidebarWrap>
-                        <NavIcon to="#">
+                        <NavIcon to="/AdminApp">
                             {/* <AiIcons.AiOutlineHome /> */}
                             <img src={Logomini} style={{ marginLeft: "2rem" }} />
                             <h1
