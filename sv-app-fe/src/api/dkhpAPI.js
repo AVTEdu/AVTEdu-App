@@ -32,6 +32,14 @@ const dkhpAPI = {
   getDanhSachHocPhi() {
     const url = "/userRequest/getDanhSachHocPhi";
     return axiosClient.get(url);
+  },
+  thanhToanHocPhiTrucTuyen() {
+    const url = "/userRequest/thanhToanHocPhiTrucTuyen";
+    return axiosClient.put(url);
+  },
+  xacNhanThanhToanTrucTuyen(resultCode, orderInfo) {
+    const url = "/userRequest/xacNhanThanhToanTrucTuyen?resultCode=" + resultCode + "&orderInfo=" + orderInfo;
+    return axiosClient.put(url);
   }
 };
 
