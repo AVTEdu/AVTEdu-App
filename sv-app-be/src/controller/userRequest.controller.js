@@ -276,14 +276,13 @@ const DangKiHocPhan = async (req, res, next) => {
         cong_no: so_tien,
         trang_thai: 1,
         ma_lop_hoc_phan: foundLopHocPhan.ma_lop_hoc_phan,
-        ma_phieu_thu:0,
+        ma_phieu_thu: 0,
       });
     }
     const updateSVHT = await LopHocPhan.update(
       {
-        so_luong_dang_ki_hien_tai: `${
-          foundLopHocPhan.so_luong_dang_ki_hien_tai + 1
-        }`,
+        so_luong_dang_ki_hien_tai: `${foundLopHocPhan.so_luong_dang_ki_hien_tai + 1
+          }`,
       },
       { where: { ma_lop_hoc_phan: `${foundLopHocPhan.ma_lop_hoc_phan}` } }
     );
@@ -437,14 +436,14 @@ const getThoiKhoaBieuSinhVienTrongMotTuan = async (req, res, next) => {
       let dayOfWeeek = day.wod;
       console.log(
         i +
-          ":" +
-          dayOfWeeek +
-          "+" +
-          day.date +
-          "+" +
-          req.payload.userId +
-          "+" +
-          result
+        ":" +
+        dayOfWeeek +
+        "+" +
+        day.date +
+        "+" +
+        req.payload.userId +
+        "+" +
+        result
       );
       ++i;
       let ngayHoc = await sequelize.query(
@@ -554,9 +553,10 @@ const thanhToanHocPhiTrucTuyen = async (req, res, next) => {
 };
 const xacNhanThanhToanTrucTuyen = async (req, res, next) => {
   try {
-    const {resultCode,orderId} = req.body
-    const ma_sinh_vien = orderId.substring(19) 
-    if (resultCode === 0 && ma_sinh_vien !== "0") {
+    const rslCode = Number.parseInt(req.query.resultCode);
+    const orderId = req.query.orderInfo;
+    const ma_sinh_vien = orderId.substring(19)
+    if (rslCode === 0 && ma_sinh_vien !== "0") {
       const updateHocPhi = await sequelize.query(
         `update hoc_phi
         join hoc_phi_sinh_vien on hoc_phi.ma_hoc_phi = hoc_phi_sinh_vien.ma_hoc_phi
@@ -564,34 +564,27 @@ const xacNhanThanhToanTrucTuyen = async (req, res, next) => {
         set hoc_phi.so_tien_da_nop = hoc_phi.so_tien
         where sinh_vien.ma_sinh_vien =${ma_sinh_vien} and hoc_phi.ma_hoc_phi <> 0 `,
         { type: QueryTypes.UPDATE }
-        
+
       );
-      const ma_phieu_thu = await PhieuThu.max("ma_phieu_thu");
-      const createPhieuThu = await PhieuThu.create({
-          ma_phieu_thu:ma_phieu_thu,
-          ten_phieu_thu:"Thanh toán công nợ của"+ma_sinh_vien,
-          ngay_thu:new Date(),
-          ghi_chu:"..."
-      })
-      res.status(200).json({ success: true, msg:"Thanh toán thành công "+ma_sinh_vien});
-    }else{
-      res.status(400).json({ success: false, msg:"Thanh toán thất bại "+ma_sinh_vien});
+      res.status(200).json({ success: true, msg: "Thanh toán thành công " + ma_sinh_vien });
+    } else {
+      res.status(400).json({ success: false, msg: "Thanh toán thất bại " + ma_sinh_vien });
     }
   } catch (error) {
     console.log(error);
     next(error);
   }
 };
-const getPhieuThuCongNo =  async (req, res, next) => {
+const getPhieuThuCongNo = async (req, res, next) => {
   try {
     const ma_sinh_vien = req.payload.userId;
-    const findPhieuThu =sequelize.query(`select pt.*
+    const findPhieuThu = sequelize.query(`select pt.*
     from phieu_thu as pt 
     left join hoc_phi as hp on hp.ma_phieu_thu = pt.ma_phieu_thu
     left join hoc_phi_sinh_vien as hpsv on hpsv.ma_hoc_phi = hp.ma_hoc_phi
     left join sinh_vien as sv on hpsv.ma_sinh_vien = sv.ma_sinh_vien
-    where sv.ma_sinh_vien = ${ma_sinh_vien}`,{type:QueryTypes.SELECT});
-    res.status(200).json({ success: true, findPhieuThu});
+    where sv.ma_sinh_vien = ${ma_sinh_vien}`, { type: QueryTypes.SELECT });
+    res.status(200).json({ success: true, findPhieuThu });
   } catch (error) {
     console.log(error);
     next(error);
