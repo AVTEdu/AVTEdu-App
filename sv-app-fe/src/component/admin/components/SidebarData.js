@@ -84,11 +84,11 @@ export const SidebarData = [
         iconOpened: <RiIcons.RiArrowUpSFill />,
 
         subNav: [
-            {
-                title: "Loại phòng",
-                path: "/ql-phong/loai-phong",
-                icon: <IoIcons.IoIosRadioButtonOn />,
-            },
+            // {
+            //     title: "Loại phòng",
+            //     path: "/ql-phong/loai-phong",
+            //     icon: <IoIcons.IoIosRadioButtonOn />,
+            // },
             {
                 title: "Phòng",
                 path: "/ql-phong/phong",

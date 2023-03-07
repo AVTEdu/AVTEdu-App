@@ -46,7 +46,6 @@ export default function XacNhanThanhToan() {
                                                         <p lang="thanhtoanonline-huygiaodich">
                                                             Để kiểm tra lại công nợ, vui lòng bấm <a href="/cong-no-sinh-vien" style={{ color: 'deepskyblue' }}>vào đây</a>.
                                                         </p>
-                                                        <p>Trở về trang chủ <a target="_blank" style={{ color: 'deepskyblue' }} href="/trang-chu">tại đây</a></p>
                                                     </div>
                                                 </div>
                                             </div>
