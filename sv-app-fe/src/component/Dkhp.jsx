@@ -34,6 +34,8 @@ export default function Dkhp() {
   const [maPhanCongLopHocPhan, setMaPhanCongLopHocPhan] = useState();
   const [trangThaiLopHocPhan, setTrangThaiLopHocPhan] = useState();
   const [selectedDsToanBoLopHP, setSelectedDsToanBoLopHP] = useState([]);
+  const [loaiHocPhanPhuTrach, setLoaiHocPhanPhuTrach] = useState();
+  const [trangThaiDangKy, setTrangThaiDangKy] = useState();
   let sttMonChuaDK = 1;
   let sttLHPChoDK = 1;
   let sttHocPhanDaDangKy = 1;
@@ -64,7 +66,21 @@ export default function Dkhp() {
       }
     };
     activeDSHocPhanDaDangKyTrongKyNay();
-  }, [maHocKi])
+  }, [maHocKi, trangThaiDangKy])
+
+  // useEffect(() => {
+  //   const activeDSHocPhanDaDangKyTrongKyNay = async () => {
+  //     try {
+  //       setDsToanBoLopHocPhan('');
+  //       setChiTietLopHP('');
+  //       const res = await dkhpAPI.getHocPhanDaDangKyTrongKynay(maHocKi);
+  //       setHpDaDangKy(res.data);
+  //     } catch (error) {
+  //       console.log(error.message);
+  //     }
+  //   };
+  //   activeDSHocPhanDaDangKyTrongKyNay();
+  // }, [trangThaiDangKy])
 
   useEffect(() => {
     const activeLopHocPhanByHocPhan = async () => {
@@ -129,12 +145,17 @@ export default function Dkhp() {
     console.log("ma hoc ki: " + maHocKi);
     console.log(trangThaiLopHocPhan);
     try {
+      if (loaiHocPhanPhuTrach === 1) {
+        const res = await dkhpAPI.dangKiHocPhan(maPhanCongLopHocPhan, maHocKi, trangThaiLopHocPhan, 1860000, 0);
+        console.log(res.data);
+        // const res2 = await dkhpAPI.getHocPhanDaDangKyTrongKynay(maHocKi);
+        // setHpDaDangKy(res2.data);
+        alert('Đăng ký  thành công');
+        setTrangThaiDangKy(res.data);
+      } else {
+        alert('Bạn chưa chọn nhóm thực hành');
+      }
 
-      const res = await dkhpAPI.dangKiHocPhan(maPhanCongLopHocPhan, maHocKi, trangThaiLopHocPhan, 1860000, 0);
-      console.log(res.data);
-      // const res2 = await dkhpAPI.getHocPhanDaDangKyTrongKynay(maHocKi);
-      // setHpDaDangKy(res2.data);
-      alert('Đăng ký  thành công');
     } catch (error) {
       alert('Đăng ký không thành công');
       console.log(error.message);
@@ -142,9 +163,7 @@ export default function Dkhp() {
 
   }
 
-  function SelectChiTietLopHocPhan() {
 
-  }
 
 
 
@@ -504,6 +523,7 @@ export default function Dkhp() {
                                           <tr className="tr-active tr-chitietlichdangky" onClick={(e) => {
                                             (ctlhp.trang_thai === 1 ? setTrangThaiLopHocPhan('Đăng ký mới') : setTrangThaiLopHocPhan(''))
                                             setMaPhanCongLopHocPhan(ctlhp.ma_phan_cong)
+                                            setLoaiHocPhanPhuTrach(ctlhp.loai_hoc_phan_phu_trach)
                                           }}>
                                             <td className="text-left">
                                               <div><span >Lịch học</span>: <b> {ctlhp.ngay_hoc_trong_tuan}   (Tiết {ctlhp.tiet_hoc_bat_dau}  -&gt; {ctlhp.tiet_hoc_ket_thuc} )</b></div>
