@@ -101,14 +101,14 @@ const getDanhSachSinhVien = async (req,res,next) =>{
       next(error);
     }
   }
-  const getDanhSachHocPhiSinhVien = async (req,res,next) =>{
-    try {
-      const result = await HocPhiSinhVien.findAll({limit:10});
-      return res.status(201).json({ success: true, result});
-    } catch (error) {
-      next(error);
-    }
-  }
+  // const getDanhSachHocPhiSinhVien = async (req,res,next) =>{
+  //   try {
+  //     const result = await HocPhiSinhVien.findAll({limit:10});
+  //     return res.status(201).json({ success: true, result});
+  //   } catch (error) {
+  //     next(error);
+  //   }
+  // }
   const getDanhSachKetQuaHocTap = async (req,res,next) =>{
     try {
       const result = await KetQuaHocTap.findAll({limit:10});
@@ -213,6 +213,32 @@ const getDanhSachSinhVien = async (req,res,next) =>{
       next(error);
     }
   }
+  const getDanhSachHocPhiSinhVien = async (req, res, next) => {
+    try {
+      const foundSinhVien = await SinhVien.findOne({
+        where: { ma_sinh_vien: req.payload.userId },
+      });
+      if (!foundSinhVien) {
+        return res
+          .status(403)
+          .json({ error: { message: "Không tìm thấy sinh viên" } });
+      }
+      const dsHocPhiSinhVien = await sequelize.query(
+        `select hp.*,mh.ten_mon_hoc,hpp.ma_hoc_phan
+                      from sinhviendb.sinh_vien as sv
+                      left join sinhviendb.hoc_phi_sinh_vien as hpsv on sv.ma_sinh_vien = hpsv.ma_sinh_vien
+                      left join sinhviendb.hoc_phi as hp on hp.ma_hoc_phi = hpsv.ma_hoc_phi
+                      left join sinhviendb.lop_hoc_phan as lhp on hp.ma_lop_hoc_phan = lhp.ma_lop_hoc_phan
+                      left join sinhviendb.hoc_phan as hpp on lhp.ma_hoc_phan = hpp.ma_hoc_phan
+                      left join sinhviendb.mon_hoc as mh on hpp.ma_mon_hoc = mh.ma_mon_hoc
+                      where sv.ma_sinh_vien = '${req.payload.userId}'`,
+        { type: QueryTypes.SELECT }
+      );
+      res.status(201).json({ success: true, dsHocPhiSinhVien });
+    } catch (error) {
+      next(error);
+    }
+  };
 module.exports = {
   getDanhSachAdmin,
   getDanhSachBacDaoTao,

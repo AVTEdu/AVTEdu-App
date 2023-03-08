@@ -2,6 +2,7 @@ import { View, Text,StyleSheet, ImageBackground, TouchableOpacity } from 'react-
 import React from 'react';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import COLORS from '../consts/color';
+import CustomButtonHome from '../components/CustomButtonHome';
 const HomeScreen = ({ navigation }) => {
   function renderHeader(){
     return(
@@ -25,23 +26,13 @@ const HomeScreen = ({ navigation }) => {
           </View>
       </View>
     )
-  }
-  function custombutton(){
-    return(
-      <View style={{justifyContent:'center',alignItems:'center',width:"20%",height:90}}>
-        <TouchableOpacity style={{width:"70%",height:"60%",backgroundColor:"red",justifyContent:'center',alignItems:'center',borderRadius:20}}>
-            <Icon name='notifications' color={COLORS.white} size={35}/>
-        </TouchableOpacity>
-        <Text>Nhắc nhở</Text>
-      </View>
-    )
-  }
+  }     
   return  (
     <View style ={styles.container}>
       {renderHeader()}
-      <View style={{top:-5,marginHorizontal:10}}>
+      <View style={{top:-5,marginHorizontal:10,flexDirection:'row'}}>
           <Text>ALo</Text>
-          {custombutton()}
+          <CustomButtonHome text="Nhắc nhở" Bgcolor={COLORS.red} icon="notifications"/>
       </View>
 
     </View>
@@ -51,7 +42,8 @@ const HomeScreen = ({ navigation }) => {
 const styles = StyleSheet.create({
   container :{
     flex:1,
-    paddingBottom:130
+    paddingBottom:130,
+    backgroundColor:COLORS.white
   },
   shadow:{
     shadowColor:"#000",

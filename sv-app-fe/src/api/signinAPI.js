@@ -8,7 +8,7 @@ const signinAPI = {
   },
   signInAdmin(ma, password) {
     const url = "/auth/signinAdmin";
-    return axiosClient.get(url, ma, password);
+    return axiosClient.post(url, ma, password);
 
   },
 
