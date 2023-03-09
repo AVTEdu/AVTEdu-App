@@ -55,6 +55,22 @@ router
 router
   .route("/createThoiKhoaBieuSinhVien")
   .post(verifyAccessToken,AdminCreateController.createThoiKhoaBieuSinhVien);
+//Cần mã sinh viên ở body
+router
+  .route("/getDanhSachPhieuThuSinhVien")
+  .put(verifyAccessToken,AdminGetController.getDanhSachPhieuThuSinhVien); 
+//Cần mã sinh viên ở body  
+router
+  .route("/getDanhSachHocPhiSinhVien")
+  .put(verifyAccessToken,AdminGetController.getDanhSachHocPhiSinhVien);  
+//Cần mã sinh viên ở param
+router
+  .route("/getDanhSachPhieuThuSinhVienParam")
+  .get(verifyAccessToken,AdminGetController.getDanhSachPhieuThuSinhVienParam); 
+//Cần mã sinh viên ở param
+router
+  .route("/getDanhSachHocPhiSinhVienParam")
+  .get(verifyAccessToken,AdminGetController.getDanhSachHocPhiSinhVienParam);      
 // router
 //   .route("/thanhToanHocPhiSinhVien")
 //   .put(AdminCreateController.thanhToanHocPhiSinhVien);  
