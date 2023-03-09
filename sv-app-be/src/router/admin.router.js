@@ -1,5 +1,6 @@
 const express = require("express");
 const AdminCreateController = require("../controller/admin.controller/create.controller");
+const AdminGetController = require("../controller/admin.controller/get.controller");
 const { verifyAccessToken } = require("../helpers/jwt.service");
 const router = express.Router();
 
@@ -54,7 +55,26 @@ router
 router
   .route("/createThoiKhoaBieuSinhVien")
   .post(verifyAccessToken,AdminCreateController.createThoiKhoaBieuSinhVien);
+//Cần mã sinh viên ở body
+router
+  .route("/getDanhSachPhieuThuSinhVien")
+  .put(verifyAccessToken,AdminGetController.getDanhSachPhieuThuSinhVien); 
+//Cần mã sinh viên ở body  
+router
+  .route("/getDanhSachHocPhiSinhVien")
+  .put(verifyAccessToken,AdminGetController.getDanhSachHocPhiSinhVien);  
+//Cần mã sinh viên ở param
+router
+  .route("/getDanhSachPhieuThuSinhVienParam")
+  .get(verifyAccessToken,AdminGetController.getDanhSachPhieuThuSinhVienParam); 
+//Cần mã sinh viên ở param
+router
+  .route("/getDanhSachHocPhiSinhVienParam")
+  .get(verifyAccessToken,AdminGetController.getDanhSachHocPhiSinhVienParam);      
 // router
 //   .route("/thanhToanHocPhiSinhVien")
 //   .put(AdminCreateController.thanhToanHocPhiSinhVien);  
+router
+  .route("/createThoiKhoaBieuSinhVien")
+  .post(verifyAccessToken,AdminCreateController.createThoiKhoaBieuSinhVien);
 module.exports = router;

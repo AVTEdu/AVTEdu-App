@@ -2,6 +2,7 @@ import { View, Text, StyleSheet, ImageBackground, TouchableOpacity } from 'react
 import React from 'react';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import COLORS from '../consts/color';
+import CustomButtonHome from '../components/CustomButtonHome';
 const HomeScreen = ({ navigation }) => {
   function renderHeader() {
     return (
