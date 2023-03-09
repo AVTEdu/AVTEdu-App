@@ -4,13 +4,21 @@ import * as AiIcons from "react-icons/ai";
 import { useEffect, useState } from "react";
 
 export const CongNo = () => {
-
+    const [sinhVienSearch, setSinhVienSearch] = useState('');
+    const searchSinhVien = (e) => {
+        if (e.key === 'Enter') {
+            setSinhVienSearch(e.target.value);
+        }
+    }
+    useEffect(() => {
+        console.log(sinhVienSearch)
+    }, [sinhVienSearch])
     return (
         <>
             <Sidebar />
             <div className="qlhp">
-                <div class="layout-wrapper layout-content-navbar">
-                    <div class="layout-container">
+                <div className="layout-wrapper layout-content-navbar">
+                    <div className="layout-container">
                         <div className="layout-page">
 
                             {/* Content wrapper */}
@@ -28,7 +36,9 @@ export const CongNo = () => {
                                                     <div className="navbar-nav align-items-center">
                                                         <div className="nav-item d-flex align-items-center">
                                                             <i className="bx bx-search fs-4 lh-0" />
-                                                            <input type="text" className="form-control border-0 shadow-none" placeholder="Mã số sinh viên..." />
+                                                            <input type="text" className="form-control border-0 shadow-none"
+                                                                onKeyDown={searchSinhVien}
+                                                                placeholder="Mã số sinh viên..." />
                                                         </div>
                                                     </div>
                                                     {/* /Search */}
