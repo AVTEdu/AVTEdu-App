@@ -20,5 +20,5 @@ router
   .delete(AuthController.Logout);
 router
   .route("/signinAdmin")
-  .get(AuthController.signInAdmin);
+  .post(AuthController.signInAdmin);
 module.exports = router;
