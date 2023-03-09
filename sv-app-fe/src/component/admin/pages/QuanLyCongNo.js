@@ -2,16 +2,37 @@ import React from "react";
 import Sidebar from "../components/Sidebar";
 import * as AiIcons from "react-icons/ai";
 import { useEffect, useState } from "react";
+import adminAPI from "../../../api/adminAPI";
 
 export const CongNo = () => {
     const [sinhVienSearch, setSinhVienSearch] = useState('');
+    const [dsHocPhi, setDsHocPhi] = useState('');
+    const [dsPhieuThu, setDsPhieuThu] = useState('');
     const searchSinhVien = (e) => {
         if (e.key === 'Enter') {
             setSinhVienSearch(e.target.value);
         }
     }
     useEffect(() => {
-        console.log(sinhVienSearch)
+        const activeSinhVienTimDuoc = async () => {
+            try {
+                const dshpsv_res = await adminAPI.getDSHocPhiSinhVien(sinhVienSearch);
+                const dsphieuthu_res = await adminAPI.getDanhSachPhieuThuSinhVien(sinhVienSearch);
+                setDsPhieuThu(dsphieuthu_res.data);
+                setDsHocPhi(dshpsv_res.data);
+                setSinhVienSearch("");
+            } catch (error) {
+                if (error.response) {
+                    if (error.response.status === 403 && sinhVienSearch) {
+                        alert("Không tìm thấy sinh viên");
+                        setSinhVienSearch("");
+                        setDsHocPhi("");
+                        setDsPhieuThu("");
+                    }
+                }
+            }
+        };
+        activeSinhVienTimDuoc();
     }, [sinhVienSearch])
     return (
         <>
@@ -65,7 +86,7 @@ export const CongNo = () => {
                                                             <thead>
                                                                 <tr style={{ backgroundColor: "#CADAE1" }}>
                                                                     <th style={{ border: "2px solid", textAlign: "center" }}>Mã học phí</th>
-                                                                    <th style={{ border: "2px solid", textAlign: "center" }}>Mã môn</th>
+                                                                    <th style={{ border: "2px solid", textAlign: "center" }}>Môn học</th>
                                                                     <th style={{ border: "2px solid", textAlign: "center" }}>Mã LHP</th>
                                                                     <th style={{ border: "2px solid", textAlign: "center" }}>Nội dung thu</th>
                                                                     <th style={{ border: "2px solid", textAlign: "center" }}>Trạng thái</th>
@@ -77,30 +98,57 @@ export const CongNo = () => {
                                                             </thead>
                                                             <tbody className="adminClassHover">
 
-                                                                <tr>
-                                                                    <td style={{ border: "2px solid", textAlign: "center", verticalAlign: "middle" }}>1</td>
-                                                                    <td style={{ border: "2px solid", textAlign: "center", verticalAlign: "middle" }}>DHKTPM</td>
-                                                                    <td style={{ border: "2px solid", textAlign: "center", verticalAlign: "middle" }}>9</td>
-                                                                    <td style={{ border: "2px solid", textAlign: "center", verticalAlign: "middle" }}>Tiền học phí</td>
-                                                                    <td style={{ border: "2px solid", textAlign: "center", verticalAlign: "middle" }}>
-                                                                        <select className="form-control" style={{ textAlign: "center" }}
-                                                                            defaultValue={1}>
-                                                                            <option value={2}>Đã thanh toán</option>
-                                                                            <option value={1}>Chưa thanh toán</option>
-                                                                        </select>
-                                                                    </td>
-                                                                    <td style={{ border: "2px solid", textAlign: "center", verticalAlign: "middle" }}>1860000</td>
-                                                                    <td style={{ border: "2px solid", textAlign: "center", verticalAlign: "middle" }}>1860000</td>
-                                                                    <td style={{ border: "2px solid", textAlign: "center", verticalAlign: "middle" }}>0</td>
-                                                                    <td style={{ border: "2px solid", textAlign: "center", verticalAlign: "middle" }}>
-                                                                        <button type="button" class="btn  btn-success"
-                                                                            style={{
-                                                                                display: "inline-block", fontWeight: "400"
-                                                                                , lineHeight: "1.53", textAlign: "center", verticalAlign: "middle", userSelect: "none"
-                                                                                , border: "1px solid transparent", padding: "0.4375rem 1.25rem", fontSize: "0.9375 rme"
-                                                                            }}><AiIcons.AiTwotoneEdit /> Cập nhật</button>
-                                                                    </td>
-                                                                </tr>
+                                                                {
+                                                                    dsHocPhi
+                                                                        ?
+                                                                        <>
+                                                                            {
+                                                                                dsHocPhi["dsHocPhiSinhVien"].map((dshp) => (
+                                                                                    <tr>
+                                                                                        <td style={{ border: "2px solid", textAlign: "center", verticalAlign: "middle" }}>{dshp.ma_hoc_phi}</td>
+                                                                                        <td style={{ border: "2px solid", textAlign: "center", verticalAlign: "middle" }}>{dshp.ten_mon_hoc}</td>
+                                                                                        <td style={{ border: "2px solid", textAlign: "center", verticalAlign: "middle" }}>{dshp.ma_lop_hoc_phan}</td>
+                                                                                        <td style={{ border: "2px solid", textAlign: "center", verticalAlign: "middle" }}>{dshp.noi_dung_thu}</td>
+                                                                                        {
+                                                                                            dshp.trang_thai == 1
+                                                                                                ?
+                                                                                                <td style={{ border: "2px solid", textAlign: "center", verticalAlign: "middle" }}>
+                                                                                                    <select className="form-control" style={{ textAlign: "center" }}
+                                                                                                        defaultValue={1}>
+                                                                                                        <option value={0}>Đã thanh toán</option>
+                                                                                                        <option value={1}>Chưa thanh toán</option>
+                                                                                                    </select>
+                                                                                                </td>
+                                                                                                :
+                                                                                                <td style={{ border: "2px solid", textAlign: "center", verticalAlign: "middle" }}>
+                                                                                                    <select className="form-control" style={{ textAlign: "center" }}
+                                                                                                        defaultValue={0}>
+                                                                                                        <option value={0}>Đã thanh toán</option>
+                                                                                                        <option value={1}>Chưa thanh toán</option>
+                                                                                                    </select>
+                                                                                                </td>
+                                                                                        }
+                                                                                        <td style={{ border: "2px solid", textAlign: "center", verticalAlign: "middle" }}>{dshp.so_tien}</td>
+                                                                                        <td style={{ border: "2px solid", textAlign: "center", verticalAlign: "middle" }}>{dshp.cong_no}</td>
+                                                                                        <td style={{ border: "2px solid", textAlign: "center", verticalAlign: "middle" }}>{dshp.so_tien_da_nop}</td>
+                                                                                        <td style={{ border: "2px solid", textAlign: "center", verticalAlign: "middle" }}>
+                                                                                            <button type="button" class="btn  btn-success"
+                                                                                                style={{
+                                                                                                    display: "inline-block", fontWeight: "400"
+                                                                                                    , lineHeight: "1.53", textAlign: "center", verticalAlign: "middle", userSelect: "none"
+                                                                                                    , border: "1px solid transparent", padding: "0.4375rem 1.25rem", fontSize: "0.9375 rme"
+                                                                                                }}><AiIcons.AiTwotoneEdit /> Cập nhật</button>
+                                                                                        </td>
+                                                                                    </tr>
+                                                                                ))
+                                                                            }
+                                                                        </>
+                                                                        : <tr>
+                                                                            <td colSpan={9} className="text-center">
+                                                                                <p className="bold"><span>Tạm chưa có dữ liệu</span></p>
+                                                                            </td>
+                                                                        </tr>
+                                                                }
                                                             </tbody>
                                                         </table>
                                                     </div>
@@ -129,40 +177,42 @@ export const CongNo = () => {
                                                                 <tr style={{ backgroundColor: "#CADAE1" }}>
                                                                     <th style={{ border: "2px solid", textAlign: "center" }}>Mã phiếu thu</th>
                                                                     <th style={{ border: "2px solid", textAlign: "center" }}>Ngày thu</th>
-                                                                    <th style={{ border: "2px solid", textAlign: "center" }}>Số tiền</th>
-                                                                    <th style={{ border: "2px solid", textAlign: "center" }}>Đơn vị xử lý</th>
+                                                                    <th style={{ border: "2px solid", textAlign: "center" }}>Tổng tiền</th>
+                                                                    <th style={{ border: "2px solid", textAlign: "center" }}>Đơn vị thu</th>
                                                                     <th style={{ border: "2px solid", textAlign: "center" }}>Thao tác</th>
                                                                 </tr>
                                                             </thead>
                                                             <tbody className="adminClassHover">
-                                                                <tr>
-                                                                    <td style={{ border: "2px solid", textAlign: "center", verticalAlign: "middle" }}>10144</td>
-                                                                    <td style={{ border: "2px solid", textAlign: "center", verticalAlign: "middle" }}>03-03-2023</td>
-                                                                    <td style={{ border: "2px solid", textAlign: "center", verticalAlign: "middle" }}>1860000</td>
-                                                                    <td style={{ border: "2px solid", textAlign: "center", verticalAlign: "middle" }}>Giáo vụ IUH</td>
-                                                                    <td style={{ border: "2px solid", textAlign: "center", verticalAlign: "middle" }}>
-                                                                        <button type="button" class="btn  btn-primary"
-                                                                            style={{
-                                                                                display: "inline-block", fontWeight: "400"
-                                                                                , lineHeight: "1.53", userSelect: "none"
-                                                                                , border: "1px solid transparent", padding: "0.4375rem 1.25rem", fontSize: "0.9375 rme"
-                                                                            }}><AiIcons.AiFillPrinter /> Xuất phiếu</button>
-                                                                    </td>
-                                                                </tr>
-                                                                <tr>
-                                                                    <td style={{ border: "2px solid", textAlign: "center", verticalAlign: "middle" }}>10144</td>
-                                                                    <td style={{ border: "2px solid", textAlign: "center", verticalAlign: "middle" }}>03-03-2023</td>
-                                                                    <td style={{ border: "2px solid", textAlign: "center", verticalAlign: "middle" }}>1860000</td>
-                                                                    <td style={{ border: "2px solid", textAlign: "center", verticalAlign: "middle" }}>Momo</td>
-                                                                    <td style={{ border: "2px solid", textAlign: "center", verticalAlign: "middle" }}>
-                                                                        <button type="button" class="btn  btn-primary"
-                                                                            style={{
-                                                                                display: "inline-block", fontWeight: "400"
-                                                                                , lineHeight: "1.53", userSelect: "none"
-                                                                                , border: "1px solid transparent", padding: "0.4375rem 1.25rem", fontSize: "0.9375 rme"
-                                                                            }}><AiIcons.AiFillPrinter /> Xuất phiếu</button>
-                                                                    </td>
-                                                                </tr>
+                                                                {
+                                                                    dsPhieuThu
+                                                                        ?
+                                                                        <>
+                                                                            {
+                                                                                dsPhieuThu["dsHocPhiSinhVien"].map((dspth) => (
+                                                                                    <tr>
+                                                                                        <td style={{ border: "2px solid", textAlign: "center", verticalAlign: "middle" }}>{dspth.ma_phieu_thu}</td>
+                                                                                        <td style={{ border: "2px solid", textAlign: "center", verticalAlign: "middle" }}>{dspth.ngay_thu}</td>
+                                                                                        <td style={{ border: "2px solid", textAlign: "center", verticalAlign: "middle" }}>1860000</td>
+                                                                                        <td style={{ border: "2px solid", textAlign: "center", verticalAlign: "middle" }}>{dspth.don_vi_thu}</td>
+                                                                                        <td style={{ border: "2px solid", textAlign: "center", verticalAlign: "middle" }}>
+                                                                                            <button type="button" class="btn  btn-primary"
+                                                                                                style={{
+                                                                                                    display: "inline-block", fontWeight: "400"
+                                                                                                    , lineHeight: "1.53", userSelect: "none"
+                                                                                                    , border: "1px solid transparent", padding: "0.4375rem 1.25rem", fontSize: "0.9375 rme"
+                                                                                                }}><AiIcons.AiFillPrinter /> Xuất phiếu</button>
+                                                                                        </td>
+                                                                                    </tr>
+                                                                                ))
+                                                                            }
+                                                                        </>
+                                                                        :
+                                                                        <tr>
+                                                                            <td colSpan={5} className="text-center">
+                                                                                <p className="bold"><span>Tạm chưa có dữ liệu</span></p>
+                                                                            </td>
+                                                                        </tr>
+                                                                }
                                                             </tbody>
                                                         </table>
                                                     </div>
