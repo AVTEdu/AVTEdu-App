@@ -28,11 +28,19 @@ export const Login = () => {
     const [user, setUser] = useState('');
     const [pwd, setPwd] = useState('');
     const [errMsg, setErrMsg] = useState('');
-    //const [success, setSuccess] = useState(false);
+    const [loading, setLoading] = useState(false);
+    useEffect(() => {
+        setLoading(true);
+        setTimeout(() => {
+            setLoading(false);
+        }, 650);
+    }, []);
 
     useEffect(() => {
         userRef.current.focus();
     }, [])
+
+
 
     useEffect(() => {
         setErrMsg('');
@@ -41,7 +49,6 @@ export const Login = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         //console.log(user, pwd);
-
         try {
             const res = await signinAPI.signIn({
                 ma: user,
@@ -49,6 +56,8 @@ export const Login = () => {
             });
             //console.log(JSON.stringify(res?.data));
             //localStorage.setItem("user", JSON.stringify(res.data));
+            // setLoading(false);
+
             localStorage.setItem("user", JSON.stringify(res.data.sinh_vien.ma_sinh_vien));
             //console.log(JSON.parse(localStorage.getItem("user")?.email));
             const _ma = localStorage.getItem("user");
@@ -83,61 +92,73 @@ export const Login = () => {
                     {errMsg}
                 </p>
                 <div className="container-login100">
-                    <div className="wrap-login100">
-                        <form className="login100-form validate-form" onSubmit={handleSubmit}>
-                            <input type="hidden" defaultValue="" />
-                            <img style={{ width: '130px', marginRight: 'auto', marginLeft: 'auto', display: 'block' }} alt="AVTEdu" src={LoginSV1} />
-                            <br />
-                            <h3 style={{ textAlign: 'center', color: 'rgb(0, 0, 0)', textTransform: 'uppercase', fontSize: '20px', fontWeight: 'bold', marginBottom: '10px' }}>Dành cho người học</h3>
-                            <div className="wrap-input100 validate-input txtemail" data-validate="MSSV có dạng: 31200000121">
-                                <input className="input100" id="username"
-                                    type="text" placeholder="Mã số sinh viên"
-                                    ref={userRef}
-                                    // autoComplete="off"
-                                    onChange={(e) => setUser(e.target.value)}
-                                    value={user}
-                                    required />
-                                <span className="focus-input100" />
-                                {/* <span className="label-input100">Mã số sinh viên</span> */}
+                    {loading ? (
+                        <div className="load-container">
+                            <div>
+                                <h1 style={{ color: "white", marginBottom: "25px", fontSize: "20px", letterSpacing: "2px" }}>Loading...</h1>
                             </div>
-                            <div className="wrap-input100 validate-input uselocalaccount" data-validate="Mật khẩu không được để trống">
-                                <input className="input100" placeholder="Mật khẩu"
-                                    type="password"
-                                    id="password"
-                                    onChange={(e) => setPwd(e.target.value)}
-                                    value={pwd}
-                                    required
-                                />
-                                <span className="focus-input100" />
-                                {/* <span className="label-input100">Mật khẩu</span> */}
-                            </div>
-                            <div className="flex-sb-m w-full p-t-3 p-b-32">
-                                <div>
-                                    <a className="txt1" href="#" data-target="#tutorialModal" data-toggle="modal">
-                                        Xem hướng dẫn
-                                    </a>
-                                </div>
-                                <div>
-                                    <a className="txt1" href="/Account/ForgotPassword">
-                                        Quên mật khẩu
-                                    </a>
+                            <div className="loading">
+                                <div className="load-line-box">
+                                    <div className="load-line"></div>
                                 </div>
                             </div>
-                            <input name="grecaptchaResponseToken" id="grecaptchaResponseToken" type="hidden" defaultValue="" />
-                            <div className="container-login100-form-btn uselocalaccount">
-                                <button className="login100-form-btn" type="submit">
-                                    Đăng Nhập
-                                </button>
-                            </div>
-                            <div className="text-center p-t-35 p-b-20 uselocalaccount">
-                                <a className="txt2" id="" href="../AdminLogin">
+                        </div>
+                    ) : (
+                        <div className="wrap-login100">
+                            <form className="login100-form validate-form" onSubmit={handleSubmit}>
+                                <input type="hidden" defaultValue="" />
+                                <img style={{ width: '130px', marginRight: 'auto', marginLeft: 'auto', display: 'block' }} alt="AVTEdu" src={LoginSV1} />
+                                <br />
+                                <h3 style={{ textAlign: 'center', color: 'rgb(0, 0, 0)', textTransform: 'uppercase', fontSize: '20px', fontWeight: 'bold', marginBottom: '10px' }}>Dành cho người học</h3>
+                                <div className="wrap-input100 validate-input txtemail" data-validate="MSSV có dạng: 31200000121">
+                                    <input className="input100" id="username"
+                                        type="text" placeholder="Mã số sinh viên"
+                                        ref={userRef}
+                                        // autoComplete="off"
+                                        onChange={(e) => setUser(e.target.value)}
+                                        value={user}
+                                        required />
+                                    <span className="focus-input100" />
+                                    {/* <span className="label-input100">Mã số sinh viên</span> */}
+                                </div>
+                                <div className="wrap-input100 validate-input uselocalaccount" data-validate="Mật khẩu không được để trống">
+                                    <input className="input100" placeholder="Mật khẩu"
+                                        type="password"
+                                        id="password"
+                                        onChange={(e) => setPwd(e.target.value)}
+                                        value={pwd}
+                                        required
+                                    />
+                                    <span className="focus-input100" />
+                                    {/* <span className="label-input100">Mật khẩu</span> */}
+                                </div>
+                                <div className="flex-sb-m w-full p-t-3 p-b-32">
+                                    <div>
+                                        <a className="txt1" href="#" data-target="#tutorialModal" data-toggle="modal">
+                                            Xem hướng dẫn
+                                        </a>
+                                    </div>
+                                    <div>
+                                        <a className="txt1" href="/Account/ForgotPassword">
+                                            Quên mật khẩu
+                                        </a>
+                                    </div>
+                                </div>
+                                <input name="grecaptchaResponseToken" id="grecaptchaResponseToken" type="hidden" defaultValue="" />
+                                <div className="container-login100-form-btn uselocalaccount">
+                                    <button className="login100-form-btn" type="submit">
+                                        Đăng Nhập
+                                    </button>
+                                </div>
+                                <div className="text-center p-t-35 p-b-20 uselocalaccount">
+                                    <a className="txt2" id="" href="../AdminLogin">
 
-                                    <span>Nhấn vào đây để đăng nhập dưới quyền quản trị viên</span>
-                                </a>
+                                        <span>Nhấn vào đây để đăng nhập dưới quyền quản trị viên</span>
+                                    </a>
 
-                            </div>
-                        </form>            <div className="login100-more" style={{ backgroundImage: `url(${bg})` }} />
-                    </div>
+                                </div>
+                            </form>            <div className="login100-more" style={{ backgroundImage: `url(${bg})` }} />
+                        </div>)}
                 </div>
             </section>
         </>
