@@ -9,19 +9,32 @@ export default function TraCuuCongNo() {
     let tongSoTien = 0;
     let tongDaNop = 0;
     let tongCongNo = 0;
+    var sendDate = (new Date()).getTime();
     const [loading, setLoading] = useState(false);
+    const [resTime, setResTime] = useState(0);
+    // useEffect(() => {
+    //     setLoading(true);
+    //     setTimeout(() => {
+    //         setLoading(false);
+    //     }, 650);
+    // }, []);
     useEffect(() => {
-        setLoading(true);
-        setTimeout(() => {
-            setLoading(false);
-        }, 650);
-    }, []);
+        if (resTime > 0) {
+            console.log(resTime);
+            setTimeout(() => {
+                setLoading(false);
+            }, resTime)
+        }
+    }, [resTime])
     useEffect(() => {
         const activeHocPhi = async () => {
             try {
+                setLoading(true);
                 const res = await dkhpAPI.getDanhSachHocPhi();
-
                 setDsHocPhi(res.data);
+                var receiveDate = (new Date()).getTime();
+                var responseTimeMs = receiveDate - sendDate;
+                setResTime(responseTimeMs);
             } catch (error) {
                 console.log(error.message);
             }
@@ -33,18 +46,19 @@ export default function TraCuuCongNo() {
 
     return (
         <>
-            {loading ? (
-                <div className="load-container">
-                    <div>
-                        <h1 style={{ color: "white", marginBottom: "25px", fontSize: "20px", letterSpacing: "2px" }}>Loading...</h1>
-                    </div>
-                    <div className="loading">
-                        <div className="load-line-box">
-                            <div className="load-line"></div>
+            <div className="wrapper">
+                {loading ? (
+                    <div className="load-container">
+                        <div>
+                            <h1 style={{ color: "white", marginBottom: "25px", fontSize: "20px", letterSpacing: "2px" }}>Loading...</h1>
+                        </div>
+                        <div className="loading">
+                            <div className="load-line-box">
+                                <div className="load-line"></div>
+                            </div>
                         </div>
                     </div>
-                </div>
-            ) : (<div className="wrapper">
+                ) : <></>}
                 <Sidenavbar />
                 <div className="main-content">
                     <div className="container" id="full-resize-table">
@@ -1771,7 +1785,7 @@ export default function TraCuuCongNo() {
                         </div>
                     </div>
                 </div>
-            </div>)}
+            </div>
         </>
 
     )

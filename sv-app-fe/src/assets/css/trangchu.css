@@ -705,7 +705,7 @@ svg.feather {
 
 .load-container {
     width          : 100%;
-    min-height     : 100vh;
+    min-height     : 20px;
     display        : flex;
     justify-content: center;
     align-items    : center;
@@ -716,25 +716,25 @@ svg.feather {
 
 .loading {
     width          : 100%;
-    height         : auto;
+    height         : 20px;
     display        : flex;
     justify-content: center;
     align-items    : center;
 }
 
 .loading .load-line-box {
-    padding      : 2px;
-    width        : 40%;
-    height       : 20px;
-    border       : 2px solid #267591;
-    border-radius: 20px;
+    padding            : 2px;
+    width              : 100%;
+    height             : 20px;
+    /* border          : 2px solid #267591; */
+    /* border-radius   : 20px; */
 }
 
 .loading .load-line-box .load-line {
-    height       : 20px;
-    border-radius: 20px;
-    background   : #67d295;
-    animation    : loading 2s forwards cubic-bezier(0, 0, 0, 0);
+    height          : 20px;
+    /* border-radius: 20px; */
+    background      : #67d295;
+    animation       : loading 1s forwards cubic-bezier(0, 0, 0, 0);
 }
 
 @keyframes loading {
