@@ -12,7 +12,7 @@ export const LoginAdmin = () => {
     const { setAuth } = useAuth();
     const navigate = useNavigate();
     const location = useLocation();
-    const from = location.state?.from?.pathname || "/AdminApp/*";
+    const from = location.state?.from?.pathname || "/AdminApp";
 
     const userRef = useRef();
     const errRef = useRef();
