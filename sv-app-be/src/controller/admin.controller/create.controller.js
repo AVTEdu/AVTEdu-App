@@ -212,7 +212,6 @@ const createChuyenNganh = async (req,res,next) =>{
       so_tin_chi:so_tin_chi,
       ma_khoa:ma_khoa,
       mo_ta:mota
-
     });
     return res.status(201).json({ success: true, newChuyenNganh });
   } catch (error) {

@@ -1,6 +1,7 @@
 
 const bcrypt = require("bcryptjs");
-const { QueryTypes } = require("sequelize/types");
+const { QueryTypes } = require("sequelize");
+const { ConnectDB } = require("../../config/mysql.config");
 const Admin = require("../../model/admin.model");
 const ChuyenNganh = require("../../model/chuyennganh.models");
 const ChuyenNganhHocPhan = require("../../model/chuyennganhhocphan.model");
@@ -21,6 +22,8 @@ const ThoiKhoaBieu = require("../../model/thoikhoabieu.model");
 const ThoiKhoaBieuSinhVien = require("../../model/thoikhoabieusinhvien.model");
 const TonGiao = require("../../model/tongiao.model");
 const TrangThaiHocTap = require("../../model/trangthaihoctap.model");
+
+const sequelize = ConnectDB().getInstance();
 
 const getDanhSachSinhVien = async (req,res,next) =>{
     try {
@@ -253,7 +256,7 @@ const getDanhSachSinhVien = async (req,res,next) =>{
           .json({ error: { message: "Không tìm thấy sinh viên" } });
       }
       const dsHocPhiSinhVien = await sequelize.query(
-        `select pt.*
+        `select pt.*,sum(hp.so_tien_da_nop) as tong_tien
         from phieu_thu as pt 
         left join hoc_phi as hp on hp.ma_phieu_thu = pt.ma_phieu_thu
         left join hoc_phi_sinh_vien as hpsv on hpsv.ma_hoc_phi = hp.ma_hoc_phi

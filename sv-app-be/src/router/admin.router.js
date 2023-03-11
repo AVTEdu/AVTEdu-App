@@ -1,6 +1,7 @@
 const express = require("express");
 const AdminCreateController = require("../controller/admin.controller/create.controller");
 const AdminGetController = require("../controller/admin.controller/get.controller");
+const AdminUpdateController = require("../controller/admin.controller/update.controller");
 const { verifyAccessToken } = require("../helpers/jwt.service");
 const router = express.Router();
 
@@ -77,4 +78,8 @@ router
 router
   .route("/createThoiKhoaBieuSinhVien")
   .post(verifyAccessToken,AdminCreateController.createThoiKhoaBieuSinhVien);
+//Cần mã sinh viên và danh sách mã học phí đã chọn  
+router
+  .route("/thanhToanCongNoSinhVien")
+  .put(verifyAccessToken,AdminUpdateController.thanhToanCongNoSinhVien);  
 module.exports = router;
