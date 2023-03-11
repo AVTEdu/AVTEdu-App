@@ -290,7 +290,7 @@ const DangKiHocPhan = async (req, res, next) => {
       "ma_hoc_phi_sinh_vien"
     );
     let createHocPhiSinhVien = await HocPhiSinhVien.findOne({
-      where: { ma_hoc_phi: ma_hoc_phi },
+      where: { ma_hoc_phi: ma_hoc_phi+1},
     });
     if (!createHocPhiSinhVien) {
       createHocPhiSinhVien = await HocPhiSinhVien.create({
