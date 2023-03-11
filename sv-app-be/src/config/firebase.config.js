@@ -1,5 +1,5 @@
 // Import the functions you need from the SDKs you need
-const  { initializeApp}= require('firebase/app');
+const { initializeApp } = require('firebase/app');
 const analytics = require('firebase/analytics');
 const { getAuth } = require('firebase/auth');
 // TODO: Add SDKs for Firebase products that you want to use
@@ -23,7 +23,7 @@ const defaultAuth = getAuth(app);
 
 
 module.exports = {
-    defaultAuth,app
+  defaultAuth, app
 };
 
 

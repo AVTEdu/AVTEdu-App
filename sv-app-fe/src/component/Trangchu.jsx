@@ -22,229 +22,221 @@ export const TrangChu = () => {
         setLoading(true);
         setTimeout(() => {
             setLoading(false);
-        }, 650);
+        }, 500);
     }, []);
 
     return (
-        // <div className="trangchu-demo">
-        //     <Sidenavbar />
-        //     <div className="main-content">
-        //         <a href="../dkhp">
-        //             Đăng ký học phần
-        //         </a>
-        //     </div>
-        // </div>
         <>
-            {loading ? (
-                <div className="load-container">
-                    <div>
-                        <h1 style={{ color: "white", marginBottom: "25px", fontSize: "20px", letterSpacing: "2px" }}>Loading...</h1>
-                    </div>
-                    <div className="loading">
-                        <div className="load-line-box">
-                            <div className="load-line"></div>
+            <div className="wrapper">
+                {loading ? (
+                    <div className="load-container">
+                        <div>
+                            <h1 style={{ color: "white", marginBottom: "25px", fontSize: "20px", letterSpacing: "2px" }}>Loading...</h1>
+                        </div>
+                        <div className="loading">
+                            <div className="load-line-box">
+                                <div className="load-line"></div>
+                            </div>
                         </div>
                     </div>
-                </div>
-            ) : (
-                <div className="wrapper">
-                    <Sidenavbar />
-                    <input id="WarningKSMode" name="WarningKSMode" type="hidden" defaultValue={0} />
-                    <div className="main-content main-dashboard">
-                        <input id="phao-hoa-danh-hieu-sinh-vien" name="phao-hoa-danh-hieu-sinh-vien" type="hidden" defaultValue={0} />
-                        <div className="container">
-                            <div className="main-section-content" id="contnet">
-                                <div className="row">
-                                    <div className="col-md-7">
-                                        <div className="box-df profile-ds-info">
-                                            <div className="portlet">
-                                                <div className="portlet-title">
-                                                    <div className="caption">
-                                                        <span className="caption-subject bold" lang="db-thongtinsinhvien">Thông tin sinh viên</span>
-                                                    </div>
-                                                </div>
-                                                <div className="portlet-body">
-                                                    <div className="row">
-                                                        <div className="col-sm-3">
-                                                            <div className="profile-userpic">
-                                                            </div>
-                                                            <div className="text-center">
-                                                                <a href="/thong-tin-sinh-vien.html" className="color-active" lang="db-chitiet-button">Xem chi tiết</a>
-                                                            </div>
-                                                        </div>
-                                                        <div className="col-sm-9">
-                                                            <form className="form-horizontal">
-                                                                <div className="form-body">
-                                                                    <div className="form-group" style={{}}>
-                                                                        <label className="col-xs-6"><span lang="sv-mssv">MSSV</span>: <span className="bold">19507391</span></label>
-                                                                        <label className="col-xs-6"><span lang="sv-lophoc">Lớp học</span>: <span className="bold">DHKTPM15A</span></label>
-                                                                    </div>
-                                                                    <div className="form-group" style={{}}>
-                                                                        <label className="col-xs-6"><span lang="sv-hoten">Họ tên</span>: <span className="bold">Phạm Nguyễn Văn Trường</span></label>
-                                                                        <label className="col-xs-6"><span lang="sv-khoahoc">Khóa học</span>: <span className="bold">2019 - 2020</span></label>
-                                                                    </div>
-                                                                    <div className="form-group" style={{}}>
-                                                                        <label className="col-xs-6"><span lang="sv-gioitinh">Giới tính</span>: <span className="bold">Nam</span></label>
-                                                                        <label className="col-xs-6"><span lang="sv-hedaotao">Bậc đào tạo</span>: <span className="bold">Đại học</span></label>
-                                                                    </div>
-                                                                    <div className="form-group" style={{}}>
-                                                                        <label className="col-xs-6">
-                                                                            <span lang="sv-ngaysinh">Ngày sinh</span>: <span className="bold">15/10/2001</span>
-                                                                        </label>
-                                                                        <label className="col-xs-6"><span lang="sv-loaihinhdt">Loại hình đào tạo</span>: <span className="bold">Chính quy</span></label>
-                                                                    </div>
-                                                                    <div className="form-group" style={{}}>
-                                                                        <label className="col-xs-6"><span lang="sv-noisinh">Nơi sinh</span>: <span className="bold">Thành phố Hồ Chí Minh</span></label>
-                                                                        <label className="col-xs-6"><span lang="sv-nganh">Ngành</span>: <span className="bold">Kỹ thuật phần mềm </span></label>
-                                                                    </div>
-                                                                </div>
-                                                            </form>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div className="col-md-5">
+                ) : (<></>)}
+                <Sidenavbar />
+                <input id="WarningKSMode" name="WarningKSMode" type="hidden" defaultValue={0} />
+                <div className="main-content main-dashboard">
+                    <input id="phao-hoa-danh-hieu-sinh-vien" name="phao-hoa-danh-hieu-sinh-vien" type="hidden" defaultValue={0} />
+                    <div className="container">
+                        <div className="main-section-content" id="contnet">
+                            <div className="row">
+                                <div className="col-md-7">
+                                    <div className="box-df profile-ds-info">
                                         <div className="portlet">
+                                            <div className="portlet-title">
+                                                <div className="caption">
+                                                    <span className="caption-subject bold" lang="db-thongtinsinhvien">Thông tin sinh viên</span>
+                                                </div>
+                                            </div>
                                             <div className="portlet-body">
-                                                <div className="box-menu row">
-                                                    <div className="col-xs-12">
-                                                        <div className="item-box-menu box-df">
-                                                            <h3 className="name" lang="db-nhacnho">Nhắc nhở mới, chưa xem</h3>
-                                                            <div className="desc clearfix">
-                                                                <div className="number" style={{ width: '110px !important' }}>0</div>
-                                                                <div className="text-runing" style={{ width: '100%', height: '51px' }}>
-                                                                </div>
-                                                                <div className="icon-menu text-right" style={{ fontSize: "30px" }}>
-                                                                    <AiIcons.AiOutlineBell />
-                                                                </div>
-                                                            </div>
-                                                            <div className="text-left">
-                                                                <a href="/ghi-chu-nhac-nho-sinh-vien.html" className="color-active" lang="db-chitiet-button">Xem chi tiết</a>
-                                                            </div>
+                                                <div className="row">
+                                                    <div className="col-sm-3">
+                                                        <div className="profile-userpic">
+                                                        </div>
+                                                        <div className="text-center">
+                                                            <a href="/thong-tin-sinh-vien.html" className="color-active" lang="db-chitiet-button">Xem chi tiết</a>
                                                         </div>
                                                     </div>
-                                                    <div className="col-xs-6">
-                                                        <a href="/lich-theo-tuan.html?pLoaiLich=1" className="color-active" title>
-                                                            <div className="item-box-menu box-df">
-                                                                <h3 className="name" lang="db-lichhoctuan">Lịch học trong tuần</h3>
-                                                                <div className="desc clearfix">
-                                                                    <div className="number">0</div>
-                                                                    <div className="icon-menu text-right" style={{ fontSize: "30px" }}>
-                                                                        <RiIcons.RiCalendar2Fill />
-                                                                    </div>
+                                                    <div className="col-sm-9">
+                                                        <form className="form-horizontal">
+                                                            <div className="form-body">
+                                                                <div className="form-group" style={{}}>
+                                                                    <label className="col-xs-6"><span lang="sv-mssv">MSSV</span>: <span className="bold">19507391</span></label>
+                                                                    <label className="col-xs-6"><span lang="sv-lophoc">Lớp học</span>: <span className="bold">DHKTPM15A</span></label>
                                                                 </div>
-                                                                <div className="text-left" lang="db-chitiet-button">
-                                                                    Xem chi tiết
+                                                                <div className="form-group" style={{}}>
+                                                                    <label className="col-xs-6"><span lang="sv-hoten">Họ tên</span>: <span className="bold">Phạm Nguyễn Văn Trường</span></label>
+                                                                    <label className="col-xs-6"><span lang="sv-khoahoc">Khóa học</span>: <span className="bold">2019 - 2020</span></label>
                                                                 </div>
-                                                            </div>
-                                                        </a>
-                                                    </div>
-                                                    <div className="col-xs-6">
-                                                        <a href="/lich-theo-tuan.html?pLoaiLich=2" className="color-active" title>
-                                                            <div className="item-box-menu box-df">
-                                                                <h3 className="name" lang="db-lichthituan">Lịch thi trong tuần</h3>
-                                                                <div className="desc clearfix">
-                                                                    <div className="number">0</div>
-                                                                    <div className="icon-menu text-right" style={{ fontSize: "30px" }}>
-                                                                        <RiIcons.RiCalendarTodoFill />
-                                                                    </div>
+                                                                <div className="form-group" style={{}}>
+                                                                    <label className="col-xs-6"><span lang="sv-gioitinh">Giới tính</span>: <span className="bold">Nam</span></label>
+                                                                    <label className="col-xs-6"><span lang="sv-hedaotao">Bậc đào tạo</span>: <span className="bold">Đại học</span></label>
                                                                 </div>
-                                                                <div className="text-left" lang="db-chitiet-button">
-                                                                    Xem chi tiết
+                                                                <div className="form-group" style={{}}>
+                                                                    <label className="col-xs-6">
+                                                                        <span lang="sv-ngaysinh">Ngày sinh</span>: <span className="bold">15/10/2001</span>
+                                                                    </label>
+                                                                    <label className="col-xs-6"><span lang="sv-loaihinhdt">Loại hình đào tạo</span>: <span className="bold">Chính quy</span></label>
+                                                                </div>
+                                                                <div className="form-group" style={{}}>
+                                                                    <label className="col-xs-6"><span lang="sv-noisinh">Nơi sinh</span>: <span className="bold">Thành phố Hồ Chí Minh</span></label>
+                                                                    <label className="col-xs-6"><span lang="sv-nganh">Ngành</span>: <span className="bold">Kỹ thuật phần mềm </span></label>
                                                                 </div>
                                                             </div>
-                                                        </a>
+                                                        </form>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                                <div className="featured">
-                                    <div className="featured-item">
-                                        <a href="/lich-theo-tuan" title="Lịch theo tuần" langid="menusinhvien-8-title">
-                                            <div className="box-df">
-                                                <div className="icon">
-                                                    <img src={lichTheoTuan} alt="" />
+                                <div className="col-md-5">
+                                    <div className="portlet">
+                                        <div className="portlet-body">
+                                            <div className="box-menu row">
+                                                <div className="col-xs-12">
+                                                    <div className="item-box-menu box-df">
+                                                        <h3 className="name" lang="db-nhacnho">Nhắc nhở mới, chưa xem</h3>
+                                                        <div className="desc clearfix">
+                                                            <div className="number" style={{ width: '110px !important' }}>0</div>
+                                                            <div className="text-runing" style={{ width: '100%', height: '51px' }}>
+                                                            </div>
+                                                            <div className="icon-menu text-right" style={{ fontSize: "30px" }}>
+                                                                <AiIcons.AiOutlineBell />
+                                                            </div>
+                                                        </div>
+                                                        <div className="text-left">
+                                                            <a href="/ghi-chu-nhac-nho-sinh-vien.html" className="color-active" lang="db-chitiet-button">Xem chi tiết</a>
+                                                        </div>
+                                                    </div>
                                                 </div>
-                                                <span lang="menusinhvien-8-vt">Lịch theo tuần</span>
-                                            </div>
-                                        </a>
-                                    </div>
-                                    <div className="featured-item">
-                                        <a href="/ket-qua-hoc-tap.html" title="Kết quả học tập" langid="menusinhvien-7-title">
-                                            <div className="box-df">
-                                                <div className="icon">
-                                                    <img src={ketQuaHocTap} alt="" />
+                                                <div className="col-xs-6">
+                                                    <a href="/lich-theo-tuan.html?pLoaiLich=1" className="color-active" title>
+                                                        <div className="item-box-menu box-df">
+                                                            <h3 className="name" lang="db-lichhoctuan">Lịch học trong tuần</h3>
+                                                            <div className="desc clearfix">
+                                                                <div className="number">0</div>
+                                                                <div className="icon-menu text-right" style={{ fontSize: "30px" }}>
+                                                                    <RiIcons.RiCalendar2Fill />
+                                                                </div>
+                                                            </div>
+                                                            <div className="text-left" lang="db-chitiet-button">
+                                                                Xem chi tiết
+                                                            </div>
+                                                        </div>
+                                                    </a>
                                                 </div>
-                                                <span lang="menusinhvien-7-vt">Kết quả học tập</span>
-                                            </div>
-                                        </a>
-                                    </div>
-                                    <div className="featured-item">
-                                        <a href="/dkhp" title="Đăng ký học phần" langid="menusinhvien-15-title">
-                                            <div className="box-df">
-                                                <div className="icon">
-                                                    <img src={dangKyHocPhan} alt="" />
+                                                <div className="col-xs-6">
+                                                    <a href="/lich-theo-tuan.html?pLoaiLich=2" className="color-active" title>
+                                                        <div className="item-box-menu box-df">
+                                                            <h3 className="name" lang="db-lichthituan">Lịch thi trong tuần</h3>
+                                                            <div className="desc clearfix">
+                                                                <div className="number">0</div>
+                                                                <div className="icon-menu text-right" style={{ fontSize: "30px" }}>
+                                                                    <RiIcons.RiCalendarTodoFill />
+                                                                </div>
+                                                            </div>
+                                                            <div className="text-left" lang="db-chitiet-button">
+                                                                Xem chi tiết
+                                                            </div>
+                                                        </div>
+                                                    </a>
                                                 </div>
-                                                <span lang="menusinhvien-15-vt">Đăng ký học phần</span>
                                             </div>
-                                        </a>
-                                    </div>
-                                    <div className="featured-item">
-                                        <a href="/cong-no-sinh-vien" title="Tra cứu công nợ" langid="menusinhvien-20-title">
-                                            <div className="box-df">
-                                                <div className="icon">
-                                                    <img src={traCuuCongNo} alt="" />
-                                                </div>
-                                                <span lang="menusinhvien-20-vt">Tra cứu công nợ</span>
-                                            </div>
-                                        </a>
-                                    </div>
-                                    <div className="featured-item">
-                                        <a href="/thanh-toan-truc-tuyen" title="Thanh toán trực tuyến" langid="menusinhvien-21-title">
-                                            <div className="box-df">
-                                                <div className="icon">
-                                                    <img src={thanhToanTrucTuyen} alt="" />
-                                                </div>
-                                                <span lang="menusinhvien-21-vt">Thanh toán trực tuyến</span>
-                                            </div>
-                                        </a>
-                                    </div>
-                                    <div className="featured-item">
-                                        <a href="/phieu-thu-tong-hop.html" title="Phiếu thu tổng hợp" langid="menusinhvien-23-title">
-                                            <div className="box-df">
-                                                <div className="icon">
-                                                    <img src={phieuThuTongHop} alt="" />
-                                                </div>
-                                                <span lang="menusinhvien-23-vt">Phiếu thu tổng hợp</span>
-                                            </div>
-                                        </a>
-                                    </div>
-                                    <div className="featured-item">
-                                        <a href="/lich-theo-tien-do.html" title="Lịch theo tiến độ" langid="menusinhvien-9-title">
-                                            <div className="box-df">
-                                                <div className="icon">
-                                                    <img src={lichTheoTienDo} alt="" />
-                                                </div>
-                                                <span lang="menusinhvien-9-vt">Lịch theo tiến độ</span>
-                                            </div>
-                                        </a>
-                                    </div>
-                                    <div className="featured-item">
-                                        <a href="/ghi-chu-nhac-nho-sinh-vien.html" title="Ghi chú nhắc nhở" langid="menusinhvien-6-title">
-                                            <div className="box-df">
-                                                <div className="icon">
-                                                    <img src={nhacNho} alt="" />
-                                                </div>
-                                                <span lang="menusinhvien-6-vt">Nhắc nhở</span>
-                                            </div>
-                                        </a>
+                                        </div>
                                     </div>
                                 </div>
-                                {/* <div className="row chart-custom">
+                            </div>
+                            <div className="featured">
+                                <div className="featured-item">
+                                    <a href="/lich-theo-tuan" title="Lịch theo tuần" langid="menusinhvien-8-title">
+                                        <div className="box-df">
+                                            <div className="icon">
+                                                <img src={lichTheoTuan} alt="" />
+                                            </div>
+                                            <span lang="menusinhvien-8-vt">Lịch theo tuần</span>
+                                        </div>
+                                    </a>
+                                </div>
+                                <div className="featured-item">
+                                    <a href="/ket-qua-hoc-tap.html" title="Kết quả học tập" langid="menusinhvien-7-title">
+                                        <div className="box-df">
+                                            <div className="icon">
+                                                <img src={ketQuaHocTap} alt="" />
+                                            </div>
+                                            <span lang="menusinhvien-7-vt">Kết quả học tập</span>
+                                        </div>
+                                    </a>
+                                </div>
+                                <div className="featured-item">
+                                    <a href="/dkhp" title="Đăng ký học phần" langid="menusinhvien-15-title">
+                                        <div className="box-df">
+                                            <div className="icon">
+                                                <img src={dangKyHocPhan} alt="" />
+                                            </div>
+                                            <span lang="menusinhvien-15-vt">Đăng ký học phần</span>
+                                        </div>
+                                    </a>
+                                </div>
+                                <div className="featured-item">
+                                    <a href="/cong-no-sinh-vien" title="Tra cứu công nợ" langid="menusinhvien-20-title">
+                                        <div className="box-df">
+                                            <div className="icon">
+                                                <img src={traCuuCongNo} alt="" />
+                                            </div>
+                                            <span lang="menusinhvien-20-vt">Tra cứu công nợ</span>
+                                        </div>
+                                    </a>
+                                </div>
+                                <div className="featured-item">
+                                    <a href="/thanh-toan-truc-tuyen" title="Thanh toán trực tuyến" langid="menusinhvien-21-title">
+                                        <div className="box-df">
+                                            <div className="icon">
+                                                <img src={thanhToanTrucTuyen} alt="" />
+                                            </div>
+                                            <span lang="menusinhvien-21-vt">Thanh toán trực tuyến</span>
+                                        </div>
+                                    </a>
+                                </div>
+                                <div className="featured-item">
+                                    <a href="/phieu-thu-tong-hop.html" title="Phiếu thu tổng hợp" langid="menusinhvien-23-title">
+                                        <div className="box-df">
+                                            <div className="icon">
+                                                <img src={phieuThuTongHop} alt="" />
+                                            </div>
+                                            <span lang="menusinhvien-23-vt">Phiếu thu tổng hợp</span>
+                                        </div>
+                                    </a>
+                                </div>
+                                <div className="featured-item">
+                                    <a href="/lich-theo-tien-do.html" title="Lịch theo tiến độ" langid="menusinhvien-9-title">
+                                        <div className="box-df">
+                                            <div className="icon">
+                                                <img src={lichTheoTienDo} alt="" />
+                                            </div>
+                                            <span lang="menusinhvien-9-vt">Lịch theo tiến độ</span>
+                                        </div>
+                                    </a>
+                                </div>
+                                <div className="featured-item">
+                                    <a href="/ghi-chu-nhac-nho-sinh-vien.html" title="Ghi chú nhắc nhở" langid="menusinhvien-6-title">
+                                        <div className="box-df">
+                                            <div className="icon">
+                                                <img src={nhacNho} alt="" />
+                                            </div>
+                                            <span lang="menusinhvien-6-vt">Nhắc nhở</span>
+                                        </div>
+                                    </a>
+                                </div>
+                            </div>
+                            {/* <div className="row chart-custom">
                                         <div className="col-md-5">
                                             <div className="box-df">
                                                 <div className="portlet">
@@ -367,70 +359,69 @@ export const TrangChu = () => {
                                         </div>
                                     </div> */}
 
-                                <div className="row">
-                                    <div className="col-md-12">
-                                        <div className="box-df">
-                                            <div className="portlet">
-                                                <div className="portlet-title">
-                                                    <div className="caption">
-                                                        <span className="caption-subject bold" lang="db-lhp">Lớp học phần</span>
-                                                    </div>
-                                                    <div className="actions">
-                                                        <select className="form-control" id="cboIDDotForLHP" langid="db-hocky-combobox_1" name="cboIDDotForLHP" placeholder="Chọn học kỳ"><option value>Chọn học kỳ</option>
-                                                            <option value={45}>HK3 (2022-2023)</option>
-                                                            <option selected="selected" value={44}>HK2 (2022-2023)</option>
-                                                            <option value={43}>HK1 (2022-2023)</option>
-                                                            <option value={42}>HK3 (2021-2022)</option>
-                                                            <option value={41}>HK2 (2021-2022)</option>
-                                                            <option value={40}>HK1 (2021-2022)</option>
-                                                            <option value={39}>HK3 (2020-2021)</option>
-                                                            <option value={38}>HK2 (2020-2021)</option>
-                                                            <option value={37}>HK1 (2020-2021)</option>
-                                                            <option value={36}>HK3 (2019-2020)</option>
-                                                            <option value={35}>HK2 (2019-2020)</option>
-                                                            <option value={34}>HK1 (2019-2020)</option>
-                                                        </select>
-                                                    </div>
+                            <div className="row">
+                                <div className="col-md-12">
+                                    <div className="box-df">
+                                        <div className="portlet">
+                                            <div className="portlet-title">
+                                                <div className="caption">
+                                                    <span className="caption-subject bold" lang="db-lhp">Lớp học phần</span>
                                                 </div>
-                                                <div className="portlet-body">
-                                                    <div id="box-dashboard-lophocphan-theodot">
-                                                        <div className="panel panel-admin">
-                                                            <div className="panel-heading clearfix">
-                                                                <span>Môn học/học phần</span>
-                                                                <span className="text-center">Số tín chỉ</span>
-                                                            </div>
-                                                            <div className="panel-scroll border-scroll" tabIndex={0} style={{ overflow: 'hidden', outline: 'none' }}>
-                                                                <table className="table table-striped">
-                                                                    <tbody>
-                                                                        <tr>
-                                                                            <td width="80%">
-                                                                                <div>
-                                                                                    <a href="#" className="color-active" data-bg={513935}>
-                                                                                        420300279001
-                                                                                    </a>
-                                                                                </div>
-                                                                                <div className="name">Khóa luận tốt nghiệp</div>
-                                                                            </td>
-                                                                            <td width="20%">
-                                                                                <div className="text-center">5</div>
-                                                                            </td>
-                                                                        </tr>
-                                                                        <tr>
-                                                                            <td width="80%">
-                                                                                <div>
-                                                                                    <a href="#" className="color-active" data-bg={513936}>
-                                                                                        420300309801
-                                                                                    </a>
-                                                                                </div>
-                                                                                <div className="name">Thực tập doanh nghiệp</div>
-                                                                            </td>
-                                                                            <td width="20%">
-                                                                                <div className="text-center">5</div>
-                                                                            </td>
-                                                                        </tr>
-                                                                    </tbody>
-                                                                </table>
-                                                            </div>
+                                                <div className="actions">
+                                                    <select className="form-control" id="cboIDDotForLHP" langid="db-hocky-combobox_1" name="cboIDDotForLHP" placeholder="Chọn học kỳ"><option value>Chọn học kỳ</option>
+                                                        <option value={45}>HK3 (2022-2023)</option>
+                                                        <option selected="selected" value={44}>HK2 (2022-2023)</option>
+                                                        <option value={43}>HK1 (2022-2023)</option>
+                                                        <option value={42}>HK3 (2021-2022)</option>
+                                                        <option value={41}>HK2 (2021-2022)</option>
+                                                        <option value={40}>HK1 (2021-2022)</option>
+                                                        <option value={39}>HK3 (2020-2021)</option>
+                                                        <option value={38}>HK2 (2020-2021)</option>
+                                                        <option value={37}>HK1 (2020-2021)</option>
+                                                        <option value={36}>HK3 (2019-2020)</option>
+                                                        <option value={35}>HK2 (2019-2020)</option>
+                                                        <option value={34}>HK1 (2019-2020)</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div className="portlet-body">
+                                                <div id="box-dashboard-lophocphan-theodot">
+                                                    <div className="panel panel-admin">
+                                                        <div className="panel-heading clearfix">
+                                                            <span>Môn học/học phần</span>
+                                                            <span className="text-center">Số tín chỉ</span>
+                                                        </div>
+                                                        <div className="panel-scroll border-scroll" tabIndex={0} style={{ overflow: 'hidden', outline: 'none' }}>
+                                                            <table className="table table-striped">
+                                                                <tbody>
+                                                                    <tr>
+                                                                        <td width="80%">
+                                                                            <div>
+                                                                                <a href="#" className="color-active" data-bg={513935}>
+                                                                                    420300279001
+                                                                                </a>
+                                                                            </div>
+                                                                            <div className="name">Khóa luận tốt nghiệp</div>
+                                                                        </td>
+                                                                        <td width="20%">
+                                                                            <div className="text-center">5</div>
+                                                                        </td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td width="80%">
+                                                                            <div>
+                                                                                <a href="#" className="color-active" data-bg={513936}>
+                                                                                    420300309801
+                                                                                </a>
+                                                                            </div>
+                                                                            <div className="name">Thực tập doanh nghiệp</div>
+                                                                        </td>
+                                                                        <td width="20%">
+                                                                            <div className="text-center">5</div>
+                                                                        </td>
+                                                                    </tr>
+                                                                </tbody>
+                                                            </table>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -438,13 +429,12 @@ export const TrangChu = () => {
                                         </div>
                                     </div>
                                 </div>
-
                             </div>
+
                         </div>
                     </div>
                 </div>
-
-            )}
+            </div>
         </>
 
 
