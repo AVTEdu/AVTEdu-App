@@ -262,9 +262,13 @@ const getDanhSachSinhVien = async (req,res,next) =>{
         left join hoc_phi_sinh_vien as hpsv on hpsv.ma_hoc_phi = hp.ma_hoc_phi
         left join sinh_vien as sv on hpsv.ma_sinh_vien = sv.ma_sinh_vien
         where sv.ma_sinh_vien = '${ma}'`,
-        { type: QueryTypes.SELECT }
+        { type: QueryTypes.SELECT}
       );
+      if(dsHocPhiSinhVien[0].ma_phieu_thu != null){
       res.status(201).json({ success: true, dsHocPhiSinhVien });
+      }else{
+        res.status(201).json({ success: true});
+      }
     } catch (error) {
       next(error);
     }
