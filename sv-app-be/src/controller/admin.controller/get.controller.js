@@ -27,7 +27,6 @@ const TonGiao = require("../../model/tongiao.model");
 const TrangThaiHocTap = require("../../model/trangthaihoctap.model");
 
 
-const sequelize = ConnectDB().getInstance();
 
 const getDanhSachSinhVien = async (req,res,next) =>{
     try {
@@ -38,7 +37,6 @@ const getDanhSachSinhVien = async (req,res,next) =>{
     }
 
   }
-}
 const getDanhSachAdmin = async (req, res, next) => {
   try {
     const result = await Admin.findAll({ limit: 10 });
@@ -250,18 +248,6 @@ const getDanhSachHocPhiSinhVien = async (req, res, next) => {
     next(error);
   }
 };
-const getDanhSachPhieuThuSinhVien = async (req, res, next) => {
-  try {
-    const { ma } = req.body
-    const foundSinhVien = await SinhVien.findOne({
-      where: { ma_sinh_vien: ma },
-    });
-    if (!foundSinhVien) {
-      return res
-        .status(403)
-        .json({ error: { message: "Không tìm thấy sinh viên" } });
-    }
-  };
   const getDanhSachPhieuThuSinhVien = async (req, res, next) => {
     try {
       const {ma} = req.body
@@ -301,20 +287,24 @@ const getDanhSachHocPhiSinhVienParam = async (req, res, next) => {
     }
     const dsHocPhiSinhVien = await sequelize.query(
       `select hp.*,mh.ten_mon_hoc,hpp.ma_hoc_phan
-                      from sinhviendb.sinh_vien as sv
-                      left join sinhviendb.hoc_phi_sinh_vien as hpsv on sv.ma_sinh_vien = hpsv.ma_sinh_vien
-                      left join sinhviendb.hoc_phi as hp on hp.ma_hoc_phi = hpsv.ma_hoc_phi
-                      left join sinhviendb.lop_hoc_phan as lhp on hp.ma_lop_hoc_phan = lhp.ma_lop_hoc_phan
-                      left join sinhviendb.hoc_phan as hpp on lhp.ma_hoc_phan = hpp.ma_hoc_phan
-                      left join sinhviendb.mon_hoc as mh on hpp.ma_mon_hoc = mh.ma_mon_hoc
-                      where sv.ma_sinh_vien = '${ma}'`,
-      { type: QueryTypes.SELECT }
+                    from sinhviendb.sinh_vien as sv
+                    left join sinhviendb.hoc_phi_sinh_vien as hpsv on sv.ma_sinh_vien = hpsv.ma_sinh_vien
+                    left join sinhviendb.hoc_phi as hp on hp.ma_hoc_phi = hpsv.ma_hoc_phi
+                    left join sinhviendb.lop_hoc_phan as lhp on hp.ma_lop_hoc_phan = lhp.ma_lop_hoc_phan
+                    left join sinhviendb.hoc_phan as hpp on lhp.ma_hoc_phan = hpp.ma_hoc_phan
+                    left join sinhviendb.mon_hoc as mh on hpp.ma_mon_hoc = mh.ma_mon_hoc
+                    where sv.ma_sinh_vien = '${ma}'`,
+    { type: QueryTypes.SELECT }
     );
-    res.status(201).json({ success: true, dsHocPhiSinhVien });
-  } catch (error) {
-    next(error);
-  }
-};
+      if(dsHocPhiSinhVien[0].ma_phieu_thu != null){
+      res.status(201).json({ success: true, dsHocPhiSinhVien });
+      }else{
+        res.status(201).json({ success: true});
+      }
+    } catch (error) {
+      next(error);
+    }
+  };
 const getDanhSachPhieuThuSinhVienParam = async (req, res, next) => {
   try {
     const ma = req.query.ma
