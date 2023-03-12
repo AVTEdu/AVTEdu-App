@@ -641,6 +641,36 @@ const getChiTietPhieuThu = async (req, res, next) => {
     next(error);
   }
 };
+const getChiTietPhieuThuTongHop = async (req, res, next) => {
+  try {
+    const { ma,ma_phieu_thu } = req.body;
+    const getThongTinCoBanSinhVien = await sequelize.query(`select sv.ho_ten_sinh_vien,sv.ma_sinh_vien,sv.nien_khoa ,bdt.ten_bac_dao_tao,pt.don_vi_thu
+    from sinhviendb.sinh_vien as sv
+    left join sinhviendb.bacdaotao as bdt on sv.ma_bac_dao_tao = bdt.ma_bac_dao_tao
+    left join sinhviendb.hoc_phi_sinh_vien as hpsv on hpsv.ma_sinh_vien = sv.ma_sinh_vien
+    left join sinhviendb.hoc_phi as hp on hp.ma_hoc_phi = hpsv.ma_hoc_phi
+    left join sinhviendb.phieu_thu as pt on pt.ma_phieu_thu = hp.ma_phieu_thu
+    where sv.ma_sinh_vien = ${ma} and pt.ma_phieu_thu = ${ma_phieu_thu}
+    group by sv.ho_ten_sinh_vien,sv.ma_sinh_vien,sv.nien_khoa ,bdt.ten_bac_dao_tao,pt.don_vi_thu`, { type: QueryTypes.SELECT });
+
+    const getChiTietPhieuThu =  await sequelize.query(`select hp.ma_hoc_phi,mh.ten_mon_hoc,hk.thu_tu_hoc_ki,hk.nam_hoc_bat_dau,hk.nam_hoc_ket_thuc,hp.so_tien
+    from sinhviendb.sinh_vien as sv
+    left join sinhviendb.bacdaotao as bdt on sv.ma_bac_dao_tao = bdt.ma_bac_dao_tao
+    left join sinhviendb.hoc_phi_sinh_vien as hpsv on hpsv.ma_sinh_vien = sv.ma_sinh_vien
+    left join sinhviendb.hoc_phi as hp on hp.ma_hoc_phi = hpsv.ma_hoc_phi
+    left join sinhviendb.phieu_thu as pt on pt.ma_phieu_thu = hp.ma_phieu_thu
+    left join sinhviendb.lop_hoc_phan as lhp on hp.ma_lop_hoc_phan = lhp.ma_lop_hoc_phan
+    left join sinhviendb.hoc_phan as hpp on hpp.ma_hoc_phan = lhp.ma_hoc_phan
+    left join sinhviendb.mon_hoc as mh on hpp.ma_mon_hoc = mh.ma_mon_hoc
+    left join sinhviendb.hoc_ki as hk on hk.ma_hoc_ki = lhp.ma_hoc_ki
+    where sv.ma_sinh_vien = 19504781 and pt.ma_phieu_thu =8
+    group by hp.ma_hoc_phi,mh.ten_mon_hoc,hk.thu_tu_hoc_ki,hk.nam_hoc_bat_dau,hk.nam_hoc_ket_thuc,hp.so_tien`, { type: QueryTypes.SELECT });
+    responseHanlder.ok(res , {success:true,getThongTinCoBanSinhVien,getChiTietPhieuThu})
+  } catch (error) {
+    console.log(error);
+    next(error);
+  }
+};
 module.exports = {
   getHocKiSinhVien,
   getMonHocSinhVienChuaHoc,
@@ -652,5 +682,6 @@ module.exports = {
   getMonDaDangKiTrongHocKi,
   getThoiKhoaBieuSinhVienTrongMotTuan,
   thanhToanHocPhiTrucTuyen,
-  xacNhanThanhToanTrucTuyen
+  xacNhanThanhToanTrucTuyen,
+  getChiTietPhieuThuTongHop
 };
