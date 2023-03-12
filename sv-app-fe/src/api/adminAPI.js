@@ -9,5 +9,9 @@ const adminAPI = {
         const url = "/admin/getDanhSachPhieuThuSinhVien";
         return axiosClient.put(url, { ma: maSV });
     },
+    thanhToanCongNoSinhVien(maSV, dshp) {
+        const url = "/admin/thanhToanCongNoSinhVien";
+        return axiosClient.put(url, { ma_sinh_vien: maSV, dsHocPhi: dshp })
+    }
 };
 export default adminAPI;

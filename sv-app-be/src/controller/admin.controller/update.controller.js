@@ -64,7 +64,7 @@ const updateSinhVien = async (req, res, next) => {
 const updateBacDaoTao = async (req, res, next) => {
   try {
     const { ma, ten_bac_dao_tao, mota } = req.body;
-    
+
     const result = BacDaoTao.update(
       {
         ten_bac_dao_tao: ten_bac_dao_tao,
@@ -84,41 +84,41 @@ const updateChuyenNganh = async (req, res, next) => {
       where: { ma_chuyen_nganh: `${ma}` },
     });
     if (!foundChuyenNganh) {
-      return responseHandler.badrequest(res ,{success:false , msg:"Không tìm thấy mã chuyên ngành"})
+      return responseHandler.badrequest(res, { success: false, msg: "Không tìm thấy mã chuyên ngành" })
     }
     const result = await ChuyenNganh.update({
       ten_chuyen_nganh: ten,
       so_tin_chi: so_tin_chi,
       ma_khoa: ma_khoa,
       mo_ta: mota,
-    },{where:{ma_chuyen_nganh:`${ma}`}});
-    return responseHandler.ok(res,{success:true , result})
+    }, { where: { ma_chuyen_nganh: `${ma}` } });
+    return responseHandler.ok(res, { success: true, result })
   } catch (error) {
-    return responseHandler.error(res,{success:false , error})
+    return responseHandler.error(res, { success: false, error })
   }
 };
 const updateChuyenNganhHocPhan = async (req, res, next) => {
   try {
-    const {ma,ma_chuyen_nganh,ma_hoc_phan}= req.body;
-    const foundChuyenNganhHocPhan= await ChuyenNganhHocPhan.findOne({ where: { ma:`${ma}` } });
-    if(foundChuyenNganhHocPhan){
-      return responseHandler.badrequest(res,{success:false, msg:"Không tìm thấy mã chuyên ngành học phần"})
+    const { ma, ma_chuyen_nganh, ma_hoc_phan } = req.body;
+    const foundChuyenNganhHocPhan = await ChuyenNganhHocPhan.findOne({ where: { ma: `${ma}` } });
+    if (foundChuyenNganhHocPhan) {
+      return responseHandler.badrequest(res, { success: false, msg: "Không tìm thấy mã chuyên ngành học phần" })
     }
     const result = await ChuyenNganhHocPhan.update({
-      ma_chuyen_nganh:ma_chuyen_nganh,
-      ma_hoc_phan:ma_hoc_phan,
-    },{where:{ ma:`${ma}`}});
-    return responseHandler.ok(res,{success:true , result})
+      ma_chuyen_nganh: ma_chuyen_nganh,
+      ma_hoc_phan: ma_hoc_phan,
+    }, { where: { ma: `${ma}` } });
+    return responseHandler.ok(res, { success: true, result })
   } catch (error) {
-    return responseHandler.error(res,{success:false , error})
+    return responseHandler.error(res, { success: false, error })
   }
 };
 const updateDanToc = async (req, res, next) => {
   try {
-    const {ma_dan_toc,ten_dan_toc,mo_ta} = req.body;
-    const foundDanToc= await DanToc.findOne({ where: { ma_dan_toc:`${ma_dan_toc}` } });
-    if(foundDanToc){
-      return responseHandler.badrequest(res,{success:false, msg:"Không tìm thấy mã dân tộc"})
+    const { ma_dan_toc, ten_dan_toc, mo_ta } = req.body;
+    const foundDanToc = await DanToc.findOne({ where: { ma_dan_toc: `${ma_dan_toc}` } });
+    if (foundDanToc) {
+      return responseHandler.badrequest(res, { success: false, msg: "Không tìm thấy mã dân tộc" })
     }
     return res.status(201).json({ success: true, result });
   } catch (error) {
@@ -273,36 +273,36 @@ const getDanhSachTrangThaiHocTap = async (req, res, next) => {
 const thanhToanCongNoSinhVien = async (req, res, next) => {
   try {
     // const {resultCode,orderId} = req.body
-    const {ma_sinh_vien,dsHocPhi} = req.body;
+    const { ma_sinh_vien, dsHocPhi } = req.body;
     const ma_phieu_thu = await PhieuThu.max("ma_phieu_thu");
-      const createPhieuThu = await PhieuThu.create({
-        ma_phieu_thu: ma_phieu_thu + 1,
-        ten_phieu_thu: "Thanh toán công nợ của" + ma_sinh_vien,
-        ngay_thu: new Date(),
-        ghi_chu: "...",
-        don_vi_thu: "Admin"
-      })
-      await dsHocPhi.map(async (ma_hoc_phi) =>{
+    const createPhieuThu = await PhieuThu.create({
+      ma_phieu_thu: ma_phieu_thu + 1,
+      ten_phieu_thu: "Thanh toán công nợ của" + ma_sinh_vien,
+      ngay_thu: new Date(),
+      ghi_chu: "...",
+      don_vi_thu: "Admin"
+    })
+    await dsHocPhi.map(async (ma_hoc_phi) => {
 
       let updateTienHocPhi = await sequelize.query(`update hoc_phi
       set hoc_phi.so_tien_da_nop = hoc_phi.so_tien 
-      where hoc_phi.ma_hoc_phi = ${ma_hoc_phi}`,{ type: QueryTypes.UPDATE });
+      where hoc_phi.ma_hoc_phi = ${ma_hoc_phi}`, { type: QueryTypes.UPDATE });
 
       let updateCongNo = await sequelize.query(`update hoc_phi
       set hoc_phi.cong_no = 0 
-      where hoc_phi.ma_hoc_phi = ${ma_hoc_phi}`,{ type: QueryTypes.UPDATE }); 
+      where hoc_phi.ma_hoc_phi = ${ma_hoc_phi}`, { type: QueryTypes.UPDATE });
 
       let updateTrangThai = await sequelize.query(`update hoc_phi
-      set hoc_phi.cong_no = 0 
-      where hoc_phi.ma_hoc_phi = ${ma_hoc_phi}`,{ type: QueryTypes.UPDATE }); 
+      set hoc_phi.trang_thai = 0 
+      where hoc_phi.ma_hoc_phi = ${ma_hoc_phi}`, { type: QueryTypes.UPDATE });
 
       let updatePhieuThu = await sequelize.query(`update hoc_phi
-      set hoc_phi.ma_phieu_thu = ${ma_phieu_thu+1}
-      where hoc_phi.ma_hoc_phi = ${ma_hoc_phi}`,{ type: QueryTypes.UPDATE }); 
+      set hoc_phi.ma_phieu_thu = ${ma_phieu_thu + 1}
+      where hoc_phi.ma_hoc_phi = ${ma_hoc_phi}`, { type: QueryTypes.UPDATE });
 
     })
-    const dsUpdateHocPhi = await sequelize.query(`SELECT * FROM sinhviendb.hoc_phi where ma_phieu_thu=${ma_phieu_thu}`,{ type: QueryTypes.SELECT })
-    return responseHandler.ok(res,{ma_sinh_vien,dsUpdateHocPhi});
+    const dsUpdateHocPhi = await sequelize.query(`SELECT * FROM sinhviendb.hoc_phi where ma_phieu_thu=${ma_phieu_thu}`, { type: QueryTypes.SELECT })
+    return responseHandler.ok(res, { ma_sinh_vien, dsUpdateHocPhi });
   } catch (error) {
     next(error)
   }
