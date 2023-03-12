@@ -28,11 +28,26 @@ export const Login = () => {
     const [user, setUser] = useState('');
     const [pwd, setPwd] = useState('');
     const [errMsg, setErrMsg] = useState('');
-    //const [success, setSuccess] = useState(false);
+    var sendDate = (new Date()).getTime();
+    const [loading, setLoading] = useState(false);
+    const [resTime, setResTime] = useState(0);
 
     useEffect(() => {
         userRef.current.focus();
+        setLoading(true);
+        setTimeout(() => {
+            setLoading(false);
+        }, 500)
     }, [])
+    useEffect(() => {
+        if (resTime > 0) {
+            console.log(resTime);
+            setTimeout(() => {
+                setLoading(false);
+            }, resTime)
+        }
+    }, [resTime])
+
 
     useEffect(() => {
         setErrMsg('');
@@ -41,14 +56,16 @@ export const Login = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         //console.log(user, pwd);
-
         try {
+            setLoading(true);
             const res = await signinAPI.signIn({
                 ma: user,
                 password: pwd,
             });
             //console.log(JSON.stringify(res?.data));
             //localStorage.setItem("user", JSON.stringify(res.data));
+            // setLoading(false);
+
             localStorage.setItem("user", JSON.stringify(res.data.sinh_vien.ma_sinh_vien));
             //console.log(JSON.parse(localStorage.getItem("user")?.email));
             const _ma = localStorage.getItem("user");
@@ -62,6 +79,9 @@ export const Login = () => {
             setUser('');
             setPwd('');
             //setSuccess(true);
+            var receiveDate = (new Date()).getTime();
+            var responseTimeMs = receiveDate - sendDate;
+            setResTime(responseTimeMs);
             navigate(from, { replace: true });
         } catch (error) {
             if (!error?.res) {
@@ -83,6 +103,18 @@ export const Login = () => {
                     {errMsg}
                 </p>
                 <div className="container-login100">
+                    {loading ? (
+                        <div className="load-container">
+                            <div>
+                                <h1 style={{ color: "white", marginBottom: "25px", fontSize: "20px", letterSpacing: "2px" }}>Loading...</h1>
+                            </div>
+                            <div className="loading">
+                                <div className="load-line-box">
+                                    <div className="load-line"></div>
+                                </div>
+                            </div>
+                        </div>
+                    ) : (<></>)}
                     <div className="wrap-login100">
                         <form className="login100-form validate-form" onSubmit={handleSubmit}>
                             <input type="hidden" defaultValue="" />
