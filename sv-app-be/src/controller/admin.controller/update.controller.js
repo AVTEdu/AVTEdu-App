@@ -25,6 +25,7 @@ const ThoiKhoaBieuSinhVien = require("../../model/thoikhoabieusinhvien.model");
 const TonGiao = require("../../model/tongiao.model");
 const TrangThaiHocTap = require("../../model/trangthaihoctap.model");
 const HocPhi = require("../../model/hocphi.model");
+const PhieuThu = require("../../model/phieuthu.model");
 
 
 const sequelize = ConnectDB().getInstance();
@@ -281,27 +282,29 @@ const thanhToanCongNoSinhVien = async (req, res, next) => {
       ghi_chu: "...",
       don_vi_thu: "Admin"
     })
-    dsHocPhi.map(ma_hoc_phi => {
-      let updateTienHocPhi = sequelize.query(`update hoc_phi
+    await dsHocPhi.map(async (ma_hoc_phi) => {
+
+      let updateTienHocPhi = await sequelize.query(`update hoc_phi
       set hoc_phi.so_tien_da_nop = hoc_phi.so_tien 
       where hoc_phi.ma_hoc_phi = ${ma_hoc_phi}`, { type: QueryTypes.UPDATE });
 
-      let updateCongNo = sequelize.query(`update hoc_phi
+      let updateCongNo = await sequelize.query(`update hoc_phi
       set hoc_phi.cong_no = 0 
       where hoc_phi.ma_hoc_phi = ${ma_hoc_phi}`, { type: QueryTypes.UPDATE });
 
-      let updateTrangThai = sequelize.query(`update hoc_phi
-      set hoc_phi.cong_no = 0 
+      let updateTrangThai = await sequelize.query(`update hoc_phi
+      set hoc_phi.trang_thai = 0 
       where hoc_phi.ma_hoc_phi = ${ma_hoc_phi}`, { type: QueryTypes.UPDATE });
 
-      let updatePhieuThu = sequelize.query(`update hoc_phi
+      let updatePhieuThu = await sequelize.query(`update hoc_phi
       set hoc_phi.ma_phieu_thu = ${ma_phieu_thu + 1}
       where hoc_phi.ma_hoc_phi = ${ma_hoc_phi}`, { type: QueryTypes.UPDATE });
+
     })
-    let dsUpdateHocPhi = HocPhi.findAll({ where: { ma_phieu_thu: ma_phieu_thu + 1 } })
+    const dsUpdateHocPhi = await sequelize.query(`SELECT * FROM sinhviendb.hoc_phi where ma_phieu_thu=${ma_phieu_thu}`, { type: QueryTypes.SELECT })
     return responseHandler.ok(res, { ma_sinh_vien, dsUpdateHocPhi });
   } catch (error) {
-    responseHandler.error(res, { error })
+    next(error)
   }
 };
 module.exports = {

@@ -24,7 +24,7 @@ export const CongNo = () => {
                 const dsphieuthu_res = await adminAPI.getDanhSachPhieuThuSinhVien(sinhVienSearch);
                 setDsPhieuThu(dsphieuthu_res.data);
                 setDsHocPhi(dshpsv_res.data);
-                setSinhVienSearch("");
+                // setSinhVienSearch("");
             } catch (error) {
                 if (error.response) {
                     if (error.response.status === 403 && sinhVienSearch) {
@@ -38,6 +38,23 @@ export const CongNo = () => {
         };
         activeSinhVienTimDuoc();
     }, [sinhVienSearch])
+
+    const thanhToanCongNo = async () => {
+        try {
+            const res = await adminAPI.thanhToanCongNoSinhVien(sinhVienSearch, isCheck);
+            if (res.status == 200) {
+                alert('Thanh toán cho sinh viên thành công!!!');
+                setIsCheck([]);
+                setIsCheckAll(false);
+                const dshpsv_res = await adminAPI.getDSHocPhiSinhVien(sinhVienSearch);
+                const dsphieuthu_res = await adminAPI.getDanhSachPhieuThuSinhVien(sinhVienSearch);
+                setDsPhieuThu(dsphieuthu_res.data);
+                setDsHocPhi(dshpsv_res.data);
+            }
+        } catch (error) {
+            console.log(error.message);
+        }
+    }
 
 
     const handleSelectAll = (e) => {
@@ -107,16 +124,18 @@ export const CongNo = () => {
                                                                 , lineHeight: "1.1", color: "#566a7f", fontFamily: "var(--bs-body-font-family)"
                                                             }}>Danh sách công nợ</h5>
                                                         </div>
-                                                        <div className="col-md-6">
+                                                        <div className="col-md-4">
 
                                                         </div>
-                                                        <div className="col-md-2">
+                                                        <div className="col-md-4">
                                                             <button type="button" className="btn  btn-success"
                                                                 style={{
-                                                                    display: "inline-block", fontWeight: "400", marginLeft: "52px"
+                                                                    display: "inline-block", fontWeight: "400", float: "right"
                                                                     , lineHeight: "1.53", textAlign: "right", verticalAlign: "right", userSelect: "none"
                                                                     , border: "1px solid transparent", padding: "0.4375rem 1.25rem", fontSize: "0.9375 rme"
-                                                                }}><AiIcons.AiTwotoneEdit /> Cập nhật</button>
+                                                                }}
+                                                                onClick={thanhToanCongNo}
+                                                            ><AiIcons.AiTwotoneEdit /> Thanh toán</button>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -173,23 +192,30 @@ export const CongNo = () => {
                                                                                         <td style={{ border: "2px solid", textAlign: "center", verticalAlign: "middle" }}>{dshp.ma_lop_hoc_phan}</td>
                                                                                         <td style={{ border: "2px solid", textAlign: "center", verticalAlign: "middle" }}>{dshp.noi_dung_thu}</td>
                                                                                         {
-                                                                                            dshp.trang_thai == 1
-                                                                                                ?
-                                                                                                <td style={{ border: "2px solid", textAlign: "center", verticalAlign: "middle" }}>
-                                                                                                    <select className="form-control" style={{ textAlign: "center" }}
-                                                                                                        defaultValue={1}>
-                                                                                                        <option value={0}>Đã thanh toán</option>
-                                                                                                        <option value={1}>Chưa thanh toán</option>
-                                                                                                    </select>
-                                                                                                </td>
-                                                                                                :
-                                                                                                <td style={{ border: "2px solid", textAlign: "center", verticalAlign: "middle" }}>
-                                                                                                    <select className="form-control" style={{ textAlign: "center" }}
-                                                                                                        defaultValue={0}>
-                                                                                                        <option value={0}>Đã thanh toán</option>
-                                                                                                        <option value={1}>Chưa thanh toán</option>
-                                                                                                    </select>
-                                                                                                </td>
+                                                                                            // dshp.trang_thai != 0
+                                                                                            //     ?
+                                                                                            //     <td style={{ border: "2px solid", textAlign: "center", verticalAlign: "middle" }}>
+                                                                                            //         <select className="form-control" style={{ textAlign: "center" }}
+                                                                                            //             defaultValue={1}>
+                                                                                            //             <option value={0}>Đã thanh toán</option>
+                                                                                            //             <option value={1}>Chưa thanh toán</option>
+                                                                                            //         </select>
+                                                                                            //     </td>
+                                                                                            //     :
+                                                                                            //     <td style={{ border: "2px solid", textAlign: "center", verticalAlign: "middle" }}>
+                                                                                            //         <select className="form-control" style={{ textAlign: "center" }}
+                                                                                            //             defaultValue={0}>
+                                                                                            //             <option value={0}>Đã thanh toán</option>
+                                                                                            //             <option value={1}>Chưa thanh toán</option>
+                                                                                            //         </select>
+                                                                                            //     </td>
+                                                                                            <td style={{ border: "2px solid", textAlign: "center", verticalAlign: "middle" }}>
+                                                                                                <select className="form-control" style={{ textAlign: "center" }}
+                                                                                                    value={dshp.trang_thai}>
+                                                                                                    <option value={0}>Đã thanh toán</option>
+                                                                                                    <option value={1}>Chưa thanh toán</option>
+                                                                                                </select>
+                                                                                            </td>
                                                                                         }
                                                                                         <td style={{ border: "2px solid", textAlign: "center", verticalAlign: "middle" }}>{dshp.so_tien}</td>
                                                                                         <td style={{ border: "2px solid", textAlign: "center", verticalAlign: "middle" }}>{dshp.cong_no}</td>
