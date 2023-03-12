@@ -46,5 +46,9 @@ router
 router
   .route("/xacNhanThanhToanTrucTuyen")
   .put(userRequestController.xacNhanThanhToanTrucTuyen);    
+//Cần mã sinh viên và danh sách mã phiếu thu
+router
+  .route("/getChiTietPhieuThuTongHop")
+  .put(userRequestController.getChiTietPhieuThuTongHop);      
 
 module.exports = router;

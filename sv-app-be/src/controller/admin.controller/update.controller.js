@@ -293,7 +293,7 @@ const thanhToanCongNoSinhVien = async (req, res, next) => {
       where hoc_phi.ma_hoc_phi = ${ma_hoc_phi}`,{ type: QueryTypes.UPDATE }); 
 
       let updateTrangThai = await sequelize.query(`update hoc_phi
-      set hoc_phi.cong_no = 0 
+      set hoc_phi.trang_thai= 0 
       where hoc_phi.ma_hoc_phi = ${ma_hoc_phi}`,{ type: QueryTypes.UPDATE }); 
 
       let updatePhieuThu = await sequelize.query(`update hoc_phi
