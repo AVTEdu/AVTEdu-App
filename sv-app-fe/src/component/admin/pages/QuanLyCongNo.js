@@ -8,6 +8,10 @@ export const CongNo = () => {
     const [sinhVienSearch, setSinhVienSearch] = useState('');
     const [dsHocPhi, setDsHocPhi] = useState('');
     const [dsPhieuThu, setDsPhieuThu] = useState('');
+    const [isCheckAll, setIsCheckAll] = useState(false);
+    const [isCheck, setIsCheck] = useState([]);
+
+
     const searchSinhVien = (e) => {
         if (e.key === 'Enter') {
             setSinhVienSearch(e.target.value);
@@ -34,6 +38,28 @@ export const CongNo = () => {
         };
         activeSinhVienTimDuoc();
     }, [sinhVienSearch])
+
+
+    const handleSelectAll = (e) => {
+        setIsCheckAll(!isCheckAll);
+        setIsCheck(dsHocPhi["dsHocPhiSinhVien"].map((dshp) => dshp.ma_hoc_phi));
+        if (isCheckAll) {
+            setIsCheck([]);
+        }
+    };
+
+    const handleClick = (e) => {
+        const { id, checked } = e.target;
+        const idConvert = Number(id);
+        setIsCheck([...isCheck, idConvert]);
+        if (!checked) {
+            setIsCheck(isCheck.filter((item) => item !== idConvert));
+        }
+    };
+
+    console.log(isCheck);
+
+
     return (
         <>
             <Sidebar />
@@ -73,10 +99,28 @@ export const CongNo = () => {
                                         <div className="col-md-2"></div>
                                         <div className="col-md-10">
                                             <div className="card">
-                                                <h5 className="card-header" style={{
-                                                    fontSize: "1.125rem", marginTop: "0", fontWeight: "500"
-                                                    , lineHeight: "1.1", color: "#566a7f", fontFamily: "var(--bs-body-font-family)"
-                                                }}>Danh sách công nợ</h5>
+                                                <div className="card-header">
+                                                    <div className="row">
+                                                        <div className="col-md-4">
+                                                            <h5 style={{
+                                                                fontSize: "1.125rem", marginTop: "0", fontWeight: "500"
+                                                                , lineHeight: "1.1", color: "#566a7f", fontFamily: "var(--bs-body-font-family)"
+                                                            }}>Danh sách công nợ</h5>
+                                                        </div>
+                                                        <div className="col-md-6">
+
+                                                        </div>
+                                                        <div className="col-md-2">
+                                                            <button type="button" className="btn  btn-success"
+                                                                style={{
+                                                                    display: "inline-block", fontWeight: "400", marginLeft: "52px"
+                                                                    , lineHeight: "1.53", textAlign: "right", verticalAlign: "right", userSelect: "none"
+                                                                    , border: "1px solid transparent", padding: "0.4375rem 1.25rem", fontSize: "0.9375 rme"
+                                                                }}><AiIcons.AiTwotoneEdit /> Cập nhật</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
                                                 <div className="card-body">
                                                     <div className="table-responsive text-nowrap">
                                                         <table className="table table-bordered" style={{
@@ -85,6 +129,15 @@ export const CongNo = () => {
                                                         }} >
                                                             <thead>
                                                                 <tr style={{ backgroundColor: "#CADAE1" }}>
+                                                                    <th style={{
+                                                                        border: "2px solid"
+                                                                    }}>
+                                                                        <input type="checkbox"
+                                                                            name="selectAll"
+                                                                            id="selectAll"
+                                                                            onChange={handleSelectAll}
+                                                                            checked={isCheckAll} />
+                                                                    </th>
                                                                     <th style={{ border: "2px solid", textAlign: "center" }}>Mã học phí</th>
                                                                     <th style={{ border: "2px solid", textAlign: "center" }}>Môn học</th>
                                                                     <th style={{ border: "2px solid", textAlign: "center" }}>Mã LHP</th>
@@ -93,7 +146,7 @@ export const CongNo = () => {
                                                                     <th style={{ border: "2px solid", textAlign: "center" }}>Số tiền</th>
                                                                     <th style={{ border: "2px solid", textAlign: "center" }}>Công nợ</th>
                                                                     <th style={{ border: "2px solid", textAlign: "center" }}>Đã nộp</th>
-                                                                    <th style={{ border: "2px solid", textAlign: "center" }}>Thao tác</th>
+                                                                    {/* <th style={{ border: "2px solid", textAlign: "center" }}>Thao tác</th> */}
                                                                 </tr>
                                                             </thead>
                                                             <tbody className="adminClassHover">
@@ -104,7 +157,17 @@ export const CongNo = () => {
                                                                         <>
                                                                             {
                                                                                 dsHocPhi["dsHocPhiSinhVien"].map((dshp) => (
+
                                                                                     <tr>
+                                                                                        <td style={{ border: "2px solid" }}>
+                                                                                            <input key={dshp.ma_hoc_phi}
+                                                                                                type="checkbox"
+                                                                                                id={dshp.ma_hoc_phi}
+                                                                                                onChange={handleClick}
+                                                                                                checked={isCheck.includes(dshp.ma_hoc_phi)}
+
+                                                                                            />
+                                                                                        </td>
                                                                                         <td style={{ border: "2px solid", textAlign: "center", verticalAlign: "middle" }}>{dshp.ma_hoc_phi}</td>
                                                                                         <td style={{ border: "2px solid", textAlign: "center", verticalAlign: "middle" }}>{dshp.ten_mon_hoc}</td>
                                                                                         <td style={{ border: "2px solid", textAlign: "center", verticalAlign: "middle" }}>{dshp.ma_lop_hoc_phan}</td>
@@ -131,14 +194,14 @@ export const CongNo = () => {
                                                                                         <td style={{ border: "2px solid", textAlign: "center", verticalAlign: "middle" }}>{dshp.so_tien}</td>
                                                                                         <td style={{ border: "2px solid", textAlign: "center", verticalAlign: "middle" }}>{dshp.cong_no}</td>
                                                                                         <td style={{ border: "2px solid", textAlign: "center", verticalAlign: "middle" }}>{dshp.so_tien_da_nop}</td>
-                                                                                        <td style={{ border: "2px solid", textAlign: "center", verticalAlign: "middle" }}>
-                                                                                            <button type="button" class="btn  btn-success"
+                                                                                        {/* <td style={{ border: "2px solid", textAlign: "center", verticalAlign: "middle" }}>
+                                                                                            <button type="button" className="btn  btn-success"
                                                                                                 style={{
                                                                                                     display: "inline-block", fontWeight: "400"
                                                                                                     , lineHeight: "1.53", textAlign: "center", verticalAlign: "middle", userSelect: "none"
                                                                                                     , border: "1px solid transparent", padding: "0.4375rem 1.25rem", fontSize: "0.9375 rme"
                                                                                                 }}><AiIcons.AiTwotoneEdit /> Cập nhật</button>
-                                                                                        </td>
+                                                                                        </td> */}
                                                                                     </tr>
                                                                                 ))
                                                                             }
@@ -184,7 +247,7 @@ export const CongNo = () => {
                                                             </thead>
                                                             <tbody className="adminClassHover">
                                                                 {
-                                                                    dsPhieuThu
+                                                                    dsPhieuThu && dsPhieuThu?.dsHocPhiSinhVien.length > 0
                                                                         ?
                                                                         <>
                                                                             {
@@ -195,7 +258,7 @@ export const CongNo = () => {
                                                                                         <td style={{ border: "2px solid", textAlign: "center", verticalAlign: "middle" }}>1860000</td>
                                                                                         <td style={{ border: "2px solid", textAlign: "center", verticalAlign: "middle" }}>{dspth.don_vi_thu}</td>
                                                                                         <td style={{ border: "2px solid", textAlign: "center", verticalAlign: "middle" }}>
-                                                                                            <button type="button" class="btn  btn-primary"
+                                                                                            <button type="button" className="btn  btn-primary"
                                                                                                 style={{
                                                                                                     display: "inline-block", fontWeight: "400"
                                                                                                     , lineHeight: "1.53", userSelect: "none"
