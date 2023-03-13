@@ -27,6 +27,7 @@
     "react-router-dom": "^6.8.1",
     "react-scripts": "5.0.1",
     "react-table-scrollbar": "^0.1.11",
+    "react-to-print": "^2.14.12",
     "reactstrap": "^9.1.6",
     "sass": "^1.57.1",
     "styled-components": "^5.3.6",

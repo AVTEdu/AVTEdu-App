@@ -3,6 +3,7 @@ import Sidebar from "../components/Sidebar";
 import * as AiIcons from "react-icons/ai";
 import { useEffect, useState } from "react";
 import adminAPI from "../../../api/adminAPI";
+import PrintPhieuThu from "../../print/PrintPhieuThu";
 
 export const CongNo = () => {
     const [sinhVienSearch, setSinhVienSearch] = useState('');
@@ -10,6 +11,7 @@ export const CongNo = () => {
     const [dsPhieuThu, setDsPhieuThu] = useState('');
     const [isCheckAll, setIsCheckAll] = useState(false);
     const [isCheck, setIsCheck] = useState([]);
+    const [maPhieuThu, setMaPhieuThu] = useState('');
 
 
     const searchSinhVien = (e) => {
@@ -38,6 +40,11 @@ export const CongNo = () => {
         };
         activeSinhVienTimDuoc();
     }, [sinhVienSearch])
+
+    useEffect(() => {
+        window.localStorage.clear();
+        window.localStorage.setItem('ma', maPhieuThu);
+    }, [maPhieuThu])
 
     const thanhToanCongNo = async () => {
         try {
@@ -278,18 +285,21 @@ export const CongNo = () => {
                                                                         <>
                                                                             {
                                                                                 dsPhieuThu["dsHocPhiSinhVien"].map((dspth) => (
-                                                                                    <tr>
+                                                                                    <tr onClick={(e) => {
+                                                                                        setMaPhieuThu(dspth.ma_phieu_thu)
+                                                                                    }}>
                                                                                         <td style={{ border: "2px solid", textAlign: "center", verticalAlign: "middle" }}>{dspth.ma_phieu_thu}</td>
                                                                                         <td style={{ border: "2px solid", textAlign: "center", verticalAlign: "middle" }}>{dspth.ngay_thu}</td>
                                                                                         <td style={{ border: "2px solid", textAlign: "center", verticalAlign: "middle" }}>1860000</td>
                                                                                         <td style={{ border: "2px solid", textAlign: "center", verticalAlign: "middle" }}>{dspth.don_vi_thu}</td>
                                                                                         <td style={{ border: "2px solid", textAlign: "center", verticalAlign: "middle" }}>
-                                                                                            <button type="button" className="btn  btn-primary"
+                                                                                            {/* <button type="button" className="btn  btn-primary"
                                                                                                 style={{
                                                                                                     display: "inline-block", fontWeight: "400"
                                                                                                     , lineHeight: "1.53", userSelect: "none"
                                                                                                     , border: "1px solid transparent", padding: "0.4375rem 1.25rem", fontSize: "0.9375 rme"
-                                                                                                }}><AiIcons.AiFillPrinter /> Xuất phiếu</button>
+                                                                                                }}><AiIcons.AiFillPrinter /> Xuất phiếu</button> */}
+                                                                                            <PrintPhieuThu />
                                                                                         </td>
                                                                                     </tr>
                                                                                 ))
