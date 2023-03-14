@@ -276,7 +276,7 @@ const DangKiHocPhan = async (req, res, next) => {
         cong_no: so_tien,
         trang_thai: 1,
         ma_lop_hoc_phan: foundLopHocPhan.ma_lop_hoc_phan,
-        ma_phieu_thu:null,
+        ma_phieu_thu: null,
       });
     }
     const updateSVHT = await LopHocPhan.update(
@@ -290,7 +290,7 @@ const DangKiHocPhan = async (req, res, next) => {
       "ma_hoc_phi_sinh_vien"
     );
     let createHocPhiSinhVien = await HocPhiSinhVien.findOne({
-      where: { ma_hoc_phi: ma_hoc_phi+1},
+      where: { ma_hoc_phi: ma_hoc_phi + 1 },
     });
     if (!createHocPhiSinhVien) {
       createHocPhiSinhVien = await HocPhiSinhVien.create({
@@ -579,7 +579,7 @@ const xacNhanThanhToanTrucTuyen = async (req, res, next) => {
         `update hoc_phi
         join hoc_phi_sinh_vien on hoc_phi.ma_hoc_phi = hoc_phi_sinh_vien.ma_hoc_phi
         join sinh_vien on sinh_vien.ma_sinh_vien = hoc_phi_sinh_vien.ma_sinh_vien
-        set hoc_phi.ma_phieu_thu = ${ma_phieu_thu+1}
+        set hoc_phi.ma_phieu_thu = ${ma_phieu_thu + 1}
         where sinh_vien.ma_sinh_vien =${ma_sinh_vien} and hoc_phi.ma_hoc_phi <> 0 `,
         { type: QueryTypes.UPDATE }
 
@@ -643,7 +643,7 @@ const getChiTietPhieuThu = async (req, res, next) => {
 };
 const getChiTietPhieuThuTongHop = async (req, res, next) => {
   try {
-    const { ma,ma_phieu_thu } = req.body;
+    const { ma, ma_phieu_thu } = req.body;
     const getThongTinCoBanSinhVien = await sequelize.query(`select sv.ho_ten_sinh_vien,sv.ma_sinh_vien,sv.nien_khoa ,bdt.ten_bac_dao_tao,pt.don_vi_thu
     from sinhviendb.sinh_vien as sv
     left join sinhviendb.bacdaotao as bdt on sv.ma_bac_dao_tao = bdt.ma_bac_dao_tao
@@ -653,7 +653,7 @@ const getChiTietPhieuThuTongHop = async (req, res, next) => {
     where sv.ma_sinh_vien = ${ma} and pt.ma_phieu_thu = ${ma_phieu_thu}
     group by sv.ho_ten_sinh_vien,sv.ma_sinh_vien,sv.nien_khoa ,bdt.ten_bac_dao_tao,pt.don_vi_thu`, { type: QueryTypes.SELECT });
 
-    const getChiTietPhieuThu =  await sequelize.query(`select hp.ma_hoc_phi,mh.ten_mon_hoc,hk.thu_tu_hoc_ki,hk.nam_hoc_bat_dau,hk.nam_hoc_ket_thuc,hp.so_tien
+    const getChiTietPhieuThu = await sequelize.query(`select hp.ma_hoc_phi,mh.ten_mon_hoc,hk.thu_tu_hoc_ki,hk.nam_hoc_bat_dau,hk.nam_hoc_ket_thuc,hp.so_tien
     from sinhviendb.sinh_vien as sv
     left join sinhviendb.bacdaotao as bdt on sv.ma_bac_dao_tao = bdt.ma_bac_dao_tao
     left join sinhviendb.hoc_phi_sinh_vien as hpsv on hpsv.ma_sinh_vien = sv.ma_sinh_vien
@@ -663,9 +663,9 @@ const getChiTietPhieuThuTongHop = async (req, res, next) => {
     left join sinhviendb.hoc_phan as hpp on hpp.ma_hoc_phan = lhp.ma_hoc_phan
     left join sinhviendb.mon_hoc as mh on hpp.ma_mon_hoc = mh.ma_mon_hoc
     left join sinhviendb.hoc_ki as hk on hk.ma_hoc_ki = lhp.ma_hoc_ki
-    where sv.ma_sinh_vien = 19504781 and pt.ma_phieu_thu =8
+    where sv.ma_sinh_vien = ${ma} and pt.ma_phieu_thu = ${ma_phieu_thu}
     group by hp.ma_hoc_phi,mh.ten_mon_hoc,hk.thu_tu_hoc_ki,hk.nam_hoc_bat_dau,hk.nam_hoc_ket_thuc,hp.so_tien`, { type: QueryTypes.SELECT });
-    responseHanlder.ok(res , {success:true,getThongTinCoBanSinhVien,getChiTietPhieuThu})
+    responseHanlder.ok(res, { success: true, getThongTinCoBanSinhVien, getChiTietPhieuThu })
   } catch (error) {
     console.log(error);
     next(error);

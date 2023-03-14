@@ -12,6 +12,10 @@ const adminAPI = {
     thanhToanCongNoSinhVien(maSV, dshp) {
         const url = "/admin/thanhToanCongNoSinhVien";
         return axiosClient.put(url, { ma_sinh_vien: maSV, dsHocPhi: dshp })
-    }
+    },
+    getChiTietPhieuThuTongHop(maSV, maPhieuThu) {
+        const url = "/userRequest/getChiTietPhieuThuTongHop";
+        return axiosClient.put(url, { ma: maSV, ma_phieu_thu: maPhieuThu })
+    },
 };
 export default adminAPI;
