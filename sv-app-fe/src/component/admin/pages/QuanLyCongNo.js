@@ -1,9 +1,11 @@
 import React from "react";
 import Sidebar from "../components/Sidebar";
 import * as AiIcons from "react-icons/ai";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import adminAPI from "../../../api/adminAPI";
 import PrintPhieuThu from "../../print/PrintPhieuThu";
+import $ from 'jquery';
+
 
 export const CongNo = () => {
     const [sinhVienSearch, setSinhVienSearch] = useState('');
@@ -11,8 +13,11 @@ export const CongNo = () => {
     const [dsPhieuThu, setDsPhieuThu] = useState('');
     const [isCheckAll, setIsCheckAll] = useState(false);
     const [isCheck, setIsCheck] = useState([]);
-    const [maPhieuThu, setMaPhieuThu] = useState('');
-
+    const [maPhieuThu, setMaPhieuThu] = useState(0);
+    const [dsChiTietPhieuThu, setDsChiTietPhieuThu] = useState();
+    var sendDate = (new Date()).getTime();
+    const [resTime, setResTime] = useState(0);
+    let sttKhoanThu = 1;
 
     const searchSinhVien = (e) => {
         if (e.key === 'Enter') {
@@ -42,9 +47,59 @@ export const CongNo = () => {
     }, [sinhVienSearch])
 
     useEffect(() => {
-        window.localStorage.clear();
-        window.localStorage.setItem('ma', maPhieuThu);
+        if (resTime > 0) {
+            console.log(resTime);
+            setTimeout(() => {
+                PrintElem($('#id-phieu-thu'));
+                setMaPhieuThu('');
+            }, resTime + 200)
+        }
+    }, [resTime])
+
+    useEffect(() => {
+        // setTimeout(() => {
+        //     window.localStorage.setItem('ma_phieu_thu', maPhieuThu);
+        //     window.localStorage.setItem('ma', sinhVienSearch);
+        // }, 5000);
+        // localStorage.setItem('ma_phieu_thu', JSON.stringify(maPhieuThu));
+        if (maPhieuThu !== 0) {
+            const activeChiTietPhieuThu = async () => {
+                try {
+                    const res = await adminAPI.getChiTietPhieuThuTongHop(sinhVienSearch, maPhieuThu);
+                    setDsChiTietPhieuThu(res.data);
+                    var receiveDate = (new Date()).getTime();
+                    var responseTimeMs = receiveDate - sendDate;
+                    setResTime(responseTimeMs);
+                    console.log(res.data);
+                } catch (error) {
+                    console.log(error.message);
+                }
+            };
+            activeChiTietPhieuThu();
+            // setTimeout(() => {
+            //     PrintElem($('#id-phieu-thu'));
+            // }, 1000);
+        }
     }, [maPhieuThu])
+    // window.localStorage.setItem('ma_phieu_thu', maPhieuThu);
+    // window.localStorage.setItem('ma', sinhVienSearch);
+
+    function PrintElem(elem) {
+        var mywindow = window.open('', 'PRINT', 'height=720,width=1200');
+        mywindow.document.write('<html><head>')
+        //mywindow.document.write('<link href = "../../../assets/css/style.css" rel = "stylesheet" type="text/css"/>');
+        // mywindow.document.write('<link href = "/Content/ThemeMXH/css/responsive.css" rel = "stylesheet" type="text/css"/>');
+        // mywindow.document.write('<link href = "/Content/ThemeMXH/css/main.css" rel = "stylesheet" type="text/css"/>');
+        mywindow.document.write('</head><body >');
+        mywindow.document.write($(elem).html());
+        mywindow.document.write('</body></html>');
+        mywindow.document.close(); // necessary for IE >= 10
+        mywindow.focus(); // necessary for IE >= 10*/
+        setTimeout(function () { mywindow.print(); mywindow.close(); }, 500);
+
+        return true;
+    }
+
 
     const thanhToanCongNo = async () => {
         try {
@@ -81,7 +136,7 @@ export const CongNo = () => {
         }
     };
 
-    console.log(isCheck);
+    // console.log(isCheck);
 
 
     return (
@@ -285,21 +340,28 @@ export const CongNo = () => {
                                                                         <>
                                                                             {
                                                                                 dsPhieuThu["dsHocPhiSinhVien"].map((dspth) => (
-                                                                                    <tr onClick={(e) => {
-                                                                                        setMaPhieuThu(dspth.ma_phieu_thu)
-                                                                                    }}>
+                                                                                    <tr
+                                                                                    // onClick={(e) => {
+                                                                                    //     setMaPhieuThu(dspth.ma_phieu_thu)
+                                                                                    // }}
+                                                                                    >
                                                                                         <td style={{ border: "2px solid", textAlign: "center", verticalAlign: "middle" }}>{dspth.ma_phieu_thu}</td>
                                                                                         <td style={{ border: "2px solid", textAlign: "center", verticalAlign: "middle" }}>{dspth.ngay_thu}</td>
                                                                                         <td style={{ border: "2px solid", textAlign: "center", verticalAlign: "middle" }}>1860000</td>
                                                                                         <td style={{ border: "2px solid", textAlign: "center", verticalAlign: "middle" }}>{dspth.don_vi_thu}</td>
-                                                                                        <td style={{ border: "2px solid", textAlign: "center", verticalAlign: "middle" }}>
-                                                                                            {/* <button type="button" className="btn  btn-primary"
+                                                                                        <td style={{ border: "2px solid", textAlign: "center", verticalAlign: "middle" }}
+                                                                                        >
+                                                                                            <button type="button" className="btn  btn-primary"
                                                                                                 style={{
                                                                                                     display: "inline-block", fontWeight: "400"
                                                                                                     , lineHeight: "1.53", userSelect: "none"
                                                                                                     , border: "1px solid transparent", padding: "0.4375rem 1.25rem", fontSize: "0.9375 rme"
-                                                                                                }}><AiIcons.AiFillPrinter /> Xuất phiếu</button> */}
-                                                                                            <PrintPhieuThu />
+                                                                                                }}
+                                                                                                onClick={(e) => {
+                                                                                                    setMaPhieuThu(dspth.ma_phieu_thu)
+                                                                                                }}
+                                                                                            // onClick={(e) => { PrintElem($('#id-phieu-thu')) }}
+                                                                                            ><AiIcons.AiFillPrinter /> Xuất phiếu</button>
                                                                                         </td>
                                                                                     </tr>
                                                                                 ))
@@ -327,6 +389,192 @@ export const CongNo = () => {
                     </div>
                 </div>
             </div>
+
+            {
+                dsChiTietPhieuThu
+                    ?
+                    <div id="id-phieu-thu"
+                        style={{ display: 'none' }}
+                    >
+                        <table style={{ width: '95%', fontFamily: '"Times New Roman"' }}>
+                            <tbody>
+                                <tr>
+                                    <td style={{ paddingTop: '20px' }}>
+                                        <table style={{ width: '100%' }}>
+                                            <tbody><tr>
+                                                <td style={{ width: '60px' }}>
+                                                    <img />
+                                                </td>
+                                                <td style={{ textAlign: 'center', width: '300px', fontWeight: 'bolder', fontSize: 'smaller' }}>
+                                                    <p style={{ marginTop: '0pt', marginBottom: '0pt', marginLeft: '0in', textAlign: 'center' }}><span style={{ language: 'en-US' }}><span style={{ unicodeBidi: 'embed' }}><span style={{ fontSize: '11.0pt' }}><span style={{ fontFamily: '"Times New Roman"' }}><span style={{ color: 'black' }}><span style={{ language: 'en-US' }}><span style={{ fontWeight: 'bold' }}><span style={{ fontStyle: 'normal' }}><span style={{ alignItems: 'center' }}>BỘ CÔNG THƯƠNG</span></span></span></span></span></span></span></span></span></p>
+                                                    <p style={{ marginTop: '0pt', marginBottom: '0pt', marginLeft: '0in', textAlign: 'center' }}><span style={{ language: 'en-US' }}><span style={{ unicodeBidi: 'embed' }}><span style={{ fontSize: '11.0pt' }}><span style={{ fontFamily: '"Times New Roman"' }}><span style={{ color: 'black' }}><span style={{ language: 'en-US' }}><span style={{ fontWeight: 'bold' }}><span style={{ fontStyle: 'normal' }}><span style={{ alignItems: 'center' }}>TRƯỜNG ĐẠI HỌC CÔNG NGHIỆP TP.HCM</span></span></span></span></span></span></span></span></span></p>
+                                                    <p>--------------------------</p>
+                                                </td>
+                                                <td style={{ width: 'auto' }} />
+                                                <td style={{ textAlign: 'center', width: '350px', fontWeight: 'bolder', fontSize: 'smaller' }}>
+                                                    CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM<br />
+                                                    Độc Lập - Tự Do - Hạnh Phúc<br />
+                                                    ---------------------------------
+                                                </td>
+                                            </tr>
+                                            </tbody></table>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style={{ textAlign: 'center', fontSize: '26px', fontWeight: 'bolder', height: '40px' }}>
+                                        HÓA ĐƠN BÁN HÀNG
+                                        <br />
+                                        (THU TIỀN HỌC PHÍ)
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style={{ textAlign: 'center', height: '30px' }}>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style={{ paddingLeft: '10px' }}>
+                                        <table style={{ width: '100%', fontWeight: 'bold' }}>
+                                            <tbody>
+                                                {
+
+
+                                                    dsChiTietPhieuThu?.data?.getThongTinCoBanSinhVien
+                                                        .map((item, i) => (
+                                                            <><tr key={i}>
+                                                                <td style={{ width: '300px', paddingBottom: '5px' }}>Mã sinh viên: {item.ma_sinh_vien}</td>
+                                                                <td style={{ width: '400px' }}>Họ tên: {item.ho_ten_sinh_vien}</td>
+                                                                {/* <td style={{ width: '200px' }}>Lớp học: DHKTPM15A </td> */}
+                                                            </tr><tr>
+                                                                    <td style={{ width: '300px', paddingBottom: '5px' }}>Hệ đào tạo: Đại học </td>
+                                                                    <td style={{ width: '400px' }}>Khoa: Khoa Công nghệ Thông tin </td>
+                                                                </tr>
+                                                                {/* <tr>
+                                                            <td style={{ width: '300px', paddingBottom: '5px' }}>Mã phiếu thu: 0097946 </td>
+                                                            <td style={{ width: '400px' }}>Hình thức thanh toán:  </td>
+                                                        </tr> */}
+                                                            </>
+                                                        ))
+                                                }
+                                            </tbody></table>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style={{ paddingLeft: '10px', paddingTop: '15px', paddingBottom: '5px' }}>
+                                        Các khoản đã nộp:
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style={{ paddingLeft: '10px' }}>
+                                        <table className="table-custom table table-bordered text-center no-footer dtr-inline" width="100%" role="grid">
+                                            <thead>
+                                                <tr role="row">
+                                                    <th className="sorting_disabled"
+                                                        style={{
+                                                            borderTop: "0", borderBottom: "0", verticalAlign: "middle", textAlign: "center"
+                                                            , padding: "16px 5px", border: "1px solid #ddd"
+                                                        }}>STT</th>
+                                                    <th className="sorting_disabled" style={{
+                                                        borderTop: "0", borderBottom: "0", verticalAlign: "middle", textAlign: "center"
+                                                        , padding: "16px 5px", border: "1px solid #ddd"
+                                                    }}>Mã khoản thu</th>
+                                                    <th className="sorting_disabled" style={{
+                                                        borderTop: "0", borderBottom: "0", verticalAlign: "middle", textAlign: "center"
+                                                        , padding: "16px 5px", border: "1px solid #ddd"
+                                                    }}>Tên khoản thu</th>
+                                                    <th className="sorting_disabled" style={{
+                                                        borderTop: "0", borderBottom: "0", verticalAlign: "middle", textAlign: "center"
+                                                        , padding: "16px 5px", border: "1px solid #ddd"
+                                                    }}>Học kỳ</th>
+                                                    <th className="sorting_disabled" style={{
+                                                        borderTop: "0", borderBottom: "0", verticalAlign: "middle", textAlign: "center"
+                                                        , padding: "16px 5px", border: "1px solid #ddd"
+                                                    }}>Thành tiền</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {
+
+                                                    dsChiTietPhieuThu?.data?.getChiTietPhieuThu
+                                                        .map((item, i) => (
+                                                            <tr key={i}>
+                                                                <td
+                                                                    style={{
+                                                                        border: "1px solid #ddd", lineHeight: "1.42857143"
+                                                                        , textAlign: "center", borderRadius: "0"
+                                                                    }}
+                                                                >{sttKhoanThu++}</td>
+                                                                <td
+                                                                    style={{
+                                                                        border: "1px solid #ddd", lineHeight: "1.42857143"
+                                                                        , textAlign: "center", borderRadius: "0"
+                                                                    }}
+                                                                >{item.ma_hoc_phi}</td>
+                                                                <td className="text-left"
+                                                                    style={{
+                                                                        border: "1px solid #ddd", lineHeight: "1.42857143"
+                                                                        , textAlign: "left", borderRadius: "0"
+                                                                    }}
+                                                                >{item.ten_mon_hoc}</td>
+                                                                <td
+                                                                    style={{
+                                                                        border: "1px solid #ddd", lineHeight: "1.42857143"
+                                                                        , textAlign: "center", borderRadius: "0"
+                                                                    }}
+                                                                >{item.nam_hoc_bat_dau}-{item.nam_hoc_ket_thuc}</td>
+                                                                <td className="text-right"
+                                                                    style={{
+                                                                        border: "1px solid #ddd", lineHeight: "1.42857143"
+                                                                        , textAlign: "right", borderRadius: "0"
+                                                                    }}
+                                                                >
+                                                                    <span>{item.so_tien}</span>
+                                                                </td>
+                                                            </tr>
+                                                        ))
+                                                }
+                                            </tbody>
+                                        </table>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style={{ textAlign: 'right', paddingTop: '5px' }}>
+                                        <div style={{ fontWeight: 'bold' }}>
+                                            Tổng cộng:                                  <span>Chưa cộng</span>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style={{ textAlign: 'left', paddingLeft: '10px' }}>
+                                        <div style={{ fontWeight: 'bold' }}>Số tiền bằng chữ: <span>Chưa có</span></div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <table style={{ width: '100%', textAlign: 'center' }}>
+                                            <tbody><tr>
+                                                <td />
+                                                <td style={{ width: '300px' }} />
+                                            </tr>
+                                                <tr>
+                                                    <td />
+                                                    <td style={{ width: '300px', fontWeight: 'bold', paddingTop: '25px' }}>
+                                                        Người thu<br />
+                                                        (Ký, ghi rõ họ tên)
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td />
+                                                    <td style={{ width: '300px', paddingTop: '40px', fontWeight: 'bold' }}>
+                                                    </td>
+                                                </tr>
+                                            </tbody></table>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    : <></>
+            }
         </>
     )
 };
