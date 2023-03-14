@@ -6,7 +6,10 @@ const COLORS = {
     light: '#E5E5E5',
     grey: '#908e8c',
     blue:'#66B2FF',
-    red:'#FF3333'
+    red:'#FF3333',
+    dateheaderbar:'#d6e7f9',
+    lichhoc:"#d9f9f6",
+    lichthi:"feecde",
   };
   
   export default COLORS;
