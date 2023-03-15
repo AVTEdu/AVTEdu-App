@@ -20,7 +20,7 @@ export default function ThanhToanTrucTuyen() {
                 setLoading(false);
             }, resTimeDshp + resTimeMoMo)
         }
-    }, [resTimeDshp])
+    }, [resTimeDshp, resTimeMoMo])
 
     useEffect(() => {
         const activeHocPhi = async () => {
@@ -29,8 +29,10 @@ export default function ThanhToanTrucTuyen() {
                 const res = await dkhpAPI.getDanhSachHocPhi();
 
                 setDsHocPhi(res.data);
+
                 var receiveDate = (new Date()).getTime();
                 var responseTimeMs = receiveDate - sendDate;
+                console.log(responseTimeMs);
                 setResTimeDshp(responseTimeMs);
             } catch (error) {
                 console.log(error.message);
