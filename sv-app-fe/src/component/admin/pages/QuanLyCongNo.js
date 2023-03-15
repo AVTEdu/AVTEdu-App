@@ -18,6 +18,7 @@ export const CongNo = () => {
     var sendDate = (new Date()).getTime();
     const [resTime, setResTime] = useState(0);
     let sttKhoanThu = 1;
+    let tongTien = 0;
 
     const searchSinhVien = (e) => {
         if (e.key === 'Enter') {
@@ -529,6 +530,9 @@ export const CongNo = () => {
                                                                 >
                                                                     <span>{item.so_tien}</span>
                                                                 </td>
+                                                                <p hidden>
+                                                                    {tongTien = item.so_tien + tongTien};
+                                                                </p>
                                                             </tr>
                                                         ))
                                                 }
@@ -539,7 +543,7 @@ export const CongNo = () => {
                                 <tr>
                                     <td style={{ textAlign: 'right', paddingTop: '5px' }}>
                                         <div style={{ fontWeight: 'bold' }}>
-                                            Tổng cộng:                                  <span>Chưa cộng</span>
+                                            Tổng cộng:                                  <span>{tongTien}</span>
                                         </div>
                                     </td>
                                 </tr>

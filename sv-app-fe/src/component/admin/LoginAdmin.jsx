@@ -80,7 +80,7 @@ export const LoginAdmin = () => {
                                             <div className="card-body">
 
                                                 <div className="app-brand justify-content-center">
-                                                    <a className="app-brand-link gap-2" href="index.html">
+                                                    <a className="app-brand-link gap-2" href="/">
                                                         <span className="app-brand-text text-body fw-bolder"
                                                             style={{ fontSize: "1.5rem" }}>AVTEdu</span>
                                                     </a>

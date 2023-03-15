@@ -164,9 +164,14 @@ export const Login = () => {
                             <div className="text-center p-t-35 p-b-20 uselocalaccount">
                                 <a className="txt2" id="" href="../AdminLogin">
 
-                                    <span>Nhấn vào đây để đăng nhập dưới quyền quản trị viên</span>
+                                    <span>Trang dành cho giáo vụ</span>
                                 </a>
+                            </div>
+                            <div className="text-center p-t-35 p-b-20 uselocalaccount">
+                                <a className="txt2" id="" href="../GiangVienLogin">
 
+                                    <span>Trang dành cho giảng viên</span>
+                                </a>
                             </div>
                         </form>            <div className="login100-more" style={{ backgroundImage: `url(${bg})` }} />
                     </div>
