@@ -2,7 +2,7 @@ import React from "react";
 import Sidebar from "../components/Sidebar";
 import * as AiIcons from "react-icons/ai";
 // import * as Corecss from "../../../assets/vendor/css/core.css";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef, useLayoutEffect } from "react";
 import Popup from "../../Popup";
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
@@ -11,12 +11,71 @@ import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import TreeView from '@mui/lab/TreeView';
 import TreeItem from '@mui/lab/TreeItem';
 import * as xlsx from "xlsx";
+import PaginationComponent from "../components/paginationComponent";
+import PopupNotify from "../../PopupNotify";
 
 
 export const DiemDanhTheoLHP = () => {
     const [openPopup, setOpenPopup] = useState(false);
     const [expanded, setExpanded] = React.useState([]);
     const [selected, setSelected] = React.useState([]);
+    const [stateDsImport, setStateDsImport] = useState(
+        [
+            // {
+            //     ho_ten_sinh_vien: '',
+            //     nien_khoa: ''
+            // }
+        ]
+    );
+
+    var listImport = [
+        {
+        }
+    ];
+    const [popupNotify, setPopupNotify] = useState({
+        title: '',
+        mes: '',
+        isLoading: false
+    })
+    const [currentPage, setCurrentPage] = useState(1);
+    const [dataPerPage, setDataPerPage] = useState(10);
+    const lastIndex = currentPage * dataPerPage;
+    const firstIndex = lastIndex - dataPerPage;
+    const currentData = stateDsImport.slice(firstIndex, lastIndex);
+    const paginate = (pageNumber) => setCurrentPage(pageNumber);
+    const nextPage = currentPage + 1;
+    const prevPage = currentPage - 1;
+
+    const [firstState, setFirstSate] = useState(false);
+    useEffect(() => {
+        if (firstState) {
+            if (stateDsImport && stateDsImport.length === 0) {
+                setPopupNotify({
+                    title: 'Thông báo',
+                    mes: 'Mẫu import sai định dạng !!!',
+                    isLoading: true
+                });
+            }
+        }
+        else {
+            setFirstSate(true);
+        }
+
+        // if (stateDsImport && stateDsImport.length === 0 && firstUpdate.current === true) {
+        //     console.log('Import sai mẫu');
+        // }
+
+    }, [stateDsImport])
+
+    function handleNotify(choose) {
+        if (choose) {
+            setPopupNotify({
+                title: '',
+                mes: '',
+                isLoading: false
+            });
+        }
+    }
 
     const readUploadFile = (e) => {
         e.preventDefault();
@@ -40,12 +99,68 @@ export const DiemDanhTheoLHP = () => {
                 //     console.log(json[i].__EMPTY_4);
                 //     console.log(json[i].__EMPTY_5);
                 // }
-                console.log(json);
+
+                // console.log(json);
+
+                // for (let i = 0; i < json.length; i++) {
+                //     setDsImport({
+                //         ...dsImport,
+                //         ho_ten_sinh_vien: json[i]["ho_ten_sinh_vien"],
+                //         nien_khoa: json[i]["nien_khoa"]
+                //     })
+
+                //     console.log(json[i]);
+                // }
+
+
+                // listImport.shift();
+                // json.map(item => {
+                //     if (item !== null || item.ho_ten_sinh_vien !== '') {
+                //         listImport.push({
+                //             ma_sinh_vien: item["Mã sinh viên"],
+                //             ho_ten_sinh_vien: item.ho_ten_sinh_vien,
+                //             nien_khoa: item.nien_khoa
+                //         })
+                //     }
+                // })
+                // setStateDsImport(listImport);
+
+                //console.log(json[9].__EMPTY);
+                listImport.shift();
+                for (let i = 8; i < json.length; i++) {
+                    listImport.push({
+                        stt: json[i].__EMPTY,
+                        ma_sinh_vien: json[i].__EMPTY_1,
+                        ho: json[i].__EMPTY_2,
+                        ten: json[i].__EMPTY_3,
+                        gioi_tinh: json[i].__EMPTY_4,
+                        ngay_sinh: json[i].__EMPTY_5,
+                        st_tuan_1: json[i].__EMPTY_7,
+                        st_tuan_2: json[i].__EMPTY_10,
+                        st_tuan_3: json[i].__EMPTY_13,
+                        st_tuan_4: json[i].__EMPTY_16,
+                        st_tuan_5: json[i].__EMPTY_19,
+                        st_tuan_6: json[i].__EMPTY_22,
+                        st_tuan_7: json[i].__EMPTY_25,
+                        st_tuan_8: json[i].__EMPTY_28,
+                        st_tuan_9: json[i].__EMPTY_31,
+                        st_tuan_10: json[i].__EMPTY_34,
+                        vang_co_phep: json[i].__EMPTY_36,
+                        vang_ko_phep: json[i].__EMPTY_37,
+                        tong_so_tiet: json[i].__EMPTY_38,
+                        phan_tram_vang: json[i].__EMPTY_39
+                    })
+                }
+
+                setStateDsImport(listImport);
+
 
             };
             reader.readAsArrayBuffer(e.target.files[0]);
         }
     }
+
+    console.log(stateDsImport);
 
     const handleToggle = (event, nodeIds) => {
         setExpanded(nodeIds);
@@ -69,9 +184,9 @@ export const DiemDanhTheoLHP = () => {
     return (
         <div>
             <Sidebar />
-            <div className="qlhp" style={{ backgroundColor: "#E7EEF1", display: "grid" }}>
-                <div class="layout-wrapper layout-content-navbar">
-                    <div class="layout-container">
+            <div className="qlhp" style={{ backgroundColor: "#E7EEF1" }}>
+                <div className="layout-wrapper layout-content-navbar">
+                    <div className="layout-container">
                         <div className="layout-page">
 
                             {/* Content wrapper */}
@@ -81,7 +196,7 @@ export const DiemDanhTheoLHP = () => {
                                     <div className="row">
                                         <div className="col-md-2"></div>
                                         <div className="col-md-10">
-                                            <div className="card-gv-header">
+                                            <div className="card-gv-header grid-bg">
                                                 <h5 style={{
                                                     display: "inline-flex",
                                                     position: "relative",
@@ -102,7 +217,7 @@ export const DiemDanhTheoLHP = () => {
                                                 <div className="card-body">
                                                     <div className="demo-inline-spacing">
                                                         <div className="col-md-3">
-                                                            <label for="exampleFormControlSelect1" class="form-label">Đợt</label>
+                                                            <label htmlFor="exampleFormControlSelect1" className="form-label">Đợt</label>
                                                             <select className="form-select" id="exampleFormControlSelect1" aria-label="Default select example">
                                                                 <option selected>Chọn đợt</option>
                                                                 <option value="1">HK2 (2022 - 2023)</option>
@@ -111,7 +226,7 @@ export const DiemDanhTheoLHP = () => {
                                                             </select>
                                                         </div>
                                                         <div className="col-md-3">
-                                                            <label for="defaultFormControlInput" class="form-label">Môn học</label>
+                                                            <label htmlFor="defaultFormControlInput" className="form-label">Môn học</label>
                                                             <input
                                                                 type="text"
                                                                 className="form-control"
@@ -120,7 +235,7 @@ export const DiemDanhTheoLHP = () => {
                                                             />
                                                         </div>
                                                         <div className="col-md-3">
-                                                            <label for="defaultFormControlInput" class="form-label">Mã lớp học phần</label>
+                                                            <label htmlFor="defaultFormControlInput" className="form-label">Mã lớp học phần</label>
                                                             <input
                                                                 type="text"
                                                                 className="form-control"
@@ -154,7 +269,7 @@ export const DiemDanhTheoLHP = () => {
                                     <div>
                                         <div className="col-md-2"></div>
                                         <div className="col-md-3">
-                                            <div className="card-gv" >
+                                            <div className="card-gv grid-bg" >
                                                 <Box sx={{
                                                     height: 270, flexGrow: 1,
                                                     overflowY: 'auto', overflowX: 'auto'
@@ -220,7 +335,7 @@ export const DiemDanhTheoLHP = () => {
                                         <div className="col-md-7">
                                             <div className="row">
                                                 <div className="col-md-12">
-                                                    <div className="card-gv">
+                                                    <div className="card-gv grid-bg">
                                                         <div className="mb-3">
                                                             <div className="demo-inline-spacing" style={{ marginRight: "17px" }} >
 
@@ -231,7 +346,7 @@ export const DiemDanhTheoLHP = () => {
                                                                         , border: "1px solid transparent", padding: "0.4375rem 1.25rem", fontSize: "0.9375 rme",
                                                                     }}
                                                                     onClick={() => { setOpenPopup(true); }}
-                                                                > <AiIcons.AiFillPlusSquare /> Xuất file điểm danh tổng hợp</button>
+                                                                > <AiIcons.AiOutlineExport /> Xuất file điểm danh tổng hợp</button>
                                                                 {/* <button type="button" className="btn btn-warning"
                                                                     style={{
                                                                         float: "right", display: "inline-block", fontWeight: "400"
@@ -254,7 +369,7 @@ export const DiemDanhTheoLHP = () => {
                                                                         , border: "1px solid transparent", padding: "0.4375rem 1.25rem", fontSize: "0.9375 rme"
                                                                     }}
                                                                 >
-                                                                    <AiIcons.AiFillDelete />
+                                                                    <AiIcons.AiOutlineImport />
                                                                     Import điểm danh</label>
                                                                 <input
                                                                     type="file"
@@ -265,8 +380,9 @@ export const DiemDanhTheoLHP = () => {
                                                                 />
                                                             </div>
                                                         </div>
-                                                        <div className="card-body">
-                                                            <div className="table-responsive text-nowrap">
+                                                        <div className="card-body" style={{ display: "block", height: "600", overflowY: "auto", maxHeight: "600" }}>
+                                                            <div className="table-responsive text-nowrap"
+                                                            >
                                                                 {/* <table className="table table-bordered" style={{
                                                                     borderColor: "#d9dee3", color: "#697a8d",
                                                                     border: "2px solid", backgroundColor: "#fff"
@@ -309,7 +425,8 @@ export const DiemDanhTheoLHP = () => {
 
                                                                     </tbody>
                                                                 </table> */}
-                                                                <table className="table-custom table table-bordered text-center no-footer dtr-inline" width="100%" role="grid">
+                                                                <table className="table-custom table table-bordered text-center no-footer dtr-inline"
+                                                                    width="100%" role="grid">
                                                                     <thead>
                                                                         <tr role="row">
                                                                             <th className="sorting_disabled" rowSpan={2} >STT</th>
@@ -377,7 +494,7 @@ export const DiemDanhTheoLHP = () => {
                                                                         </tr>
                                                                     </thead>
                                                                     <tbody>
-                                                                        <tr className role="row">
+                                                                        {/* <tr className role="row">
                                                                             <td>1</td>
                                                                             <td>19516131</td>
                                                                             <td className="text-left">Nguyễn Khoa</td>
@@ -418,9 +535,56 @@ export const DiemDanhTheoLHP = () => {
                                                                             <td>0</td>
                                                                             <td>60</td>
                                                                             <td>0%</td>
+                                                                        </tr> */}
+                                                                        {
+                                                                            stateDsImport && stateDsImport.length > 0 ?
+                                                                                <>
+                                                                                    {
+                                                                                        currentData.map((ds) =>
+                                                                                            <tr className role="row">
+                                                                                                <td>{ds.stt}</td>
+                                                                                                <td>{ds.ma_sinh_vien}</td>
+                                                                                                <td className="text-left">{ds.ho}</td>
+                                                                                                <td className="text-left">{ds.ten}</td>
+                                                                                                <td >{ds.gioi_tinh}</td>
+                                                                                                <td>{ds.ngay_sinh}</td>
+                                                                                                <td></td>
+                                                                                                <td>{ds.st_tuan_1}</td>
+                                                                                                <td></td>
+                                                                                                <td></td>
+                                                                                                <td>{ds.st_tuan_2}</td>
+                                                                                                <td></td>
+                                                                                                <td></td>
+                                                                                                <td>{ds.st_tuan_3}</td>
+                                                                                                <td></td>
+                                                                                                <td></td>
+                                                                                                <td>{ds.st_tuan_4}</td>
+                                                                                                <td></td>
+                                                                                                <td></td>
+                                                                                                <td>{ds.st_tuan_5}</td>
+                                                                                                <td></td>
+                                                                                                <td></td>
+                                                                                                <td>{ds.st_tuan_6}</td>
+                                                                                                <td></td>
+                                                                                                <td></td>
+                                                                                                <td>{ds.st_tuan_7}</td>
+                                                                                                <td></td>
+                                                                                                <td></td>
+                                                                                                <td>{ds.st_tuan_8}</td>
+                                                                                                <td></td>
+                                                                                                <td></td>
+                                                                                                <td>{ds.st_tuan_9}</td>
+                                                                                                <td></td>
+                                                                                                <td></td>
+                                                                                                <td>{ds.st_tuan_10}</td>
+                                                                                                <td></td>
+                                                                                                <td>{ds.vang_co_phep}</td>
+                                                                                                <td>{ds.vang_ko_phep}</td>
+                                                                                                <td>{ds.tong_so_tiet}</td>
+                                                                                                <td>{ds.phan_tram_vang}</td>
 
 
-                                                                            {/* <td>
+                                                                                                {/* <td>
                                                                                 <span>7</span>                  </td>
                                                                             <td colSpan={2}>
                                                                                 <span>16</span>                  </td>
@@ -434,7 +598,18 @@ export const DiemDanhTheoLHP = () => {
                                                                                 <span>31/12/2022</span>                  </td>
                                                                             <td className="text-center"><a href="javascript:;" data-magiangvien="TA00120118" onclick="getThongTinGiangVien(this)">TA00120118</a></td>
                                                                             <td className="text-left"><a href="javascript:;" data-magiangvien="TA00120118" onclick="getThongTinGiangVien(this)">Giảng viên tạm CNTT 3</a></td> */}
-                                                                        </tr>
+                                                                                            </tr>
+
+                                                                                        )
+
+                                                                                    }
+                                                                                </>
+                                                                                : <tr>
+                                                                                    <td colSpan={40} >
+                                                                                        <span style={{ color: "red" }}>Tạm chưa có dữ liệu</span>
+                                                                                    </td>
+                                                                                </tr>
+                                                                        }
                                                                         {/* <tr className role="row">
                                                                             <td>2</td>
                                                                             <td>4203003098</td>
@@ -455,9 +630,15 @@ export const DiemDanhTheoLHP = () => {
                                                                             <td className="text-center"><a href="javascript:;" data-magiangvien="TA00120119" onclick="getThongTinGiangVien(this)">TA00120119</a></td>
                                                                             <td className="text-left"><a href="javascript:;" data-magiangvien="TA00120119" onclick="getThongTinGiangVien(this)">Giảng viên tạm CNTT 4</a></td>
                                                                         </tr> */}
+
                                                                     </tbody>
+
                                                                 </table>
+
                                                             </div>
+                                                            <PaginationComponent dataPerPage={dataPerPage} total={stateDsImport.length}
+                                                                paginate={paginate} nextPage={nextPage} prevPage={prevPage}
+                                                            />
                                                         </div>
                                                     </div>
                                                 </div>
@@ -525,7 +706,7 @@ export const DiemDanhTheoLHP = () => {
 
                                                             <div className="mb-3">
                                                                 <div className="demo-inline-spacing">
-                                                                    <button type="button" class="btn rounded-pill btn-outline-primary"
+                                                                    <button type="button" className="btn rounded-pill btn-outline-primary"
                                                                         style={{
                                                                             float: "right", display: "inline-block", fontWeight: "400"
                                                                             , lineHeight: "1.53", textAlign: "center", verticalAlign: "middle", userSelect: "none"
@@ -549,6 +730,8 @@ export const DiemDanhTheoLHP = () => {
                         </div>
                     </div>
                 </Popup>
+
+                {popupNotify.isLoading && <PopupNotify onDialog={handleNotify} title={popupNotify.title} mes={popupNotify.mes} />}
             </div>
         </div>
     );

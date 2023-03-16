@@ -86,8 +86,8 @@ export const LoginAdmin = () => {
                                                     </a>
                                                 </div>
 
-                                                <h4 className="mb-2">Trang Quản Trị</h4>
-                                                <p className="mb-4">Đăng nhập để sử dụng quyền quản trị</p>
+                                                <h4 className="mb-2" style={{ textAlign: "center" }}>Trang Quản Trị</h4>
+                                                <p className="mb-4" style={{ textAlign: "center" }}>Đăng nhập để sử dụng quyền quản trị</p>
                                                 <form className="mb-3" id="formAuthentication" onSubmit={handleSubmit}>
                                                     <div className="mb-3">
                                                         <div className="d-flex justify-content-between">
