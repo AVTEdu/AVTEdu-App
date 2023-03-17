@@ -9,6 +9,7 @@ import TableContainer from "@material-ui/core/TableContainer";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import TableScrollbar from 'react-table-scrollbar';
+import PopupNotify from "./PopupNotify";
 
 export default function Dkhp() {
   const [hocKiState, setHocKiState] = useState(null);
@@ -32,6 +33,11 @@ export default function Dkhp() {
   var sendDate = (new Date()).getTime();
   const [loading, setLoading] = useState(false);
   const [resTime, setResTime] = useState(0);
+  const [popupNotify, setPopupNotify] = useState({
+    title: '',
+    mes: '',
+    isLoading: false
+  })
 
   useEffect(() => {
     if (resTime > 0) {
@@ -127,6 +133,16 @@ export default function Dkhp() {
 
   if (!hocKiState) return null;
 
+  function handleNotify(choose) {
+    if (choose) {
+      setPopupNotify({
+        title: '',
+        mes: '',
+        isLoading: false
+      });
+    }
+  }
+
 
   async function activeMonChuaDK(e) {
     try {
@@ -166,19 +182,33 @@ export default function Dkhp() {
       if (loaiHocPhanPhuTrach === 1) {
         const res = await dkhpAPI.dangKiHocPhan(maPhanCongLopHocPhan, maHocKi, trangThaiLopHocPhan, 1860000, 0);
         console.log(res.data);
+        const resF5MonChuaDK = await dkhpAPI.getToanBoMonHocChuaDangKy();
+        setMonChuaDangKy(resF5MonChuaDK.data);
         // const res2 = await dkhpAPI.getHocPhanDaDangKyTrongKynay(maHocKi);
         // setHpDaDangKy(res2.data);
-        alert('Đăng ký  thành công');
+        setPopupNotify({
+          title: 'Thông báo',
+          mes: 'Đăng ký thành công',
+          isLoading: true
+        });
         setTrangThaiDangKy(res.data);
         var receiveDate = (new Date()).getTime();
         var responseTimeMs = receiveDate - sendDate;
         setResTime(responseTimeMs);
       } else {
-        alert('Bạn chưa chọn nhóm thực hành');
+        setPopupNotify({
+          title: 'Thông báo',
+          mes: 'Bạn chưa chọn nhóm thực hành',
+          isLoading: true
+        });
       }
 
     } catch (error) {
-      alert('Đăng ký không thành công');
+      setPopupNotify({
+        title: 'Thông báo',
+        mes: 'Đăng ký không thành công',
+        isLoading: true
+      });
       console.log(error.message);
     }
 
@@ -459,18 +489,18 @@ export default function Dkhp() {
                             </div>
                           }
                         </div>
-                        <div className="row" id="lopHPChoDangKy">
+                        <div className="row" id="lopHPChoDangKy" style={{ marginBottom: "30px", maxHeight: "600px", overflowY: "auto" }}>
                           {
                             dsToanBoLopHocPhan ? (dsToanBoLopHocPhan?.results.length > 0 ?
                               <div className="col-md-6">
                                 <div className="gr-table">
                                   <div className="border-scroll" style={{ maxHeight: '370px', outline: 'none' }} tabIndex={1}>
-                                    <div id="box_lophocphan_chodangky">
+                                    <div id="box_lophocphan_chodangky" style={{ overflowY: "auto" }}>
                                       <h3 className="title-table" lang="lhpchodangky-tabletitle">Lớp học phần chờ đăng ký</h3>
                                       <div className="text-right" style={{ marginBottom: '10px', marginTop: '18px' }}>
                                         <label><input id="checkLichTrung" name="checkLichTrung" type="checkbox" defaultValue="true" /><input name="checkLichTrung" type="hidden" defaultValue="false" /><b><span className="text-uppercase" style={{ color: 'red', marginLeft: '5px !important', marginRight: '10px !important' }} lang="lhpchodangky-lhpkhongtrunglich">HIỂN THỊ LỚP học phần KHÔNG TRÙNG LỊCH</span></b></label>
                                       </div>
-                                      <div className="table-responsive" style={{ overflowY: "auto" }}>
+                                      <div className="table-responsive" style={{ overflowY: "auto", marginBottom: "20px" }}>
                                         <TableContainer>
                                           <Table id="table_lhpchodangky" className="table-pointer table-dkhp table-custom table table-bordered text-center no-footer dtr-inline" width="100%" role="grid">
                                             <TableHead>
@@ -709,6 +739,7 @@ export default function Dkhp() {
           </div>
         </div>
       </>
+      {popupNotify.isLoading && <PopupNotify onDialog={handleNotify} title={popupNotify.title} mes={popupNotify.mes} />}
     </div >
   );
 }

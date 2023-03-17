@@ -3,8 +3,8 @@ import Sidebar from "../components/Sidebar";
 import * as AiIcons from "react-icons/ai";
 import { useEffect, useState, useRef } from "react";
 import adminAPI from "../../../api/adminAPI";
-import PrintPhieuThu from "../../print/PrintPhieuThu";
 import $ from 'jquery';
+import PopupNotify from "../../PopupNotify";
 
 
 export const CongNo = () => {
@@ -25,6 +25,11 @@ export const CongNo = () => {
             setSinhVienSearch(e.target.value);
         }
     }
+    const [popupNotify, setPopupNotify] = useState({
+        title: '',
+        mes: '',
+        isLoading: false
+    })
     useEffect(() => {
         const activeSinhVienTimDuoc = async () => {
             try {
@@ -36,7 +41,11 @@ export const CongNo = () => {
             } catch (error) {
                 if (error.response) {
                     if (error.response.status === 403 && sinhVienSearch) {
-                        alert("Không tìm thấy sinh viên");
+                        setPopupNotify({
+                            title: 'Thông báo',
+                            mes: 'Không tìm thấy sinh viên',
+                            isLoading: true
+                        });
                         setSinhVienSearch("");
                         setDsHocPhi("");
                         setDsPhieuThu("");
@@ -105,20 +114,38 @@ export const CongNo = () => {
     const thanhToanCongNo = async () => {
         try {
             const res = await adminAPI.thanhToanCongNoSinhVien(sinhVienSearch, isCheck);
-            if (res.status == 200) {
-                alert('Thanh toán cho sinh viên thành công!!!');
+            if (res.status == 200 && isCheck.length > 0) {
                 setIsCheck([]);
                 setIsCheckAll(false);
                 const dshpsv_res = await adminAPI.getDSHocPhiSinhVien(sinhVienSearch);
                 const dsphieuthu_res = await adminAPI.getDanhSachPhieuThuSinhVien(sinhVienSearch);
                 setDsPhieuThu(dsphieuthu_res.data);
                 setDsHocPhi(dshpsv_res.data);
+                setPopupNotify({
+                    title: 'Thông báo',
+                    mes: 'Thanh toán cho sinh viên thành công !!!',
+                    isLoading: true
+                });
+            } else {
+                setPopupNotify({
+                    title: 'Thông báo',
+                    mes: 'Hãy chọn ít nhất 1 công nợ để thanh toán !!!',
+                    isLoading: true
+                });
             }
         } catch (error) {
             console.log(error.message);
         }
     }
-
+    function handleNotify(choose) {
+        if (choose) {
+            setPopupNotify({
+                title: '',
+                mes: '',
+                isLoading: false
+            });
+        }
+    }
 
     const handleSelectAll = (e) => {
         setIsCheckAll(!isCheckAll);
@@ -137,7 +164,7 @@ export const CongNo = () => {
         }
     };
 
-    // console.log(isCheck);
+    console.log(isCheck);
 
 
     return (
@@ -576,9 +603,11 @@ export const CongNo = () => {
                                 </tr>
                             </tbody>
                         </table>
+
                     </div>
                     : <></>
             }
+            {popupNotify.isLoading && <PopupNotify onDialog={handleNotify} title={popupNotify.title} mes={popupNotify.mes} />}
         </>
     )
 };
