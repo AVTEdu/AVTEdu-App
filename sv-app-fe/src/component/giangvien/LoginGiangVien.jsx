@@ -1,18 +1,16 @@
 import React from "react";
-//import "../css/loginAdmin.css"
-// import "../../assets/css/loginAdmin.css";
 import { useState, useEffect, useRef, useContext } from "react";
 import signinAPI from "../../api/signinAPI";
 import Cookies from "js-cookie";
 import useAuth from "../../services/hooks/useAuth"
 import { Link, useNavigate, useLocation } from 'react-router-dom';
+import LogoIUH from "../../assets/img/logo_img/Logo_IUH.c377b483.png"
 
-
-export const LoginAdmin = () => {
+export default function LoginGiangVien() {
     const { setAuth } = useAuth();
     const navigate = useNavigate();
     const location = useLocation();
-    const from = location.state?.from?.pathname || "/AdminApp";
+    const from = location.state?.from?.pathname || "/GiangVienApp";
 
     const userRef = useRef();
     const errRef = useRef();
@@ -34,42 +32,50 @@ export const LoginAdmin = () => {
 
 
         try {
-            const res = await signinAPI.signInAdmin({
-                ma: user,
-                password: pwd,
-            });
-            console.log(res.data);
-            localStorage.setItem("user", JSON.stringify(res.data.admin.ma_admin));
-            const _ma = localStorage.getItem("user");
-            console.log(_ma)
-            Cookies.set("token", res.data.accessToken);
-            Cookies.set("refreshToken", res.data.refreshToken);
-            const accessToken = res?.data?.accessToken;
-            // const roles = res?.data?.roles;
-            const roles = 2001;
-            setAuth({ user, pwd, accessToken, roles });
-            setUser('');
-            setPwd('');
-            //setSuccess(true);
+            // const res = await signinAPI.signInAdmin({
+            //     ma: user,
+            //     password: pwd,
+            // });
+            // console.log(res.data);
+            // localStorage.setItem("user", JSON.stringify(res.data.admin.ma_admin));
+            // const _ma = localStorage.getItem("user");
+            // console.log(_ma)
+            // Cookies.set("token", res.data.accessToken);
+            // Cookies.set("refreshToken", res.data.refreshToken);
+            // const accessToken = res?.data?.accessToken;
+            // // const roles = res?.data?.roles;
+            // const roles = 2001;
+            // setAuth({ user, pwd, accessToken, roles });
+            // setUser('');
+            // setPwd('');
+            // //setSuccess(true);
             navigate(from, { replace: true });
         } catch (error) {
             setErrMsg(error.message);
             errRef.current.focus();
         }
     }
-
-
-
     return (
         <>
             <section>
-                <p ref={errRef} className={errMsg ? "errmsg" : "offscreen"} aria-live="assertive">
+                {/* <p ref={errRef} className={errMsg ? "errmsg" : "offscreen"} aria-live="assertive">
                     {errMsg}
-                </p>
+                </p> */}
                 <div>
 
                     <div className="container-xxl">
                         <div className="authentication-wrapper authentication-basic container-p-y">
+                            <div className="row">
+                                <div className="col-md-4"></div>
+                                <div className="col-md-4">
+                                    <div className="app-brand justify-content-center"
+                                        style={{ width: '460px', textAlign: "center", marginBottom: "30px" }}>
+                                        <img className="ant-image-img" src={LogoIUH} />
+
+                                    </div>
+                                </div>
+                                <div className="col-md-4"></div>
+                            </div>
                             <div className="row">
                                 <div className="col-md-4">
                                 </div>
@@ -86,8 +92,8 @@ export const LoginAdmin = () => {
                                                     </a>
                                                 </div>
 
-                                                <h4 className="mb-2" style={{ textAlign: "center" }}>Trang Quản Trị</h4>
-                                                <p className="mb-4" style={{ textAlign: "center" }}>Đăng nhập để sử dụng quyền quản trị</p>
+                                                <h4 className="mb-2" style={{ textAlign: "center" }}>Trang Giảng Viên</h4>
+                                                <p className="mb-4" style={{ textAlign: "center" }}>Đăng nhập để sử dụng nghiệp vụ của giảng viên</p>
                                                 <form className="mb-3" id="formAuthentication" onSubmit={handleSubmit}>
                                                     <div className="mb-3">
                                                         <div className="d-flex justify-content-between">
@@ -136,6 +142,5 @@ export const LoginAdmin = () => {
                 </div>
             </section>
         </>
-
     )
 }

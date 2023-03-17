@@ -93,6 +93,13 @@
   -webkit-tap-highlight-color: rgba(67, 89, 113, 0);
 }
 
+.grid-bg {
+  background-size: 90px 90px;
+  background-image:
+    linear-gradient(to right, #edf7fa 1px, transparent 1px),
+    linear-gradient(to bottom, #edf7fa 1px, transparent 1px);
+}
+
 hr {
   margin          : 1rem 0;
   color           : #d9dee3;
@@ -4236,6 +4243,32 @@ fieldset:disabled .btn {
   background-clip : border-box;
   border          : 0 solid #d9dee3;
   border-radius   : 2rem !important;
+}
+
+.card-gv {
+  position        : relative;
+  display         : flex;
+  flex-direction  : column;
+  min-width       : 0;
+  word-wrap       : break-word;
+  background-color: #fff;
+  background-clip : border-box;
+  border          : 0 solid #d9dee3;
+  border-radius   : 0.5rem !important;
+  height          : 700px;
+  max-height      : 750px;
+}
+
+.card-gv-header {
+  position        : relative;
+  display         : flex;
+  flex-direction  : column;
+  min-width       : 0;
+  word-wrap       : break-word;
+  background-color: #fff;
+  background-clip : border-box;
+  border          : 0 solid #d9dee3;
+  border-radius   : 0.5rem !important;
 }
 
 .card>hr {
