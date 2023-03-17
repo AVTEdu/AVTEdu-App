@@ -188,28 +188,57 @@ export default function XemLichHoc() {
 
 
                                                 {
-                                                    thoiKhoaBieu ? <div className="table-responsive">
-                                                        <table className="fl-table table table-bordered text-center no-footer dtr-inline" style={{ width: "100%", display: "contents" }}>
-                                                            <thead>
-                                                                <tr role={"row"}>
-                                                                    <th>Ca học</th>
-                                                                    {thoiKhoaBieu["result"].map((tkb) =>
+                                                    thoiKhoaBieu ?
+                                                        <div className="table-responsive">
+                                                            <table className="fl-table table table-bordered text-center no-footer dtr-inline" style={{ width: "100%", display: "contents" }}>
+                                                                <thead>
+                                                                    <tr role={"row"}>
+                                                                        <th>Ca học</th>
+                                                                        {thoiKhoaBieu["result"].map((tkb) =>
 
-                                                                        <th><span>{tkb.Thu}</span><br />{tkb.Ngay}</th>
-                                                                    )}
-                                                                </tr>
-                                                            </thead>
-                                                            <tbody>
+                                                                            <th><span>{tkb.Thu}</span><br />{tkb.Ngay}</th>
+                                                                        )}
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
 
-                                                                <tr role={"row"}>
-                                                                    <td><b>Sáng</b></td>
-                                                                    {
-                                                                        thoiKhoaBieu["result"].map((tkb) =>
+                                                                    <tr role={"row"}>
+                                                                        <td><b>Sáng</b></td>
+                                                                        {
+                                                                            thoiKhoaBieu["result"].map((tkb) =>
+                                                                                tkb?.TKB.length > 0 ?
+                                                                                    <td>
+                                                                                        {
+                                                                                            tkb["TKB"].map((t =>
+                                                                                                t.tiet_hoc_ket_thuc < 7 ?
+
+                                                                                                    <div className="content color-lichhoc text-left" style={{ textAlign: 'left' }}>
+                                                                                                        <b style={{ color: "#003763" }}>{t.ten_mon_hoc}</b>
+                                                                                                        <p>{t.ten_lop_hoc_phan}</p>
+                                                                                                        <p><span lang="lichtheotuan-tiet">Tiết</span>: {t.tiet_hoc_bat_dau} - {t.tiet_hoc_ket_thuc}<br /></p>
+                                                                                                        <p><span lang="giang-duong">Phòng</span>: {t.ten_phong_hoc}</p>
+                                                                                                        <p><span lang="lichtheotuan-gv">GV</span>: {t.ten_giang_vien}</p>
+                                                                                                    </div>
+
+                                                                                                    : <></>
+                                                                                            ))
+                                                                                        }
+                                                                                    </td>
+                                                                                    : <td style={{ height: "150px" }}><div>
+                                                                                        <b hidden>no data</b>
+                                                                                    </div></td>
+                                                                            )
+                                                                        }
+
+                                                                    </tr>
+                                                                    <tr role="row">
+                                                                        <td><b>Chiều</b></td>
+                                                                        {thoiKhoaBieu["result"].map((tkb) =>
                                                                             tkb?.TKB.length > 0 ?
                                                                                 <td>
                                                                                     {
                                                                                         tkb["TKB"].map((t =>
-                                                                                            t.tiet_hoc_ket_thuc < 7 ?
+                                                                                            (t.tiet_hoc_ket_thuc > 7 && t.tiet_hoc_ket_thuc < 13) ?
 
                                                                                                 <div className="content color-lichhoc text-left" style={{ textAlign: 'left' }}>
                                                                                                     <b style={{ color: "#003763" }}>{t.ten_mon_hoc}</b>
@@ -226,65 +255,37 @@ export default function XemLichHoc() {
                                                                                 : <td style={{ height: "150px" }}><div>
                                                                                     <b hidden>no data</b>
                                                                                 </div></td>
-                                                                        )
-                                                                    }
+                                                                        )}
+                                                                    </tr>
+                                                                    <tr role="row">
+                                                                        <td><b>Tối</b></td>
+                                                                        {thoiKhoaBieu["result"].map((tkb) =>
+                                                                            tkb?.TKB.length > 0 ?
+                                                                                <td>
+                                                                                    {
+                                                                                        tkb["TKB"].map((t =>
+                                                                                            (t.tiet_hoc_ket_thuc == 15) ?
 
-                                                                </tr>
-                                                                <tr role="row">
-                                                                    <td><b>Chiều</b></td>
-                                                                    {thoiKhoaBieu["result"].map((tkb) =>
-                                                                        tkb?.TKB.length > 0 ?
-                                                                            <td>
-                                                                                {
-                                                                                    tkb["TKB"].map((t =>
-                                                                                        (t.tiet_hoc_ket_thuc > 7 && t.tiet_hoc_ket_thuc < 13) ?
+                                                                                                <div className="content color-lichhoc text-left" style={{ textAlign: 'left' }}>
+                                                                                                    <b style={{ color: "#003763" }}>{t.ten_mon_hoc}</b>
+                                                                                                    <p>{t.ten_lop_hoc_phan}</p>
+                                                                                                    <p><span lang="lichtheotuan-tiet">Tiết</span>: {t.tiet_hoc_bat_dau} - {t.tiet_hoc_ket_thuc}<br /></p>
+                                                                                                    <p><span lang="giang-duong">Phòng</span>:{t.ten_phong_hoc}</p>
+                                                                                                    <p><span lang="lichtheotuan-gv">GV</span>: {t.ten_giang_vien}</p>
+                                                                                                </div>
 
-                                                                                            <div className="content color-lichhoc text-left" style={{ textAlign: 'left' }}>
-                                                                                                <b style={{ color: "#003763" }}>{t.ten_mon_hoc}</b>
-                                                                                                <p>{t.ten_lop_hoc_phan}</p>
-                                                                                                <p><span lang="lichtheotuan-tiet">Tiết</span>: {t.tiet_hoc_bat_dau} - {t.tiet_hoc_ket_thuc}<br /></p>
-                                                                                                <p><span lang="giang-duong">Phòng</span>: {t.ten_phong_hoc}</p>
-                                                                                                <p><span lang="lichtheotuan-gv">GV</span>: {t.ten_giang_vien}</p>
-                                                                                            </div>
-
-                                                                                            : <></>
-                                                                                    ))
-                                                                                }
-                                                                            </td>
-                                                                            : <td style={{ height: "150px" }}><div>
-                                                                                <b hidden>no data</b>
-                                                                            </div></td>
-                                                                    )}
-                                                                </tr>
-                                                                <tr role="row">
-                                                                    <td><b>Tối</b></td>
-                                                                    {thoiKhoaBieu["result"].map((tkb) =>
-                                                                        tkb?.TKB.length > 0 ?
-                                                                            <td>
-                                                                                {
-                                                                                    tkb["TKB"].map((t =>
-                                                                                        (t.tiet_hoc_ket_thuc == 15) ?
-
-                                                                                            <div className="content color-lichhoc text-left" style={{ textAlign: 'left' }}>
-                                                                                                <b style={{ color: "#003763" }}>{t.ten_mon_hoc}</b>
-                                                                                                <p>{t.ten_lop_hoc_phan}</p>
-                                                                                                <p><span lang="lichtheotuan-tiet">Tiết</span>: {t.tiet_hoc_bat_dau} - {t.tiet_hoc_ket_thuc}<br /></p>
-                                                                                                <p><span lang="giang-duong">Phòng</span>:{t.ten_phong_hoc}</p>
-                                                                                                <p><span lang="lichtheotuan-gv">GV</span>: {t.ten_giang_vien}</p>
-                                                                                            </div>
-
-                                                                                            : <></>
-                                                                                    ))
-                                                                                }
-                                                                            </td>
-                                                                            : <td style={{ height: "150px" }}><div>
-                                                                                <b hidden>no data</b>
-                                                                            </div></td>
-                                                                    )}
-                                                                </tr>
-                                                            </tbody>
-                                                        </table>
-                                                    </div> : <></>
+                                                                                                : <></>
+                                                                                        ))
+                                                                                    }
+                                                                                </td>
+                                                                                : <td style={{ height: "150px" }}><div>
+                                                                                    <b hidden>no data</b>
+                                                                                </div></td>
+                                                                        )}
+                                                                    </tr>
+                                                                </tbody>
+                                                            </table>
+                                                        </div> : <></>
                                                 }
 
 

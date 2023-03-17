@@ -161,12 +161,23 @@ export const Login = () => {
                                     Đăng Nhập
                                 </button>
                             </div>
-                            <div className="text-center p-t-35 p-b-20 uselocalaccount">
-                                <a className="txt2" id="" href="../AdminLogin">
+                            <div className="row">
+                                <div className="col-md-6">
+                                    <div className="text-center p-t-35 p-b-20 uselocalaccount">
+                                        <a className="txt2" id="" href="../AdminLogin">
 
-                                    <span>Nhấn vào đây để đăng nhập dưới quyền quản trị viên</span>
-                                </a>
+                                            <span>Trang dành cho giáo vụ</span>
+                                        </a>
+                                    </div>
+                                </div>
+                                <div className="col-md-6">
+                                    <div className="text-center p-t-35 p-b-20 uselocalaccount">
+                                        <a className="txt2" id="" href="../GiangVienLogin">
 
+                                            <span>Trang dành cho giảng viên</span>
+                                        </a>
+                                    </div>
+                                </div>
                             </div>
                         </form>            <div className="login100-more" style={{ backgroundImage: `url(${bg})` }} />
                     </div>

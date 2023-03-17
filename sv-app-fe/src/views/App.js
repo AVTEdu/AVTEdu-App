@@ -19,6 +19,10 @@ import Sidebar from "../component/admin/components/Sidebar";
 import TraCuuCongNo from "../component/TraCuuCongNo";
 import ThanhToanTrucTuyen from "../component/ThanhToanTrucTuyen";
 import XacNhanThanhToan from "../component/XacNhanThanhToan";
+import LoginGiangVien from "../component/giangvien/LoginGiangVien";
+import GiangVienApp from "../component/giangvien/GiangVienApp";
+import { GVThongBao } from "../component/giangvien/pages/GVThongBao";
+import { DiemDanhTheoLHP } from "../component/giangvien/pages/DiemDanhTheoLHP";
 
 function App() {
   return (
@@ -33,9 +37,12 @@ function App() {
           <Route path="logoutSV" element={<Login />} />
           <Route path="login" element={<Login />} />
           <Route path="AdminLogin" element={<LoginAdmin />} />
+          <Route path="GiangVienLogin" element={<LoginGiangVien />} />
+          <Route path="LogoutGiangVien" element={<LoginGiangVien />} />
           <Route path="AdminApp" element={<AdminApp />} />
           <Route path="unauthorized" element={<Unauthorized />} />
           <Route path="/xac-nhan-thanh-toan" element={<XacNhanThanhToan />} />
+          <Route path="GiangVienApp" element={<GiangVienApp />} />
 
 
           {/* <Route element={<RequireAuth allowedRoles={[ROLES.USER]} />}>
@@ -70,6 +77,9 @@ function App() {
         <Route path='/ql-user/gv' element={<GiangVien />} />
         <Route path='/ql-user/sv' element={<SinhVien />} />
         <Route path='/ql-congno/ds-cno' element={<CongNo />} />
+
+        <Route path='/thong-bao-gv' element={<GVThongBao />} />
+        <Route path='/ct-gd/diem-danh-lhp' element={<DiemDanhTheoLHP />} />
       </Routes>
     </>
   );

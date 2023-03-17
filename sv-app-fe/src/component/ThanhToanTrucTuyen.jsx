@@ -15,10 +15,16 @@ export default function ThanhToanTrucTuyen() {
 
     useEffect(() => {
         if (resTimeDshp > 0 && resTimeMoMo > 0) {
-            console.log(resTimeMoMo + resTimeDshp)
+            let max = resTimeMoMo;
+            if (resTimeDshp > max) {
+                max = resTimeDshp;
+            }
+            console.log(max);
+            console.log(resTimeMoMo);
+            console.log(resTimeDshp);
             setTimeout(() => {
                 setLoading(false);
-            }, resTimeDshp + resTimeMoMo)
+            }, max)
         }
     }, [resTimeDshp, resTimeMoMo])
 
@@ -29,8 +35,10 @@ export default function ThanhToanTrucTuyen() {
                 const res = await dkhpAPI.getDanhSachHocPhi();
 
                 setDsHocPhi(res.data);
+
                 var receiveDate = (new Date()).getTime();
                 var responseTimeMs = receiveDate - sendDate;
+                // console.log(responseTimeMs);
                 setResTimeDshp(responseTimeMs);
             } catch (error) {
                 console.log(error.message);
@@ -240,7 +248,9 @@ export default function ThanhToanTrucTuyen() {
                                 </div>
                             </div>
                         </div>
-                        : <>Lỗi url thanh toán</>
+                        : <div>
+                            <div className="loader"></div>
+                        </div>
                 }
             </div>
         </>
