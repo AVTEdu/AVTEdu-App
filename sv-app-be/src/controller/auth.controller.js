@@ -1,4 +1,4 @@
-const SinhVien = require("../model/sinhvien.model");
+const SinhVien = require("../models/sinhvien.model");
 const client = require("../helpers/connect_redis");
 const JWT = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
@@ -14,7 +14,21 @@ const { createUserWithEmailAndPassword,
   sendEmailVerification } = require("firebase/auth");
 const { defaultAuth } = require("../config/firebase.config");
 const { use } = require("../router/auth.router");
-const Admin = require("../model/admin.model");
+const Admin = require("../models/admin.model");
+const XLSX = require("xlsx");
+const multer = require("multer");
+
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, "");
+  },
+  filename: (req, file, cb) => {
+    cb(null, Date.now() + "-" + file.originalname);
+  },
+});
+const upload = multer({ storage, limits: { fileSize: 20000000 } }).single(
+  "uploadFile"
+);
 
 
 //Hàm đăng nhập sinh viên
@@ -256,11 +270,27 @@ const forgotPassword = async (req, res, next) => {
     next(error);
   }
 };
+
+const getFile = async (req, res, next) => {
+  try {
+    upload(req, res, async (err) => {
+      if (err) {
+        return res.status(500).json(err);
+      }
+    console.log(req.file)    
+    return res.status(200).send(req.file);
+  });
+  } catch (err) {
+    return res.status(500).json({ success: false, message: err.message });
+  }
+};
+
 module.exports = {
     signIn,
     refreshToken,
     AuthercationEmail,
     CheckVerificationEmail,
     Logout,
-    signInAdmin
+    signInAdmin,
+    getFile
   };

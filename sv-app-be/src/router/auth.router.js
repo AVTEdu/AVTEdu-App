@@ -21,4 +21,7 @@ router
 router
   .route("/signinAdmin")
   .post(AuthController.signInAdmin);
+router
+  .route("/getFile")
+  .post(AuthController.getFile);  
 module.exports = router;

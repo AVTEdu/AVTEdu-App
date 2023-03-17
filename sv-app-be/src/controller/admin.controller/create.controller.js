@@ -1,22 +1,22 @@
 
 const bcrypt = require("bcryptjs");
-const Admin = require("../../model/admin.model");
-const ChuyenNganh = require("../../model/chuyennganh.models");
-const ChuyenNganhHocPhan = require("../../model/chuyennganhhocphan.model");
-const GiangVien = require("../../model/giangvien.model");
-const HocKi = require("../../model/hocki.model");
-const HocPhan = require("../../model/hocphan.model");
-const KetQuaHocTap = require("../../model/ketquahoctap.model");
-const Khoa = require("../../model/khoa.model");
-const LoaiPhongHoc = require("../../model/loaiphonghoc.model");
-const LopHocPhan = require("../../model/lophocphan.model");
-const MonHoc = require("../../model/monhoc.model");
-const PhanCongLopHocPhan = require("../../model/phanconglophocphan.model");
-const PhongHoc = require("../../model/phonghoc.model");
-const SinhVien = require("../../model/sinhvien.model");
-const ThoiKhoaBieu = require("../../model/thoikhoabieu.model");
-const ThoiKhoaBieuSinhVien = require("../../model/thoikhoabieusinhvien.model");
-const TonGiao = require("../../model/tongiao.model");
+const Admin = require("../../models/admin.model");
+const ChuyenNganh = require("../../models/chuyennganh.models");
+const ChuyenNganhHocPhan = require("../../models/chuyennganhhocphan.model");
+const GiangVien = require("../../models/giangvien.model");
+const HocKi = require("../../models/hocki.model");
+const HocPhan = require("../../models/hocphan.model");
+const KetQuaHocTap = require("../../models/ketquahoctap.model");
+const Khoa = require("../../models/khoa.model");
+const LoaiPhongHoc = require("../../models/loaiphonghoc.model");
+const LopHocPhan = require("../../models/lophocphan.model");
+const MonHoc = require("../../models/monhoc.model");
+const PhanCongLopHocPhan = require("../../models/phanconglophocphan.model");
+const PhongHoc = require("../../models/phonghoc.model");
+const SinhVien = require("../../models/sinhvien.model");
+const ThoiKhoaBieu = require("../../models/thoikhoabieu.model");
+const ThoiKhoaBieuSinhVien = require("../../models/thoikhoabieusinhvien.model");
+const TonGiao = require("../../models/tongiao.model");
 
 
 
@@ -97,13 +97,20 @@ const createTonGiao = async (req,res,next) =>{
 //Hàm tạo Giảng Viên mới 
 const createGiangVien = async (req,res,next) =>{
   try {
-    const {ma,ten,mota,ma_khoa,ngay_sinh,email,gioitinh}= req.body;
+    const {ma,ten,mota,ma_khoa,ngay_sinh,email,gioitinh,username,password}= req.body;
     const foundGiangVien= await GiangVien.findOne({ where: { ma_giang_vien:`${ma}` } });
     if(foundGiangVien){
       return res
         .status(403)
         .json({ error: { message: "Mã đã được sử dụng." } });
     }
+    // Generate a salt
+    const salt = await bcrypt.genSalt(10);
+    // Generate a password hash (salt + hash)
+    const passwordHashed = await bcrypt.hash(password, salt);
+    // Re-assign password hashed
+    const newPassword = passwordHashed;
+
     const newGiangVien = await GiangVien.create({
       ma_giang_vien:ma,
       ten_giang_vien:ten,
@@ -111,6 +118,8 @@ const createGiangVien = async (req,res,next) =>{
       ngay_sinh:ngay_sinh,
       email:email,
       gioi_tinh:gioitinh,
+      username:username,
+      password:newPassword
     });
     return res.status(201).json({ success: true, newGiangVien });
   } catch (error) {

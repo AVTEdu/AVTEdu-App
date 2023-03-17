@@ -20,7 +20,7 @@ export default function ThanhToanTrucTuyen() {
                 setLoading(false);
             }, resTimeDshp + resTimeMoMo)
         }
-    }, [resTimeDshp])
+    }, [resTimeDshp, resTimeMoMo])
 
     useEffect(() => {
         const activeHocPhi = async () => {
