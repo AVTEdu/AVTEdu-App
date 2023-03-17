@@ -4,6 +4,7 @@ import signinAPI from "../../api/signinAPI";
 import Cookies from "js-cookie";
 import useAuth from "../../services/hooks/useAuth"
 import { Link, useNavigate, useLocation } from 'react-router-dom';
+import LogoIUH from "../../assets/img/logo_img/Logo_IUH.c377b483.png"
 
 export default function LoginGiangVien() {
     const { setAuth } = useAuth();
@@ -64,6 +65,17 @@ export default function LoginGiangVien() {
 
                     <div className="container-xxl">
                         <div className="authentication-wrapper authentication-basic container-p-y">
+                            <div className="row">
+                                <div className="col-md-4"></div>
+                                <div className="col-md-4">
+                                    <div className="app-brand justify-content-center"
+                                        style={{ width: '460px', textAlign: "center", marginBottom: "30px" }}>
+                                        <img className="ant-image-img" src={LogoIUH} />
+
+                                    </div>
+                                </div>
+                                <div className="col-md-4"></div>
+                            </div>
                             <div className="row">
                                 <div className="col-md-4">
                                 </div>
