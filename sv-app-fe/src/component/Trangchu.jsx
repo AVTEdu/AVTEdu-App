@@ -13,16 +13,47 @@ import axios from "axios";
 import * as AiIcons from "react-icons/ai";
 import * as IoIcons from "react-icons/io";
 import * as RiIcons from "react-icons/ri";
+import dkhpAPI from "../api/dkhpAPI";
+import Avatar_1 from "../assets/img/fakeAvatar/avatar_1.jpg";
+import Avatar_2 from "../assets/img/fakeAvatar/avatar_2.jpg";
 
 export const TrangChu = () => {
     // const _ma = localStorage.getItem("user");
     // console.log(_ma);
+    var sendDate = (new Date()).getTime();
     const [loading, setLoading] = useState(false);
+    const [resTime, setResTime] = useState(0);
+    const [inforSV, setInforSV] = useState('');
+
+    var textArrayImg = [
+        Avatar_1,
+        Avatar_2
+    ];
+    var randomAva = Math.floor(Math.random() * textArrayImg.length);
+
     useEffect(() => {
-        setLoading(true);
-        setTimeout(() => {
-            setLoading(false);
-        }, 500);
+        if (resTime > 0) {
+            console.log(resTime);
+            setTimeout(() => {
+                setLoading(false);
+            }, resTime)
+        }
+    }, [resTime])
+
+    useEffect(() => {
+        const activeThongTinSV = async () => {
+            try {
+                setLoading(true);
+                const res = await dkhpAPI.getThongTinSinhVien();
+                setInforSV(res.data);
+                var receiveDate = (new Date()).getTime();
+                var responseTimeMs = receiveDate - sendDate;
+                setResTime(responseTimeMs);
+            } catch (error) {
+                console.log(error.message);
+            }
+        };
+        activeThongTinSV();
     }, []);
 
     return (
@@ -59,6 +90,7 @@ export const TrangChu = () => {
                                                 <div className="row">
                                                     <div className="col-sm-3">
                                                         <div className="profile-userpic">
+                                                            <img src={textArrayImg[randomAva]} className="img-responsive" style={{ objectFit: 'cover', width: "120px", height: "120px" }} />
                                                         </div>
                                                         <div className="text-center">
                                                             <a href="/thong-tin-sinh-vien.html" className="color-active" lang="db-chitiet-button">Xem chi tiết</a>
@@ -67,28 +99,40 @@ export const TrangChu = () => {
                                                     <div className="col-sm-9">
                                                         <form className="form-horizontal">
                                                             <div className="form-body">
-                                                                <div className="form-group" style={{}}>
-                                                                    <label className="col-xs-6"><span lang="sv-mssv">MSSV</span>: <span className="bold">19507391</span></label>
-                                                                    <label className="col-xs-6"><span lang="sv-lophoc">Lớp học</span>: <span className="bold">DHKTPM15A</span></label>
-                                                                </div>
-                                                                <div className="form-group" style={{}}>
-                                                                    <label className="col-xs-6"><span lang="sv-hoten">Họ tên</span>: <span className="bold">Phạm Nguyễn Văn Trường</span></label>
-                                                                    <label className="col-xs-6"><span lang="sv-khoahoc">Khóa học</span>: <span className="bold">2019 - 2020</span></label>
-                                                                </div>
-                                                                <div className="form-group" style={{}}>
-                                                                    <label className="col-xs-6"><span lang="sv-gioitinh">Giới tính</span>: <span className="bold">Nam</span></label>
-                                                                    <label className="col-xs-6"><span lang="sv-hedaotao">Bậc đào tạo</span>: <span className="bold">Đại học</span></label>
-                                                                </div>
-                                                                <div className="form-group" style={{}}>
-                                                                    <label className="col-xs-6">
-                                                                        <span lang="sv-ngaysinh">Ngày sinh</span>: <span className="bold">15/10/2001</span>
-                                                                    </label>
-                                                                    <label className="col-xs-6"><span lang="sv-loaihinhdt">Loại hình đào tạo</span>: <span className="bold">Chính quy</span></label>
-                                                                </div>
-                                                                <div className="form-group" style={{}}>
-                                                                    <label className="col-xs-6"><span lang="sv-noisinh">Nơi sinh</span>: <span className="bold">Thành phố Hồ Chí Minh</span></label>
-                                                                    <label className="col-xs-6"><span lang="sv-nganh">Ngành</span>: <span className="bold">Kỹ thuật phần mềm </span></label>
-                                                                </div>
+                                                                {
+                                                                    inforSV ?
+                                                                        inforSV['infor'].map((sv =>
+                                                                            <>
+                                                                                <div className="form-group" style={{}}>
+                                                                                    <label className="col-xs-6"><span lang="sv-mssv">MSSV</span>: <span className="bold">{sv.ma_sinh_vien}</span></label>
+                                                                                    <label className="col-xs-6"><span lang="sv-lophoc">Lớp học</span>: <span className="bold">DH{sv.ma_chuyen_nganh}</span></label>
+                                                                                </div>
+                                                                                <div className="form-group" style={{}}>
+                                                                                    <label className="col-xs-6"><span lang="sv-hoten">Họ tên</span>: <span className="bold">{sv.ho_ten_sinh_vien}</span></label>
+                                                                                    <label className="col-xs-6"><span lang="sv-khoahoc">Khóa học</span>: <span className="bold">{sv.nien_khoa}</span></label>
+                                                                                </div>
+                                                                                <div className="form-group" style={{}}>
+                                                                                    <label className="col-xs-6"><span lang="sv-gioitinh">Giới tính</span>: <span className="bold">
+                                                                                        {
+                                                                                            sv.gioitinh === 0 ? 'Nam' : 'Nữ'
+                                                                                        }
+                                                                                    </span></label>
+                                                                                    <label className="col-xs-6"><span lang="sv-hedaotao">Bậc đào tạo</span>: <span className="bold">Đại học</span></label>
+                                                                                </div>
+                                                                                <div className="form-group" style={{}}>
+                                                                                    <label className="col-xs-6">
+                                                                                        <span lang="sv-ngaysinh">Ngày sinh</span>: <span className="bold">{sv.ngay_sinh}</span>
+                                                                                    </label>
+                                                                                    <label className="col-xs-6"><span lang="sv-loaihinhdt">Loại hình đào tạo</span>: <span className="bold">Chính quy</span></label>
+                                                                                </div>
+                                                                                <div className="form-group" style={{}}>
+                                                                                    <label className="col-xs-6"><span lang="sv-noisinh">Nơi sinh</span>: <span className="bold">Thành phố Hồ Chí Minh</span></label>
+                                                                                    <label className="col-xs-6"><span lang="sv-nganh">Ngành</span>: <span className="bold">{sv.ten_chuyen_nganh}</span></label>
+                                                                                </div>
+                                                                            </>
+                                                                        ))
+                                                                        : <></>
+                                                                }
                                                             </div>
                                                         </form>
                                                     </div>

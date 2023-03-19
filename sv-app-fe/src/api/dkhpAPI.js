@@ -5,6 +5,10 @@ const dkhpAPI = {
     const url = "/userRequest/getHocKiSinhVien";
     return axiosClient.get(url);
   },
+  getThongTinSinhVien() {
+    const url = "/userRequest/getThongTinSinhVien";
+    return axiosClient.get(url);
+  },
   getToanBoMonHocChuaDangKy() {
     const url = "/userRequest/getMonSinhVienChuaHoc";
     return axiosClient.get(url);
