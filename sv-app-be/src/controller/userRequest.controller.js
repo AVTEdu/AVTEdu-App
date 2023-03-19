@@ -88,8 +88,25 @@ const getMonHocSinhVienChuaHoc = async (req, res, next) => {
     // Thực hiện truy vấn để lấy danh sách các môn học chưa được sinh viên học
     sequelize
       .query(
-        `select sv.ma_sinh_vien,sv.ho_ten_sinh_vien,mh.ma_mon_hoc,mh.ten_mon_hoc,hp.ma_hoc_phan,hp.so_tin_chi_ly_thuyet,hp.so_tin_chi_thuc_hanh,hp.hoc_phan_bat_buoc,hp.ma_mon_tien_quyet,hp.ma_mon_song_hanh
-         from sinhviendb.sinh_vien as sv
+        // `select sv.ma_sinh_vien,sv.ho_ten_sinh_vien,mh.ma_mon_hoc,mh.ten_mon_hoc,hp.ma_hoc_phan,hp.so_tin_chi_ly_thuyet,hp.so_tin_chi_thuc_hanh,hp.hoc_phan_bat_buoc,hp.ma_mon_tien_quyet,hp.ma_mon_song_hanh
+        //  from sinhviendb.sinh_vien as sv
+        //  left join sinhviendb.chuyen_nganh as cn on sv.ma_chuyen_nganh = cn.ma_chuyen_nganh
+        //  left join sinhviendb.chuyen_nganh_hoc_phan as cnhp on cn.ma_chuyen_nganh = cnhp.ma_chuyen_nganh
+        //  left join sinhviendb.hoc_phan as hp on cnhp.ma_hoc_phan = hp.ma_hoc_phan
+        //  left join sinhviendb.lop_hoc_phan as lhp on hp.ma_hoc_phan = lhp.ma_hoc_phan
+        //  left join sinhviendb.hoc_ki as hk on lhp.ma_hoc_ki = hk.ma_hoc_ki
+        //  left join sinhviendb.mon_hoc as mh on hp.ma_mon_hoc = mh.ma_mon_hoc
+        //  where sv.ma_sinh_vien = '${ma}'
+        //  and  hp.ma_hoc_phan not in (
+        //     select lhp.ma_hoc_phan from sinhviendb.ket_qua_hoc_tap as kqht 
+        //     left join sinhviendb.lop_hoc_phan as lhp on kqht.ma_lop_hoc_phan = lhp.ma_lop_hoc_phan
+        //     where kqht.ma_sinh_vien = '${ma}'
+        //  )
+        //  group by hp.ma_hoc_phan`,
+        `
+        select sv.ma_sinh_vien,sv.ho_ten_sinh_vien,mh.ma_mon_hoc,mh.ten_mon_hoc,hp.ma_hoc_phan,hp.so_tin_chi_ly_thuyet,hp.so_tin_chi_thuc_hanh,hp.hoc_phan_bat_buoc,hp.ma_mon_tien_quyet,hp.ma_mon_song_hanh
+        ,lhp.ma_hoc_ki
+        from sinhviendb.sinh_vien as sv
          left join sinhviendb.chuyen_nganh as cn on sv.ma_chuyen_nganh = cn.ma_chuyen_nganh
          left join sinhviendb.chuyen_nganh_hoc_phan as cnhp on cn.ma_chuyen_nganh = cnhp.ma_chuyen_nganh
          left join sinhviendb.hoc_phan as hp on cnhp.ma_hoc_phan = hp.ma_hoc_phan
@@ -102,7 +119,9 @@ const getMonHocSinhVienChuaHoc = async (req, res, next) => {
             left join sinhviendb.lop_hoc_phan as lhp on kqht.ma_lop_hoc_phan = lhp.ma_lop_hoc_phan
             where kqht.ma_sinh_vien = '${ma}'
          )
-         group by hp.ma_hoc_phan`,
+         group by hp.ma_hoc_phan,sv.ma_chuyen_nganh,cn.ma_chuyen_nganh,cnhp.ma_chuyen_nganh,lhp.ma_hoc_phan,hk.ma_hoc_ki
+         ,lhp.ma_hoc_ki, mh.ma_mon_hoc,hp.ma_mon_hoc
+        `,
         { type: QueryTypes.SELECT }
       )
       .then(function (results) {
