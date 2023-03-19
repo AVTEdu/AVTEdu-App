@@ -370,15 +370,23 @@ const DangKiHocPhan = async (req, res, next) => {
 };
 const getThongTinSinhvien = async (req, res, next) => {
   try {
-    const userId = req.payload.userId;
     const foundSinhVien = await SinhVien.findOne({
       where: { ma_sinh_vien: req.payload.userId },
     });
-    if (!foundSinhVien)
+    if (!foundSinhVien) {
       return res
         .status(403)
         .json({ error: { message: "Không tìm thấy sinh viên" } });
-    res.status(201).json({ success: true, foundSinhVien });
+    }
+    const infor = await sequelize.query(
+      `select sv.ma_sinh_vien,sv.ho_ten_sinh_vien, cn.ten_chuyen_nganh, sv.ho_ten_sinh_vien, sv.gioitinh, sv.ngay_sinh,
+      sv.ma_chuyen_nganh, sv.nien_khoa
+              from sinhviendb.sinh_vien as sv
+               left join sinhviendb.chuyen_nganh as cn on sv.ma_chuyen_nganh = cn.ma_chuyen_nganh
+               where sv.ma_sinh_vien = '${req.payload.userId}'`,
+      { type: QueryTypes.SELECT }
+    );
+    res.status(201).json({ success: true, infor });
   } catch (error) {
     next(error);
   }
