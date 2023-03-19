@@ -126,6 +126,7 @@ export const DiemDanhTheoLHP = () => {
                 // setStateDsImport(listImport);
 
                 //console.log(json[9].__EMPTY);
+                console.log(json);
                 listImport.shift();
                 for (let i = 8; i < json.length; i++) {
                     listImport.push({
