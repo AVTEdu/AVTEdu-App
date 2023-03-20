@@ -29,6 +29,7 @@ export default function Dkhp() {
   let sttMonChuaDK = 1;
   let sttLHPChoDK = 1;
   let sttHocPhanDaDangKy = 1;
+  let countMonChuaDK = 0;
   const namHienTai = new Date().getFullYear();
   var sendDate = (new Date()).getTime();
   const [loading, setLoading] = useState(false);
@@ -79,6 +80,25 @@ export default function Dkhp() {
         console.log(error.message);
       }
     };
+    const activeDSMonChuaDangKyTrongKyNay = async () => {
+      try {
+        const res = await dkhpAPI.getToanBoMonHocChuaDangKy();
+        setMonChuaDangKy(res.data);
+        var selectElementDotDangKy = document.querySelector('#cboIDDotDangKy').value;
+        selectElementDotDangKy === '' ? setItemNamHocBatDau('') :
+          setItemNamHocBatDau(selectElementDotDangKy);
+        if (selectElementDotDangKy === '') {
+          setDsToanBoLopHocPhan('');
+          setChiTietLopHP('');
+        }
+        var receiveDate = (new Date()).getTime();
+        var responseTimeMs = receiveDate - sendDate;
+        setResTime(responseTimeMs);
+      } catch (error) {
+
+      }
+    }
+    activeDSMonChuaDangKyTrongKyNay();
     activeDSHocPhanDaDangKyTrongKyNay();
   }, [maHocKi, trangThaiDangKy])
 
@@ -119,6 +139,7 @@ export default function Dkhp() {
       try {
         setLoading(true);
         const res = await dkhpAPI.getChiTietLopHocPhan(maLopHocPhan);
+        console.log(res.data);
         setChiTietLopHP(res.data);
         var receiveDate = (new Date()).getTime();
         var responseTimeMs = receiveDate - sendDate;
@@ -148,18 +169,19 @@ export default function Dkhp() {
     try {
       setLoading(true);
       setMahocKi(e.target.value);
-      const res = await dkhpAPI.getToanBoMonHocChuaDangKy();
-      setMonChuaDangKy(res.data);
-      var selectElementDotDangKy = document.querySelector('#cboIDDotDangKy').value;
-      selectElementDotDangKy === '' ? setItemNamHocBatDau('') :
-        setItemNamHocBatDau(selectElementDotDangKy);
-      if (selectElementDotDangKy === '') {
-        setDsToanBoLopHocPhan('');
-        setChiTietLopHP('');
-      }
-      var receiveDate = (new Date()).getTime();
-      var responseTimeMs = receiveDate - sendDate;
-      setResTime(responseTimeMs);
+      // const res = await dkhpAPI.getToanBoMonHocChuaDangKy();
+      // console.log(res.data);
+      // setMonChuaDangKy(res.data);
+      // var selectElementDotDangKy = document.querySelector('#cboIDDotDangKy').value;
+      // selectElementDotDangKy === '' ? setItemNamHocBatDau('') :
+      //   setItemNamHocBatDau(selectElementDotDangKy);
+      // if (selectElementDotDangKy === '') {
+      //   setDsToanBoLopHocPhan('');
+      //   setChiTietLopHP('');
+      // }
+      // var receiveDate = (new Date()).getTime();
+      // var responseTimeMs = receiveDate - sendDate;
+      // setResTime(responseTimeMs);
     } catch (error) {
       console.log(error.message);
     }
@@ -177,9 +199,12 @@ export default function Dkhp() {
     console.log("ma phan cong: " + maPhanCongLopHocPhan);
     console.log("ma hoc ki: " + maHocKi);
     console.log(trangThaiLopHocPhan);
+    console.log(loaiHocPhanPhuTrach);
+    console.log(maLopHocPhan);
+    console.log("length chi tiet lhp:" + chiTietLopHP["results"].length);
     try {
       setLoading(true);
-      if (loaiHocPhanPhuTrach === 1) {
+      if (loaiHocPhanPhuTrach === 1 & chiTietLopHP["results"].length > 1) {
         const res = await dkhpAPI.dangKiHocPhan(maPhanCongLopHocPhan, maHocKi, trangThaiLopHocPhan, 1860000, 0);
         console.log(res.data);
         const resF5MonChuaDK = await dkhpAPI.getToanBoMonHocChuaDangKy();
@@ -195,7 +220,26 @@ export default function Dkhp() {
         var receiveDate = (new Date()).getTime();
         var responseTimeMs = receiveDate - sendDate;
         setResTime(responseTimeMs);
-      } else {
+
+      }
+      else if (chiTietLopHP["results"].length === 1) {
+        const res = await dkhpAPI.dangKiHocPhan(maPhanCongLopHocPhan, maHocKi, trangThaiLopHocPhan, 1860000, 0);
+        console.log(res.data);
+        const resF5MonChuaDK = await dkhpAPI.getToanBoMonHocChuaDangKy();
+        setMonChuaDangKy(resF5MonChuaDK.data);
+        // const res2 = await dkhpAPI.getHocPhanDaDangKyTrongKynay(maHocKi);
+        // setHpDaDangKy(res2.data);
+        setPopupNotify({
+          title: 'Thông báo',
+          mes: 'Đăng ký thành công',
+          isLoading: true
+        });
+        setTrangThaiDangKy(res.data);
+        var receiveDate = (new Date()).getTime();
+        var responseTimeMs = receiveDate - sendDate;
+        setResTime(responseTimeMs);
+      }
+      else {
         setPopupNotify({
           title: 'Thông báo',
           mes: 'Bạn chưa chọn nhóm thực hành',
@@ -376,48 +420,64 @@ export default function Dkhp() {
                                           <tbody>
 
                                             {monChuaDangKy["results"].map((mh) =>
-                                              <tr
-                                                id="rowHocPhan"
-                                                value={mh.ma_hoc_phan}
-                                                key={mh.ma_hoc_phan}
-                                              >
-                                                <td className="text-center">
-                                                  <div>
-                                                    <label
-                                                      className="mt-radio"
-                                                      style={{ paddingLeft: "17px" }}
-                                                    >
-                                                      <input
-                                                        id="rdoMonHocChoDangKy"
-                                                        name="rdoMonHocChoDangKy"
-                                                        type="radio"
-                                                        value={mh.ma_hoc_phan}
-                                                        // onClick={activeLopHocPhanByHocPhan}
-                                                        onChange={event => {
-                                                          setMaHocPhan(event.target.value)
+                                              mh.ma_hoc_ki === Number(maHocKi)
+                                                ? <>
+                                                  <tr
+                                                    id="rowHocPhan"
+                                                    value={mh.ma_hoc_phan}
+                                                    key={mh.ma_hoc_phan}
+                                                  >
+                                                    <td className="text-center">
+                                                      <div>
+                                                        <label
+                                                          className="mt-radio"
+                                                          style={{ paddingLeft: "17px" }}
+                                                        >
+                                                          <input
+                                                            id="rdoMonHocChoDangKy"
+                                                            name="rdoMonHocChoDangKy"
+                                                            type="radio"
+                                                            value={mh.ma_hoc_phan}
+                                                            // onClick={activeLopHocPhanByHocPhan}
+                                                            onChange={event => {
+                                                              setMaHocPhan(event.target.value)
 
-                                                        }}
-                                                      />
-                                                      <span></span>
-                                                    </label>
-                                                  </div>
-                                                </td>
-                                                <td>{sttMonChuaDK++}</td>
-                                                <td>{mh.ma_hoc_phan}</td>
-                                                <td className="text-left">{mh.ten_mon_hoc}</td>
-                                                <td>{mh.so_tin_chi_ly_thuyet}</td>
-                                                <td>
-                                                  <div>
-                                                    {
-                                                      Number(mh.hoc_phan_bat_buoc) === 1 ?
-                                                        <div className="check"></div> :
-                                                        <div className="no-check"></div>
-                                                    }
-                                                  </div>
-                                                </td>
-                                                <td></td>
-                                              </tr>
+                                                            }}
+                                                          />
+                                                          <span></span>
+                                                        </label>
+                                                      </div>
+                                                    </td>
+                                                    <td>{sttMonChuaDK++}</td>
+                                                    <td>{mh.ma_hoc_phan}</td>
+                                                    <td className="text-left">{mh.ten_mon_hoc}</td>
+                                                    <td>{mh.so_tin_chi_ly_thuyet}</td>
+                                                    <td>
+                                                      <div>
+                                                        {
+                                                          Number(mh.hoc_phan_bat_buoc) === 1 ?
+                                                            <div className="check"></div> :
+                                                            <div className="no-check"></div>
+                                                        }
+                                                      </div>
+                                                    </td>
+                                                    <td></td>
+                                                  </tr>
+                                                  <p hidden>
+                                                    {countMonChuaDK = mh.ma_hoc_ki + countMonChuaDK}
+                                                  </p>
+                                                </> : <></>
                                             )}
+                                            {
+                                              countMonChuaDK === 0
+                                                ?
+                                                <tr>
+                                                  <td colSpan={7}>
+                                                    <span>Học kỳ này không còn môn để đăng ký</span>
+                                                  </td>
+                                                </tr>
+                                                : <></>
+                                            }
                                           </tbody>
                                         </table>
                                       </div>
@@ -528,7 +588,7 @@ export default function Dkhp() {
                                                       <div>
                                                         <span lang="dkhp-trangthai">Trạng thái</span>: <span className="cl-red">
                                                           {dsLhp.trang_thai === 1 ? 'Có thể đăng ký' : 'Đã khóa'}</span><br />
-                                                        <span lang="dkhp-malhp">Mã lớp  học phần</span>: {dsLhp.ma_lop_hoc_phan}
+                                                        <span lang="dkhp-malhp">Mã lớp  học phần</span>: {dsLhp.ma_lop_hoc_phan} - {dsLhp.ten_lop_hoc_phan}
                                                       </div>
                                                     </TableCell>
                                                     <TableCell>
