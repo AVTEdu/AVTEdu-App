@@ -1,26 +1,26 @@
 const { Op } = require("sequelize");
 const { ConnectDB } = require("../config/mysql.config");
-const HocKi = require("../model/hocki.model");
-const SinhVien = require("../model/sinhvien.model");
+const HocKi = require("../models/hocki.model");
+const SinhVien = require("../models/sinhvien.model");
 const { QueryTypes } = require("sequelize");
-const HocPhan = require("../model/hocphan.model");
-const LopHocPhan = require("../model/lophocphan.model");
-const ThoiKhoaBieuSinhVien = require("../model/thoikhoabieusinhvien.model");
+const HocPhan = require("../models/hocphan.model");
+const LopHocPhan = require("../models/lophocphan.model");
+const ThoiKhoaBieuSinhVien = require("../models/thoikhoabieusinhvien.model");
 const { createThoiKhoaBieuSinhVien } = require("./admin.controller");
 const { verifyRefreshToken } = require("../helpers/jwt.service");
-const HocPhi = require("../model/hocphi.model");
+const HocPhi = require("../models/hocphi.model");
 const responseHanlder = require("../handlers/response.handler");
-const HocPhiSinhVien = require("../model/hocphisinhvien.model");
-const PhanCongLopHocPhan = require("../model/phanconglophocphan.model");
+const HocPhiSinhVien = require("../models/hocphisinhvien.model");
+const PhanCongLopHocPhan = require("../models/phanconglophocphan.model");
 const {
   getWeekDates,
   getWeekDay,
   fomartDateToFE,
 } = require("../helpers/date.validate");
-const KetQuaHocTap = require("../model/ketquahoctap.model");
-const { findAll } = require("../model/hocki.model");
+const KetQuaHocTap = require("../models/ketquahoctap.model");
+const { findAll } = require("../models/hocki.model");
 const { momoPayment } = require("../config/momo.config");
-const PhieuThu = require("../model/phieuthu.model");
+const PhieuThu = require("../models/phieuthu.model");
 
 const sequelize = ConnectDB().getInstance();
 /**

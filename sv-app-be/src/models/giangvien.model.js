@@ -1,9 +1,18 @@
 const {Sequelize, DataTypes, Model} = require("sequelize");
 const { ConnectDB } = require("../config/mysql.config");
+const bcrypt = require("bcryptjs");
 
 const sequelize = ConnectDB().getInstance();
 
-class GiangVien extends Model {}
+class GiangVien extends Model {
+    isValidPassword = async function (newPassword) {
+        try {
+          return await bcrypt .compare(newPassword, this.password);
+        } catch (error) {
+          throw new Error(error);
+        }
+      };
+}
 
 GiangVien.init({
     ma_giang_vien:{
@@ -25,6 +34,14 @@ GiangVien.init({
     },
     gioi_tinh:{
         type:DataTypes.BOOLEAN,
+        allowNull:false
+    },
+    username:{
+        type:DataTypes.STRING,
+        allowNull:false
+    },
+    password:{
+        type:DataTypes.STRING,
         allowNull:false
     },
     //Tạo mã khoá ngoại khoa

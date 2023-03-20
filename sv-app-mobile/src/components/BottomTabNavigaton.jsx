@@ -23,7 +23,7 @@ const BottomNavigator = () => {
         headerShown:false
       }}>
       <Tab.Screen
-        name="HomeScreen"
+        name="Trang chủ"
         component={HomeScreen}
         options={{
           tabBarIcon: ({color}) => (
@@ -32,16 +32,16 @@ const BottomNavigator = () => {
         }}
       />
       <Tab.Screen
-        name="LocalMall"
+        name="Nhắc nhở"
         component={HomeScreen}
         options={{
           tabBarIcon: ({color}) => (
-            <Icon name="local-mall" color={color} size={28} />
+            <Icon name="notifications" color={color} size={28} />
           ),
         }}
       />
       <Tab.Screen
-        name="Search"
+        name="Tìm kiếm"
         component={HomeScreen}
         options={{
           tabBarIcon: ({color}) => (
@@ -64,11 +64,11 @@ const BottomNavigator = () => {
         }}
       />
       <Tab.Screen
-        name="Favorite"
+        name="Góp ý"
         component={HomeScreen}
         options={{
           tabBarIcon: ({color}) => (
-            <Icon name="favorite" color={color} size={28} />
+            <Icon name="textsms" color={color} size={28} />
           ),
         }}
       />
@@ -77,7 +77,7 @@ const BottomNavigator = () => {
         component={HomeScreen}
         options={{
           tabBarIcon: ({color}) => (
-            <Icon name="shopping-cart" color={color} size={28} />
+            <Icon name="person" color={color} size={28} />
           ),
         }}
       />
