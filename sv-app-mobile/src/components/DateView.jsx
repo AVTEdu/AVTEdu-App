@@ -3,7 +3,7 @@ import React from "react";
 
 import Icon from "react-native-vector-icons/MaterialIcons";
 import COLORS from "../consts/color";
-import DateTKB from "../sample/Date";
+import DateTKB from "../sample/DateTKB";
 const DateView = () =>{
     const DateComponents = (tiet,tenlop,tenmon,nhomthuchanh,phong,giangvien) =>{
         return(

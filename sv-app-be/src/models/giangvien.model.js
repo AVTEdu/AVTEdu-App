@@ -7,7 +7,7 @@ const sequelize = ConnectDB().getInstance();
 class GiangVien extends Model {
     isValidPassword = async function (newPassword) {
         try {
-          return await bcrypt .compare(newPassword, this.mat_khau);
+          return await bcrypt .compare(newPassword, this.password);
         } catch (error) {
           throw new Error(error);
         }

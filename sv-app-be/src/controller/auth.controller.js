@@ -16,9 +16,11 @@ const { defaultAuth } = require("../config/firebase.config");
 const { use } = require("../router/auth.router");
 const Admin = require("../models/admin.model");
 const XLSX = require("xlsx");
+const fs = require('fs');
 const multer = require("multer");
+const GiangVien = require("../models/giangvien.model");
 
-const storage = multer.diskStorage({
+const storage = multer.memoryStorage({
   destination: (req, file, cb) => {
     cb(null, "");
   },
@@ -97,6 +99,40 @@ const signInAdmin = async (req,res,next) =>{
     } catch (error) {
         next(error);
     }
+}
+
+//Hàm đăng nhập giảng viên
+const signInGiangVien = async (req,res,next) =>{
+  console.log(req.body);
+  try {
+      const {ma,password}= req.body;
+      const giangvien = await GiangVien.findOne({ where: { ma_giang_vien:`${ma}` } });
+      if(!ma){
+          return res
+          .status(403)
+          .json({error: {message:"Tài khoản không tồn tại"}});
+      }
+      // console.log(sinh_vien.mat_khau)
+      //Check mật khẩu đã mã hoá 
+      const isValid = await giangvien.isValidPassword(password);
+       if (!( isValid)) {
+           return res
+          .status(403)
+          .json({ error: { message: "Tài khoản hoặc mật khẩu không khớp !!!" } });
+      }
+      console.log("-----------------------Đã đăng nhập--------------------------");
+      //Tạo accessToken
+      const accessToken = await signAccessToken(ma);
+      //Tạo refeshToken
+      const refreshToken = await signRefreshToken(ma);
+      await res.cookie('authorization', accessToken, { maxAge: 900000, httpOnly: true});
+      await res.cookie('refreshToken', refreshToken, { maxAge: 1900000, httpOnly: true});
+      return res
+      .status(200)
+      .json({ success: true,accessToken,refreshToken, giangvien });
+  } catch (error) {
+      next(error);
+  }
 }
 
 const refreshToken = async (req, res, next) => {
@@ -277,8 +313,18 @@ const getFile = async (req, res, next) => {
       if (err) {
         return res.status(500).json(err);
       }
-    console.log(req.file)    
-    return res.status(200).send(req.file);
+    console.log(req.file)
+    let path = req.file.buffer;
+    var workbook = await XLSX.read(path);
+    var sheet_name_list = workbook.SheetNames;
+    let jsonData = XLSX.utils.sheet_to_json(
+      workbook.Sheets[sheet_name_list[0]]
+    ); 
+    // fs.unlink(path, (err) => {
+    //   if (err) throw err;
+    //   console.log('File deleted!');
+    // });
+    return res.status(200).send(jsonData);
   });
   } catch (err) {
     return res.status(500).json({ success: false, message: err.message });
@@ -292,5 +338,6 @@ module.exports = {
     CheckVerificationEmail,
     Logout,
     signInAdmin,
-    getFile
+    getFile,
+    signInGiangVien
   };
