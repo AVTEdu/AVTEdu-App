@@ -317,14 +317,40 @@ const getFile = async (req, res, next) => {
     let path = req.file.buffer;
     var workbook = await XLSX.read(path);
     var sheet_name_list = workbook.SheetNames;
-    let jsonData = XLSX.utils.sheet_to_json(
+    let json = XLSX.utils.sheet_to_json(
       workbook.Sheets[sheet_name_list[0]]
-    ); 
+    );
+    const listImport = [{}];
+    // console.log(json);
+                listImport.shift();
+                for (let i = 8; i < json.length; i++) {
+                    listImport.push({
+                        stt: json[i].__EMPTY,
+                        ma_sinh_vien: json[i].__EMPTY_1,
+                        ho: json[i].__EMPTY_2,
+                        ten: json[i].__EMPTY_3,
+                        gioi_tinh: json[i].__EMPTY_4,
+                        ngay_sinh: json[i].__EMPTY_5,
+                        st_tuan_1: json[i].__EMPTY_7,
+                        st_tuan_2: json[i].__EMPTY_10,
+                        st_tuan_3: json[i].__EMPTY_13,
+                        st_tuan_4: json[i].__EMPTY_16,
+                        st_tuan_5: json[i].__EMPTY_19,
+                        st_tuan_6: json[i].__EMPTY_22,
+                        st_tuan_7: json[i].__EMPTY_25,
+                        st_tuan_8: json[i].__EMPTY_28,
+                        st_tuan_9: json[i].__EMPTY_31,
+                        st_tuan_10: json[i].__EMPTY_34,
+                        vang_co_phep: json[i].__EMPTY_36,
+                        vang_ko_phep: json[i].__EMPTY_37,
+                        tong_so_tiet: json[i].__EMPTY_38,
+                        phan_tram_vang: json[i].__EMPTY_39
+                      })}
     // fs.unlink(path, (err) => {
     //   if (err) throw err;
     //   console.log('File deleted!');
     // });
-    return res.status(200).send(jsonData);
+    return res.status(200).send(listImport);
   });
   } catch (err) {
     return res.status(500).json({ success: false, message: err.message });

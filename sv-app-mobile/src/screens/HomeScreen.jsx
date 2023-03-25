@@ -11,14 +11,20 @@ import Icon from "react-native-vector-icons/MaterialIcons";
 import COLORS from "../consts/color";
 import CustomButtonHome from "../components/CustomButtonHome";
 import btns from "../consts/button";
+import { useSelector } from "react-redux";
 
 const HomeScreen = ({ navigation }) => {
+
+  const loggedInUser = useSelector((state) => state.user.user[0].sinh_vien);
   const btnDateHandler = () => {
     navigation.navigate("Date");
   };
   const btnScoreHandler = () => {
     navigation.navigate("Score");
   };
+  useEffect(() => {
+      
+  },[]);
 
   function renderHeader() {
     return (
@@ -35,7 +41,7 @@ const HomeScreen = ({ navigation }) => {
         <View
           style={{ top: 90, left: 10, width: "100%", flexDirection: "row" }}
         >
-          <Text style={{ color: COLORS.white }}>Xin chào,Nguyễn Việt Anh</Text>
+          <Text style={{ color: COLORS.white }}>Xin chào, {loggedInUser.ho_ten_sinh_vien}</Text>
           <View style={{ width: "47%" }}></View>
           <TouchableOpacity>
             <Icon name="notifications-none" color={COLORS.white} size={28} />

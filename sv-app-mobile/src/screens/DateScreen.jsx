@@ -1,21 +1,57 @@
 import { View, Text, StyleSheet, TouchableOpacity, Platform } from "react-native";
-import React, { useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import COLORS from "../consts/color";
 import Icon from "react-native-vector-icons/MaterialIcons";
 import DateView from "../components/DateView";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { DateTimePickerAndroid } from "@react-native-community/datetimepicker";
+import { format } from "date-fns";
+import lichHocAPI from "../api/xemLichAPI";
+import { useSelector } from "react-redux";
 
 const DateScreen = ({navigation}) => {
   const [day,setDay] = useState(new Date());
-  const [mode,setMode] = useState('date');
-  const [show,setShow] = useState(false);
-  const [text,setText] = useState('Empty');
+  const token = useSelector((state) => state.user.user[0].accessToken);
+  const [thoiKhoaBieu,setThoiKhoaBieu] = useState('');
+  
+  useEffect(() =>{
+    getWeekCurrent(day);
+    getDateData(day);
+  },[day])
+
+  const getWeekCurrent = (date) =>{
+    const dateFormat = 'dd/MM/yyyy';
+    // Lấy ngày đầu tuần bằng cách trừ số ngày hiện tại với thứ hiện tại trừ cho 1 (0 là Chủ nhật)
+    const firstDayOfWeek = format(new Date(date.getTime() - (date.getDay() - 1) * 24 * 60 * 60 * 1000),dateFormat);
+
+    // Lấy ngày cuối tuần bằng cách cộng số ngày còn lại cho đến ngày thứ 7 (6 là thứ Bảy)
+    const lastDayOfWeek = format(new Date(date.getTime() + (6 - date.getDay()) * 24 * 60 * 60 * 1000),dateFormat);
+    // Hiển thị kết quả
+    return firstDayOfWeek+" - "+lastDayOfWeek;
+  }
+ 
+  const getPreviousWeek = (date) => {
+    const nextWeek = new Date(date.getTime() - 7 * 24 * 60 * 60 * 1000);
+    const firstDay = new Date(nextWeek.setDate(nextWeek.getDate() - nextWeek.getDay() + 1)); 
+    return setDay(firstDay) ;
+  } 
+  const getNextWeek = (date) =>{
+    const nextWeek = new Date(date.getTime() + 7 * 24 * 60 * 60 * 1000);
+    const firstDay = new Date(nextWeek.setDate(nextWeek.getDate() - nextWeek.getDay() + 1)); 
+    return setDay(firstDay) ;
+  }
+  
+  const getDateData = async() =>{
+    const res = await lichHocAPI.getThoiKhoaBieuSinhVienTrongMotTuan(day,token);
+    setThoiKhoaBieu(res.data.result);
+  }
 
   const onChange = (event, selectedDate) => {
     const currentDate = selectedDate;
-    setDate(currentDate);
+    return setDay(currentDate);
   };
+
+  
 
   const showMode = (currentMode) => {
     if (!(day instanceof Date)) { // isNaN wont accept a date in typescript, use date.getTime() instead to produce a number
@@ -38,40 +74,40 @@ const DateScreen = ({navigation}) => {
   const BackHandler= () =>{
     navigation.navigate("Home");
   }
-  function renderHeader() {
-    return (
-      <View
-        style={{  
-          width: "100%",
-          height: 100,
-          ...styles.shadow,
-          backgroundColor: "#029afd",
-        }}
-      >
-        <View
-          style={{flex:1, top:60, width: "100%", flexDirection: "row",paddingHorizontal:15}}
-        >
-            <View  style={{flexDirection: "row"}}>
-                <TouchableOpacity onPress={BackHandler}>
-                    <Icon name="arrow-back-ios" color={COLORS.white} size={23} />
-                </TouchableOpacity>
-                <Text style={{fontWeight:"700",color:COLORS.white,fontFamily:"Roboto"}} >Lịch học - lịch thi</Text>
-            </View>      
-            <TouchableOpacity style={{marginLeft:"auto"}} onPress={showDatepicker}>
-                <Icon name="calendar-today" color={COLORS.white} size={23} />
-            </TouchableOpacity>
-        </View>
-      </View>
-    );
-  }
+  // function renderHeader() {
+  //   return (
+  //     <View
+  //       style={{  
+  //         width: "100%",
+  //         height: 100,
+  //         ...styles.shadow,
+  //         backgroundColor: "#029afd",
+  //       }}
+  //     >
+  //       <View
+  //         style={{flex:1, top:60, width: "100%", flexDirection: "row",paddingHorizontal:15}}
+  //       >
+  //           <View  style={{flexDirection: "row"}}>
+  //               <TouchableOpacity onPress={() => BackHandler}>
+  //                   <Icon name="arrow-back-ios" color={COLORS.white} size={23} />
+  //               </TouchableOpacity>
+  //               <Text style={{fontWeight:"700",color:COLORS.white,fontFamily:"Roboto"}} >Lịch học - lịch thi</Text>
+  //           </View>      
+  //           <TouchableOpacity style={{marginLeft:"auto"}} onPress={() => showDatepicker}>
+  //               <Icon name="calendar-today" color={COLORS.white} size={23} />
+  //           </TouchableOpacity>
+  //       </View>
+  //     </View>
+  //   );
+  // }
   function renderDateBar() {
     return(
         <View style={styles.datebar}>
-            <TouchableOpacity style={{borderWidth:1,width:"10%",justifyContent:"center",alignItems:"center",borderRadius:50,borderColor:COLORS.grey,marginRight:"auto"}}>
+            <TouchableOpacity style={{borderWidth:1,width:"10%",justifyContent:"center",alignItems:"center",borderRadius:50,borderColor:COLORS.grey,marginRight:"auto"}} onPress={() => getPreviousWeek(day)}>
                 <Icon style={{padding:5,left:5}} name="arrow-back-ios" color={COLORS.blue} size={23} />
             </TouchableOpacity>
-            <Text style={{color:"#029afd",textAlign:"center",fontFamily:"Roboto",fontWeight:"bold"}}>20/02/2023 - 26/02/2023</Text>
-            <TouchableOpacity style={{borderWidth:1,width:"10%",justifyContent:"center",alignItems:"center",borderRadius:50,borderColor:COLORS.grey,transform: [{rotate: '180deg'}],marginLeft:"auto"}}>
+            <Text style={{color:"#029afd",textAlign:"center",fontFamily:"Roboto",fontWeight:"bold"}}>{getWeekCurrent(day)}</Text>
+            <TouchableOpacity style={{borderWidth:1,width:"10%",justifyContent:"center",alignItems:"center",borderRadius:50,borderColor:COLORS.grey,transform: [{rotate: '180deg'}],marginLeft:"auto"}} onPress={() => getNextWeek(day)}>
                 <Icon style={{padding:5,left:5}} name="arrow-back-ios" color={COLORS.blue} size={23} />
             </TouchableOpacity>
         </View>
@@ -125,8 +161,7 @@ const DateScreen = ({navigation}) => {
         </View>
       </View>
       {renderDateBar()}
-      <DateView/>
-      <Text>DateScreen</Text>
+      <DateView tkbdata={thoiKhoaBieu}/>
     </View>
   );
 };

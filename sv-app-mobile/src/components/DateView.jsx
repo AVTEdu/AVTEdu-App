@@ -1,16 +1,16 @@
-import { View, Text, StyleSheet, TouchableOpacity, FlatList } from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity, FlatList,Image } from "react-native";
 import React from "react";
 
 import Icon from "react-native-vector-icons/MaterialIcons";
 import COLORS from "../consts/color";
-import DateTKB from "../sample/DateTKB";
-const DateView = () =>{
-    const DateComponents = (tiet,tenlop,tenmon,nhomthuchanh,phong,giangvien) =>{
+import nullImgae from "../assets/images/null.png"
+const DateView = ({tkbdata}) =>{
+    const DateComponents = (tiet,tietkt,tenlop,tenmon,nhomthuchanh,phong,giangvien) =>{
         return(
             <View style={{borderBottomColor:COLORS.blue,borderBottomWidth:10}}>
             <View style={{width:"100%",height:40,backgroundColor:COLORS.white,flexDirection:"row",alignItems:"center",borderBottomWidth:0.5}}>
                 <View style={{width:5,height:"100%",backgroundColor:"#196dc7"}} ></View>
-                <Text style={{marginLeft:10,fontWeight:"bold",fontFamily:"Roboto"}}>Tiết: {tiet}</Text>
+                <Text style={{marginLeft:10,fontWeight:"bold",fontFamily:"Roboto"}}>Tiết: {tiet}-{tietkt}</Text>
             </View>
             <View style={{width:"100%",minHeight:120,backgroundColor:COLORS.white,top:0.5,flexDirection:"row"}}>
                 <View style={{height:"100%",width:"10%",alignItems:"center"}}>
@@ -34,21 +34,34 @@ const DateView = () =>{
             <FlatList
                 data={tkb}
                 renderItem={({ item }) => (
-                    DateComponents(item.tiet,item.tenlop,item.tenmon,item.nhomthuchanh,item.phong,item.giangvien)
+                    DateComponents(item.tiet_hoc_bat_dau,item.tiet_hoc_ket_thuc,item.ten_lop_hoc_phan,item.ten_mon_hoc,item.nhom_thuc_hanh,item.ten_phong_hoc,item.ten_giang_vien)
                   )}
             />
            
         </View>
         )
     }
+    const checkTKBNull = () =>{
+        return tkbdata.every(day => day.TKB.length === 0);
+    }
     return(
+       
+    !checkTKBNull ? 
         <FlatList
-            data={DateTKB} 
+            data={tkbdata} 
             renderItem={({ item }) => (
-                DateHeaderDay(item.thu,item.ngay,item.TKB)
+                item.TKB.length > 0  ? DateHeaderDay(item.Thu,item.Ngay,item.TKB) : null
               )}
         />
-        
+    :
+    <View style={{justifyContent:"center",alignItems:"center",opacity:0.6}}>
+        <Image source={nullImgae}
+        style ={{width: "80%",
+        maxWidth: 300,
+        maxHeight: 300,}}
+        resizeMode="contain"/>
+        <Text>Không có lịch học hiển thị 😭😭</Text>
+    </View>
     );
 };
 export default DateView;
