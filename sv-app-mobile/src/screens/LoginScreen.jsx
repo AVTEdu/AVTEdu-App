@@ -8,19 +8,39 @@ import {
   Image,
   StyleSheet,
   useWindowDimensions,
+  Alert,
 } from "react-native";
 
 import loginImage from "../assets/images/login.jpg";
 import CustomButton from "../components/CustomButton";
 import CustomInput from "../components/CustomInput";
+import {useDispatch} from "react-redux";
+import { unwrapResult } from "@reduxjs/toolkit";
+import { signin } from "../api/userSlice";
 
 const LoginScreen = ({ navigation }) => {
-  const { username, setUsername } = useState("");
-  const { password, setPassword } = useState("");
+  const dispatch = useDispatch();
+  const [enteredMa, setEnteredMa] = useState("");
+  const [enteredPass, setEnteredPass] = useState("");
   const { height } = useWindowDimensions();
 
-  const onLoginInHandle = () =>{
-    navigation.navigate('Home');
+  const onLoginInHandle = async () =>{
+    if (enteredPass === "" || enteredMa === "") {
+      Alert.alert("Chưa điền đầy đủ thông tin!");
+    } else {
+      try {
+        const action = signin({
+          ma: enteredMa,
+          password: enteredPass,
+        });
+        const resultAction = await dispatch(action);
+        unwrapResult(resultAction);
+        navigation.navigate("Home");
+      } catch (error) {
+        console.log(error);
+        Alert.alert("Mã sinh viên hoặc mật khẩu không chính xác");
+      }
+    }
   }
   return (
     <SafeAreaView style={styles.root}>
@@ -30,14 +50,14 @@ const LoginScreen = ({ navigation }) => {
         resizeMode="contain"
       />
       <CustomInput
-        placeholder="Username"
-        value={username}
-        setValue={setUsername}
+        placeholder="Mã sinh viên"
+        value={enteredMa}
+        setValue={setEnteredMa}
       />
       <CustomInput
         placeholder="Password"
-        value={password}
-        setValue={setPassword}
+        value={enteredPass}
+        setValue={setEnteredPass}
         secureTextEntry={true}
       />
       <CustomButton label="Đăng nhập" onPress={onLoginInHandle}/>

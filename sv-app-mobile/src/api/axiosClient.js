@@ -2,7 +2,7 @@ import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 //let token = localStorage.getItem("token");
 const axiosClient = axios.create({
-  baseURL: "http://172.30.71.23:5000/",
+  baseURL: "http://172.27.64.1:4000/",
   headers: {
     "Content-Type": "application/json",
     Accept: "application/json",
@@ -21,13 +21,13 @@ axiosClient.interceptors.request.use(
 );
 
 axiosClient.interceptors.response.use(
-  function (reponse) {
-    return reponse;
+  function (response) {
+    return response;
   },
   function (error) {
     console.log("ERROR REPONSE: ", error.response);
     const { config, status, data } = error.response;
-    if (config.url === "/userRequest/GetSinhVienByMa" && status === 403) {
+    if (config.url === "/auth/signin" && status === 403) {
       const error = data.error.message;
       return Promise.reject(error);
     }

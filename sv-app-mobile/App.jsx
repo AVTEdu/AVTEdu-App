@@ -8,6 +8,9 @@ import BottomNavigator from './src/components/BottomTabNavigaton';
 import DateScreen from './src/screens/DateScreen';
 import { useState } from 'react';
 import SocreScreen from './src/screens/SocreScreen';
+import { Provider } from "react-redux";
+import store from './src/api/store';
+
 
 const Stack = createNativeStackNavigator();
 
@@ -21,6 +24,7 @@ export default function App() {
 
   if(!IsReady){
   return (
+    <Provider store={store}>
     <NavigationContainer>
       <Stack.Navigator initialRouteName="Login" screenOptions={{ headerShown: false }}>
         <Stack.Screen name="Login" component={LoginScreen} />
@@ -29,6 +33,7 @@ export default function App() {
         <Stack.Screen name="Score" component={SocreScreen} />
       </Stack.Navigator>
     </NavigationContainer>
+    </Provider>
   );
   }
 
