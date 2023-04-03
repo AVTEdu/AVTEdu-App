@@ -10,6 +10,9 @@ router.use("/admin", AdminsRouter);
 const userRequest = require("./userRequest.router");
 router.use("/userRequest", userRequest);
 
+const GiangVienRouter = require("./giangvien.router");
+router.use("/giangvien", GiangVienRouter);
+
 router.get('/hello', function (req, res) {
     res.send("Thanh toán thành công");
     

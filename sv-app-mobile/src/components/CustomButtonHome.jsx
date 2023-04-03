@@ -6,11 +6,11 @@ import COLORS from '../consts/color';
 
 export default function CustomButtonHome({onPress,Bgcolor,icon,text}) {
     return(
-        <TouchableOpacity style={{justifyContent:'center',alignItems:'center',width:"20%",height:90}}>
-          <TouchableOpacity onPress={onPress} style={{width:"70%",height:"60%",backgroundColor:`${Bgcolor}`,justifyContent:'center',alignItems:'center',borderRadius:20}}>
+        <TouchableOpacity style={{justifyContent:'center',alignItems:'center',width:"25%",height:110}}>
+          <TouchableOpacity onPress={onPress} style={{width:"60%",height:"50%",backgroundColor:`${Bgcolor}`,justifyContent:'center',alignItems:'center',borderRadius:20}}>
               <Icon name={icon} color={COLORS.white} size={35}/>
           </TouchableOpacity>
-          <Text>{text}</Text>
+          <Text style={{textAlign:'center',minHeight:38,paddingTop:5}} >{text}</Text>
         </TouchableOpacity>
     )
 }
