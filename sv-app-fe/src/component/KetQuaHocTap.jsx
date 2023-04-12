@@ -1,7 +1,52 @@
 import { React, useState, useEffect } from "react";
 import Sidenavbar from "./Sidenavbar";
+import dkhpAPI from "../api/dkhpAPI";
 
 export default function KetQuaHocTap() {
+    const [dsDiemMaHK1, setDsDiemMaHK1] = useState();
+    const [dsDiemMaHK2, setDsDiemMaHK2] = useState();
+    const [dsDiemMaHK3, setDsDiemMaHK3] = useState();
+    const [dsDiemMaHK4, setDsDiemMaHK4] = useState();
+    const [dsDiemMaHK5, setDsDiemMaHK5] = useState();
+    const [dsDiemMaHK6, setDsDiemMaHK6] = useState();
+    const [dsDiemMaHK7, setDsDiemMaHK7] = useState();
+    const [dsDiemMaHK8, setDsDiemMaHK8] = useState();
+
+    let stt1 = 1;
+    let stt2 = 1;
+    let stt3 = 1;
+    // let stt4 = 1;
+    // let stt5 = 1;
+    // let stt6 = 1;
+    // let stt7 = 1;
+    // let stt8 = 1;
+
+    useEffect(() => {
+        const activeAllDSDiem = async () => {
+            try {
+                const resHK1 = await dkhpAPI.getKetQuaHocTap(1);
+                const resHK2 = await dkhpAPI.getKetQuaHocTap(2);
+                const resHK3 = await dkhpAPI.getKetQuaHocTap(3);
+                // const resHK4 = await dkhpAPI.getKetQuaHocTap(4);
+                // const resHK5 = await dkhpAPI.getKetQuaHocTap(5);
+                // const resHK6 = await dkhpAPI.getKetQuaHocTap(6);
+                // const resHK7 = await dkhpAPI.getKetQuaHocTap(7);
+                // const resHK8 = await dkhpAPI.getKetQuaHocTap(8);
+                setDsDiemMaHK1(resHK1.data);
+                setDsDiemMaHK2(resHK2.data);
+                setDsDiemMaHK3(resHK3.data);
+                // setDsDiemMaHK4(resHK4.data);
+                // setDsDiemMaHK5(resHK5.data);
+                // setDsDiemMaHK6(resHK6.data);
+                // setDsDiemMaHK7(resHK7.data);
+                // setDsDiemMaHK8(resHK8.data);
+            } catch (error) {
+                console.log(error.message);
+            }
+        };
+        activeAllDSDiem();
+    }, [])
+
     return (
         <div className="wrapper">
             <Sidenavbar />
@@ -28,16 +73,17 @@ export default function KetQuaHocTap() {
                                                             <th rowSpan={3} style={{ width: '200px !important', minWidth: '200px !important' }} lang="kqht-malhp" className="sorting_disabled"><div>Mã lớp học phần</div></th>
                                                             <th rowSpan={3} style={{ width: '200px !important' }} lang="kqht-tenlhp" className="sorting_disabled"><div>Tên môn học/học phần</div></th>
                                                             <th rowSpan={3} style={{ width: '100px !important' }} lang="kqht-stc" className="sorting_disabled"><div>Số tín chỉ</div></th>
-                                                            <th colSpan={2} lang="Row_1_2">
-                                                                Giữa kỳ
-                                                            </th>
-                                                            <th colSpan={9} lang="Row_1_3">
+
+                                                            <th colSpan={5} lang="Row_1_3">
                                                                 Thường xuyên
+                                                            </th>
+                                                            <th rowSpan={3} colSpan={2} lang="Row_1_2">
+                                                                Giữa kỳ
                                                             </th>
                                                             <th colSpan={5} lang="Row_1_5">
                                                                 Thực hành
                                                             </th>
-                                                            <th rowSpan={3} lang="DiemTBQuaTrinh" className="sorting_disabled">TBQT</th>
+
                                                             <th rowSpan={3} lang="Row_1_8" className="sorting_disabled">
                                                                 Cuối kỳ
                                                             </th>
@@ -51,9 +97,8 @@ export default function KetQuaHocTap() {
                                                             <th rowSpan={3} lang="IsDat" className="sorting_disabled">Đạt</th>
                                                         </tr>
                                                         <tr>
-                                                            <th rowSpan={2} lang="DiemChuyenCan1" className="sorting_disabled">1</th>
-                                                            <th rowSpan={2} lang="DiemChuyenCanE" className="sorting_disabled">Chuyên cần</th>
-                                                            <th colSpan={9} lang="Row_2_3_2">LT Hệ số 1</th>
+
+                                                            <th colSpan={5} lang="Row_2_3_2">LT Hệ số 1</th>
                                                             <th rowSpan={2} lang="DiemThucHanh1" className="sorting_disabled">1</th>
                                                             <th rowSpan={2} lang="DiemThucHanh2" className="sorting_disabled">2</th>
                                                             <th rowSpan={2} lang="DiemThucHanh3" className="sorting_disabled">3</th>
@@ -66,926 +111,321 @@ export default function KetQuaHocTap() {
                                                             <th lang="DiemHeSo13" className="sorting_disabled">3</th>
                                                             <th lang="DiemHeSo14" className="sorting_disabled">4</th>
                                                             <th lang="DiemHeSo15" className="sorting_disabled">5</th>
-                                                            <th lang="DiemThuongKy6" className="sorting_disabled">6</th>
-                                                            <th lang="DiemThuongKy7" className="sorting_disabled">7</th>
-                                                            <th lang="DiemThuongKy8" className="sorting_disabled">8</th>
-                                                            <th lang="DiemThuongKy9" className="sorting_disabled">9</th>
                                                         </tr>
                                                     </thead>
-                                                    <tbody>
-                                                        <tr role="row">
-                                                            <td colSpan={28} className="text-left row-head">HK1 (2019-2020)</td>
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                        </tr>
-                                                        <tr role="row">
-                                                            <td style={{ width: '100px !important' }}><div style={{}}>1</div></td>
-                                                            <td style={{ width: '200px !important' }}>
-                                                                <div style={{}} title>
-                                                                    4203000685134
-                                                                </div>
-                                                            </td>
-                                                            <td style={{ width: '200px !important' }} className="text-left"><div style={{ wordBreak: 'break-word' }}> Những nguyên lý cơ bản của chủ nghĩa Mác - Lênin</div></td>
-                                                            <td style={{ width: '100px !important' }}><div style={{ display: 'inline-table' }}>5</div></td>
-                                                            <td className title="DiemChuyenCan1">7,00</td>
-                                                            <td className title="DiemChuyenCanE" />
-                                                            <td className title="DiemHeSo11">7,00</td>
-                                                            <td className title="DiemHeSo12">6,00</td>
-                                                            <td className title="DiemHeSo13">7,00</td>
-                                                            <td className title="DiemHeSo14" />
-                                                            <td className title="DiemHeSo15" />
-                                                            <td className title="DiemThuongKy6" />
-                                                            <td className title="DiemThuongKy7" />
-                                                            <td className title="DiemThuongKy8" />
-                                                            <td className title="DiemThuongKy9" />
-                                                            <td className title="DiemThucHanh1" />
-                                                            <td className title="DiemThucHanh2" />
-                                                            <td className title="DiemThucHanh3" />
-                                                            <td className title="DiemThucHanh4" />
-                                                            <td className title="DiemThucHanh5" />
-                                                            <td className title="DiemTBQuaTrinh" />
-                                                            <td className title="DiemThi">6,50</td>
-                                                            <td className title="DiemTongKet">6,70</td>
-                                                            <td className title="DiemTinChi">2,50</td>
-                                                            <td className title="DiemChu">C+</td>
-                                                            <td className title="XepLoai">Trung Bình</td>
-                                                            <td className title="GhiChu" />
-                                                            <td>
-                                                                <div>
-                                                                    <div className="check" />
-                                                                </div>
-                                                            </td>
-                                                        </tr>
-                                                        <tr role="row">
-                                                            <td style={{ width: '100px !important' }}><div style={{}}>2</div></td>
-                                                            <td style={{ width: '200px !important' }}>
-                                                                <div style={{}} title>
-                                                                    420300200908
-                                                                </div>
-                                                            </td>
-                                                            <td style={{ width: '200px !important' }} className="text-left"><div style={{ wordBreak: 'break-word' }}> Nhập môn Tin học</div></td>
-                                                            <td style={{ width: '100px !important' }}><div style={{ display: 'inline-table' }}>2</div></td>
-                                                            <td className title="DiemChuyenCan1">7,50</td>
-                                                            <td className title="DiemChuyenCanE" />
-                                                            <td className title="DiemHeSo11">8,00</td>
-                                                            <td className title="DiemHeSo12">8,50</td>
-                                                            <td className title="DiemHeSo13" />
-                                                            <td className title="DiemHeSo14" />
-                                                            <td className title="DiemHeSo15" />
-                                                            <td className title="DiemThuongKy6" />
-                                                            <td className title="DiemThuongKy7" />
-                                                            <td className title="DiemThuongKy8" />
-                                                            <td className title="DiemThuongKy9" />
-                                                            <td className title="DiemThucHanh1" />
-                                                            <td className title="DiemThucHanh2" />
-                                                            <td className title="DiemThucHanh3" />
-                                                            <td className title="DiemThucHanh4" />
-                                                            <td className title="DiemThucHanh5" />
-                                                            <td className title="DiemTBQuaTrinh" />
-                                                            <td className title="DiemThi">8,00</td>
-                                                            <td className title="DiemTongKet">7,90</td>
-                                                            <td className title="DiemTinChi">3,00</td>
-                                                            <td className title="DiemChu">B </td>
-                                                            <td className title="XepLoai">Khá</td>
-                                                            <td className title="GhiChu" />
-                                                            <td>
-                                                                <div>
-                                                                    <div className="check" />
-                                                                </div>
-                                                            </td>
-                                                        </tr>
-                                                        <tr role="row">
-                                                            <td style={{ width: '100px !important' }}><div style={{}}>3</div></td>
-                                                            <td style={{ width: '200px !important' }}>
-                                                                <div style={{}} title>
-                                                                    420300306701
-                                                                </div>
-                                                            </td>
-                                                            <td style={{ width: '200px !important' }} className="text-left"><div style={{ wordBreak: 'break-word' }}> Tiếng Anh 1</div></td>
-                                                            <td style={{ width: '100px !important' }}><div style={{ display: 'inline-table' }}>3</div></td>
-                                                            <td className title="DiemChuyenCan1" />
-                                                            <td className title="DiemChuyenCanE" />
-                                                            <td className title="DiemHeSo11" />
-                                                            <td className title="DiemHeSo12" />
-                                                            <td className title="DiemHeSo13" />
-                                                            <td className title="DiemHeSo14" />
-                                                            <td className title="DiemHeSo15" />
-                                                            <td className title="DiemThuongKy6" />
-                                                            <td className title="DiemThuongKy7" />
-                                                            <td className title="DiemThuongKy8" />
-                                                            <td className title="DiemThuongKy9" />
-                                                            <td className title="DiemThucHanh1" />
-                                                            <td className title="DiemThucHanh2" />
-                                                            <td className title="DiemThucHanh3" />
-                                                            <td className title="DiemThucHanh4" />
-                                                            <td className title="DiemThucHanh5" />
-                                                            <td className title="DiemTBQuaTrinh" />
-                                                            <td className title="DiemThi">345,00</td>
-                                                            <td className title="DiemTongKet">345,00</td>
-                                                            <td className title="DiemTinChi" />
-                                                            <td className title="DiemChu" />
-                                                            <td className title="XepLoai" />
-                                                            <td className title="GhiChu" />
-                                                            <td>
-                                                                <div>
-                                                                    <div className="check" />
-                                                                </div>
-                                                            </td>
-                                                        </tr>
-                                                        <tr role="row">
-                                                            <td style={{ width: '100px !important' }}><div style={{}}>4</div></td>
-                                                            <td style={{ width: '200px !important' }}>
-                                                                <div style={{}} title>
-                                                                    4203003242120
-                                                                </div>
-                                                            </td>
-                                                            <td style={{ width: '200px !important' }} className="text-left"><div style={{ wordBreak: 'break-word' }}> Giáo dục Quốc phòng và an ninh 1</div></td>
-                                                            <td style={{ width: '100px !important' }}><div style={{ display: 'inline-table' }}>4</div></td>
-                                                            <td className title="DiemChuyenCan1" />
-                                                            <td className title="DiemChuyenCanE" />
-                                                            <td className title="DiemHeSo11" />
-                                                            <td className title="DiemHeSo12" />
-                                                            <td className title="DiemHeSo13" />
-                                                            <td className title="DiemHeSo14" />
-                                                            <td className title="DiemHeSo15" />
-                                                            <td className title="DiemThuongKy6" />
-                                                            <td className title="DiemThuongKy7" />
-                                                            <td className title="DiemThuongKy8" />
-                                                            <td className title="DiemThuongKy9" />
-                                                            <td className title="DiemThucHanh1" />
-                                                            <td className title="DiemThucHanh2" />
-                                                            <td className title="DiemThucHanh3" />
-                                                            <td className title="DiemThucHanh4" />
-                                                            <td className title="DiemThucHanh5" />
-                                                            <td className title="DiemTBQuaTrinh" />
-                                                            <td className title="DiemThi">6,00</td>
-                                                            <td className title="DiemTongKet">6,00</td>
-                                                            <td className title="DiemTinChi">2,50</td>
-                                                            <td className title="DiemChu">C+</td>
-                                                            <td className title="XepLoai">Trung Bình</td>
-                                                            <td className title="GhiChu" />
-                                                            <td>
-                                                                <div>
-                                                                    <div className="check" />
-                                                                </div>
-                                                            </td>
-                                                        </tr>
-                                                        <tr role="row">
-                                                            <td style={{ width: '100px !important' }}><div style={{}}>5</div></td>
-                                                            <td style={{ width: '200px !important' }}>
-                                                                <div style={{}} title>
-                                                                    4203003259121
-                                                                </div>
-                                                            </td>
-                                                            <td style={{ width: '200px !important' }} className="text-left"><div style={{ wordBreak: 'break-word' }}> Toán cao cấp 1</div></td>
-                                                            <td style={{ width: '100px !important' }}><div style={{ display: 'inline-table' }}>2</div></td>
-                                                            <td className title="DiemChuyenCan1">9,50</td>
-                                                            <td className title="DiemChuyenCanE" />
-                                                            <td className title="DiemHeSo11">8,00</td>
-                                                            <td className title="DiemHeSo12">8,00</td>
-                                                            <td className title="DiemHeSo13" />
-                                                            <td className title="DiemHeSo14" />
-                                                            <td className title="DiemHeSo15" />
-                                                            <td className title="DiemThuongKy6" />
-                                                            <td className title="DiemThuongKy7" />
-                                                            <td className title="DiemThuongKy8" />
-                                                            <td className title="DiemThuongKy9" />
-                                                            <td className title="DiemThucHanh1" />
-                                                            <td className title="DiemThucHanh2" />
-                                                            <td className title="DiemThucHanh3" />
-                                                            <td className title="DiemThucHanh4" />
-                                                            <td className title="DiemThucHanh5" />
-                                                            <td className title="DiemTBQuaTrinh" />
-                                                            <td className title="DiemThi">7,00</td>
-                                                            <td className title="DiemTongKet">8,00</td>
-                                                            <td className title="DiemTinChi">3,50</td>
-                                                            <td className title="DiemChu">B+</td>
-                                                            <td className title="XepLoai">Khá</td>
-                                                            <td className title="GhiChu" />
-                                                            <td>
-                                                                <div>
-                                                                    <div className="check" />
-                                                                </div>
-                                                            </td>
-                                                        </tr>
-                                                        <tr role="row">
-                                                            <td style={{ width: '100px !important' }}><div style={{}}>6</div></td>
-                                                            <td style={{ width: '200px !important' }}>
-                                                                <div style={{}} title>
-                                                                    4203003307120
-                                                                </div>
-                                                            </td>
-                                                            <td style={{ width: '200px !important' }} className="text-left"><div style={{ wordBreak: 'break-word' }}> Giáo dục thể chất 1</div></td>
-                                                            <td style={{ width: '100px !important' }}><div style={{ display: 'inline-table' }}>2</div></td>
-                                                            <td className title="DiemChuyenCan1" />
-                                                            <td className title="DiemChuyenCanE" />
-                                                            <td className title="DiemHeSo11" />
-                                                            <td className title="DiemHeSo12" />
-                                                            <td className title="DiemHeSo13" />
-                                                            <td className title="DiemHeSo14" />
-                                                            <td className title="DiemHeSo15" />
-                                                            <td className title="DiemThuongKy6" />
-                                                            <td className title="DiemThuongKy7" />
-                                                            <td className title="DiemThuongKy8" />
-                                                            <td className title="DiemThuongKy9" />
-                                                            <td className title="DiemThucHanh1" />
-                                                            <td className title="DiemThucHanh2" />
-                                                            <td className title="DiemThucHanh3" />
-                                                            <td className title="DiemThucHanh4" />
-                                                            <td className title="DiemThucHanh5" />
-                                                            <td className title="DiemTBQuaTrinh" />
-                                                            <td className="cl-red" title="DiemThi">8,00</td>
-                                                            <td className="cl-red" title="DiemTongKet">8,00</td>
-                                                            <td className title="DiemTinChi">1,50</td>
-                                                            <td className title="DiemChu">D+</td>
-                                                            <td className title="XepLoai">Trung Bình Yếu</td>
-                                                            <td className title="GhiChu" />
-                                                            <td>
-                                                                <div>
-                                                                    <div className="check" />
-                                                                </div>
-                                                            </td>
-                                                        </tr>
-                                                        <tr role="row">
-                                                            <td style={{ width: '100px !important' }}><div style={{}}>7</div></td>
-                                                            <td style={{ width: '200px !important' }}>
-                                                                <div style={{}} title>
-                                                                    420300384837
-                                                                </div>
-                                                            </td>
-                                                            <td style={{ width: '200px !important' }} className="text-left"><div style={{ wordBreak: 'break-word' }}> Nhập môn Lập trình</div></td>
-                                                            <td style={{ width: '100px !important' }}><div style={{ display: 'inline-table' }}>2</div></td>
-                                                            <td className title="DiemChuyenCan1" />
-                                                            <td className title="DiemChuyenCanE" />
-                                                            <td className title="DiemHeSo11" />
-                                                            <td className title="DiemHeSo12" />
-                                                            <td className title="DiemHeSo13" />
-                                                            <td className title="DiemHeSo14" />
-                                                            <td className title="DiemHeSo15" />
-                                                            <td className title="DiemThuongKy6" />
-                                                            <td className title="DiemThuongKy7" />
-                                                            <td className title="DiemThuongKy8" />
-                                                            <td className title="DiemThuongKy9" />
-                                                            <td className title="DiemThucHanh1">8,00</td>
-                                                            <td className title="DiemThucHanh2">10,00</td>
-                                                            <td className title="DiemThucHanh3">6,50</td>
-                                                            <td className title="DiemThucHanh4" />
-                                                            <td className title="DiemThucHanh5" />
-                                                            <td className title="DiemTBQuaTrinh" />
-                                                            <td className title="DiemThi">8,00</td>
-                                                            <td className title="DiemTongKet">7,20</td>
-                                                            <td className title="DiemTinChi">3,00</td>
-                                                            <td className title="DiemChu">B </td>
-                                                            <td className title="XepLoai">Khá</td>
-                                                            <td className title="GhiChu" />
-                                                            <td>
-                                                                <div>
-                                                                    <div className="check" />
-                                                                </div>
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td colSpan={2} className style={{ verticalAlign: 'top !important', textAlign: 'left !important', fontWeight: '' }}>
-                                                                <span className />Điểm trung bình học kỳ hệ 10:<span> 7,20</span>
-                                                            </td>
-                                                            <td colSpan={2} className style={{ verticalAlign: 'top !important', textAlign: 'left !important', fontWeight: '' }}>
-                                                                <span className />Điểm trung bình học kỳ hệ 4:<span> 2,86</span>
-                                                            </td>
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                            <td colSpan={28} />
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                        </tr>
-                                                        <tr>
-                                                            <td colSpan={2} className style={{ verticalAlign: 'top !important', textAlign: 'left !important', fontWeight: '' }}>
-                                                                <span className />Điểm trung bình tích lũy:<span> 7,20</span>
-                                                            </td>
-                                                            <td colSpan={2} className style={{ verticalAlign: 'top !important', textAlign: 'left !important', fontWeight: '' }}>
-                                                                <span className />Điểm trung bình tích lũy (hệ 4):<span> 2,86</span>
-                                                            </td>
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                            <td colSpan={28} />
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                        </tr>
-                                                        <tr>
-                                                            <td colSpan={2} className style={{ verticalAlign: 'top !important', textAlign: 'left !important', fontWeight: '' }}>
-                                                                <span className />Tổng số tín chỉ đã đăng ký:<span> 11</span>
-                                                            </td>
-                                                            <td colSpan={2} className style={{ verticalAlign: 'top !important', textAlign: 'left !important', fontWeight: '' }}>
-                                                                <span className />Tổng số tín chỉ tích lũy:<span> 11</span>
-                                                            </td>
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                            <td colSpan={28} />
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                        </tr>
-                                                        <tr>
-                                                            <td colSpan={2} className style={{ verticalAlign: 'top !important', textAlign: 'left !important', fontWeight: '' }}>
-                                                                <span className />Tổng số tín chỉ đạt:<span> 11</span>
-                                                            </td>
-                                                            <td colSpan={2} className style={{ verticalAlign: 'top !important', textAlign: 'left !important', fontWeight: '' }}>
-                                                                <span className />Tổng số tín chỉ nợ tính đến hiện tại:<span> 0</span>
-                                                            </td>
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                            <td colSpan={28} />
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                        </tr>
-                                                        <tr>
-                                                            <td colSpan={2} className style={{ verticalAlign: 'top !important', textAlign: 'left !important', fontWeight: '' }}>
-                                                                <span className />Xếp loại học lực tích lũy:<span> Khá</span>
-                                                            </td>
-                                                            <td colSpan={2} className style={{ verticalAlign: 'top !important', textAlign: 'left !important', fontWeight: '' }}>
-                                                                <span className />Xếp loại học lực học kỳ:<span> Khá</span>
-                                                            </td>
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                            <td colSpan={28} />
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                        </tr>
-                                                        <tr>
-                                                            <td colSpan={28} className="text-left row-head">HK2 (2019-2020)</td>
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                        </tr>
-                                                        <tr>
-                                                            <td style={{ width: '100px !important' }}><div style={{}}>8</div></td>
-                                                            <td style={{ width: '200px !important' }}>
-                                                                <div style={{}} title>
-                                                                    420300094103
-                                                                </div>
-                                                            </td>
-                                                            <td style={{ width: '200px !important' }} className="text-left"><div style={{ wordBreak: 'break-word' }}> Kỹ thuật lập trình</div></td>
-                                                            <td style={{ width: '100px !important' }}><div style={{ display: 'inline-table' }}>3</div></td>
-                                                            <td className="cl-red" title="DiemChuyenCan1">3,00</td>
-                                                            <td className title="DiemChuyenCanE" />
-                                                            <td className title="DiemHeSo11">8,50</td>
-                                                            <td className title="DiemHeSo12">8,00</td>
-                                                            <td className title="DiemHeSo13" />
-                                                            <td className title="DiemHeSo14" />
-                                                            <td className title="DiemHeSo15" />
-                                                            <td className title="DiemThuongKy6" />
-                                                            <td className title="DiemThuongKy7" />
-                                                            <td className title="DiemThuongKy8" />
-                                                            <td className title="DiemThuongKy9" />
-                                                            <td className title="DiemThucHanh1">8,00</td>
-                                                            <td className title="DiemThucHanh2" />
-                                                            <td className title="DiemThucHanh3" />
-                                                            <td className title="DiemThucHanh4" />
-                                                            <td className title="DiemThucHanh5" />
-                                                            <td className title="DiemTBQuaTrinh" />
-                                                            <td className title="DiemThi">6,00</td>
-                                                            <td className title="DiemTongKet">6,40</td>
-                                                            <td className title="DiemTinChi">2,50</td>
-                                                            <td className title="DiemChu">C+</td>
-                                                            <td className title="XepLoai">Trung Bình</td>
-                                                            <td className title="GhiChu" />
-                                                            <td>
-                                                                <div>
-                                                                    <div className="check" />
-                                                                </div>
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td style={{ width: '100px !important' }}><div style={{}}>9</div></td>
-                                                            <td style={{ width: '200px !important' }}>
-                                                                <div style={{}} title>
-                                                                    420300213708
-                                                                </div>
-                                                            </td>
-                                                            <td style={{ width: '200px !important' }} className="text-left"><div style={{ wordBreak: 'break-word' }}> Hệ thống Máy tính</div></td>
-                                                            <td style={{ width: '100px !important' }}><div style={{ display: 'inline-table' }}>4</div></td>
-                                                            <td className="cl-red" title="DiemChuyenCan1">3,50</td>
-                                                            <td className title="DiemChuyenCanE" />
-                                                            <td className="cl-red" title="DiemHeSo11">4,00</td>
-                                                            <td className title="DiemHeSo12">8,50</td>
-                                                            <td className title="DiemHeSo13">8,00</td>
-                                                            <td className title="DiemHeSo14" />
-                                                            <td className title="DiemHeSo15" />
-                                                            <td className title="DiemThuongKy6" />
-                                                            <td className title="DiemThuongKy7" />
-                                                            <td className title="DiemThuongKy8" />
-                                                            <td className title="DiemThuongKy9" />
-                                                            <td className="cl-red" title="DiemThucHanh1">4,00</td>
-                                                            <td className title="DiemThucHanh2">6,00</td>
-                                                            <td className title="DiemThucHanh3" />
-                                                            <td className title="DiemThucHanh4" />
-                                                            <td className title="DiemThucHanh5" />
-                                                            <td className title="DiemTBQuaTrinh" />
-                                                            <td className title="DiemThi">7,50</td>
-                                                            <td className title="DiemTongKet">5,90</td>
-                                                            <td className title="DiemTinChi">2,00</td>
-                                                            <td className title="DiemChu">C </td>
-                                                            <td className title="XepLoai">Trung Bình</td>
-                                                            <td className title="GhiChu" />
-                                                            <td>
-                                                                <div>
-                                                                    <div className="check" />
-                                                                </div>
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td style={{ width: '100px !important' }}><div style={{}}>10</div></td>
-                                                            <td style={{ width: '200px !important' }}>
-                                                                <div style={{}} title>
-                                                                    420300319260
-                                                                </div>
-                                                            </td>
-                                                            <td style={{ width: '200px !important' }} className="text-left"><div style={{ wordBreak: 'break-word' }}> Kỹ năng làm việc nhóm</div></td>
-                                                            <td style={{ width: '100px !important' }}><div style={{ display: 'inline-table' }}>2</div></td>
-                                                            <td className title="DiemChuyenCan1">6,50</td>
-                                                            <td className title="DiemChuyenCanE" />
-                                                            <td className title="DiemHeSo11">8,50</td>
-                                                            <td className title="DiemHeSo12">8,00</td>
-                                                            <td className title="DiemHeSo13" />
-                                                            <td className title="DiemHeSo14" />
-                                                            <td className title="DiemHeSo15" />
-                                                            <td className title="DiemThuongKy6" />
-                                                            <td className title="DiemThuongKy7" />
-                                                            <td className title="DiemThuongKy8" />
-                                                            <td className title="DiemThuongKy9" />
-                                                            <td className title="DiemThucHanh1" />
-                                                            <td className title="DiemThucHanh2" />
-                                                            <td className title="DiemThucHanh3" />
-                                                            <td className title="DiemThucHanh4" />
-                                                            <td className title="DiemThucHanh5" />
-                                                            <td className title="DiemTBQuaTrinh" />
-                                                            <td className title="DiemThi">7,00</td>
-                                                            <td className title="DiemTongKet">7,10</td>
-                                                            <td className title="DiemTinChi">3,00</td>
-                                                            <td className title="DiemChu">B </td>
-                                                            <td className title="XepLoai">Khá</td>
-                                                            <td className title="GhiChu" />
-                                                            <td>
-                                                                <div>
-                                                                    <div className="check" />
-                                                                </div>
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td style={{ width: '100px !important' }}><div style={{}}>11</div></td>
-                                                            <td style={{ width: '200px !important' }}>
-                                                                <div style={{}} title>
-                                                                    420300328883
-                                                                </div>
-                                                            </td>
-                                                            <td style={{ width: '200px !important' }} className="text-left"><div style={{ wordBreak: 'break-word' }}> Toán cao cấp 2</div></td>
-                                                            <td style={{ width: '100px !important' }}><div style={{ display: 'inline-table' }}>2</div></td>
-                                                            <td className title="DiemChuyenCan1">8,50</td>
-                                                            <td className title="DiemChuyenCanE" />
-                                                            <td className title="DiemHeSo11">6,50</td>
-                                                            <td className title="DiemHeSo12">7,50</td>
-                                                            <td className title="DiemHeSo13" />
-                                                            <td className title="DiemHeSo14" />
-                                                            <td className title="DiemHeSo15" />
-                                                            <td className title="DiemThuongKy6" />
-                                                            <td className title="DiemThuongKy7" />
-                                                            <td className title="DiemThuongKy8" />
-                                                            <td className title="DiemThuongKy9" />
-                                                            <td className title="DiemThucHanh1" />
-                                                            <td className title="DiemThucHanh2" />
-                                                            <td className title="DiemThucHanh3" />
-                                                            <td className title="DiemThucHanh4" />
-                                                            <td className title="DiemThucHanh5" />
-                                                            <td className title="DiemTBQuaTrinh" />
-                                                            <td className title="DiemThi">5,50</td>
-                                                            <td className title="DiemTongKet">6,70</td>
-                                                            <td className title="DiemTinChi">2,50</td>
-                                                            <td className title="DiemChu">C+</td>
-                                                            <td className title="XepLoai">Trung Bình</td>
-                                                            <td className title="GhiChu" />
-                                                            <td>
-                                                                <div>
-                                                                    <div className="check" />
-                                                                </div>
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td style={{ width: '100px !important' }}><div style={{}}>12</div></td>
-                                                            <td style={{ width: '200px !important' }}>
-                                                                <div style={{}} title>
-                                                                    420300330674
-                                                                </div>
-                                                            </td>
-                                                            <td style={{ width: '200px !important' }} className="text-left"><div style={{ wordBreak: 'break-word' }}> Giáo dục thể chất 2</div></td>
-                                                            <td style={{ width: '100px !important' }}><div style={{ display: 'inline-table' }}>2</div></td>
-                                                            <td className title="DiemChuyenCan1" />
-                                                            <td className title="DiemChuyenCanE" />
-                                                            <td className title="DiemHeSo11" />
-                                                            <td className title="DiemHeSo12" />
-                                                            <td className title="DiemHeSo13" />
-                                                            <td className title="DiemHeSo14" />
-                                                            <td className title="DiemHeSo15" />
-                                                            <td className title="DiemThuongKy6" />
-                                                            <td className title="DiemThuongKy7" />
-                                                            <td className title="DiemThuongKy8" />
-                                                            <td className title="DiemThuongKy9" />
-                                                            <td className title="DiemThucHanh1" />
-                                                            <td className title="DiemThucHanh2" />
-                                                            <td className title="DiemThucHanh3" />
-                                                            <td className title="DiemThucHanh4" />
-                                                            <td className title="DiemThucHanh5" />
-                                                            <td className title="DiemTBQuaTrinh" />
-                                                            <td className="cl-red" title="DiemThi">5,00</td>
-                                                            <td className="cl-red" title="DiemTongKet">5,00</td>
-                                                            <td className title="DiemTinChi">1,50</td>
-                                                            <td className title="DiemChu">D+</td>
-                                                            <td className title="XepLoai">Trung Bình Yếu</td>
-                                                            <td className title="GhiChu" />
-                                                            <td>
-                                                                <div>
-                                                                    <div className="check" />
-                                                                </div>
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td style={{ width: '100px !important' }}><div style={{}}>13</div></td>
-                                                            <td style={{ width: '200px !important' }}>
-                                                                <div style={{}} title>
-                                                                    420300334509
-                                                                </div>
-                                                            </td>
-                                                            <td style={{ width: '200px !important' }} className="text-left"><div style={{ wordBreak: 'break-word' }}> Vật lý đại cương</div></td>
-                                                            <td style={{ width: '100px !important' }}><div style={{ display: 'inline-table' }}>3</div></td>
-                                                            <td className title="DiemChuyenCan1">7,50</td>
-                                                            <td className title="DiemChuyenCanE" />
-                                                            <td className title="DiemHeSo11">8,50</td>
-                                                            <td className title="DiemHeSo12">9,50</td>
-                                                            <td className title="DiemHeSo13">6,00</td>
-                                                            <td className title="DiemHeSo14">8,00</td>
-                                                            <td className title="DiemHeSo15" />
-                                                            <td className title="DiemThuongKy6" />
-                                                            <td className title="DiemThuongKy7" />
-                                                            <td className title="DiemThuongKy8" />
-                                                            <td className title="DiemThuongKy9" />
-                                                            <td className title="DiemThucHanh1" />
-                                                            <td className title="DiemThucHanh2" />
-                                                            <td className title="DiemThucHanh3" />
-                                                            <td className title="DiemThucHanh4" />
-                                                            <td className title="DiemThucHanh5" />
-                                                            <td className title="DiemTBQuaTrinh" />
-                                                            <td className title="DiemThi">9,50</td>
-                                                            <td className title="DiemTongKet">8,60</td>
-                                                            <td className title="DiemTinChi">3,80</td>
-                                                            <td className title="DiemChu">A </td>
-                                                            <td className title="XepLoai">Giỏi</td>
-                                                            <td className title="GhiChu" />
-                                                            <td>
-                                                                <div>
-                                                                    <div className="check" />
-                                                                </div>
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td style={{ width: '100px !important' }}><div style={{}}>14</div></td>
-                                                            <td style={{ width: '200px !important' }}>
-                                                                <div style={{}} title>
-                                                                    4203003354109
-                                                                </div>
-                                                            </td>
-                                                            <td style={{ width: '200px !important' }} className="text-left"><div style={{ wordBreak: 'break-word' }}> Giáo dục Quốc phòng và an ninh 2</div></td>
-                                                            <td style={{ width: '100px !important' }}><div style={{ display: 'inline-table' }}>4</div></td>
-                                                            <td className title="DiemChuyenCan1" />
-                                                            <td className title="DiemChuyenCanE" />
-                                                            <td className title="DiemHeSo11" />
-                                                            <td className title="DiemHeSo12" />
-                                                            <td className title="DiemHeSo13" />
-                                                            <td className title="DiemHeSo14" />
-                                                            <td className title="DiemHeSo15" />
-                                                            <td className title="DiemThuongKy6" />
-                                                            <td className title="DiemThuongKy7" />
-                                                            <td className title="DiemThuongKy8" />
-                                                            <td className title="DiemThuongKy9" />
-                                                            <td className title="DiemThucHanh1" />
-                                                            <td className title="DiemThucHanh2" />
-                                                            <td className title="DiemThucHanh3" />
-                                                            <td className title="DiemThucHanh4" />
-                                                            <td className title="DiemThucHanh5" />
-                                                            <td className title="DiemTBQuaTrinh" />
-                                                            <td className title="DiemThi">7,00</td>
-                                                            <td className title="DiemTongKet">7,00</td>
-                                                            <td className title="DiemTinChi">3,00</td>
-                                                            <td className title="DiemChu">B </td>
-                                                            <td className title="XepLoai">Khá</td>
-                                                            <td className title="GhiChu" />
-                                                            <td>
-                                                                <div>
-                                                                    <div className="check" />
-                                                                </div>
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td colSpan={2} className style={{ verticalAlign: 'top !important', textAlign: 'left !important', fontWeight: '' }}>
-                                                                <span className />Điểm trung bình học kỳ hệ 10:<span> 6,90</span>
-                                                            </td>
-                                                            <td colSpan={2} className style={{ verticalAlign: 'top !important', textAlign: 'left !important', fontWeight: '' }}>
-                                                                <span className />Điểm trung bình học kỳ hệ 4:<span> 2,71</span>
-                                                            </td>
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                            <td colSpan={28} />
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                        </tr>
-                                                        <tr>
-                                                            <td colSpan={2} className style={{ verticalAlign: 'top !important', textAlign: 'left !important', fontWeight: '' }}>
-                                                                <span className />Điểm trung bình tích lũy:<span> 7,00</span>
-                                                            </td>
-                                                            <td colSpan={2} className style={{ verticalAlign: 'top !important', textAlign: 'left !important', fontWeight: '' }}>
-                                                                <span className />Điểm trung bình tích lũy (hệ 4):<span> 2,78</span>
-                                                            </td>
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                            <td colSpan={28} />
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                        </tr>
-                                                        <tr>
-                                                            <td colSpan={2} className style={{ verticalAlign: 'top !important', textAlign: 'left !important', fontWeight: '' }}>
-                                                                <span className />Tổng số tín chỉ đã đăng ký:<span> 25</span>
-                                                            </td>
-                                                            <td colSpan={2} className style={{ verticalAlign: 'top !important', textAlign: 'left !important', fontWeight: '' }}>
-                                                                <span className />Tổng số tín chỉ tích lũy:<span> 25</span>
-                                                            </td>
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                            <td colSpan={28} />
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                        </tr>
-                                                        <tr>
-                                                            <td colSpan={2} className style={{ verticalAlign: 'top !important', textAlign: 'left !important', fontWeight: '' }}>
-                                                                <span className />Tổng số tín chỉ đạt:<span> 14</span>
-                                                            </td>
-                                                            <td colSpan={2} className style={{ verticalAlign: 'top !important', textAlign: 'left !important', fontWeight: '' }}>
-                                                                <span className />Tổng số tín chỉ nợ tính đến hiện tại:<span> 0</span>
-                                                            </td>
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                            <td colSpan={28} />
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                        </tr>
-                                                        <tr>
-                                                            <td colSpan={2} className style={{ verticalAlign: 'top !important', textAlign: 'left !important', fontWeight: '' }}>
-                                                                <span className />Xếp loại học lực tích lũy:<span> Khá</span>
-                                                            </td>
-                                                            <td colSpan={2} className style={{ verticalAlign: 'top !important', textAlign: 'left !important', fontWeight: '' }}>
-                                                                <span className />Xếp loại học lực học kỳ:<span> Khá</span>
-                                                            </td>
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                            <td colSpan={28} />
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                            <td className="hidden" />
-                                                        </tr>
+                                                    <tbody style={{ overflowY: "auto", overflowX: "auto" }}>
+                                                        {
+                                                            (dsDiemMaHK1 && dsDiemMaHK1?.getKetQuaHocTap.length > 0) ?
+                                                                <>
+                                                                    <tr role="row">
+                                                                        {/* <td colSpan={28} className="text-left row-head">HK1 (2019-2020)</td> */}
+                                                                        <td colSpan={28} className="text-left row-head">
+                                                                            HK
+                                                                            {dsDiemMaHK1?.getKetQuaHocTap[0].thu_tu_hoc_ki}
+                                                                            ( {dsDiemMaHK1?.getKetQuaHocTap[0].nam_hoc_bat_dau}-{dsDiemMaHK1?.getKetQuaHocTap[0].nam_hoc_ket_thuc})</td>
+                                                                        <td className="hidden" />
+                                                                        <td className="hidden" />
+                                                                        <td className="hidden" />
+                                                                        <td className="hidden" />
+                                                                        <td className="hidden" />
+                                                                        <td className="hidden" />
+                                                                        <td className="hidden" />
+                                                                        <td className="hidden" />
+                                                                        <td className="hidden" />
+                                                                        <td className="hidden" />
+                                                                        <td className="hidden" />
+                                                                        <td className="hidden" />
+                                                                        <td className="hidden" />
+                                                                        <td className="hidden" />
+                                                                        <td className="hidden" />
+                                                                        <td className="hidden" />
+                                                                        <td className="hidden" />
+                                                                        <td className="hidden" />
+                                                                        <td className="hidden" />
+                                                                        <td className="hidden" />
+                                                                        <td className="hidden" />
+                                                                        <td className="hidden" />
+                                                                        <td className="hidden" />
+                                                                        <td className="hidden" />
+                                                                        <td className="hidden" />
+                                                                        <td className="hidden" />
+                                                                        <td className="hidden" />
+                                                                    </tr>
+                                                                    {
+                                                                        dsDiemMaHK1?.getKetQuaHocTap.length > 0
+                                                                            ?
+                                                                            <>
+                                                                                {
+                                                                                    dsDiemMaHK1["getKetQuaHocTap"].map((ds) => (
+                                                                                        <>
+                                                                                            <tr role="row">
+                                                                                                <td style={{ width: '100px !important' }}><div style={{}}>{stt1++}</div></td>
+                                                                                                <td style={{ width: '200px !important' }}>
+                                                                                                    <div style={{}} title>
+                                                                                                        {ds.ma_lop_hoc_phan}
+                                                                                                    </div>
+                                                                                                </td>
+                                                                                                <td style={{ width: '200px !important' }} className="text-left"><div style={{ wordBreak: 'break-word' }}>{ds.ten_mon_hoc}</div></td>
+                                                                                                <td style={{ width: '100px !important' }}
+                                                                                                    title={ds.so_tin_chi_thuc_hanh}
+                                                                                                ><div style={{ display: 'inline-table' }}>{ds.so_tin_chi_ly_thuyet + ds.so_tin_chi_thuc_hanh}</div></td>
 
+                                                                                                <td className title="DiemThuongKy1">{ds.diem_tk_1}</td>
+                                                                                                <td className title="DiemThuongKy2">{ds.diem_tk_2}</td>
+                                                                                                <td className title="DiemThuongKy3">{ds.diem_tk_3}</td>
+                                                                                                <td className title="DiemThuongKy4" >{ds.diem_tk_4}</td>
+                                                                                                <td className title="DiemThuongKy5" >{ds.diem_tk_5}</td>
+                                                                                                <td className title="DiemGiuaKy" colSpan={2}>{ds.diem_gk}</td>
+                                                                                                <td className title="DiemThucHanh1" >{ds.diem_th_1}</td>
+                                                                                                <td className title="DiemThucHanh2" >{ds.diem_th_2}</td>
+                                                                                                <td className title="DiemThucHanh3" >{ds.diem_th_3}</td>
+                                                                                                <td className title="DiemThucHanh4" >{ds.diem_th_4}</td>
+                                                                                                <td className title="DiemThucHanh5" >{ds.diem_th_5}</td>
+                                                                                                <td className title="DiemThiCK">{ds.diem_ck}</td>
+                                                                                                <td className title="DiemTongKetHe10">{ds.diem_tk_hs_10}</td>
+                                                                                                <td className title="DiemTongKetHe4">{ds.diem_tk_hs_4}</td>
+                                                                                                <td className title="DiemChu">{ds.diem_chu}</td>
+                                                                                                <td className title="XepLoai">{
+                                                                                                    (ds.xep_loai == 1) ? 'Yếu' : (ds.xep_loai == 2) ? 'Trung bình' :
+                                                                                                        (ds.xep_loai == 3) ? 'Khá' : (ds.xep_loai == 4) ? 'Giỏi' :
+                                                                                                            (ds.xep_loai == 5) ? 'Xuất sắc' : ''
+                                                                                                }</td>
+                                                                                                <td className title="GhiChu" />
+                                                                                                <td>
+                                                                                                    <div>
+                                                                                                        {
+                                                                                                            (ds.tinh_trang_hoc_tap == 0)
+                                                                                                                ? <div className="check" />
+                                                                                                                : (ds.tinh_trang_hoc_tap == 1)
+                                                                                                                    ? <div className="no-check" />
+                                                                                                                    : <></>
+                                                                                                        }
+                                                                                                    </div>
+                                                                                                </td>
+                                                                                            </tr>
+                                                                                        </>
+                                                                                    ))
+                                                                                }
+                                                                            </>
+                                                                            :
+                                                                            <>
+                                                                            </>
+                                                                    }
+                                                                </>
+                                                                : <></>
+                                                        }
+
+                                                        {/* HK2 */}
+
+                                                        {
+                                                            (dsDiemMaHK2 && dsDiemMaHK2?.getKetQuaHocTap.length > 0) ?
+                                                                <>
+                                                                    <tr role="row">
+                                                                        {/* <td colSpan={28} className="text-left row-head">HK1 (2019-2020)</td> */}
+                                                                        <td colSpan={28} className="text-left row-head">
+                                                                            HK
+                                                                            {dsDiemMaHK2?.getKetQuaHocTap[0].thu_tu_hoc_ki}
+                                                                            ( {dsDiemMaHK2?.getKetQuaHocTap[0].nam_hoc_bat_dau}-{dsDiemMaHK2?.getKetQuaHocTap[0].nam_hoc_ket_thuc})</td>
+                                                                        <td className="hidden" />
+                                                                        <td className="hidden" />
+                                                                        <td className="hidden" />
+                                                                        <td className="hidden" />
+                                                                        <td className="hidden" />
+                                                                        <td className="hidden" />
+                                                                        <td className="hidden" />
+                                                                        <td className="hidden" />
+                                                                        <td className="hidden" />
+                                                                        <td className="hidden" />
+                                                                        <td className="hidden" />
+                                                                        <td className="hidden" />
+                                                                        <td className="hidden" />
+                                                                        <td className="hidden" />
+                                                                        <td className="hidden" />
+                                                                        <td className="hidden" />
+                                                                        <td className="hidden" />
+                                                                        <td className="hidden" />
+                                                                        <td className="hidden" />
+                                                                        <td className="hidden" />
+                                                                        <td className="hidden" />
+                                                                        <td className="hidden" />
+                                                                        <td className="hidden" />
+                                                                        <td className="hidden" />
+                                                                        <td className="hidden" />
+                                                                        <td className="hidden" />
+                                                                        <td className="hidden" />
+                                                                    </tr>
+                                                                    {
+                                                                        dsDiemMaHK2?.getKetQuaHocTap.length > 0
+                                                                            ?
+                                                                            <>
+                                                                                {
+                                                                                    dsDiemMaHK2["getKetQuaHocTap"].map((ds) => (
+                                                                                        <>
+                                                                                            <tr role="row">
+                                                                                                <td style={{ width: '100px !important' }}><div style={{}}>{stt2++}</div></td>
+                                                                                                <td style={{ width: '200px !important' }}>
+                                                                                                    <div style={{}} title>
+                                                                                                        {ds.ma_lop_hoc_phan}
+                                                                                                    </div>
+                                                                                                </td>
+                                                                                                <td style={{ width: '200px !important' }} className="text-left"><div style={{ wordBreak: 'break-word' }}>{ds.ten_mon_hoc}</div></td>
+                                                                                                <td style={{ width: '100px !important' }}
+                                                                                                    title={ds.so_tin_chi_thuc_hanh}
+                                                                                                ><div style={{ display: 'inline-table' }}>{ds.so_tin_chi_ly_thuyet + ds.so_tin_chi_thuc_hanh}</div></td>
+
+                                                                                                <td className title="DiemThuongKy1">{ds.diem_tk_1}</td>
+                                                                                                <td className title="DiemThuongKy2">{ds.diem_tk_2}</td>
+                                                                                                <td className title="DiemThuongKy3">{ds.diem_tk_3}</td>
+                                                                                                <td className title="DiemThuongKy4" >{ds.diem_tk_4}</td>
+                                                                                                <td className title="DiemThuongKy5" >{ds.diem_tk_5}</td>
+                                                                                                <td className title="DiemGiuaKy" colSpan={2}>{ds.diem_gk}</td>
+                                                                                                <td className title="DiemThucHanh1" >{ds.diem_th_1}</td>
+                                                                                                <td className title="DiemThucHanh2" >{ds.diem_th_2}</td>
+                                                                                                <td className title="DiemThucHanh3" >{ds.diem_th_3}</td>
+                                                                                                <td className title="DiemThucHanh4" >{ds.diem_th_4}</td>
+                                                                                                <td className title="DiemThucHanh5" >{ds.diem_th_5}</td>
+                                                                                                <td className title="DiemThiCK">{ds.diem_ck}</td>
+                                                                                                <td className title="DiemTongKetHe10">{ds.diem_tk_hs_10}</td>
+                                                                                                <td className title="DiemTongKetHe4">{ds.diem_tk_hs_4}</td>
+                                                                                                <td className title="DiemChu">{ds.diem_chu}</td>
+                                                                                                <td className title="XepLoai">{
+                                                                                                    (ds.xep_loai == 1) ? 'Yếu' : (ds.xep_loai == 2) ? 'Trung bình' :
+                                                                                                        (ds.xep_loai == 3) ? 'Khá' : (ds.xep_loai == 4) ? 'Giỏi' :
+                                                                                                            (ds.xep_loai == 5) ? 'Xuất sắc' : ''
+                                                                                                }</td>
+                                                                                                <td className title="GhiChu" />
+                                                                                                <td>
+                                                                                                    <div>
+                                                                                                        {
+                                                                                                            (ds.tinh_trang_hoc_tap == 0)
+                                                                                                                ? <div className="check" />
+                                                                                                                : (ds.tinh_trang_hoc_tap == 1)
+                                                                                                                    ? <div className="no-check" />
+                                                                                                                    : <></>
+                                                                                                        }
+                                                                                                    </div>
+                                                                                                </td>
+                                                                                            </tr>
+                                                                                        </>
+                                                                                    ))
+                                                                                }
+                                                                            </>
+                                                                            :
+                                                                            <>
+                                                                            </>
+                                                                    }
+                                                                </> :
+                                                                <>
+                                                                </>
+                                                        }
+                                                        {/* HK3 */}
+                                                        {
+                                                            (dsDiemMaHK3 && dsDiemMaHK3?.getKetQuaHocTap.length > 0) ?
+                                                                <>
+                                                                    <tr role="row">
+                                                                        {/* <td colSpan={28} className="text-left row-head">HK1 (2019-2020)</td> */}
+                                                                        <td colSpan={28} className="text-left row-head">
+                                                                            HK
+                                                                            {dsDiemMaHK3?.getKetQuaHocTap[0].thu_tu_hoc_ki}
+                                                                            ( {dsDiemMaHK3?.getKetQuaHocTap[0].nam_hoc_bat_dau}-{dsDiemMaHK3?.getKetQuaHocTap[0].nam_hoc_ket_thuc})</td>
+                                                                        <td className="hidden" />
+                                                                        <td className="hidden" />
+                                                                        <td className="hidden" />
+                                                                        <td className="hidden" />
+                                                                        <td className="hidden" />
+                                                                        <td className="hidden" />
+                                                                        <td className="hidden" />
+                                                                        <td className="hidden" />
+                                                                        <td className="hidden" />
+                                                                        <td className="hidden" />
+                                                                        <td className="hidden" />
+                                                                        <td className="hidden" />
+                                                                        <td className="hidden" />
+                                                                        <td className="hidden" />
+                                                                        <td className="hidden" />
+                                                                        <td className="hidden" />
+                                                                        <td className="hidden" />
+                                                                        <td className="hidden" />
+                                                                        <td className="hidden" />
+                                                                        <td className="hidden" />
+                                                                        <td className="hidden" />
+                                                                        <td className="hidden" />
+                                                                        <td className="hidden" />
+                                                                        <td className="hidden" />
+                                                                        <td className="hidden" />
+                                                                        <td className="hidden" />
+                                                                        <td className="hidden" />
+                                                                    </tr>
+                                                                    {
+                                                                        dsDiemMaHK3?.getKetQuaHocTap.length > 0
+                                                                            ?
+                                                                            <>
+                                                                                {
+                                                                                    dsDiemMaHK3["getKetQuaHocTap"].map((ds) => (
+                                                                                        <>
+                                                                                            <tr role="row">
+                                                                                                <td style={{ width: '100px !important' }}><div style={{}}>{stt3++}</div></td>
+                                                                                                <td style={{ width: '200px !important' }}>
+                                                                                                    <div style={{}} title>
+                                                                                                        {ds.ma_lop_hoc_phan}
+                                                                                                    </div>
+                                                                                                </td>
+                                                                                                <td style={{ width: '200px !important' }} className="text-left"><div style={{ wordBreak: 'break-word' }}>{ds.ten_mon_hoc}</div></td>
+                                                                                                <td style={{ width: '100px !important' }}
+                                                                                                    title={ds.so_tin_chi_thuc_hanh}
+                                                                                                ><div style={{ display: 'inline-table' }}>{ds.so_tin_chi_ly_thuyet + ds.so_tin_chi_thuc_hanh}</div></td>
+
+                                                                                                <td className title="DiemThuongKy1">{ds.diem_tk_1}</td>
+                                                                                                <td className title="DiemThuongKy2">{ds.diem_tk_2}</td>
+                                                                                                <td className title="DiemThuongKy3">{ds.diem_tk_3}</td>
+                                                                                                <td className title="DiemThuongKy4" >{ds.diem_tk_4}</td>
+                                                                                                <td className title="DiemThuongKy5" >{ds.diem_tk_5}</td>
+                                                                                                <td className title="DiemGiuaKy" colSpan={2}>{ds.diem_gk}</td>
+                                                                                                <td className title="DiemThucHanh1" >{ds.diem_th_1}</td>
+                                                                                                <td className title="DiemThucHanh2" >{ds.diem_th_2}</td>
+                                                                                                <td className title="DiemThucHanh3" >{ds.diem_th_3}</td>
+                                                                                                <td className title="DiemThucHanh4" >{ds.diem_th_4}</td>
+                                                                                                <td className title="DiemThucHanh5" >{ds.diem_th_5}</td>
+                                                                                                <td className title="DiemThiCK">{ds.diem_ck}</td>
+                                                                                                <td className title="DiemTongKetHe10">{ds.diem_tk_hs_10}</td>
+                                                                                                <td className title="DiemTongKetHe4">{ds.diem_tk_hs_4}</td>
+                                                                                                <td className title="DiemChu">
+                                                                                                    {
+                                                                                                        (ds.diem_tk_hs_10 > 9) ? 'A+' : (ds.diem_tk_hs_10 > 8.5) ? 'A' :
+                                                                                                            (ds.diem_tk_hs_10 > 8) ? 'B+' : (ds.diem_tk_hs_10 > 7) ? 'B' :
+                                                                                                                (ds.xep_loai > 6) ? 'C+' : (ds.xep_loai > 5.5) ? 'C' :
+                                                                                                                    (ds.xep_loai > 5) ? 'D+' : (ds.xep_loai > 4) ? 'D' : 'F'
+                                                                                                    }
+                                                                                                </td>
+                                                                                                <td className title="XepLoai">{
+                                                                                                    (ds.xep_loai == 1) ? 'Yếu' : (ds.xep_loai == 2) ? 'Trung bình' :
+                                                                                                        (ds.xep_loai == 3) ? 'Khá' : (ds.xep_loai == 4) ? 'Giỏi' :
+                                                                                                            (ds.xep_loai == 5) ? 'Xuất sắc' : ''
+                                                                                                }</td>
+                                                                                                <td className title="GhiChu" />
+                                                                                                <td>
+                                                                                                    <div>
+                                                                                                        {
+                                                                                                            (ds.tinh_trang_hoc_tap == 0)
+                                                                                                                ? <div className="check" />
+                                                                                                                : (ds.tinh_trang_hoc_tap == 1)
+                                                                                                                    ? <div className="no-check" />
+                                                                                                                    : <></>
+                                                                                                        }
+                                                                                                    </div>
+                                                                                                </td>
+                                                                                            </tr>
+                                                                                        </>
+                                                                                    ))
+                                                                                }
+                                                                            </>
+                                                                            :
+                                                                            <>
+                                                                            </>
+                                                                    }
+                                                                </>
+                                                                : <></>
+                                                        }
                                                     </tbody>
                                                 </table>
                                             </div>

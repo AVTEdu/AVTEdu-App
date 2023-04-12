@@ -387,7 +387,7 @@ export const CongNo = () => {
                                                                                     >
                                                                                         <td style={{ border: "2px solid", textAlign: "center", verticalAlign: "middle" }}>{dspth.ma_phieu_thu}</td>
                                                                                         <td style={{ border: "2px solid", textAlign: "center", verticalAlign: "middle" }}>{dspth.ngay_thu}</td>
-                                                                                        <td style={{ border: "2px solid", textAlign: "center", verticalAlign: "middle" }}>1860000</td>
+                                                                                        <td style={{ border: "2px solid", textAlign: "center", verticalAlign: "middle" }}>{dspth.tong_tien}</td>
                                                                                         <td style={{ border: "2px solid", textAlign: "center", verticalAlign: "middle" }}>{dspth.don_vi_thu}</td>
                                                                                         <td style={{ border: "2px solid", textAlign: "center", verticalAlign: "middle" }}
                                                                                         >

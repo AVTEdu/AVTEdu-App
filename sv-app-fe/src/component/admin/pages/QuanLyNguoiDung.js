@@ -1,10 +1,13 @@
-import React from "react";
+import React, { Fragment } from "react";
 import Sidebar from "../components/Sidebar";
 import * as AiIcons from "react-icons/ai";
 // import * as Corecss from "../../../assets/vendor/css/core.css";
 import { useState, useEffect } from "react";
 import Popup from "../../Popup";
 import { Link, useNavigate, useLocation } from 'react-router-dom';
+import adminAPI from "../../../api/adminAPI";
+import PopupNotify from "../../PopupNotify";
+import { event } from "jquery";
 
 
 export const Admin = () => {
@@ -231,7 +234,179 @@ export const NhapDiemSinhVien = () => {
     )
 };
 
+export const ReadOnlyRowDiem = ({ dsDiem, handleEditClick }) => {
+    return (
+        <tr>
+            <td style={{ border: "2px solid" }}>{dsDiem.ma_sinh_vien}</td>
+            <td style={{ border: "2px solid" }}>{dsDiem.ho_ten_sinh_vien}</td>
+            <td style={{ border: "2px solid" }}>{dsDiem.diem_tk_1}</td>
+            <td style={{ border: "2px solid" }}>{dsDiem.diem_tk_2}</td>
+            <td style={{ border: "2px solid" }}>{dsDiem.diem_tk_3}</td>
+            <td style={{ border: "2px solid" }}>{dsDiem.diem_tk_4}</td>
+            <td style={{ border: "2px solid" }}>{dsDiem.diem_tk_5}</td>
+            <td style={{ border: "2px solid" }}>{dsDiem.diem_th_1}</td>
+            <td style={{ border: "2px solid" }}>{dsDiem.diem_th_2}</td>
+            <td style={{ border: "2px solid" }}>{dsDiem.diem_th_3}</td>
+            <td style={{ border: "2px solid" }}>{dsDiem.diem_th_4}</td>
+            <td style={{ border: "2px solid" }}>{dsDiem.diem_th_5}</td>
+            <td style={{ border: "2px solid" }}>{dsDiem.diem_gk}</td>
+            <td style={{ border: "2px solid" }}>{dsDiem.diem_ck}</td>
+            <td style={{ border: "2px solid" }}>{dsDiem.diem_tk_hs_10}</td>
+            <td style={{ border: "2px solid" }}>
+                <button type="button" className="btn btn-primary"
+                    style={{
+                        float: "right", display: "inline-block", fontWeight: "400"
+                        , lineHeight: "1.53", textAlign: "center", verticalAlign: "middle", userSelect: "none"
+                        , border: "1px solid transparent", padding: "0.4375rem 1.25rem", fontSize: "0.9375 rme"
+                    }}
+                    onClick={() => handleEditClick(dsDiem)}
+                >
+                    Cập nhật
+                </button>
+            </td>
+        </tr>
+    )
+};
+
+export const EditTableRowDiem = ({ dsDiem, editFormData, handleEditFormChange, handleEditFormSubmit }) => {
+    return (
+        <tr>
+            <td style={{ border: "2px solid" }}>{dsDiem.ma_sinh_vien}</td>
+            <td style={{ border: "2px solid" }}>{dsDiem.ho_ten_sinh_vien}</td>
+            <td style={{ border: "2px solid" }}>
+                <input
+                    type="text" name="diem_tk_1" onChange={handleEditFormChange} value={editFormData.diem_tk_1}
+                />
+            </td>
+            <td style={{ border: "2px solid" }}>
+                <input
+                    type="text" name="diem_tk_2" onChange={handleEditFormChange} value={editFormData.diem_tk_2}
+                />
+            </td>
+            <td style={{ border: "2px solid" }}>
+                <input
+                    type="text" name="diem_tk_3" onChange={handleEditFormChange} value={editFormData.diem_tk_3}
+                />
+            </td>
+            <td style={{ border: "2px solid" }}>
+                <input
+                    type="text" name="diem_tk_4" onChange={handleEditFormChange} value={editFormData.diem_tk_4}
+                />
+            </td>
+            <td style={{ border: "2px solid" }}>
+                <input
+                    type="text" name="diem_tk_5" onChange={handleEditFormChange} value={editFormData.diem_tk_5}
+                />
+            </td>
+            <td style={{ border: "2px solid" }}>
+                <input
+                    type="text" name="diem_th_1" onChange={handleEditFormChange} value={editFormData.diem_th_1}
+                />
+            </td>
+            <td style={{ border: "2px solid" }}>
+                <input
+                    type="text" name="diem_th_2" onChange={handleEditFormChange} value={editFormData.diem_th_2}
+                />
+            </td>
+            <td style={{ border: "2px solid" }}>
+                <input
+                    type="text" name="diem_th_3" onChange={handleEditFormChange} value={editFormData.diem_th_3}
+                />
+            </td>
+            <td style={{ border: "2px solid" }}>
+                <input
+                    type="text" name="diem_th_4" onChange={handleEditFormChange} value={editFormData.diem_th_4}
+                />
+            </td>
+            <td style={{ border: "2px solid" }}>
+                <input
+                    type="text" name="diem_th_5" onChange={handleEditFormChange} value={editFormData.diem_th_5}
+                />
+            </td>
+            <td style={{ border: "2px solid" }}>
+                <input
+                    type="text" name="diem_gk" onChange={handleEditFormChange} value={editFormData.diem_gk}
+                />
+            </td>
+            <td style={{ border: "2px solid" }}>
+                <input
+                    type="text" name="diem_ck" onChange={handleEditFormChange} value={editFormData.diem_ck}
+                />
+            </td>
+            <td style={{ border: "2px solid" }}>
+                <input
+                    type="text" name="diem_tk_hs_10" onChange={handleEditFormChange} value={editFormData.diem_tk_hs_10}
+                />
+            </td>
+
+            <td style={{ border: "2px solid" }}>
+                <button type="button" className="btn btn-primary"
+                    style={{
+                        float: "right", display: "inline-block", fontWeight: "400"
+                        , lineHeight: "1.53", textAlign: "center", verticalAlign: "middle", userSelect: "none"
+                        , border: "1px solid transparent", padding: "0.4375rem 1.25rem", fontSize: "0.9375 rme"
+                    }}
+                    onClick={handleEditFormSubmit}
+                >
+                    Lưu
+                </button>
+            </td>
+        </tr>
+    )
+};
+
 export const SinhVien = () => {
+    const [editFormData, setEditFormData] = useState({
+        "diem_tk_1": null,
+        "diem_tk_2": null,
+        "diem_tk_3": null,
+        "diem_tk_4": null,
+        "diem_tk_5": null,
+        "diem_th_1": null,
+        "diem_th_2": null,
+        "diem_th_3": null,
+        "diem_th_4": null,
+        "diem_th_5": null,
+        "diem_gk": null,
+        "diem_ck": null,
+        "diem_tk_hs_10": null
+    });
+
+    const handleEditFormChange = (event) => {
+
+        const fieldName = event.target.getAttribute("name");
+        const fieldValue = event.target.value;
+        const newFormData = { ...editFormData };
+        newFormData[fieldName] = fieldValue;
+        setEditFormData(newFormData);
+    }
+
+    const handleEditClick = (sinhvien) => {
+        setEditDiemId(sinhvien.ma_sinh_vien);
+        setEditDiemHoTen(sinhvien.ho_ten_sinh_vien);
+        setEditMaKetQuaHT(sinhvien.ma_ket_qua_hoc_tap);
+        setTinChiLyThuyet(sinhvien.so_tin_chi_ly_thuyet);
+        setTinChiThucHanh(sinhvien.so_tin_chi_thuc_hanh);
+        const formValues = {
+            "diem_tk_1": sinhvien.diem_tk_1,
+            "diem_tk_2": sinhvien.diem_tk_2,
+            "diem_tk_3": sinhvien.diem_tk_3,
+            "diem_tk_4": sinhvien.diem_tk_4,
+            "diem_tk_5": sinhvien.diem_tk_5,
+            "diem_th_1": sinhvien.diem_th_1,
+            "diem_th_2": sinhvien.diem_th_2,
+            "diem_th_3": sinhvien.diem_th_3,
+            "diem_th_4": sinhvien.diem_th_4,
+            "diem_th_5": sinhvien.diem_th_5,
+            "diem_gk": sinhvien.diem_gk,
+            "diem_ck": sinhvien.diem_ck,
+            "diem_tk_hs_10": sinhvien.diem_tk_hs_10
+        }
+        setEditFormData(formValues);
+    };
+
+
+
     const [openPopup, setOpenPopup] = useState(false);
     const chuyenMaLop = (e) => {
         // var maLopHocPhanDeChuyen = document.querySelector('#TimTheoMaLopHocPhan').value;
@@ -241,6 +416,109 @@ export const SinhVien = () => {
         // }, 1000);
         window.localStorage.setItem('maLHP', document.querySelector('#TimTheoMaLopHocPhan').value);
     }
+    const [dsSVTheoLop, setDsSVTheoLop] = useState();
+    const [searchLopTheoMa, setSearchLopTheoMa] = useState();
+    const [popupNotify, setPopupNotify] = useState({
+        title: '',
+        mes: '',
+        isLoading: false
+    })
+
+    const [editDiemId, setEditDiemId] = useState(null);
+    const [editDiemHoTen, setEditDiemHoTen] = useState(null);
+    const [editMaKetQuaHT, setEditMaKetQuaHT] = useState(null);
+    const [tinChiLyThuyet, setTinChiLyThuyet] = useState(null);
+    const [tinChiThucHanh, setTinChiThucHanh] = useState(null);
+
+
+    useEffect(() => {
+        const activeLopTimDuoc = async () => {
+            try {
+                const dsDiemSVTheoLop = await adminAPI.getDanhSachDiemSVTheoLop(searchLopTheoMa);
+                setDsSVTheoLop(dsDiemSVTheoLop.data);
+            } catch (error) {
+                if (error.response) {
+                    if (error.response.status === 403 && searchLopTheoMa) {
+                        setPopupNotify({
+                            title: 'Thông báo',
+                            mes: 'Không tìm thấy lớp',
+                            isLoading: true
+                        });
+                        setSearchLopTheoMa("");
+                    }
+                }
+            }
+        };
+        activeLopTimDuoc();
+    }, [searchLopTheoMa])
+
+
+    const handleEditFormSubmit = async () => {
+        try {
+            let trungbinhTK = (Number(editFormData.diem_tk_1) + Number(editFormData.diem_tk_2) +
+                Number(editFormData.diem_tk_3) + Number(editFormData.diem_tk_4) + Number(editFormData.diem_tk_5)) / 5;
+            let trungbinhTH = (Number(editFormData.diem_th_1) + Number(editFormData.diem_th_2) +
+                Number(editFormData.diem_th_3) + Number(editFormData.diem_th_4) + Number(editFormData.diem_th_5));
+            let tongKetHe10 = (((trungbinhTK * 0.2) + Number(editFormData.diem_ck) * 0.3 + Number(editFormData.diem_ck) * 0.5) *
+                tinChiLyThuyet + trungbinhTH * tinChiThucHanh) / (tinChiLyThuyet + tinChiThucHanh);
+            let tongKetHe4 = (tongKetHe10 * 4) / 10;
+            const editedDiem = {
+                ma_sinh_vien: editDiemId,
+                ho_ten_sinh_vien: editDiemHoTen,
+                ma_ket_qua_hoc_tap: editMaKetQuaHT,
+                diem_tk_1: Number(editFormData.diem_tk_1),
+                diem_tk_2: Number(editFormData.diem_tk_2),
+                diem_tk_3: Number(editFormData.diem_tk_3),
+                diem_tk_4: Number(editFormData.diem_tk_4),
+                diem_tk_5: Number(editFormData.diem_tk_5),
+                diem_th_1: Number(editFormData.diem_th_1),
+                diem_th_2: Number(editFormData.diem_th_2),
+                diem_th_3: Number(editFormData.diem_th_3),
+                diem_th_4: Number(editFormData.diem_th_4),
+                diem_th_5: Number(editFormData.diem_th_5),
+                diem_gk: Number(editFormData.diem_gk),
+                diem_ck: Number(editFormData.diem_ck),
+                diem_tk_hs_4: tongKetHe4,
+                diem_tk_hs_10: tongKetHe10
+            }
+            // const newDiems = [...dsSVTheoLop?.dssv];
+            // const index = dsSVTheoLop?.dssv.findIndex(
+            //     (sv) => sv.ma_sinh_vien === editDiemId.ma_sinh_vien
+            // )
+            // newDiems[index] = editedDiem;
+            console.log(editedDiem.diem_tk_hs_10);
+            //setDsSVTheoLop(newDiems);
+            const updatDiem = await adminAPI.putDiemMotSinhVien(editedDiem.ma_ket_qua_hoc_tap, editedDiem.diem_tk_1,
+                editedDiem.diem_tk_2, editedDiem.diem_tk_3, editedDiem.diem_tk_4, editedDiem.diem_tk_5,
+                editedDiem.diem_th_1, editedDiem.diem_th_2, editedDiem.diem_th_3, editedDiem.diem_th_4,
+                editedDiem.diem_th_5, editedDiem.diem_gk, editedDiem.diem_ck, editedDiem.diem_tk_hs_10,
+                editedDiem.diem_tk_hs_4);
+            const dsDiemSVTheoLop = await adminAPI.getDanhSachDiemSVTheoLop(searchLopTheoMa);
+            setDsSVTheoLop(dsDiemSVTheoLop.data);
+            setEditDiemId(null);
+            setEditDiemHoTen(null);
+            setEditMaKetQuaHT(null);
+        } catch (error) {
+
+        }
+    }
+
+    const searchLop = (e) => {
+        if (e.key === 'Enter') {
+            setSearchLopTheoMa(e.target.value);
+        }
+    };
+
+    function handleNotify(choose) {
+        if (choose) {
+            setPopupNotify({
+                title: '',
+                mes: '',
+                isLoading: false
+            });
+        }
+    }
+
     return (
         <>
             <Sidebar />
@@ -291,6 +569,7 @@ export const SinhVien = () => {
                                                                 className="form-control"
                                                                 id="TimTheoMaLopHocPhan"
                                                                 aria-describedby="defaultFormControlHelp"
+                                                                onKeyDown={searchLop}
                                                             />
                                                         </div>
                                                         <div className="col-md-3">
@@ -324,29 +603,8 @@ export const SinhVien = () => {
                                         <div className="col-md-5">
                                             <div className="mb-3">
                                                 <div className="demo-inline-spacing">
-                                                    {/* <button type="button" class="btn btn-primary"
-                                                        style={{
-                                                            float: "right", display: "inline-block", fontWeight: "400"
-                                                            , lineHeight: "1.53", textAlign: "center", verticalAlign: "middle", userSelect: "none"
-                                                            , border: "1px solid transparent", padding: "0.4375rem 1.25rem", fontSize: "0.9375 rme"
-                                                        }}
-                                                        
-                                                    > <AiIcons.AiOutlineUpload /> 
-                                                    <a href="/nhap-diem-sv" type="button" className="btn btn-primary" >
-                                                        
-                                                    </a>
-                                                    </button> */}
 
-                                                    <a href="/nhap-diem-sv" type="button" className="btn btn-primary"
-                                                        style={{
-                                                            float: "right", display: "inline-block", fontWeight: "400"
-                                                            , lineHeight: "1.53", textAlign: "center", verticalAlign: "middle", userSelect: "none"
-                                                            , border: "1px solid transparent", padding: "0.4375rem 1.25rem", fontSize: "0.9375 rme"
-                                                        }}
-                                                        onClick={chuyenMaLop}
-                                                    > <AiIcons.AiOutlineFileAdd />
-                                                        Nhập điểm
-                                                    </a>
+
                                                     <button type="button" class="btn btn-info"
                                                         style={{
                                                             float: "right", display: "inline-block", fontWeight: "400"
@@ -367,7 +625,7 @@ export const SinhVien = () => {
                                                 <h5 className="card-header" style={{
                                                     fontSize: "1.125rem", marginTop: "0", fontWeight: "500"
                                                     , lineHeight: "1.1", color: "#566a7f", fontFamily: "var(--bs-body-font-family)"
-                                                }}>Danh sách sinh viên</h5>
+                                                }}>Danh sách sinh viên theo khoa</h5>
                                                 <div className="card-body">
                                                     <div className="table-responsive text-nowrap">
                                                         <table className="table table-bordered" style={{
@@ -416,6 +674,89 @@ export const SinhVien = () => {
 
                                                             </tbody>
                                                         </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <hr />
+                                    <div className="row">
+                                        <div className="col-md-2"></div>
+                                        <div className="col-md-10">
+                                            <div className="card">
+                                                <h5 className="card-header" style={{
+                                                    fontSize: "1.125rem", marginTop: "0", fontWeight: "500"
+                                                    , lineHeight: "1.1", color: "#566a7f", fontFamily: "var(--bs-body-font-family)"
+                                                }}>Danh sách sinh viên theo lớp học phần</h5>
+                                                <div className="card-body">
+                                                    <div className="table-responsive text-nowrap">
+                                                        <form>
+                                                            <table className="table table-bordered" style={{
+                                                                borderColor: "#d9dee3", color: "#697a8d",
+                                                                border: "2px solid", backgroundColor: "#fff"
+                                                            }} >
+                                                                <thead>
+                                                                    <tr style={{ backgroundColor: "#CADAE1" }}>
+                                                                        <th style={{ border: "2px solid" }}>Mã sv</th>
+                                                                        <th style={{ border: "2px solid" }}>Tên</th>
+                                                                        <th style={{ border: "2px solid" }}>Thường kỳ 1</th>
+                                                                        <th style={{ border: "2px solid" }}>Thường kỳ 2</th>
+                                                                        <th style={{ border: "2px solid" }}>Thường kỳ 3</th>
+                                                                        <th style={{ border: "2px solid" }}>Thường kỳ 4</th>
+                                                                        <th style={{ border: "2px solid" }}>Thường kỳ 5</th>
+                                                                        <th style={{ border: "2px solid" }}>Thực hành 1</th>
+                                                                        <th style={{ border: "2px solid" }}>Thực hành 2</th>
+                                                                        <th style={{ border: "2px solid" }}>Thực hành 3</th>
+                                                                        <th style={{ border: "2px solid" }}>Thực hành 4</th>
+                                                                        <th style={{ border: "2px solid" }}>Thực hành 5</th>
+                                                                        <th style={{ border: "2px solid" }}>Giữa kỳ</th>
+                                                                        <th style={{ border: "2px solid" }}>Cuối kỳ</th>
+                                                                        <th style={{ border: "2px solid" }}>Tổng kết</th>
+                                                                        <th style={{ border: "2px solid" }}>Thao tác</th>
+                                                                    </tr>
+                                                                </thead>
+
+                                                                <tbody className="adminClassHover">
+                                                                    {
+                                                                        dsSVTheoLop && dsSVTheoLop?.dssv.length > 0
+                                                                            ?
+                                                                            <>
+                                                                                {
+                                                                                    dsSVTheoLop["dssv"].map((dsDiem) => (
+                                                                                        <>
+                                                                                            <Fragment>
+                                                                                                {editDiemId === dsDiem.ma_sinh_vien ?
+                                                                                                    (
+                                                                                                        <EditTableRowDiem dsDiem={dsDiem}
+                                                                                                            editFormData={editFormData}
+                                                                                                            handleEditFormChange={handleEditFormChange}
+                                                                                                            handleEditFormSubmit={handleEditFormSubmit}
+                                                                                                        />
+                                                                                                    )
+                                                                                                    : (
+                                                                                                        <ReadOnlyRowDiem dsDiem={dsDiem}
+                                                                                                            handleEditClick={handleEditClick}
+                                                                                                        />
+                                                                                                    )
+                                                                                                }
+                                                                                            </Fragment>
+                                                                                        </>
+
+                                                                                    ))
+                                                                                }
+                                                                            </>
+                                                                            :
+                                                                            <tr>
+                                                                                <td colSpan={16} className="text-center">
+                                                                                    <p className="bold"><span>Tạm chưa có dữ liệu</span></p>
+                                                                                </td>
+                                                                            </tr>
+                                                                    }
+
+                                                                </tbody>
+
+                                                            </table>
+                                                        </form>
                                                     </div>
                                                 </div>
                                             </div>
@@ -555,6 +896,7 @@ export const SinhVien = () => {
                     </div>
                 </Popup>
             </div>
+            {popupNotify.isLoading && <PopupNotify onDialog={handleNotify} title={popupNotify.title} mes={popupNotify.mes} />}
         </>
     );
 };

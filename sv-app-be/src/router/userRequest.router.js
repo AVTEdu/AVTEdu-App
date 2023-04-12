@@ -42,13 +42,23 @@ router
   .put(verifyAccessToken, userRequestController.getThoiKhoaBieuSinhVienTrongMotTuan);
 router
   .route("/thanhToanHocPhiTrucTuyen")
-  .put(verifyAccessToken,userRequestController.thanhToanHocPhiTrucTuyen);  
+  .put(verifyAccessToken, userRequestController.thanhToanHocPhiTrucTuyen);
 router
   .route("/xacNhanThanhToanTrucTuyen")
-  .put(userRequestController.xacNhanThanhToanTrucTuyen);    
+  .put(userRequestController.xacNhanThanhToanTrucTuyen);
 //Cần mã sinh viên và danh sách mã phiếu thu
 router
   .route("/getChiTietPhieuThuTongHop")
-  .put(userRequestController.getChiTietPhieuThuTongHop);      
+  .put(userRequestController.getChiTietPhieuThuTongHop);
+router
+  .route("/getDSPhieuThuBySinhVien")
+  .put(verifyAccessToken, userRequestController.getDanhSachPhieuThuSinhVien);
+router
+  .route("/getChiTietPhieuThuTongHopBySV")
+  .put(verifyAccessToken, userRequestController.getChiTietPhieuThuTongHopBySV);
+router
+  .route("/getKetQuaHocTap")
+  .put(verifyAccessToken, userRequestController.getKetQuaHocTap);
+
 
 module.exports = router;
