@@ -77,10 +77,16 @@ router
 //   .put(AdminCreateController.thanhToanHocPhiSinhVien);  
 router
   .route("/createThoiKhoaBieuSinhVien")
-  .post(verifyAccessToken,AdminCreateController.createThoiKhoaBieuSinhVien);
+  .post(verifyAccessToken, AdminCreateController.createThoiKhoaBieuSinhVien);
 //Cần mã sinh viên và danh sách mã học phí đã chọn  
 router
   .route("/thanhToanCongNoSinhVien")
-  .put(verifyAccessToken,AdminUpdateController.thanhToanCongNoSinhVien);  
+  .put(verifyAccessToken, AdminUpdateController.thanhToanCongNoSinhVien);
+router
+  .route("/getDSDiemSinhVienTheoLop")
+  .put(verifyAccessToken, AdminGetController.getDanhSachDiemSinhVienByMaLopHP);
+router
+  .route("/updateDiemMotSinhVien")
+  .put(verifyAccessToken, AdminUpdateController.updateDiemMotSinhVien);
 
 module.exports = router;

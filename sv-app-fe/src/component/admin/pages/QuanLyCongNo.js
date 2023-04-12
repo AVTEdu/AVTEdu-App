@@ -19,6 +19,7 @@ export const CongNo = () => {
     const [resTime, setResTime] = useState(0);
     let sttKhoanThu = 1;
     let tongTien = 0;
+    const [stateThanhToanSinhVien, setStateThanhToanSinhVien] = useState();
 
     const searchSinhVien = (e) => {
         if (e.key === 'Enter') {
@@ -65,6 +66,20 @@ export const CongNo = () => {
             }, resTime + 200)
         }
     }, [resTime])
+
+    useEffect(() => {
+        const activeRefresh = async () => {
+            try {
+                const dshpsv_res = await adminAPI.getDSHocPhiSinhVien(sinhVienSearch);
+                const dsphieuthu_res = await adminAPI.getDanhSachPhieuThuSinhVien(sinhVienSearch);
+                setDsPhieuThu(dsphieuthu_res.data);
+                setDsHocPhi(dshpsv_res.data);
+            } catch (error) {
+                console.log(error.message);
+            }
+        }
+        activeRefresh();
+    }, [stateThanhToanSinhVien])
 
     useEffect(() => {
         // setTimeout(() => {
@@ -117,10 +132,7 @@ export const CongNo = () => {
             if (res.status == 200 && isCheck.length > 0) {
                 setIsCheck([]);
                 setIsCheckAll(false);
-                const dshpsv_res = await adminAPI.getDSHocPhiSinhVien(sinhVienSearch);
-                const dsphieuthu_res = await adminAPI.getDanhSachPhieuThuSinhVien(sinhVienSearch);
-                setDsPhieuThu(dsphieuthu_res.data);
-                setDsHocPhi(dshpsv_res.data);
+                setStateThanhToanSinhVien(res.data);
                 setPopupNotify({
                     title: 'Thông báo',
                     mes: 'Thanh toán cho sinh viên thành công !!!',
@@ -375,7 +387,7 @@ export const CongNo = () => {
                                                                                     >
                                                                                         <td style={{ border: "2px solid", textAlign: "center", verticalAlign: "middle" }}>{dspth.ma_phieu_thu}</td>
                                                                                         <td style={{ border: "2px solid", textAlign: "center", verticalAlign: "middle" }}>{dspth.ngay_thu}</td>
-                                                                                        <td style={{ border: "2px solid", textAlign: "center", verticalAlign: "middle" }}>1860000</td>
+                                                                                        <td style={{ border: "2px solid", textAlign: "center", verticalAlign: "middle" }}>{dspth.tong_tien}</td>
                                                                                         <td style={{ border: "2px solid", textAlign: "center", verticalAlign: "middle" }}>{dspth.don_vi_thu}</td>
                                                                                         <td style={{ border: "2px solid", textAlign: "center", verticalAlign: "middle" }}
                                                                                         >
