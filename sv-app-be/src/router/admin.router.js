@@ -6,7 +6,7 @@ const { verifyAccessToken } = require("../helpers/jwt.service");
 const router = express.Router();
 
 router
-  .route("/signup")
+  .route("/createSinhVien")
   .post(verifyAccessToken, AdminCreateController.createSinhVien);
 router
   .route("/createKhoa")
@@ -88,5 +88,14 @@ router
 router
   .route("/updateDiemMotSinhVien")
   .put(verifyAccessToken, AdminUpdateController.updateDiemMotSinhVien);
+router
+  .route("/getDSKhoa")
+  .get(verifyAccessToken, AdminGetController.getDanhSachKhoa);
+router
+  .route("/getDsSVByKhoa")
+  .put(verifyAccessToken, AdminGetController.getDanhSachSinhVienByKhoa);
+router
+  .route("/getDsChuyenNganhTheoKhoa")
+  .put(verifyAccessToken, AdminGetController.getDSChuyenNganhTheoKhoa);
 
 module.exports = router;

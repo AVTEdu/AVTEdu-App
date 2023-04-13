@@ -170,25 +170,60 @@ export default function KetQuaHocTap() {
                                                                                                     title={ds.so_tin_chi_thuc_hanh}
                                                                                                 ><div style={{ display: 'inline-table' }}>{ds.so_tin_chi_ly_thuyet + ds.so_tin_chi_thuc_hanh}</div></td>
 
-                                                                                                <td className title="DiemThuongKy1">{ds.diem_tk_1}</td>
-                                                                                                <td className title="DiemThuongKy2">{ds.diem_tk_2}</td>
-                                                                                                <td className title="DiemThuongKy3">{ds.diem_tk_3}</td>
-                                                                                                <td className title="DiemThuongKy4" >{ds.diem_tk_4}</td>
-                                                                                                <td className title="DiemThuongKy5" >{ds.diem_tk_5}</td>
-                                                                                                <td className title="DiemGiuaKy" colSpan={2}>{ds.diem_gk}</td>
-                                                                                                <td className title="DiemThucHanh1" >{ds.diem_th_1}</td>
-                                                                                                <td className title="DiemThucHanh2" >{ds.diem_th_2}</td>
-                                                                                                <td className title="DiemThucHanh3" >{ds.diem_th_3}</td>
-                                                                                                <td className title="DiemThucHanh4" >{ds.diem_th_4}</td>
-                                                                                                <td className title="DiemThucHanh5" >{ds.diem_th_5}</td>
-                                                                                                <td className title="DiemThiCK">{ds.diem_ck}</td>
-                                                                                                <td className title="DiemTongKetHe10">{ds.diem_tk_hs_10}</td>
-                                                                                                <td className title="DiemTongKetHe4">{ds.diem_tk_hs_4}</td>
-                                                                                                <td className title="DiemChu">{ds.diem_chu}</td>
+                                                                                                <td className title="DiemThuongKy1">{
+                                                                                                    ds.diem_tk_1 > 0 ? ds.diem_tk_1 : null
+                                                                                                }</td>
+                                                                                                <td className title="DiemThuongKy2">{
+                                                                                                    ds.diem_tk_2 > 0 ? ds.diem_tk_2 : null
+                                                                                                }</td>
+                                                                                                <td className title="DiemThuongKy3">{
+                                                                                                    ds.diem_tk_3 > 0 ? ds.diem_tk_3 : null
+                                                                                                }</td>
+                                                                                                <td className title="DiemThuongKy4" >{
+                                                                                                    ds.diem_tk_4 > 0 ? ds.diem_tk_4 : null
+                                                                                                }</td>
+                                                                                                <td className title="DiemThuongKy5" >{
+                                                                                                    ds.diem_tk_5 > 0 ? ds.diem_tk_5 : null
+                                                                                                }</td>
+                                                                                                <td className title="DiemGiuaKy" colSpan={2}>{
+                                                                                                    ds.diem_gk > 0 ? ds.diem_gk : null
+                                                                                                }</td>
+                                                                                                <td className title="DiemThucHanh1" >{
+                                                                                                    ds.diem_th_1 > 0 ? ds.diem_th_1 : null
+                                                                                                }</td>
+                                                                                                <td className title="DiemThucHanh2" >{
+                                                                                                    ds.diem_th_2 > 0 ? ds.diem_th_2 : null
+                                                                                                }</td>
+                                                                                                <td className title="DiemThucHanh3" >{
+                                                                                                    ds.diem_th_3 > 0 ? ds.diem_th_3 : null
+                                                                                                }</td>
+                                                                                                <td className title="DiemThucHanh4" >{
+                                                                                                    ds.diem_th_4 > 0 ? ds.diem_th_4 : null
+                                                                                                }</td>
+                                                                                                <td className title="DiemThucHanh5" >{
+                                                                                                    ds.diem_th_5 > 0 ? ds.diem_th_5 : null
+                                                                                                }</td>
+                                                                                                <td className title="DiemThiCK">{
+                                                                                                    ds.diem_ck > 0 ? ds.diem_ck : null
+                                                                                                }</td>
+                                                                                                <td className title="DiemTongKetHe10">{
+                                                                                                    ds.diem_tk_hs_10 > 0 ? ds.diem_tk_hs_10 : null
+                                                                                                }</td>
+                                                                                                <td className title="DiemTongKetHe4">{
+                                                                                                    ds.diem_tk_hs_4 > 0 ? ds.diem_tk_hs_4 : null
+                                                                                                }</td>
+                                                                                                <td className title="DiemChu">
+                                                                                                    {
+                                                                                                        (ds.diem_tk_hs_10 > 9) ? 'A+' : (ds.diem_tk_hs_10 > 8.5) ? 'A' :
+                                                                                                            (ds.diem_tk_hs_10 > 8) ? 'B+' : (ds.diem_tk_hs_10 > 7) ? 'B' :
+                                                                                                                (ds.diem_tk_hs_10 > 6) ? 'C+' : (ds.diem_tk_hs_10 > 5.5) ? 'C' :
+                                                                                                                    (ds.diem_tk_hs_10 > 5) ? 'D+' : (ds.diem_tk_hs_10 > 4) ? 'D' : 'F'
+                                                                                                    }
+                                                                                                </td>
                                                                                                 <td className title="XepLoai">{
-                                                                                                    (ds.xep_loai == 1) ? 'Yếu' : (ds.xep_loai == 2) ? 'Trung bình' :
-                                                                                                        (ds.xep_loai == 3) ? 'Khá' : (ds.xep_loai == 4) ? 'Giỏi' :
-                                                                                                            (ds.xep_loai == 5) ? 'Xuất sắc' : ''
+                                                                                                    (ds.diem_tk_hs_10 < 4) ? 'Yếu' : (ds.diem_tk_hs_10 < 5) ? 'Trung bình' :
+                                                                                                        (ds.diem_tk_hs_10 < 8) ? 'Khá' : (ds.diem_tk_hs_10 < 9) ? 'Giỏi' :
+                                                                                                            (ds.diem_tk_hs_10 >= 9) ? 'Xuất sắc' : ''
                                                                                                 }</td>
                                                                                                 <td className title="GhiChu" />
                                                                                                 <td>
@@ -273,25 +308,60 @@ export default function KetQuaHocTap() {
                                                                                                     title={ds.so_tin_chi_thuc_hanh}
                                                                                                 ><div style={{ display: 'inline-table' }}>{ds.so_tin_chi_ly_thuyet + ds.so_tin_chi_thuc_hanh}</div></td>
 
-                                                                                                <td className title="DiemThuongKy1">{ds.diem_tk_1}</td>
-                                                                                                <td className title="DiemThuongKy2">{ds.diem_tk_2}</td>
-                                                                                                <td className title="DiemThuongKy3">{ds.diem_tk_3}</td>
-                                                                                                <td className title="DiemThuongKy4" >{ds.diem_tk_4}</td>
-                                                                                                <td className title="DiemThuongKy5" >{ds.diem_tk_5}</td>
-                                                                                                <td className title="DiemGiuaKy" colSpan={2}>{ds.diem_gk}</td>
-                                                                                                <td className title="DiemThucHanh1" >{ds.diem_th_1}</td>
-                                                                                                <td className title="DiemThucHanh2" >{ds.diem_th_2}</td>
-                                                                                                <td className title="DiemThucHanh3" >{ds.diem_th_3}</td>
-                                                                                                <td className title="DiemThucHanh4" >{ds.diem_th_4}</td>
-                                                                                                <td className title="DiemThucHanh5" >{ds.diem_th_5}</td>
-                                                                                                <td className title="DiemThiCK">{ds.diem_ck}</td>
-                                                                                                <td className title="DiemTongKetHe10">{ds.diem_tk_hs_10}</td>
-                                                                                                <td className title="DiemTongKetHe4">{ds.diem_tk_hs_4}</td>
-                                                                                                <td className title="DiemChu">{ds.diem_chu}</td>
+                                                                                                <td className title="DiemThuongKy1">{
+                                                                                                    ds.diem_tk_1 > 0 ? ds.diem_tk_1 : null
+                                                                                                }</td>
+                                                                                                <td className title="DiemThuongKy2">{
+                                                                                                    ds.diem_tk_2 > 0 ? ds.diem_tk_2 : null
+                                                                                                }</td>
+                                                                                                <td className title="DiemThuongKy3">{
+                                                                                                    ds.diem_tk_3 > 0 ? ds.diem_tk_3 : null
+                                                                                                }</td>
+                                                                                                <td className title="DiemThuongKy4" >{
+                                                                                                    ds.diem_tk_4 > 0 ? ds.diem_tk_4 : null
+                                                                                                }</td>
+                                                                                                <td className title="DiemThuongKy5" >{
+                                                                                                    ds.diem_tk_5 > 0 ? ds.diem_tk_5 : null
+                                                                                                }</td>
+                                                                                                <td className title="DiemGiuaKy" colSpan={2}>{
+                                                                                                    ds.diem_gk > 0 ? ds.diem_gk : null
+                                                                                                }</td>
+                                                                                                <td className title="DiemThucHanh1" >{
+                                                                                                    ds.diem_th_1 > 0 ? ds.diem_th_1 : null
+                                                                                                }</td>
+                                                                                                <td className title="DiemThucHanh2" >{
+                                                                                                    ds.diem_th_2 > 0 ? ds.diem_th_2 : null
+                                                                                                }</td>
+                                                                                                <td className title="DiemThucHanh3" >{
+                                                                                                    ds.diem_th_3 > 0 ? ds.diem_th_3 : null
+                                                                                                }</td>
+                                                                                                <td className title="DiemThucHanh4" >{
+                                                                                                    ds.diem_th_4 > 0 ? ds.diem_th_4 : null
+                                                                                                }</td>
+                                                                                                <td className title="DiemThucHanh5" >{
+                                                                                                    ds.diem_th_5 > 0 ? ds.diem_th_5 : null
+                                                                                                }</td>
+                                                                                                <td className title="DiemThiCK">{
+                                                                                                    ds.diem_ck > 0 ? ds.diem_ck : null
+                                                                                                }</td>
+                                                                                                <td className title="DiemTongKetHe10">{
+                                                                                                    ds.diem_tk_hs_10 > 0 ? ds.diem_tk_hs_10 : null
+                                                                                                }</td>
+                                                                                                <td className title="DiemTongKetHe4">{
+                                                                                                    ds.diem_tk_hs_4 > 0 ? ds.diem_tk_hs_4 : null
+                                                                                                }</td>
+                                                                                                <td className title="DiemChu">
+                                                                                                    {
+                                                                                                        (ds.diem_tk_hs_10 > 9) ? 'A+' : (ds.diem_tk_hs_10 > 8.5) ? 'A' :
+                                                                                                            (ds.diem_tk_hs_10 > 8) ? 'B+' : (ds.diem_tk_hs_10 > 7) ? 'B' :
+                                                                                                                (ds.xep_loai > 6) ? 'C+' : (ds.xep_loai > 5.5) ? 'C' :
+                                                                                                                    (ds.xep_loai > 5) ? 'D+' : (ds.xep_loai > 4) ? 'D' : 'F'
+                                                                                                    }
+                                                                                                </td>
                                                                                                 <td className title="XepLoai">{
-                                                                                                    (ds.xep_loai == 1) ? 'Yếu' : (ds.xep_loai == 2) ? 'Trung bình' :
-                                                                                                        (ds.xep_loai == 3) ? 'Khá' : (ds.xep_loai == 4) ? 'Giỏi' :
-                                                                                                            (ds.xep_loai == 5) ? 'Xuất sắc' : ''
+                                                                                                    (ds.diem_tk_hs_10 < 4) ? 'Yếu' : (ds.diem_tk_hs_10 < 5) ? 'Trung bình' :
+                                                                                                        (ds.diem_tk_hs_10 < 8) ? 'Khá' : (ds.diem_tk_hs_10 < 9) ? 'Giỏi' :
+                                                                                                            (ds.diem_tk_hs_10 >= 9) ? 'Xuất sắc' : ''
                                                                                                 }</td>
                                                                                                 <td className title="GhiChu" />
                                                                                                 <td>
@@ -375,20 +445,48 @@ export default function KetQuaHocTap() {
                                                                                                     title={ds.so_tin_chi_thuc_hanh}
                                                                                                 ><div style={{ display: 'inline-table' }}>{ds.so_tin_chi_ly_thuyet + ds.so_tin_chi_thuc_hanh}</div></td>
 
-                                                                                                <td className title="DiemThuongKy1">{ds.diem_tk_1}</td>
-                                                                                                <td className title="DiemThuongKy2">{ds.diem_tk_2}</td>
-                                                                                                <td className title="DiemThuongKy3">{ds.diem_tk_3}</td>
-                                                                                                <td className title="DiemThuongKy4" >{ds.diem_tk_4}</td>
-                                                                                                <td className title="DiemThuongKy5" >{ds.diem_tk_5}</td>
-                                                                                                <td className title="DiemGiuaKy" colSpan={2}>{ds.diem_gk}</td>
-                                                                                                <td className title="DiemThucHanh1" >{ds.diem_th_1}</td>
-                                                                                                <td className title="DiemThucHanh2" >{ds.diem_th_2}</td>
-                                                                                                <td className title="DiemThucHanh3" >{ds.diem_th_3}</td>
-                                                                                                <td className title="DiemThucHanh4" >{ds.diem_th_4}</td>
-                                                                                                <td className title="DiemThucHanh5" >{ds.diem_th_5}</td>
-                                                                                                <td className title="DiemThiCK">{ds.diem_ck}</td>
-                                                                                                <td className title="DiemTongKetHe10">{ds.diem_tk_hs_10}</td>
-                                                                                                <td className title="DiemTongKetHe4">{ds.diem_tk_hs_4}</td>
+                                                                                                <td className title="DiemThuongKy1">{
+                                                                                                    ds.diem_tk_1 > 0 ? ds.diem_tk_1 : null
+                                                                                                }</td>
+                                                                                                <td className title="DiemThuongKy2">{
+                                                                                                    ds.diem_tk_2 > 0 ? ds.diem_tk_2 : null
+                                                                                                }</td>
+                                                                                                <td className title="DiemThuongKy3">{
+                                                                                                    ds.diem_tk_3 > 0 ? ds.diem_tk_3 : null
+                                                                                                }</td>
+                                                                                                <td className title="DiemThuongKy4" >{
+                                                                                                    ds.diem_tk_4 > 0 ? ds.diem_tk_4 : null
+                                                                                                }</td>
+                                                                                                <td className title="DiemThuongKy5" >{
+                                                                                                    ds.diem_tk_5 > 0 ? ds.diem_tk_5 : null
+                                                                                                }</td>
+                                                                                                <td className title="DiemGiuaKy" colSpan={2}>{
+                                                                                                    ds.diem_gk > 0 ? ds.diem_gk : null
+                                                                                                }</td>
+                                                                                                <td className title="DiemThucHanh1" >{
+                                                                                                    ds.diem_th_1 > 0 ? ds.diem_th_1 : null
+                                                                                                }</td>
+                                                                                                <td className title="DiemThucHanh2" >{
+                                                                                                    ds.diem_th_2 > 0 ? ds.diem_th_2 : null
+                                                                                                }</td>
+                                                                                                <td className title="DiemThucHanh3" >{
+                                                                                                    ds.diem_th_3 > 0 ? ds.diem_th_3 : null
+                                                                                                }</td>
+                                                                                                <td className title="DiemThucHanh4" >{
+                                                                                                    ds.diem_th_4 > 0 ? ds.diem_th_4 : null
+                                                                                                }</td>
+                                                                                                <td className title="DiemThucHanh5" >{
+                                                                                                    ds.diem_th_5 > 0 ? ds.diem_th_5 : null
+                                                                                                }</td>
+                                                                                                <td className title="DiemThiCK">{
+                                                                                                    ds.diem_ck > 0 ? ds.diem_ck : null
+                                                                                                }</td>
+                                                                                                <td className title="DiemTongKetHe10">{
+                                                                                                    ds.diem_tk_hs_10 > 0 ? ds.diem_tk_hs_10 : null
+                                                                                                }</td>
+                                                                                                <td className title="DiemTongKetHe4">{
+                                                                                                    ds.diem_tk_hs_4 > 0 ? ds.diem_tk_hs_4 : null
+                                                                                                }</td>
                                                                                                 <td className title="DiemChu">
                                                                                                     {
                                                                                                         (ds.diem_tk_hs_10 > 9) ? 'A+' : (ds.diem_tk_hs_10 > 8.5) ? 'A' :
@@ -398,9 +496,9 @@ export default function KetQuaHocTap() {
                                                                                                     }
                                                                                                 </td>
                                                                                                 <td className title="XepLoai">{
-                                                                                                    (ds.xep_loai == 1) ? 'Yếu' : (ds.xep_loai == 2) ? 'Trung bình' :
-                                                                                                        (ds.xep_loai == 3) ? 'Khá' : (ds.xep_loai == 4) ? 'Giỏi' :
-                                                                                                            (ds.xep_loai == 5) ? 'Xuất sắc' : ''
+                                                                                                    (ds.diem_tk_hs_10 < 4) ? 'Yếu' : (ds.diem_tk_hs_10 < 5) ? 'Trung bình' :
+                                                                                                        (ds.diem_tk_hs_10 < 8) ? 'Khá' : (ds.diem_tk_hs_10 < 9) ? 'Giỏi' :
+                                                                                                            (ds.diem_tk_hs_10 >= 9) ? 'Xuất sắc' : ''
                                                                                                 }</td>
                                                                                                 <td className title="GhiChu" />
                                                                                                 <td>
