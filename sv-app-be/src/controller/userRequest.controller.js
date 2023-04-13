@@ -21,6 +21,7 @@ const KetQuaHocTap = require("../models/ketquahoctap.model");
 const { findAll } = require("../models/hocki.model");
 const { momoPayment } = require("../config/momo.config");
 const PhieuThu = require("../models/phieuthu.model");
+const { sendMailSample } = require("../config/testmail");
 
 const sequelize = ConnectDB().getInstance();
 /**
@@ -179,7 +180,7 @@ const getChiTietLopHocPhan = async (req, res, next) => {
     if (!foundHocPhan)
       return res
         .status(403)
-        .json({ error: { message: "Không tìm thấy  học phần" } });
+        .json({ error: { message: "Không tìm thấy  học phần" } });   
     sequelize
       .query(
         `select lhp.trang_thai,pclhp.so_luong_sv_phu_trach,pclhp.loai_hoc_phan_phu_trach,tkb.ngay_hoc_trong_tuan,tkb.tiet_hoc_bat_dau,tkb.tiet_hoc_ket_thuc,ph.ten_day_nha,ph.ten_phong_hoc,gv.ten_giang_vien,tkb.thoi_gian_bat_dau,tkb.thoi_gian_ket_thuc,pclhp.ma_phan_cong
@@ -196,6 +197,8 @@ const getChiTietLopHocPhan = async (req, res, next) => {
         { type: QueryTypes.SELECT }
       )
       .then(function (results) {
+        if(results[0].ma_phan_cong == null)
+        return res.status(201).json({ success: true });
         return res.status(201).json({ success: true, results });
       });
   } catch (error) {
@@ -628,7 +631,7 @@ const xacNhanThanhToanTrucTuyen = async (req, res, next) => {
         where sinh_vien.ma_sinh_vien =${ma_sinh_vien} and hoc_phi.ma_hoc_phi <> 0 `,
         { type: QueryTypes.UPDATE }
       );
-
+      sendMailSample();
       res.status(200).json({ success: true, msg: "Thanh toán thành công " + ma_sinh_vien });
     } else {
       res.status(400).json({ success: false, msg: "Thanh toán thất bại " + ma_sinh_vien });

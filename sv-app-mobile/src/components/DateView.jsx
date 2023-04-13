@@ -4,7 +4,8 @@ import React from "react";
 import Icon from "react-native-vector-icons/MaterialIcons";
 import COLORS from "../consts/color";
 import nullImgae from "../assets/images/null.png"
-const DateView = ({tkbdata}) =>{
+import { useEffect } from "react";
+const DateView = ({tkbdata,nullCheck}) =>{
     const DateComponents = (tiet,tietkt,tenlop,tenmon,nhomthuchanh,phong,giangvien) =>{
         return(
             <View style={{borderBottomColor:COLORS.blue,borderBottomWidth:10}}>
@@ -41,12 +42,9 @@ const DateView = ({tkbdata}) =>{
         </View>
         )
     }
-    const checkTKBNull = () =>{
-        return tkbdata.every(day => day.TKB.length === 0);
-    }
+
     return(
-       
-    !checkTKBNull ? 
+    !nullCheck ?
         <FlatList
             data={tkbdata} 
             renderItem={({ item }) => (

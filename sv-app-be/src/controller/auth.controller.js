@@ -145,8 +145,7 @@ const refreshToken = async (req, res, next) => {
       const {userId} = await verifyRefreshToken(refreshToken);
       console.log(userId);
       const accessToken = await signAccessToken(userId);
-      const refToken = await signRefreshToken(userId);
-      return res.status(200).json({ accessToken, refToken });
+      return res.status(200).json({ accessToken });
     } catch (error) {
       next(error);
     }
