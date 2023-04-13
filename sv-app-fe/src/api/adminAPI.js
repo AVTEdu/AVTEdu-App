@@ -29,6 +29,26 @@ const adminAPI = {
             diem_th_1: th1, diem_th_2: th2, diem_th_3: th3, diem_th_4: th4, diem_th_5: th5, diem_gk: gk, diem_ck: ck, diem_tk_hs_10: tongket
             , diem_tk_hs_4: tongketh4
         })
-    }
+    },
+    getDanhSachToanBoKhoa() {
+        const url = "admin/getDSKhoa";
+        return axiosClient.get(url);
+    },
+    getDanhSachSVByKhoa(ma_khoa) {
+        const url = "/admin/getDsSVByKhoa";
+        return axiosClient.put(url, { maKhoa: ma_khoa });
+    },
+    getDsChuyenNganhTheoKhoa(ma_khoa) {
+        const url = "admin/getDsChuyenNganhTheoKhoa";
+        return axiosClient.put(url, { maKhoa: ma_khoa });
+    },
+    createSinhVien(masv, tensv, ngay_sinhsv, emailsv, gioitinhsv, sdtsv, so_cmndsv, khoasv, chuyennganhsv) {
+        const url = "/admin/createSinhVien";
+        return axiosClient.post(url, {
+            ma: masv, ten: tensv, ngay_sinh: ngay_sinhsv,
+            email: emailsv, gioitinh: gioitinhsv, sdt: sdtsv, so_cmnd: so_cmndsv, khoa: khoasv,
+            chuyennganh: chuyennganhsv
+        });
+    },
 };
 export default adminAPI;
