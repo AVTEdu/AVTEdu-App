@@ -9,8 +9,8 @@ require('dotenv').config();
 
 const DatabaseName = "sinhviendb";
 const DatabaseUsername = "root";
-// const DatabasePassword = "Sapassword_123";
-const DatabasePassword = "sapassword";
+const DatabasePassword = "Sapassword_123";
+//const DatabasePassword = "sapassword";
 
 const ConnectDB = (function () {
     var instance;
@@ -54,3 +54,50 @@ const ConnectDB = (function () {
 module.exports = {
     ConnectDB
 };
+
+//#region Connect RDS
+// const Sequelize = require('sequelize');
+// const mysql = require('mysql2/promise');
+// require('dotenv').config();
+
+
+
+// const DatabaseName = "sinhviendb";
+// const DatabaseUsername = 'admin';
+// const DatabasePassword = "12345678";
+
+
+// const ConnectDB = (function () {
+//     var instance;
+//     function init() {
+
+//             `${DatabaseName}`,
+//             `${DatabaseUsername}`,
+//             `${DatabasePassword}`,
+//             {
+//                 host: 'sinhviendb.chodan0pjpbf.ap-southeast-1.rds.amazonaws.com',
+//                 dialect: 'mysql',
+//             }
+
+//         );
+//         sequelize.authenticate().then(() => {
+//         }).catch((error) => {
+//             console.error('Unable to connect to the database: ', error);
+//         });
+//         return sequelize;
+//     }
+
+//     return {
+//         getInstance: function () {
+//             // if (!instance) instance = init();
+//             instance = init();
+//             return instance;
+//         }
+//     }
+// });
+
+
+// module.exports = {
+//     ConnectDB
+// };
+//#endregion

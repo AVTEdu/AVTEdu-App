@@ -10,7 +10,7 @@ import { TrangChu } from '../component/Trangchu';
 import { MonHoc, HocPhan } from '../component/admin/pages/QuanLyHocPhan';
 import { Khoa, ChuyenNganh } from '../component/admin/pages/QuanLyKhoa';
 import { HocKi, LopHocPhan, PhanCong } from '../component/admin/pages/QuanLyLopHocPhan';
-import { Admin, GiangVien, SinhVien } from '../component/admin/pages/QuanLyNguoiDung';
+import { Admin, GiangVien, SinhVien, NhapDiemSinhVien } from '../component/admin/pages/QuanLyNguoiDung';
 import { Phong } from '../component/admin/pages/QuanLyPhong';
 import { ThoiKhoaBieu } from '../component/admin/pages/QuanLyTKB';
 import { CongNo } from "../component/admin/pages/QuanLyCongNo";
@@ -23,6 +23,10 @@ import LoginGiangVien from "../component/giangvien/LoginGiangVien";
 import GiangVienApp from "../component/giangvien/GiangVienApp";
 import { GVThongBao } from "../component/giangvien/pages/GVThongBao";
 import { DiemDanhTheoLHP } from "../component/giangvien/pages/DiemDanhTheoLHP";
+import PhieuThuTongHop from "../component/PhieuThuTongHop";
+import KetQuaHocTap from "../component/KetQuaHocTap";
+import ThongBaoNhacNho from "../component/ThongBaoNhacNho";
+import FeedBack from "../component/FeedBack";
 
 function App() {
   return (
@@ -43,7 +47,10 @@ function App() {
           <Route path="unauthorized" element={<Unauthorized />} />
           <Route path="/xac-nhan-thanh-toan" element={<XacNhanThanhToan />} />
           <Route path="GiangVienApp" element={<GiangVienApp />} />
-
+          <Route path="phieu-thu-tong-hop" element={<PhieuThuTongHop />} />
+          <Route path="ket-qua-hoc-tap" element={<KetQuaHocTap />} />
+          <Route path="ghi-chu-nhac-nho-sinh-vien" element={<ThongBaoNhacNho />} />
+          <Route path="khao-sat" element={<FeedBack />} />
 
           {/* <Route element={<RequireAuth allowedRoles={[ROLES.USER]} />}>
           <Route path="dkhp" element={<Dkhp />} />
@@ -76,6 +83,7 @@ function App() {
         <Route path='/ql-user/admin' element={<Admin />} />
         <Route path='/ql-user/gv' element={<GiangVien />} />
         <Route path='/ql-user/sv' element={<SinhVien />} />
+        <Route path="/nhap-diem-sv" element={<NhapDiemSinhVien />} />
         <Route path='/ql-congno/ds-cno' element={<CongNo />} />
 
         <Route path='/thong-bao-gv' element={<GVThongBao />} />

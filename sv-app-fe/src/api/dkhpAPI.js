@@ -44,7 +44,19 @@ const dkhpAPI = {
   xacNhanThanhToanTrucTuyen(resultCode, orderInfo) {
     const url = "/userRequest/xacNhanThanhToanTrucTuyen?resultCode=" + resultCode + "&orderInfo=" + orderInfo;
     return axiosClient.put(url);
-  }
+  },
+  getDanhSachPhieuThuSinhVien() {
+    const url = "/userRequest/getDSPhieuThuBySinhVien";
+    return axiosClient.put(url);
+  },
+  getChiTietPhieuThuTongHopBySV(maPhieuThu) {
+    const url = "/userRequest/getChiTietPhieuThuTongHopBySV";
+    return axiosClient.put(url, { ma_phieu_thu: maPhieuThu })
+  },
+  getKetQuaHocTap(maHocKi) {
+    const url = "userRequest/getKetQuaHocTap";
+    return axiosClient.put(url, { ma_hoc_ki: maHocKi })
+  },
 };
 
 export default dkhpAPI;

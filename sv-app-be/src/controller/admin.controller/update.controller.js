@@ -1,6 +1,6 @@
 const bcrypt = require("bcryptjs");
 const { ConnectDB } = require("../../config/mysql.config");
-const { QueryTypes } = require("sequelize");
+const { QueryTypes, Model } = require("sequelize");
 const responseHandler = require("../../handlers/response.handler");
 const Admin = require("../../models/admin.model");
 const BacDaoTao = require("../../models/bacdaotao.model");
@@ -273,14 +273,22 @@ const getDanhSachTrangThaiHocTap = async (req, res, next) => {
 const thanhToanCongNoSinhVien = async (req, res, next) => {
   try {
     // const {resultCode,orderId} = req.body
+    const adminID = req.payload.userId;
     const { ma_sinh_vien, dsHocPhi } = req.body;
     const ma_phieu_thu = await PhieuThu.max("ma_phieu_thu");
+
+    const foundGiaoVu = await Admin.findOne({
+      where: { ma_admin: `${adminID}` },
+    });
+    const usernameAdmin = foundGiaoVu.username;
+    console.log(usernameAdmin);
+
     const createPhieuThu = await PhieuThu.create({
       ma_phieu_thu: ma_phieu_thu + 1,
       ten_phieu_thu: "Thanh toán công nợ của" + ma_sinh_vien,
       ngay_thu: new Date(),
       ghi_chu: "...",
-      don_vi_thu: "Admin"
+      don_vi_thu: usernameAdmin,
     })
     await dsHocPhi.map(async (ma_hoc_phi) => {
 
@@ -307,6 +315,39 @@ const thanhToanCongNoSinhVien = async (req, res, next) => {
     next(error)
   }
 };
+
+const updateDiemMotSinhVien = async (req, res, next) => {
+  try {
+    const { ma_ket_qua_hoc_tap, diem_tk_1, diem_tk_2, diem_tk_3, diem_tk_4,
+      diem_tk_5, diem_th_1, diem_th_2, diem_th_3, diem_th_4, diem_th_5, diem_gk, diem_ck, diem_tk_hs_10, diem_tk_hs_4 } = req.body;
+    const foundKetQuaHT = await KetQuaHocTap.findOne({
+      where: { ma_ket_qua_hoc_tap: `${ma_ket_qua_hoc_tap}` },
+    });
+    if (!foundKetQuaHT) {
+      return responseHandler.badrequest(res, { success: false, msg: "Không tìm thấy kết quả học tập" })
+    }
+    const result = await KetQuaHocTap.update({
+      diem_tk_1: diem_tk_1,
+      diem_tk_2: diem_tk_2,
+      diem_tk_3: diem_tk_3,
+      diem_tk_4: diem_tk_4,
+      diem_tk_5: diem_tk_5,
+      diem_th_1: diem_th_1,
+      diem_th_2: diem_th_2,
+      diem_th_3: diem_th_3,
+      diem_th_4: diem_th_4,
+      diem_th_5: diem_th_5,
+      diem_gk: diem_gk,
+      diem_ck: diem_ck,
+      diem_tk_hs_10: diem_tk_hs_10,
+      diem_tk_hs_4: diem_tk_hs_4
+    }, { where: { ma_ket_qua_hoc_tap: `${ma_ket_qua_hoc_tap}` } });
+    return responseHandler.ok(res, { success: true, result })
+  } catch (error) {
+    return responseHandler.error(res, { success: false, error })
+  }
+}
 module.exports = {
-  thanhToanCongNoSinhVien
+  thanhToanCongNoSinhVien,
+  updateDiemMotSinhVien
 };
