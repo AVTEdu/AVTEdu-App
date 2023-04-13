@@ -97,5 +97,8 @@ router
 router
   .route("/getDsChuyenNganhTheoKhoa")
   .put(verifyAccessToken, AdminGetController.getDSChuyenNganhTheoKhoa);
+router
+  .route("/getDSMonHoc")
+  .get(verifyAccessToken, AdminGetController.getDanhSachMonHoc);
 
 module.exports = router;

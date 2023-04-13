@@ -163,7 +163,7 @@ const getDanhSachMoHinhDaoTao = async (req, res, next) => {
 }
 const getDanhSachMonHoc = async (req, res, next) => {
   try {
-    const result = await MonHoc.findAll({ limit: 10 });
+    const result = await MonHoc.findAll({ limit: 30 });
     return res.status(201).json({ success: true, result });
   } catch (error) {
     next(error);

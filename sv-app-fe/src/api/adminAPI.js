@@ -50,5 +50,9 @@ const adminAPI = {
             chuyennganh: chuyennganhsv
         });
     },
+    getDSMonHoc() {
+        const url = "/admin/getDSMonHoc";
+        return axiosClient.get(url);
+    }
 };
 export default adminAPI;
