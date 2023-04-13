@@ -218,40 +218,68 @@ export const GiangVien = () => {
     );
 };
 
-export const NhapDiemSinhVien = () => {
-    const [maLopHP, setMaLopHP] = useState(localStorage.getItem("maLHP"));
-    const alertMaLHP = (e) => {
-        alert(maLopHP);
-    }
-    alertMaLHP();
-    return (
-        <>
-            <Sidebar />
-            <div className="qlhp" style={{ backgroundColor: "#E7EEF1" }}>
-                <p style={{ marginLeft: "350px" }}>{maLopHP}</p>
-            </div>
-        </>
-    )
-};
+// export const NhapDiemSinhVien = () => {
+//     const [maLopHP, setMaLopHP] = useState(localStorage.getItem("maLHP"));
+//     const alertMaLHP = (e) => {
+//         alert(maLopHP);
+//     }
+//     alertMaLHP();
+//     return (
+//         <>
+//             <Sidebar />
+//             <div className="qlhp" style={{ backgroundColor: "#E7EEF1" }}>
+//                 <p style={{ marginLeft: "350px" }}>{maLopHP}</p>
+//             </div>
+//         </>
+//     )
+// };
 
 export const ReadOnlyRowDiem = ({ dsDiem, handleEditClick }) => {
     return (
         <tr>
             <td style={{ border: "2px solid" }}>{dsDiem.ma_sinh_vien}</td>
             <td style={{ border: "2px solid" }}>{dsDiem.ho_ten_sinh_vien}</td>
-            <td style={{ border: "2px solid" }}>{dsDiem.diem_tk_1}</td>
-            <td style={{ border: "2px solid" }}>{dsDiem.diem_tk_2}</td>
-            <td style={{ border: "2px solid" }}>{dsDiem.diem_tk_3}</td>
-            <td style={{ border: "2px solid" }}>{dsDiem.diem_tk_4}</td>
-            <td style={{ border: "2px solid" }}>{dsDiem.diem_tk_5}</td>
-            <td style={{ border: "2px solid" }}>{dsDiem.diem_th_1}</td>
-            <td style={{ border: "2px solid" }}>{dsDiem.diem_th_2}</td>
-            <td style={{ border: "2px solid" }}>{dsDiem.diem_th_3}</td>
-            <td style={{ border: "2px solid" }}>{dsDiem.diem_th_4}</td>
-            <td style={{ border: "2px solid" }}>{dsDiem.diem_th_5}</td>
-            <td style={{ border: "2px solid" }}>{dsDiem.diem_gk}</td>
-            <td style={{ border: "2px solid" }}>{dsDiem.diem_ck}</td>
-            <td style={{ border: "2px solid" }}>{dsDiem.diem_tk_hs_10}</td>
+            <td style={{ border: "2px solid" }}>
+                {
+                    dsDiem.diem_tk_1 > 0 ? dsDiem.diem_tk_1 : ""
+                }
+            </td>
+            <td style={{ border: "2px solid" }}>{
+                dsDiem.diem_tk_2 > 0 ? dsDiem.diem_tk_2 : null
+            }</td>
+            <td style={{ border: "2px solid" }}>{
+                dsDiem.diem_tk_3 > 0 ? dsDiem.diem_tk_3 : null
+            }</td>
+            <td style={{ border: "2px solid" }}>{
+                dsDiem.diem_tk_4 > 0 ? dsDiem.diem_tk_4 : null
+            }</td>
+            <td style={{ border: "2px solid" }}>{
+                dsDiem.diem_tk_5 > 0 ? dsDiem.diem_tk_5 : null
+            }</td>
+            <td style={{ border: "2px solid" }}>{
+                dsDiem.diem_th_1 > 0 ? dsDiem.diem_th_1 : null
+            }</td>
+            <td style={{ border: "2px solid" }}>{
+                dsDiem.diem_th_2 > 0 ? dsDiem.diem_th_2 : null
+            }</td>
+            <td style={{ border: "2px solid" }}>{
+                dsDiem.diem_th_3 > 0 ? dsDiem.diem_th_3 : null
+            }</td>
+            <td style={{ border: "2px solid" }}>{
+                dsDiem.diem_th_4 > 0 ? dsDiem.diem_th_4 : null
+            }</td>
+            <td style={{ border: "2px solid" }}>{
+                dsDiem.diem_th_5 > 0 ? dsDiem.diem_th_5 : null
+            }</td>
+            <td style={{ border: "2px solid" }}>{
+                dsDiem.diem_gk > 0 ? dsDiem.diem_gk : null
+            }</td>
+            <td style={{ border: "2px solid" }}>{
+                dsDiem.diem_ck > 0 ? dsDiem.diem_ck : null
+            }</td>
+            <td style={{ border: "2px solid" }}>{
+                dsDiem.diem_tk_hs_10 > 0 ? dsDiem.diem_tk_hs_10 : null
+            }</td>
             <td style={{ border: "2px solid" }}>
                 <button type="button" className="btn btn-primary"
                     style={{
@@ -408,14 +436,14 @@ export const SinhVien = () => {
 
 
     const [openPopup, setOpenPopup] = useState(false);
-    const chuyenMaLop = (e) => {
-        // var maLopHocPhanDeChuyen = document.querySelector('#TimTheoMaLopHocPhan').value;
-        // alert(maLopHocPhanDeChuyen);
-        // setTimeout(() => {
-        //     <NhapDiemSinhVien maLopHP={123} />
-        // }, 1000);
-        window.localStorage.setItem('maLHP', document.querySelector('#TimTheoMaLopHocPhan').value);
-    }
+    // const chuyenMaLop = (e) => {
+    //     // var maLopHocPhanDeChuyen = document.querySelector('#TimTheoMaLopHocPhan').value;
+    //     // alert(maLopHocPhanDeChuyen);
+    //     // setTimeout(() => {
+    //     //     <NhapDiemSinhVien maLopHP={123} />
+    //     // }, 1000);
+    //     window.localStorage.setItem('maLHP', document.querySelector('#TimTheoMaLopHocPhan').value);
+    // }
     const [dsSVTheoLop, setDsSVTheoLop] = useState();
     const [searchLopTheoMa, setSearchLopTheoMa] = useState();
     const [popupNotify, setPopupNotify] = useState({
@@ -429,7 +457,49 @@ export const SinhVien = () => {
     const [editMaKetQuaHT, setEditMaKetQuaHT] = useState(null);
     const [tinChiLyThuyet, setTinChiLyThuyet] = useState(null);
     const [tinChiThucHanh, setTinChiThucHanh] = useState(null);
+    const [dsKhoa, setDSKhoa] = useState();
+    const [maKhoa, setMaKhoa] = useState();
+    const [dsSVTheoKhoa, setDsSVTheoKhoa] = useState();
+    const [dsChuyenNganh, setDsChuyenNganh] = useState();
+    const [maCN, setMaCN] = useState();
+    const [maKhoaNew, setMaKhoaNew] = useState();
 
+    useEffect(() => {
+        const getDSKhoa = async () => {
+            try {
+                const res = await adminAPI.getDanhSachToanBoKhoa();
+                console.log(res.data)
+                setDSKhoa(res.data);
+            } catch (error) {
+
+            }
+        };
+        getDSKhoa();
+    }, [])
+
+    useEffect(() => {
+        const getDsTheoKhoa = async () => {
+            try {
+                const res = await adminAPI.getDanhSachSVByKhoa(maKhoa);
+                setDsSVTheoKhoa(res.data);
+            } catch (error) {
+
+            }
+        };
+        getDsTheoKhoa();
+    }, [maKhoa])
+
+    useEffect(() => {
+        const getDsTheoKhoa = async () => {
+            try {
+                const dsCN = await adminAPI.getDsChuyenNganhTheoKhoa(maKhoaNew);
+                setDsChuyenNganh(dsCN.data);
+            } catch (error) {
+
+            }
+        };
+        getDsTheoKhoa();
+    }, [maKhoaNew])
 
     useEffect(() => {
         const activeLopTimDuoc = async () => {
@@ -452,6 +522,7 @@ export const SinhVien = () => {
         activeLopTimDuoc();
     }, [searchLopTheoMa])
 
+    if (!dsKhoa) return null;
 
     const handleEditFormSubmit = async () => {
         try {
@@ -462,6 +533,10 @@ export const SinhVien = () => {
             let tongKetHe10 = (((trungbinhTK * 0.2) + Number(editFormData.diem_ck) * 0.3 + Number(editFormData.diem_ck) * 0.5) *
                 tinChiLyThuyet + trungbinhTH * tinChiThucHanh) / (tinChiLyThuyet + tinChiThucHanh);
             let tongKetHe4 = (tongKetHe10 * 4) / 10;
+            if (trungbinhTK == 0 || editFormData.diem_ck == 0 || editFormData.diem_gk == 0) {
+                tongKetHe10 = 0;
+                tongKetHe4 = 0;
+            }
             const editedDiem = {
                 ma_sinh_vien: editDiemId,
                 ho_ten_sinh_vien: editDiemHoTen,
@@ -479,7 +554,7 @@ export const SinhVien = () => {
                 diem_gk: Number(editFormData.diem_gk),
                 diem_ck: Number(editFormData.diem_ck),
                 diem_tk_hs_4: tongKetHe4,
-                diem_tk_hs_10: tongKetHe10
+                diem_tk_hs_10: tongKetHe10,
             }
             // const newDiems = [...dsSVTheoLop?.dssv];
             // const index = dsSVTheoLop?.dssv.findIndex(
@@ -519,6 +594,44 @@ export const SinhVien = () => {
         }
     }
 
+    const getMaKhoa = (e) => {
+        setMaKhoa(e.target.value);
+    }
+    const getMaCN = (e) => {
+        setMaCN(e.target.value);
+    }
+    const getMaKhoaNew = (e) => {
+        setMaKhoaNew(e.target.value);
+    }
+
+    const newSinhVien = async () => {
+        var masv = document.querySelector('#maSV').value;
+        var tenSV = document.querySelector('#tenSV').value;
+        var ngaySinh = document.querySelector('#ngaySinh').value;
+        var newEmail = document.querySelector('#newEmail').value;
+        var sex = document.querySelector('#sex').value;
+        var newSdt = document.querySelector('#newSdt').value;
+        var cccd = document.querySelector('#cccd').value;
+        try {
+            const newsv = await adminAPI.createSinhVien(masv, tenSV, ngaySinh, newEmail, sex, newSdt, cccd, maKhoaNew, maCN);
+            console.log(newsv.data);
+            const res = await adminAPI.getDanhSachSVByKhoa(maKhoaNew);
+            setDsSVTheoKhoa(res.data);
+        } catch (error) {
+            if (error.response) {
+                if (error.response.status === 403) {
+                    setPopupNotify({
+                        title: 'Thông báo',
+                        mes: 'Mã đã được sử dụng',
+                        isLoading: true
+                    });
+                }
+            }
+        }
+    }
+
+
+
     return (
         <>
             <Sidebar />
@@ -555,11 +668,16 @@ export const SinhVien = () => {
                                                     <div className="demo-inline-spacing">
                                                         <div className="col-md-3">
                                                             <label htmlFor="exampleFormControlSelect1" className="form-label">Khoa</label>
-                                                            <select className="form-select" id="exampleFormControlSelect1" aria-label="Default select example">
+                                                            <select className="form-select" id="exampleFormControlSelect1" aria-label="Default select example"
+                                                                onChange={(e) => getMaKhoa(e)}
+                                                            >
                                                                 <option selected>Chọn Khoa</option>
-                                                                <option value="1">Khoa Công nghệ Thông Tin</option>
-                                                                <option value="2">Khoa Công nghệ Cơ khí</option>
-                                                                <option value="3">Khoa Công nghệ Điện</option>
+                                                                {
+                                                                    dsKhoa["result"].map((dsK) => (
+                                                                        <option key={dsK.ma_khoa} value={dsK.ma_khoa} >
+                                                                            {dsK.ten_khoa}
+                                                                        </option>
+                                                                    ))}
                                                             </select>
                                                         </div>
                                                         <div className="col-md-3">
@@ -570,15 +688,6 @@ export const SinhVien = () => {
                                                                 id="TimTheoMaLopHocPhan"
                                                                 aria-describedby="defaultFormControlHelp"
                                                                 onKeyDown={searchLop}
-                                                            />
-                                                        </div>
-                                                        <div className="col-md-3">
-                                                            <label htmlFor="defaultFormControlInput" className="form-label">Tìm theo Mã lớp danh nghĩa</label>
-                                                            <input
-                                                                type="text"
-                                                                className="form-control"
-                                                                id="defaultFormControlInput"
-                                                                aria-describedby="defaultFormControlHelp"
                                                             />
                                                         </div>
                                                         {/* <button type="button" className="btn btn-secondary">Secondary</button>
@@ -611,7 +720,7 @@ export const SinhVien = () => {
                                                             , lineHeight: "1.53", textAlign: "center", verticalAlign: "middle", userSelect: "none"
                                                             , border: "1px solid transparent", padding: "0.4375rem 1.25rem", fontSize: "0.9375 rme",
                                                         }}
-                                                        onClick={() => { setOpenPopup(true); }}
+                                                        onClick={() => { setOpenPopup(true); setMaKhoa(''); }}
                                                     > <AiIcons.AiFillPlusSquare /> Thêm mới</button>
 
                                                 </div>
@@ -636,7 +745,6 @@ export const SinhVien = () => {
                                                                 <tr style={{ backgroundColor: "#CADAE1" }}>
                                                                     <th style={{ border: "2px solid" }}>Mã sv</th>
                                                                     <th style={{ border: "2px solid" }}>Tên</th>
-                                                                    <th style={{ border: "2px solid" }}>Lớp danh nghĩa</th>
                                                                     <th style={{ border: "2px solid" }}>Ngày sinh</th>
                                                                     <th style={{ border: "2px solid" }}>Email</th>
                                                                     <th style={{ border: "2px solid" }}>Giới tính</th>
@@ -648,29 +756,36 @@ export const SinhVien = () => {
                                                                 </tr>
                                                             </thead>
                                                             <tbody className="adminClassHover">
-                                                                <tr>
-                                                                    <td style={{ border: "2px solid" }}>19507399</td>
-                                                                    <td style={{ border: "2px solid" }}>Lý Liên Kiệt</td>
-                                                                    <td style={{ border: "2px solid" }}>DHCNTT15B</td>
-                                                                    <td style={{ border: "2px solid" }}>15/02/2003</td>
-                                                                    <td style={{ border: "2px solid" }}>nmm@iuh.edu.vn</td>
-                                                                    <td style={{ border: "2px solid" }}>Nam</td>
-                                                                    <td style={{ border: "2px solid" }}>0899613042</td>
-                                                                    <td style={{ border: "2px solid" }}>079202003152</td>
-                                                                    <td style={{ border: "2px solid" }}>Công nghệ Thông tin</td>
-                                                                    <td style={{ border: "2px solid" }}>Công nghệ Thông tin</td>
-                                                                    <td style={{ border: "2px solid" }}>
-                                                                        <div className="dropdown">
-                                                                            <button type="button" className="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
-                                                                                <i className="bx bx-dots-vertical-rounded" />
-                                                                            </button>
-                                                                            <div className="dropdown-menu">
-                                                                                <a className="dropdown-item" href="javascript:void(0);"><i className="bx bx-edit-alt me-1" /> Edit</a>
-                                                                                <a className="dropdown-item" href="javascript:void(0);"><i className="bx bx-trash me-1" /> Delete</a>
-                                                                            </div>
-                                                                        </div>
-                                                                    </td>
-                                                                </tr>
+                                                                {
+                                                                    dsSVTheoKhoa && dsSVTheoKhoa?.dssv.length > 0 ?
+                                                                        <>
+                                                                            {
+                                                                                dsSVTheoKhoa["dssv"].map((dssv) => (
+                                                                                    <tr>
+                                                                                        <td style={{ border: "2px solid" }}>{dssv.ma_sinh_vien}</td>
+                                                                                        <td style={{ border: "2px solid" }}>{dssv.ho_ten_sinh_vien}</td>
+                                                                                        <td style={{ border: "2px solid" }}>{dssv.ngay_sinh}</td>
+                                                                                        <td style={{ border: "2px solid" }}>{dssv.email}</td>
+                                                                                        <td style={{ border: "2px solid" }}>{
+                                                                                            dssv.gioitinh == 0 ? "Nam" : "Nữ"
+                                                                                        }</td>
+                                                                                        <td style={{ border: "2px solid" }}>{dssv.so_dien_thoai}</td>
+                                                                                        <td style={{ border: "2px solid" }}>{dssv.so_cmnd}</td>
+                                                                                        <td style={{ border: "2px solid" }}>{dssv.ten_khoa}</td>
+                                                                                        <td style={{ border: "2px solid" }}>{dssv.ten_chuyen_nganh}</td>
+                                                                                        <td style={{ border: "2px solid" }}>
+                                                                                            <a ><i className="bx bx-edit-alt me-1" /> Edit</a>
+                                                                                            <a style={{ marginLeft: "15px" }} ><i className="bx bx-trash me-1" /> Delete</a>
+                                                                                        </td>
+                                                                                    </tr>
+                                                                                ))
+                                                                            }
+                                                                        </> : <tr>
+                                                                            <td colSpan={10} className="text-center">
+                                                                                <p className="bold"><span>Tạm chưa có dữ liệu</span></p>
+                                                                            </td>
+                                                                        </tr>
+                                                                }
 
                                                             </tbody>
                                                         </table>
@@ -790,56 +905,49 @@ export const SinhVien = () => {
                                                                     display: "inline-block", boxSizing: "border-box"
                                                                     , cursor: "default", fontFamily: "var(--bs-body-font-family)", lineHeight: "var(--bs-body-line-height)"
                                                                 }}>Mã sv</label>
-                                                                <input type="text" className="form-control" id="" placeholder="" />
+                                                                <input type="text" className="form-control" id="maSV" placeholder="" />
                                                             </div>
                                                             <div className="mb-3">
                                                                 <label htmlFor="" className="form-label" style={{
                                                                     display: "inline-block", boxSizing: "border-box"
                                                                     , cursor: "default", fontFamily: "var(--bs-body-font-family)", lineHeight: "var(--bs-body-line-height)"
                                                                 }}>Tên</label>
-                                                                <input type="text" className="form-control" id="" placeholder="" />
-                                                            </div>
-                                                            <div className="mb-3">
-                                                                <label htmlFor="" className="form-label" style={{
-                                                                    display: "inline-block", boxSizing: "border-box"
-                                                                    , cursor: "default", fontFamily: "var(--bs-body-font-family)", lineHeight: "var(--bs-body-line-height)"
-                                                                }}>Lớp danh nghĩa</label>
-                                                                <input type="text" className="form-control" id="" placeholder="" />
+                                                                <input type="text" className="form-control" id="tenSV" placeholder="" />
                                                             </div>
                                                             <div className="mb-3">
                                                                 <label htmlFor="" className="form-label" style={{
                                                                     display: "inline-block", boxSizing: "border-box"
                                                                     , cursor: "default", fontFamily: "var(--bs-body-font-family)", lineHeight: "var(--bs-body-line-height)"
                                                                 }}>Ngày sinh</label>
-                                                                <input type="text" className="form-control" id="" placeholder="" />
+                                                                <input type="text" className="form-control" id="ngaySinh" placeholder="" />
                                                             </div>
                                                             <div className="mb-3">
                                                                 <label htmlFor="" className="form-label" style={{
                                                                     display: "inline-block", boxSizing: "border-box"
                                                                     , cursor: "default", fontFamily: "var(--bs-body-font-family)", lineHeight: "var(--bs-body-line-height)"
                                                                 }}>Email</label>
-                                                                <input type="text" className="form-control" id="" placeholder="" />
+                                                                <input type="text" className="form-control" id="newEmail" placeholder="" />
                                                             </div>
                                                             <div className="mb-3">
                                                                 <label htmlFor="" className="form-label" style={{
                                                                     display: "inline-block", boxSizing: "border-box"
                                                                     , cursor: "default", fontFamily: "var(--bs-body-font-family)", lineHeight: "var(--bs-body-line-height)"
                                                                 }}>Giới tính</label>
-                                                                <input type="text" className="form-control" id="" placeholder="" />
+                                                                <input type="text" className="form-control" id="sex" placeholder="" />
                                                             </div>
                                                             <div className="mb-3">
                                                                 <label htmlFor="" className="form-label" style={{
                                                                     display: "inline-block", boxSizing: "border-box"
                                                                     , cursor: "default", fontFamily: "var(--bs-body-font-family)", lineHeight: "var(--bs-body-line-height)"
                                                                 }}>Số điện thoại</label>
-                                                                <input type="text" className="form-control" id="" placeholder="" />
+                                                                <input type="text" className="form-control" id="newSdt" placeholder="" />
                                                             </div>
                                                             <div className="mb-3">
                                                                 <label htmlFor="" className="form-label" style={{
                                                                     display: "inline-block", boxSizing: "border-box"
                                                                     , cursor: "default", fontFamily: "var(--bs-body-font-family)", lineHeight: "var(--bs-body-line-height)"
                                                                 }}>Số chứng minh nhân dân</label>
-                                                                <input type="text" className="form-control" id="" placeholder="" />
+                                                                <input type="text" className="form-control" id="cccd" placeholder="" />
                                                             </div>
 
                                                             <div className="mb-3">
@@ -847,11 +955,20 @@ export const SinhVien = () => {
                                                                     display: "inline-block", boxSizing: "border-box"
                                                                     , cursor: "default", fontFamily: "var(--bs-body-font-family)", lineHeight: "var(--bs-body-line-height)"
                                                                 }}>Khoa</label>
-                                                                <select className="form-select" id="" aria-label="Default select example">
+                                                                <select className="form-select" id="" aria-label="Default select example"
+                                                                    onChange={(e) => getMaKhoaNew(e)}
+                                                                >
                                                                     <option selected>Chọn khoa</option>
-                                                                    <option value={1}>One</option>
-                                                                    <option value={2}>Two</option>
-                                                                    <option value={3}>Three</option>
+                                                                    {
+                                                                        dsKhoa ?
+                                                                            <>
+                                                                                {
+                                                                                    dsKhoa["result"].map((dsKhoa) => (
+                                                                                        <option value={dsKhoa.ma_khoa}>{dsKhoa.ten_khoa}</option>
+                                                                                    ))
+                                                                                }
+                                                                            </> : <></>
+                                                                    }
                                                                 </select>
                                                             </div>
 
@@ -860,11 +977,22 @@ export const SinhVien = () => {
                                                                     display: "inline-block", boxSizing: "border-box"
                                                                     , cursor: "default", fontFamily: "var(--bs-body-font-family)", lineHeight: "var(--bs-body-line-height)"
                                                                 }}>Chuyên ngành</label>
-                                                                <select className="form-select" id="" aria-label="Default select example">
+                                                                <select className="form-select" id="" aria-label="Default select example"
+                                                                    onChange={(e) => getMaCN(e)}
+                                                                >
                                                                     <option selected>Chọn chuyên ngành</option>
-                                                                    <option value={1}>One</option>
-                                                                    <option value={2}>Two</option>
-                                                                    <option value={3}>Three</option>
+                                                                    {
+                                                                        dsChuyenNganh && dsChuyenNganh?.ds.length > 0 ?
+                                                                            <>
+                                                                                {
+                                                                                    dsChuyenNganh["ds"].map((ds) => (
+                                                                                        <option key={ds.ma_chuyen_nganh} value={ds.ma_chuyen_nganh}>
+                                                                                            {ds.ten_chuyen_nganh}
+                                                                                        </option>
+                                                                                    ))
+                                                                                }
+                                                                            </> : <></>
+                                                                    }
                                                                 </select>
                                                             </div>
 
@@ -880,6 +1008,7 @@ export const SinhVien = () => {
                                                                         onClick={(e) => {
                                                                             e.preventDefault()
                                                                             setOpenPopup(false)
+                                                                            newSinhVien()
                                                                         }}
                                                                     >Lưu</button>
                                                                 </div>

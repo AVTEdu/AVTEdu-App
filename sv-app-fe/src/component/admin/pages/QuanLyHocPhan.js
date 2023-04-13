@@ -4,10 +4,25 @@ import * as AiIcons from "react-icons/ai";
 // import * as Corecss from "../../../assets/vendor/css/core.css";
 import { useState, useEffect } from "react";
 import Popup from "../../Popup";
+import adminAPI from "../../../api/adminAPI";
+import PopupNotify from "../../PopupNotify";
 
 
 export const MonHoc = () => {
     const [openPopup, setOpenPopup] = useState(false);
+    const [dsMon, setDsMon] = useState();
+    useEffect(() => {
+        const getDSMonHoc = async () => {
+            try {
+                const res = await adminAPI.getDSMonHoc();
+                setDsMon(res.data);
+            } catch (error) {
+
+            }
+        };
+        getDSMonHoc();
+    }, [])
+    if (!dsMon) return null;
     return (
         <>
             <Sidebar />
@@ -103,31 +118,37 @@ export const MonHoc = () => {
                                                                     <th style={{ border: "2px solid" }}>Mã môn</th>
                                                                     <th style={{ border: "2px solid" }}>Tên môn</th>
                                                                     <th style={{ border: "2px solid" }}>Mã khoa</th>
-                                                                    <th style={{ border: "2px solid" }}>Mô tả</th>
                                                                     <th style={{ border: "2px solid" }}>Thao tác</th>
                                                                 </tr>
                                                             </thead>
                                                             <tbody className="adminClassHover">
-                                                                <tr>
-                                                                    <td style={{ border: "2px solid" }}>
-                                                                        <input type="checkbox" value=""></input>
-                                                                    </td>
-                                                                    <td style={{ border: "2px solid" }}>DHKTPM</td>
-                                                                    <td style={{ border: "2px solid" }}>3</td>
-                                                                    <td style={{ border: "2px solid" }}>3</td>
-                                                                    <td style={{ border: "2px solid" }}></td>
-                                                                    <td style={{ border: "2px solid" }}>
-                                                                        <div className="dropdown">
-                                                                            <button type="button" className="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
-                                                                                <i className="bx bx-dots-vertical-rounded" />
-                                                                            </button>
-                                                                            <div className="dropdown-menu">
-                                                                                <a className="dropdown-item" href="javascript:void(0);"><i className="bx bx-edit-alt me-1" /> Edit</a>
-                                                                                <a className="dropdown-item" href="javascript:void(0);"><i className="bx bx-trash me-1" /> Delete</a>
-                                                                            </div>
-                                                                        </div>
-                                                                    </td>
-                                                                </tr>
+                                                                {
+                                                                    dsMon && dsMon?.result.length > 0
+                                                                        ?
+                                                                        <>
+                                                                            {
+                                                                                dsMon["result"].map((ds) => (
+                                                                                    <tr>
+                                                                                        <td style={{ border: "2px solid" }}>
+                                                                                            <input type="checkbox" value=""></input>
+                                                                                        </td>
+                                                                                        <td style={{ border: "2px solid" }}>{ds.ma_mon_hoc}</td>
+                                                                                        <td style={{ border: "2px solid" }}>{ds.ten_mon_hoc}</td>
+                                                                                        <td style={{ border: "2px solid" }}>{ds.ma_khoa}</td>
+                                                                                        <td style={{ border: "2px solid" }}>
+                                                                                            <a ><i className="bx bx-edit-alt me-1" /> Edit</a>
+                                                                                            <a style={{ marginLeft: "15px" }} ><i className="bx bx-trash me-1" /> Delete</a>
+                                                                                        </td>
+                                                                                    </tr>
+                                                                                ))
+                                                                            }
+                                                                        </>
+                                                                        : <tr>
+                                                                            <td colSpan={5} className="text-center">
+                                                                                <p className="bold"><span>Tạm chưa có dữ liệu</span></p>
+                                                                            </td>
+                                                                        </tr>
+                                                                }
 
                                                             </tbody>
                                                         </table>
