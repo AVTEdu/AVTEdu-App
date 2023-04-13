@@ -1,9 +1,11 @@
+
 const btns = [
     {    
         id:1,
         text:"Nhắc nhở",
         icon:"notifications",
         Bgcolor:"#e44345",
+          
     },
     {
         id:2,
@@ -25,9 +27,10 @@ const btns = [
     },
     {
         id:5,
-        text:"Chương trình khung",
+        text:"Đăng kí học phần",
         icon:"date-range",
-        Bgcolor:"#58d021"
+        Bgcolor:"#58d021",
+        OnPress:"ModuleRegistration"  
     },
     {
         id:6,
