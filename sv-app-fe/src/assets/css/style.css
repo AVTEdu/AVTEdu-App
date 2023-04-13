@@ -2206,7 +2206,7 @@ h3.title-table:before {
 }
 
 .submit_boxes .btn_submit_boxes {
-    min-width       : 250px;
+    min-width       : 100px;
     padding         : 6px 12px;
     border          : 1px solid #ff5722;
     color           : #369ef4;

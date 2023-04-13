@@ -701,6 +701,99 @@ const getChiTietPhieuThuTongHop = async (req, res, next) => {
     next(error);
   }
 };
+
+const getDanhSachPhieuThuSinhVien = async (req, res, next) => {
+  try {
+    const ma = req.payload.userId;
+    const foundSinhVien = await SinhVien.findOne({
+      where: { ma_sinh_vien: ma },
+    });
+    if (!foundSinhVien) {
+      return res
+        .status(403)
+        .json({ error: { message: "Không tìm thấy sinh viên" } });
+    }
+    const dsHocPhiSinhVien = await sequelize.query(
+      `select pt.* , sum(hp.so_tien_da_nop) as tong_tien
+        from phieu_thu as pt 
+        left join hoc_phi as hp on hp.ma_phieu_thu = pt.ma_phieu_thu
+        left join hoc_phi_sinh_vien as hpsv on hpsv.ma_hoc_phi = hp.ma_hoc_phi
+        left join sinh_vien as sv on hpsv.ma_sinh_vien = sv.ma_sinh_vien
+        where sv.ma_sinh_vien = '${ma}'
+        group by pt.ma_phieu_thu, hp.so_tien_da_nop`,
+      { type: QueryTypes.SELECT }
+    );
+    res.status(201).json({ success: true, dsHocPhiSinhVien });
+  } catch (error) {
+    next(error);
+  }
+};
+
+const getChiTietPhieuThuTongHopBySV = async (req, res, next) => {
+  try {
+    const ma = req.payload.userId;
+    const foundSinhVien = await SinhVien.findOne({
+      where: { ma_sinh_vien: `${ma}` },
+    });
+    if (!foundSinhVien)
+      return res
+        .status(403)
+        .json({ error: { message: "Không tìm thấy sinh viên" } });
+    const { ma_phieu_thu } = req.body;
+
+
+    const getChiTietPhieuThu = await sequelize.query(`select hp.ma_hoc_phi,mh.ten_mon_hoc,hk.thu_tu_hoc_ki,hk.nam_hoc_bat_dau,hk.nam_hoc_ket_thuc,hp.so_tien,pt.ngay_thu
+    from sinhviendb.sinh_vien as sv
+    left join sinhviendb.bacdaotao as bdt on sv.ma_bac_dao_tao = bdt.ma_bac_dao_tao
+    left join sinhviendb.hoc_phi_sinh_vien as hpsv on hpsv.ma_sinh_vien = sv.ma_sinh_vien
+    left join sinhviendb.hoc_phi as hp on hp.ma_hoc_phi = hpsv.ma_hoc_phi
+    left join sinhviendb.phieu_thu as pt on pt.ma_phieu_thu = hp.ma_phieu_thu
+    left join sinhviendb.lop_hoc_phan as lhp on hp.ma_lop_hoc_phan = lhp.ma_lop_hoc_phan
+    left join sinhviendb.hoc_phan as hpp on hpp.ma_hoc_phan = lhp.ma_hoc_phan
+    left join sinhviendb.mon_hoc as mh on hpp.ma_mon_hoc = mh.ma_mon_hoc
+    left join sinhviendb.hoc_ki as hk on hk.ma_hoc_ki = lhp.ma_hoc_ki
+    where sv.ma_sinh_vien = '${ma}' and pt.ma_phieu_thu = '${ma_phieu_thu}'
+    group by hp.ma_hoc_phi,mh.ten_mon_hoc,hk.thu_tu_hoc_ki,hk.nam_hoc_bat_dau,hk.nam_hoc_ket_thuc,hp.so_tien`, { type: QueryTypes.SELECT });
+    // responseHanlder.ok(res, { success: true, getChiTietPhieuThu })
+    res.status(201).json({ success: true, getChiTietPhieuThu });
+  } catch (error) {
+    console.log(error);
+    next(error);
+  }
+};
+
+const getKetQuaHocTap = async (req, res, next) => {
+  try {
+    const ma = req.payload.userId;
+    const foundSinhVien = await SinhVien.findOne({
+      where: { ma_sinh_vien: `${ma}` },
+    });
+    if (!foundSinhVien)
+      return res
+        .status(403)
+        .json({ error: { message: "Không tìm thấy sinh viên" } });
+
+    const { ma_hoc_ki } = req.body;
+
+    const getKetQuaHocTap = await sequelize.query(`SELECT sinhviendb.hoc_ki.thu_tu_hoc_ki, sinhviendb.hoc_ki.nam_hoc_bat_dau, sinhviendb.hoc_ki.nam_hoc_ket_thuc, sinhviendb.lop_hoc_phan.ma_lop_hoc_phan, sinhviendb.mon_hoc.ten_mon_hoc, sinhviendb.hoc_phan.so_tin_chi_ly_thuyet, 
+    sinhviendb.ket_qua_hoc_tap.diem_tk_1, sinhviendb.ket_qua_hoc_tap.diem_tk_2, sinhviendb.ket_qua_hoc_tap.diem_tk_3, sinhviendb.ket_qua_hoc_tap.diem_tk_4, sinhviendb.ket_qua_hoc_tap.diem_tk_5, 
+    sinhviendb.ket_qua_hoc_tap.diem_th_1, sinhviendb.ket_qua_hoc_tap.diem_th_2, sinhviendb.ket_qua_hoc_tap.diem_th_3, sinhviendb.ket_qua_hoc_tap.diem_th_4, sinhviendb.ket_qua_hoc_tap.diem_th_5, 
+    sinhviendb.ket_qua_hoc_tap.diem_ck, sinhviendb.ket_qua_hoc_tap.diem_gk, sinhviendb.ket_qua_hoc_tap.diem_tk_hs_10, sinhviendb.ket_qua_hoc_tap.diem_tk_hs_4, sinhviendb.ket_qua_hoc_tap.diem_chu, 
+    sinhviendb.ket_qua_hoc_tap.xep_loai, sinhviendb.ket_qua_hoc_tap.tinh_trang_hoc_tap,sinhviendb.hoc_phan.so_tin_chi_thuc_hanh
+FROM     sinhviendb.hoc_ki INNER JOIN
+    sinhviendb.lop_hoc_phan ON sinhviendb.hoc_ki.ma_hoc_ki = sinhviendb.lop_hoc_phan.ma_hoc_ki INNER JOIN
+    sinhviendb.hoc_phan ON sinhviendb.lop_hoc_phan.ma_hoc_phan = sinhviendb.hoc_phan.ma_hoc_phan INNER JOIN
+    sinhviendb.ket_qua_hoc_tap ON sinhviendb.lop_hoc_phan.ma_lop_hoc_phan = sinhviendb.ket_qua_hoc_tap.ma_lop_hoc_phan INNER JOIN
+    sinhviendb.mon_hoc ON sinhviendb.hoc_phan.ma_mon_hoc = sinhviendb.mon_hoc.ma_mon_hoc INNER JOIN
+    sinhviendb.sinh_vien ON sinhviendb.ket_qua_hoc_tap.ma_sinh_vien = sinhviendb.sinh_vien.ma_sinh_vien
+WHERE sinhviendb.sinh_vien.ma_sinh_vien = '${ma}' and sinhviendb.hoc_ki.ma_hoc_ki = '${ma_hoc_ki}'`, { type: QueryTypes.SELECT });
+    res.status(201).json({ success: true, getKetQuaHocTap });
+  } catch (error) {
+    console.log(error);
+    next(error);
+  }
+};
+
 module.exports = {
   getHocKiSinhVien,
   getMonHocSinhVienChuaHoc,
@@ -713,5 +806,8 @@ module.exports = {
   getThoiKhoaBieuSinhVienTrongMotTuan,
   thanhToanHocPhiTrucTuyen,
   xacNhanThanhToanTrucTuyen,
-  getChiTietPhieuThuTongHop
+  getChiTietPhieuThuTongHop,
+  getDanhSachPhieuThuSinhVien,
+  getChiTietPhieuThuTongHopBySV,
+  getKetQuaHocTap
 };

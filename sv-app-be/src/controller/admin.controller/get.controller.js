@@ -322,6 +322,43 @@ const getDanhSachPhieuThuSinhVienParam = async (req, res, next) => {
     next(error);
   }
 };
+const getDanhSachDiemSinhVienByMaLopHP = async (req, res, next) => {
+  try {
+    const { maLHP } = req.body
+    const foundLop = await LopHocPhan.findOne({
+      where: { ma_lop_hoc_phan: maLHP },
+    });
+    if (!foundLop) {
+      return res
+        .status(403)
+        .json({ error: { message: "Không tìm thấy lớp học phần" } });
+    }
+    //'${maLHP}'`
+    const dssv = await sequelize.query(
+      `SELECT sinhviendb.sinh_vien.ma_sinh_vien, sinhviendb.sinh_vien.ho_ten_sinh_vien, sinhviendb.ket_qua_hoc_tap.diem_tk_1, sinhviendb.ket_qua_hoc_tap.diem_tk_2, sinhviendb.ket_qua_hoc_tap.diem_tk_3, sinhviendb.ket_qua_hoc_tap.diem_tk_4, 
+      sinhviendb.ket_qua_hoc_tap.diem_tk_5, sinhviendb.ket_qua_hoc_tap.diem_th_1, sinhviendb.ket_qua_hoc_tap.diem_th_2, sinhviendb.ket_qua_hoc_tap.diem_th_3, sinhviendb.ket_qua_hoc_tap.diem_th_4, 
+      sinhviendb.ket_qua_hoc_tap.diem_th_5, sinhviendb.ket_qua_hoc_tap.diem_gk, sinhviendb.ket_qua_hoc_tap.diem_ck, sinhviendb.ket_qua_hoc_tap.diem_tk_hs_10, sinhviendb.ket_qua_hoc_tap.ma_ket_qua_hoc_tap,
+      sinhviendb.hoc_phan.so_tin_chi_ly_thuyet, sinhviendb.hoc_phan.so_tin_chi_thuc_hanh,sinhviendb.ket_qua_hoc_tap.diem_tk_hs_4
+FROM     sinhviendb.chuyen_nganh INNER JOIN
+      sinhviendb.chuyen_nganh_hoc_phan ON sinhviendb.chuyen_nganh.ma_chuyen_nganh = sinhviendb.chuyen_nganh_hoc_phan.ma_chuyen_nganh INNER JOIN
+      sinhviendb.hoc_phan ON sinhviendb.chuyen_nganh_hoc_phan.ma_hoc_phan = sinhviendb.hoc_phan.ma_hoc_phan INNER JOIN
+      sinhviendb.khoa ON sinhviendb.chuyen_nganh.ma_khoa = sinhviendb.khoa.ma_khoa INNER JOIN
+      sinhviendb.lop_hoc_phan ON sinhviendb.hoc_phan.ma_hoc_phan = sinhviendb.lop_hoc_phan.ma_hoc_phan INNER JOIN
+      sinhviendb.ket_qua_hoc_tap ON sinhviendb.lop_hoc_phan.ma_lop_hoc_phan = sinhviendb.ket_qua_hoc_tap.ma_lop_hoc_phan INNER JOIN
+      sinhviendb.hoc_ki ON sinhviendb.lop_hoc_phan.ma_hoc_ki = sinhviendb.hoc_ki.ma_hoc_ki INNER JOIN
+      sinhviendb.sinh_vien ON sinhviendb.chuyen_nganh.ma_chuyen_nganh = sinhviendb.sinh_vien.ma_chuyen_nganh AND sinhviendb.khoa.ma_khoa = sinhviendb.sinh_vien.ma_khoa AND 
+      sinhviendb.ket_qua_hoc_tap.ma_sinh_vien = sinhviendb.sinh_vien.ma_sinh_vien
+where sinhviendb.lop_hoc_phan.ma_lop_hoc_phan = '${maLHP}'`,
+      { type: QueryTypes.SELECT }
+    );
+    res.status(201).json({ success: true, dssv });
+  } catch (error) {
+    next(error);
+  }
+};
+const getDanhSachSinhVienByKhoa = async (req, res, next) => {
+
+};
 module.exports = {
   getDanhSachAdmin,
   getDanhSachBacDaoTao,
@@ -349,6 +386,8 @@ module.exports = {
   getDanhSachTrangThaiHocTap,
   getDanhSachPhieuThuSinhVien,
   getDanhSachHocPhiSinhVienParam,
-  getDanhSachPhieuThuSinhVienParam
+  getDanhSachPhieuThuSinhVienParam,
+  getDanhSachDiemSinhVienByMaLopHP,
+  getDanhSachSinhVienByKhoa
 }
 
