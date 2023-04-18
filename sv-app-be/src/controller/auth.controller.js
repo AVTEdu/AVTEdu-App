@@ -136,24 +136,6 @@ const signInGiangVien = async (req, res, next) => {
 }
 
 const refreshToken = async (req, res, next) => {
-<<<<<<< HEAD
-    try {
-      const { refreshToken } = req.body;
-      if (!refreshToken) {
-        return res.status(403).json({ message: "không có refreshtoken" });
-      }
-      console.log(refreshToken);
-      const {userId} = await verifyRefreshToken(refreshToken);
-      console.log(userId);
-      const accessToken = await signAccessToken(userId);
-      return res.status(200).json({ accessToken });
-    } catch (error) {
-      next(error);
-    }
-};
-const AuthercationEmail= async (req, res, next) => {
-=======
->>>>>>> cf3f0558371006c4f7b4e99a299621a6b991079c
   try {
     const { refreshToken } = req.body;
     if (!refreshToken) {
