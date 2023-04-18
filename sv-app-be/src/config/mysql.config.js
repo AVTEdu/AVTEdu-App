@@ -70,12 +70,12 @@ module.exports = {
 // const ConnectDB = (function () {
 //     var instance;
 //     function init() {
-
+//         const sequelize = new Sequelize(
 //             `${DatabaseName}`,
 //             `${DatabaseUsername}`,
 //             `${DatabasePassword}`,
 //             {
-//                 host: 'sinhviendb.chodan0pjpbf.ap-southeast-1.rds.amazonaws.com',
+//                 host: 'database-1.chodan0pjpbf.ap-southeast-1.rds.amazonaws.com',
 //                 dialect: 'mysql',
 //             }
 
@@ -86,7 +86,6 @@ module.exports = {
 //         });
 //         return sequelize;
 //     }
-
 //     return {
 //         getInstance: function () {
 //             // if (!instance) instance = init();

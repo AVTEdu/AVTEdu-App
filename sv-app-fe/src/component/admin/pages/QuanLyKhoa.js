@@ -4,11 +4,26 @@ import * as AiIcons from "react-icons/ai";
 // import * as Corecss from "../../../assets/vendor/css/core.css";
 import { useState, useEffect } from "react";
 import Popup from "../../Popup";
+import adminAPI from "../../../api/adminAPI";
+import PopupNotify from "../../PopupNotify";
 
 
 
 export const Khoa = () => {
     const [openPopup, setOpenPopup] = useState(false);
+    const [dsKhoa, setDsKhoa] = useState();
+    useEffect(() => {
+        const getDSKhoa = async () => {
+            try {
+                const res = await adminAPI.getDanhSachToanBoKhoa();
+                setDsKhoa(res.data);
+            } catch (error) {
+
+            }
+        };
+        getDSKhoa();
+    }, [])
+
     return (
         <>
             <Sidebar />
@@ -31,7 +46,7 @@ export const Khoa = () => {
                                                     <div className="navbar-nav align-items-center">
                                                         <div className="nav-item d-flex align-items-center">
                                                             <i className="bx bx-search fs-4 lh-0" />
-                                                            <input type="text" className="form-control border-0 shadow-none" placeholder="Search..." aria-label="Search..." />
+                                                            <input type="text" className="form-control border-0 shadow-none" placeholder="Tìm khoa" aria-label="Search..." />
                                                         </div>
                                                     </div>
                                                     {/* /Search */}
@@ -108,44 +123,34 @@ export const Khoa = () => {
                                                                 </tr>
                                                             </thead>
                                                             <tbody className="adminClassHover">
-                                                                <tr>
-                                                                    <td style={{ border: "2px solid" }}>
-                                                                        <input type="checkbox" value=""></input>
-                                                                    </td>
-                                                                    <td style={{ border: "2px solid" }}>DHKTPM</td>
-                                                                    <td style={{ border: "2px solid" }}>3</td>
-                                                                    <td style={{ border: "2px solid" }}></td>
-                                                                    <td style={{ border: "2px solid" }}>
-                                                                        <div className="dropdown">
-                                                                            <button type="button" className="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
-                                                                                <i className="bx bx-dots-vertical-rounded" />
-                                                                            </button>
-                                                                            <div className="dropdown-menu">
-                                                                                <a className="dropdown-item" href="javascript:void(0);"><i className="bx bx-edit-alt me-1" /> Edit</a>
-                                                                                <a className="dropdown-item" href="javascript:void(0);"><i className="bx bx-trash me-1" /> Delete</a>
-                                                                            </div>
-                                                                        </div>
-                                                                    </td>
-                                                                </tr>
-                                                                <tr>
-                                                                    <td style={{ border: "2px solid" }}>
-                                                                        <input type="checkbox" value=""></input>
-                                                                    </td>
-                                                                    <td style={{ border: "2px solid" }}>DHKTPM</td>
-                                                                    <td style={{ border: "2px solid" }}>3</td>
-                                                                    <td style={{ border: "2px solid" }}></td>
-                                                                    <td style={{ border: "2px solid" }}>
-                                                                        <div className="dropdown">
-                                                                            <button type="button" className="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
-                                                                                <i className="bx bx-dots-vertical-rounded" />
-                                                                            </button>
-                                                                            <div className="dropdown-menu">
-                                                                                <a className="dropdown-item" href="javascript:void(0);"><i className="bx bx-edit-alt me-1" /> Edit</a>
-                                                                                <a className="dropdown-item" href="javascript:void(0);"><i className="bx bx-trash me-1" /> Delete</a>
-                                                                            </div>
-                                                                        </div>
-                                                                    </td>
-                                                                </tr>
+                                                                {
+                                                                    dsKhoa && dsKhoa?.result.length > 0
+                                                                        ?
+                                                                        <>
+                                                                            {
+                                                                                dsKhoa["result"].map((ds) => (
+                                                                                    <tr>
+                                                                                        <td style={{ border: "2px solid" }}>
+                                                                                            <input type="checkbox" value=""></input>
+                                                                                        </td>
+                                                                                        <td style={{ border: "2px solid" }}>{ds.ma_khoa}</td>
+                                                                                        <td style={{ border: "2px solid" }}>{ds.ten_khoa}</td>
+                                                                                        <td style={{ border: "2px solid" }}>{ds.mo_ta}</td>
+                                                                                        <td style={{ border: "2px solid" }}>
+                                                                                            <a ><i className="bx bx-edit-alt me-1" /> Edit</a>
+                                                                                            <a style={{ marginLeft: "15px" }} ><i className="bx bx-trash me-1" /> Delete</a>
+                                                                                        </td>
+                                                                                    </tr>
+                                                                                ))
+                                                                            }
+                                                                        </>
+                                                                        : <tr>
+                                                                            <td colSpan={4} className="text-center">
+                                                                                <p className="bold"><span>Tạm chưa có dữ liệu</span></p>
+                                                                            </td>
+                                                                        </tr>
+                                                                }
+
 
                                                             </tbody>
                                                         </table>
@@ -217,6 +222,49 @@ export const Khoa = () => {
 
 export const ChuyenNganh = () => {
     const [openPopup, setOpenPopup] = useState(false);
+    const [dsChuyenNganh, setDsChuyenNganh] = useState();
+    const [maKhoa, setMaKhoa] = useState();
+    const [dsKhoa, setDSKhoa] = useState();
+    const [dsAllChuyenNganh, setDsAllChuyenNganh] = useState();
+    useEffect(() => {
+        const getDSChuyenNganh = async () => {
+            try {
+                const res = await adminAPI.getAllChuyenNganh();
+                setDsAllChuyenNganh(res.data);
+            } catch (error) {
+
+            }
+        };
+        getDSChuyenNganh();
+    }, [])
+    useEffect(() => {
+        const getDSKhoa = async () => {
+            try {
+                const res = await adminAPI.getDanhSachToanBoKhoa();
+                console.log(res.data)
+                setDSKhoa(res.data);
+            } catch (error) {
+
+            }
+        };
+        getDSKhoa();
+    }, [])
+    useEffect(() => {
+        const getDsTheoKhoa = async () => {
+            try {
+                const dsCN = await adminAPI.getDsChuyenNganhTheoKhoa(maKhoa);
+                console.log(dsCN);
+                setDsChuyenNganh(dsCN.data);
+            } catch (error) {
+
+            }
+        };
+        getDsTheoKhoa();
+    }, [maKhoa])
+    const getMaKhoa = (e) => {
+        setMaKhoa(e.target.value);
+    }
+    if (!dsKhoa) return null;
     return (
         <>
             <Sidebar />
@@ -232,20 +280,43 @@ export const ChuyenNganh = () => {
                                     <div className="row">
                                         <div className="col-md-2"></div>
                                         <div className="col-md-10">
-                                            <nav className="layout-navbar container-xxl navbar navbar-expand-xl  align-items-center bg-navbar-theme" id="layout-navbar">
 
-                                                <div className="navbar-nav-right d-flex align-items-center" id="navbar-collapse">
-                                                    {/* Search */}
-                                                    <div className="navbar-nav align-items-center">
-                                                        <div className="nav-item d-flex align-items-center">
-                                                            <i className="bx bx-search fs-4 lh-0" />
-                                                            <input type="text" className="form-control border-0 shadow-none" placeholder="Search..." aria-label="Search..." />
+                                            <div className="card-gv-header grid-bg">
+                                                <h5 style={{
+                                                    display: "inline-flex",
+                                                    position: "relative",
+                                                    boxSizing: "border-box",
+                                                    backgroundColor: "transparent",
+                                                    border: "0",
+                                                    margin: "0",
+                                                    textDecoration: "none",
+                                                    fontWeight: "500",
+                                                    fontSize: "0.875rem",
+                                                    lineHeight: "1.75",
+                                                    letterSpacing: "0.02857em",
+                                                    textTransform: "uppercase",
+                                                    minWidth: "64px",
+                                                    padding: "6px 8px",
+                                                }}>Lọc Danh sách chuyên ngành</h5>
+                                                <div className="card-body">
+                                                    <div className="demo-inline-spacing">
+                                                        <div className="col-md-3">
+                                                            <label htmlFor="exampleFormControlSelect1" className="form-label">Khoa</label>
+                                                            <select className="form-select" id="exampleFormControlSelect1" aria-label="Default select example"
+                                                                onChange={(e) => getMaKhoa(e)}
+                                                            >
+                                                                <option selected>Chọn Khoa</option>
+                                                                {
+                                                                    dsKhoa["result"].map((dsK) => (
+                                                                        <option key={dsK.ma_khoa} value={dsK.ma_khoa} >
+                                                                            {dsK.ten_khoa}
+                                                                        </option>
+                                                                    ))}
+                                                            </select>
                                                         </div>
                                                     </div>
-                                                    {/* /Search */}
-
                                                 </div>
-                                            </nav>
+                                            </div>
                                         </div>
                                     </div>
                                     <div className="row">
@@ -318,27 +389,52 @@ export const ChuyenNganh = () => {
                                                                 </tr>
                                                             </thead>
                                                             <tbody className="adminClassHover">
-                                                                <tr>
-                                                                    <td style={{ border: "2px solid" }}>
-                                                                        <input type="checkbox" value=""></input>
-                                                                    </td>
-                                                                    <td style={{ border: "2px solid" }}>DHKTPM</td>
-                                                                    <td style={{ border: "2px solid" }}>3</td>
-                                                                    <td style={{ border: "2px solid" }}>3</td>
-                                                                    <td style={{ border: "2px solid" }}>2</td>
-                                                                    <td style={{ border: "2px solid" }}></td>
-                                                                    <td style={{ border: "2px solid" }}>
-                                                                        <div className="dropdown">
-                                                                            <button type="button" className="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
-                                                                                <i className="bx bx-dots-vertical-rounded" />
-                                                                            </button>
-                                                                            <div className="dropdown-menu">
-                                                                                <a className="dropdown-item" href="javascript:void(0);"><i className="bx bx-edit-alt me-1" /> Edit</a>
-                                                                                <a className="dropdown-item" href="javascript:void(0);"><i className="bx bx-trash me-1" /> Delete</a>
-                                                                            </div>
-                                                                        </div>
-                                                                    </td>
-                                                                </tr>
+                                                                {
+                                                                    dsChuyenNganh && dsChuyenNganh?.ds.length > 0
+                                                                        ?
+                                                                        <>
+                                                                            {
+                                                                                dsChuyenNganh["ds"].map((ds) => (
+                                                                                    <tr>
+                                                                                        <td style={{ border: "2px solid" }}>
+                                                                                            <input type="checkbox" value=""></input>
+                                                                                        </td>
+                                                                                        <td style={{ border: "2px solid" }}>{ds.ma_chuyen_nganh}</td>
+                                                                                        <td style={{ border: "2px solid" }}>{ds.ten_chuyen_nganh}</td>
+                                                                                        <td style={{ border: "2px solid" }}>{ds.ma_khoa}</td>
+                                                                                        <td style={{ border: "2px solid" }}>{ds.so_tin_chi}</td>
+                                                                                        <td style={{ border: "2px solid" }}>{ds.mo_ta}</td>
+                                                                                        <td style={{ border: "2px solid" }}>
+                                                                                            <a ><i className="bx bx-edit-alt me-1" /> Edit</a>
+                                                                                            <a style={{ marginLeft: "15px" }} ><i className="bx bx-trash me-1" /> Delete</a>
+                                                                                        </td>
+                                                                                    </tr>
+                                                                                ))
+                                                                            }
+                                                                        </>
+                                                                        : dsAllChuyenNganh && dsAllChuyenNganh?.result.length > 0
+                                                                            ? <>
+                                                                                {
+                                                                                    dsAllChuyenNganh["result"].map((ds) => (
+                                                                                        <tr>
+                                                                                            <td style={{ border: "2px solid" }}>
+                                                                                                <input type="checkbox" value=""></input>
+                                                                                            </td>
+                                                                                            <td style={{ border: "2px solid" }}>{ds.ma_chuyen_nganh}</td>
+                                                                                            <td style={{ border: "2px solid" }}>{ds.ten_chuyen_nganh}</td>
+                                                                                            <td style={{ border: "2px solid" }}>{ds.ma_khoa}</td>
+                                                                                            <td style={{ border: "2px solid" }}>{ds.so_tin_chi}</td>
+                                                                                            <td style={{ border: "2px solid" }}>{ds.mo_ta}</td>
+                                                                                            <td style={{ border: "2px solid" }}>
+                                                                                                <a ><i className="bx bx-edit-alt me-1" /> Edit</a>
+                                                                                                <a style={{ marginLeft: "15px" }} ><i className="bx bx-trash me-1" /> Delete</a>
+                                                                                            </td>
+                                                                                        </tr>
+                                                                                    ))
+                                                                                }
+                                                                            </>
+                                                                            : <></>
+                                                                }
                                                             </tbody>
                                                         </table>
                                                     </div>

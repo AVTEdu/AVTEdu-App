@@ -4,6 +4,8 @@ import * as AiIcons from "react-icons/ai";
 // import * as Corecss from "../../../assets/vendor/css/core.css";
 import { useState, useEffect } from "react";
 import Popup from "../../Popup";
+import adminAPI from "../../../api/adminAPI";
+import PopupNotify from "../../PopupNotify";
 
 
 
@@ -12,6 +14,18 @@ import Popup from "../../Popup";
 export const Phong = () => {
     const [openPopup, setOpenPopup] = useState(false);
     const [openPopup2, setOpenPopup2] = useState(false);
+    const [dsPhong, setDsPhong] = useState();
+    useEffect(() => {
+        const getAllPhong = async () => {
+            try {
+                const res = await adminAPI.getAllPhong();
+                setDsPhong(res.data);
+            } catch (error) {
+
+            }
+        };
+        getAllPhong();
+    }, [])
     return (
         <>
             <Sidebar />
@@ -113,33 +127,37 @@ export const Phong = () => {
                                                                     <th style={{ border: "2px solid" }}>Mã phòng</th>
                                                                     <th style={{ border: "2px solid" }}>Tên dãy nhà</th>
                                                                     <th style={{ border: "2px solid" }}>Tên phòng học</th>
-                                                                    <th style={{ border: "2px solid" }}>Loại phòng</th>
+                                                                    <th style={{ border: "2px solid" }}>Mã loại phòng</th>
                                                                     <th style={{ border: "2px solid" }}>Ghi chú</th>
                                                                     <th style={{ border: "2px solid" }}>Thao tác</th>
                                                                 </tr>
                                                             </thead>
                                                             <tbody className="adminClassHover">
-                                                                <tr>
-                                                                    <td style={{ border: "2px solid" }}>
-                                                                        <input type="checkbox" value=""></input>
-                                                                    </td>
-                                                                    <td style={{ border: "2px solid" }}>DHKTPM</td>
-                                                                    <td style={{ border: "2px solid" }}>3</td>
-                                                                    <td style={{ border: "2px solid" }}>3</td>
-                                                                    <td style={{ border: "2px solid" }}>2</td>
-                                                                    <td style={{ border: "2px solid" }}></td>
-                                                                    <td style={{ border: "2px solid" }}>
-                                                                        <div className="dropdown">
-                                                                            <button type="button" className="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
-                                                                                <i className="bx bx-dots-vertical-rounded" />
-                                                                            </button>
-                                                                            <div className="dropdown-menu">
-                                                                                <a className="dropdown-item" href="javascript:void(0);"><i className="bx bx-edit-alt me-1" /> Edit</a>
-                                                                                <a className="dropdown-item" href="javascript:void(0);"><i className="bx bx-trash me-1" /> Delete</a>
-                                                                            </div>
-                                                                        </div>
-                                                                    </td>
-                                                                </tr>
+                                                                {
+                                                                    dsPhong && dsPhong?.result.length > 0
+                                                                        ?
+                                                                        <>
+                                                                            {
+                                                                                dsPhong["result"].map((ds) => (
+                                                                                    <tr>
+                                                                                        <td style={{ border: "2px solid" }}>
+                                                                                            <input type="checkbox" value=""></input>
+                                                                                        </td>
+                                                                                        <td style={{ border: "2px solid" }}>{ds.ma_phong_hoc}</td>
+                                                                                        <td style={{ border: "2px solid" }}>{ds.ten_day_nha}</td>
+                                                                                        <td style={{ border: "2px solid" }}>{ds.ten_phong_hoc}</td>
+                                                                                        <td style={{ border: "2px solid" }}>{ds.ma_loai_phong}</td>
+                                                                                        <td style={{ border: "2px solid" }}>{ds.ghi_chu}</td>
+                                                                                        <td style={{ border: "2px solid" }}>
+                                                                                            <a ><i className="bx bx-edit-alt me-1" /> Edit</a>
+                                                                                            <a style={{ marginLeft: "15px" }} ><i className="bx bx-trash me-1" /> Delete</a>
+                                                                                        </td>
+                                                                                    </tr>
+                                                                                ))
+                                                                            }
+                                                                        </>
+                                                                        : <></>
+                                                                }
 
                                                             </tbody>
                                                         </table>
