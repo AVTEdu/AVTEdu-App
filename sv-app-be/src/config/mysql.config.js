@@ -15,16 +15,16 @@ const DatabasePassword = "Sapassword_123";
 const ConnectDB = (function () {
     var instance;
     function init() {
-        const CheckDB_Promise = new Promise((resolve, reject) => {
-            mysql.createConnection({
-                user: DatabaseUsername,
-                password: DatabasePassword
-            }).then((connection) => {
-                connection.query(`CREATE DATABASE IF NOT EXISTS ${DatabaseName};`);
-            });
-        });
-        CheckDB_Promise
-            .then((err) => console.log(err));
+        // const CheckDB_Promise = new Promise((resolve, reject) => {
+        //     mysql.createConnection({
+        //         user: DatabaseUsername,
+        //         password: DatabasePassword
+        //     }).then((connection) => {
+        //         connection.query(`CREATE DATABASE IF NOT EXISTS ${DatabaseName};`);
+        //     });
+        // });
+        // CheckDB_Promise
+        //     .then((err) => console.log(err));
         const sequelize = new Sequelize(
             `${DatabaseName}`,
             `${DatabaseUsername}`,
@@ -33,6 +33,7 @@ const ConnectDB = (function () {
                 host: 'localhost',
                 dialect: 'mysql',
                 logging: false,
+                port: process.env.MYSQL_PORT || 3306
             }
         );
         sequelize.authenticate().then(() => {
@@ -59,8 +60,6 @@ module.exports = {
 // const Sequelize = require('sequelize');
 // const mysql = require('mysql2/promise');
 // require('dotenv').config();
-
-
 
 // const DatabaseName = "sinhviendb";
 // const DatabaseUsername = 'admin';

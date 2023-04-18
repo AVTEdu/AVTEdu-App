@@ -13,10 +13,12 @@ const DateScreen = ({navigation}) => {
   const [day,setDay] = useState(new Date());
   const token = useSelector((state) => state.user.user[0].accessToken);
   const [thoiKhoaBieu,setThoiKhoaBieu] = useState('');
+  const [nullCheck,setNullCheck] = useState(true);
   
   useEffect(() =>{
     getWeekCurrent(day);
     getDateData(day);
+    checkTKBNull(thoiKhoaBieu);
   },[day])
 
   const getWeekCurrent = (date) =>{
@@ -32,24 +34,35 @@ const DateScreen = ({navigation}) => {
  
   const getPreviousWeek = (date) => {
     const nextWeek = new Date(date.getTime() - 7 * 24 * 60 * 60 * 1000);
-    const firstDay = new Date(nextWeek.setDate(nextWeek.getDate() - nextWeek.getDay() + 1)); 
+    const firstDay = new Date(nextWeek.setDate(nextWeek.getDate() - nextWeek.getDay() -1 )); 
     return setDay(firstDay) ;
   } 
   const getNextWeek = (date) =>{
     const nextWeek = new Date(date.getTime() + 7 * 24 * 60 * 60 * 1000);
-    const firstDay = new Date(nextWeek.setDate(nextWeek.getDate() - nextWeek.getDay() + 1)); 
+    const firstDay = new Date(nextWeek.setDate(nextWeek.getDate() - nextWeek.getDay() + 1 )); 
     return setDay(firstDay) ;
   }
   
   const getDateData = async() =>{
     const res = await lichHocAPI.getThoiKhoaBieuSinhVienTrongMotTuan(day,token);
     setThoiKhoaBieu(res.data.result);
+    checkTKBNull(res.data.result);
   }
 
   const onChange = (event, selectedDate) => {
     const currentDate = selectedDate;
     return setDay(currentDate);
   };
+
+  const checkTKBNull = (thoiKhoaBieu) => {
+    //Tránh lỗi .some is not function
+    if(Array.isArray(thoiKhoaBieu)){
+      if(thoiKhoaBieu.some((data) => data.TKB.length !== 0)){
+        return setNullCheck(false)
+      }
+    }
+    return setNullCheck(true)
+  }
 
   
 
@@ -161,7 +174,7 @@ const DateScreen = ({navigation}) => {
         </View>
       </View>
       {renderDateBar()}
-      <DateView tkbdata={thoiKhoaBieu}/>
+      <DateView tkbdata={thoiKhoaBieu} nullCheck={nullCheck}/>
     </View>
   );
 };

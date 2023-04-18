@@ -22,6 +22,7 @@ const HomeScreen = ({ navigation }) => {
   const btnScoreHandler = () => {
     navigation.navigate("Score");
   };
+  
   useEffect(() => {
       
   },[]);
@@ -89,6 +90,7 @@ const HomeScreen = ({ navigation }) => {
               icon={item.icon}
               text={item.text}
               Bgcolor={item.Bgcolor}
+              onPress={() =>{navigation.navigate(item.OnPress);}}
             />
           )}
         />
