@@ -10,7 +10,7 @@ import { TrangChu } from '../component/Trangchu';
 import { MonHoc, HocPhan } from '../component/admin/pages/QuanLyHocPhan';
 import { Khoa, ChuyenNganh } from '../component/admin/pages/QuanLyKhoa';
 import { HocKi, LopHocPhan, PhanCong } from '../component/admin/pages/QuanLyLopHocPhan';
-import { Admin, GiangVien, SinhVien, NhapDiemSinhVien } from '../component/admin/pages/QuanLyNguoiDung';
+import { Admin, GiangVien, SinhVien } from '../component/admin/pages/QuanLyNguoiDung';
 import { Phong } from '../component/admin/pages/QuanLyPhong';
 import { ThoiKhoaBieu } from '../component/admin/pages/QuanLyTKB';
 import { CongNo } from "../component/admin/pages/QuanLyCongNo";
@@ -83,7 +83,6 @@ function App() {
         <Route path='/ql-user/admin' element={<Admin />} />
         <Route path='/ql-user/gv' element={<GiangVien />} />
         <Route path='/ql-user/sv' element={<SinhVien />} />
-        <Route path="/nhap-diem-sv" element={<NhapDiemSinhVien />} />
         <Route path='/ql-congno/ds-cno' element={<CongNo />} />
 
         <Route path='/thong-bao-gv' element={<GVThongBao />} />

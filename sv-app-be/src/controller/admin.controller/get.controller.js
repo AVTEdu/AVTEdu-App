@@ -123,7 +123,7 @@ const getDanhSachKetQuaHocTap = async (req, res, next) => {
 }
 const getDanhSachKhoa = async (req, res, next) => {
   try {
-    const result = await Khoa.findAll({ limit: 10 });
+    const result = await Khoa.findAll({ limit: 20 });
     return res.status(201).json({ success: true, result });
   } catch (error) {
     next(error);
@@ -163,7 +163,7 @@ const getDanhSachMoHinhDaoTao = async (req, res, next) => {
 }
 const getDanhSachMonHoc = async (req, res, next) => {
   try {
-    const result = await MonHoc.findAll({ limit: 10 });
+    const result = await MonHoc.findAll({ limit: 30 });
     return res.status(201).json({ success: true, result });
   } catch (error) {
     next(error);
@@ -358,6 +358,35 @@ where sinhviendb.lop_hoc_phan.ma_lop_hoc_phan = '${maLHP}'`,
 };
 const getDanhSachSinhVienByKhoa = async (req, res, next) => {
 
+  try {
+    const { maKhoa } = req.body;
+    const dssv = await sequelize.query(
+      `SELECT sinhviendb.chuyen_nganh.ten_chuyen_nganh, sinhviendb.khoa.ten_khoa, sinhviendb.sinh_vien.ma_sinh_vien, sinhviendb.sinh_vien.ho_ten_sinh_vien, sinhviendb.sinh_vien.ngay_sinh, sinhviendb.sinh_vien.email, 
+                        sinhviendb.sinh_vien.gioitinh, sinhviendb.sinh_vien.so_dien_thoai, sinhviendb.sinh_vien.so_cmnd, sinhviendb.sinh_vien.nien_khoa, sinhviendb.sinh_vien.mat_khau
+      FROM     sinhviendb.chuyen_nganh INNER JOIN
+                        sinhviendb.khoa ON sinhviendb.chuyen_nganh.ma_khoa = sinhviendb.khoa.ma_khoa INNER JOIN
+                        sinhviendb.sinh_vien ON sinhviendb.chuyen_nganh.ma_chuyen_nganh = sinhviendb.sinh_vien.ma_chuyen_nganh AND sinhviendb.khoa.ma_khoa = sinhviendb.sinh_vien.ma_khoa
+                where sinhviendb.khoa.ma_khoa = '${maKhoa}'`,
+      { type: QueryTypes.SELECT }
+    );
+    res.status(201).json({ success: true, dssv });
+  } catch (error) {
+    next(error);
+  }
+};
+
+const getDSChuyenNganhTheoKhoa = async (req, res, next) => {
+
+  try {
+    const { maKhoa } = req.body;
+    const ds = await sequelize.query(
+      `select ten_chuyen_nganh,ma_chuyen_nganh from sinhviendb.chuyen_nganh where ma_khoa = '${maKhoa}'`,
+      { type: QueryTypes.SELECT }
+    );
+    res.status(201).json({ success: true, ds });
+  } catch (error) {
+    next(error);
+  }
 };
 module.exports = {
   getDanhSachAdmin,
@@ -388,6 +417,7 @@ module.exports = {
   getDanhSachHocPhiSinhVienParam,
   getDanhSachPhieuThuSinhVienParam,
   getDanhSachDiemSinhVienByMaLopHP,
-  getDanhSachSinhVienByKhoa
+  getDanhSachSinhVienByKhoa,
+  getDSChuyenNganhTheoKhoa
 }
 
