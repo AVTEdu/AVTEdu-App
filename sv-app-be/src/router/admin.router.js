@@ -100,5 +100,26 @@ router
 router
   .route("/getDSMonHoc")
   .get(verifyAccessToken, AdminGetController.getDanhSachMonHoc);
+router
+  .route("/getAllChuyenNganh")
+  .get(verifyAccessToken, AdminGetController.getDanhSachChuyenNganh);
+router
+  .route("/getAllHocPhan")
+  .get(verifyAccessToken, AdminGetController.getDanhSachHocPhan);
+router
+  .route("/getAllHocKi")
+  .get(verifyAccessToken, AdminGetController.getDanhSachHocKi);
+router
+  .route("/getAllLopHocPhan")
+  .get(verifyAccessToken, AdminGetController.getDanhSachLopHocPhan);
+router
+  .route("/getAllPhanCong")
+  .get(verifyAccessToken, AdminGetController.getDanhSachPhanCongLopHocPhan);
+router
+  .route("/getAllPhong")
+  .get(verifyAccessToken, AdminGetController.getDanhSachPhongHoc);
+router
+  .route("/getAllTKB")
+  .get(verifyAccessToken, AdminGetController.getDanhSachThoiKhoaBieu);
 
 module.exports = router;

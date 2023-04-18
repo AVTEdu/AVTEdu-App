@@ -249,6 +249,18 @@ export const MonHoc = () => {
 
 export const HocPhan = () => {
     const [openPopup, setOpenPopup] = useState(false);
+    const [dsHocPhan, setDsHocPhan] = useState();
+    useEffect(() => {
+        const getdsHocPhan = async () => {
+            try {
+                const res = await adminAPI.getAllHocPhan();
+                setDsHocPhan(res.data);
+            } catch (error) {
+
+            }
+        };
+        getdsHocPhan();
+    }, [])
     return (
         <>
             <Sidebar />
@@ -345,159 +357,42 @@ export const HocPhan = () => {
                                                                     <th style={{ border: "2px solid" }}>Số tín chỉ lý thuyết</th>
                                                                     <th style={{ border: "2px solid" }}>Số tín chỉ thực hành</th>
                                                                     <th style={{ border: "2px solid" }}>Loại học phần</th>
-                                                                    <th style={{ border: "2px solid" }}>Mã môn song hành</th>
                                                                     <th style={{ border: "2px solid" }}>Mã môn tiên quyết</th>
-                                                                    <th style={{ border: "2px solid" }}>Mã chuyên ngành</th>
+                                                                    <th style={{ border: "2px solid" }}>Mã môn học</th>
                                                                     <th style={{ border: "2px solid" }}>Mô tả</th>
                                                                     <th style={{ border: "2px solid" }}>Thao tác</th>
                                                                 </tr>
                                                             </thead>
                                                             <tbody className="adminClassHover">
-                                                                <tr>
-                                                                    <td style={{ border: "2px solid" }}>
-                                                                        <input type="checkbox" value=""></input>
-                                                                    </td>
-                                                                    <td style={{ border: "2px solid" }}>DHKTPM</td>
-                                                                    <td style={{ border: "2px solid" }}>3</td>
-                                                                    <td style={{ border: "2px solid" }}>3</td>
-                                                                    <td style={{ border: "2px solid" }}>2</td>
-                                                                    <td style={{ border: "2px solid" }}>DHKTPMA</td>
-                                                                    <td style={{ border: "2px solid" }}>DHKTPMB</td>
-                                                                    <td style={{ border: "2px solid" }}>KTPM</td>
-                                                                    <td style={{ border: "2px solid" }}></td>
-                                                                    <td style={{ border: "2px solid" }}>
-                                                                        <div className="dropdown">
-                                                                            <button type="button" className="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
-                                                                                <i className="bx bx-dots-vertical-rounded" />
-                                                                            </button>
-                                                                            <div className="dropdown-menu">
-                                                                                <a className="dropdown-item" href="javascript:void(0);"><i className="bx bx-edit-alt me-1" /> Edit</a>
-                                                                                <a className="dropdown-item" href="javascript:void(0);"><i className="bx bx-trash me-1" /> Delete</a>
-                                                                            </div>
-                                                                        </div>
-                                                                    </td>
-                                                                </tr>
-                                                                <tr>
-                                                                    <td style={{ border: "2px solid" }}>
-                                                                        <input type="checkbox" value=""></input>
-                                                                    </td>
-                                                                    <td style={{ border: "2px solid" }}>DHKTPM</td>
-                                                                    <td style={{ border: "2px solid" }}>3</td>
-                                                                    <td style={{ border: "2px solid" }}>3</td>
-                                                                    <td style={{ border: "2px solid" }}>2</td>
-                                                                    <td style={{ border: "2px solid" }}>DHKTPMA</td>
-                                                                    <td style={{ border: "2px solid" }}>DHKTPMB</td>
-                                                                    <td style={{ border: "2px solid" }}>KTPM</td>
-                                                                    <td style={{ border: "2px solid" }}></td>
-                                                                    <td style={{ border: "2px solid" }}>
-                                                                        <div className="dropdown">
-                                                                            <button type="button" className="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
-                                                                                <i className="bx bx-dots-vertical-rounded" />
-                                                                            </button>
-                                                                            <div className="dropdown-menu">
-                                                                                <a className="dropdown-item" href="javascript:void(0);"><i className="bx bx-edit-alt me-1" /> Edit</a>
-                                                                                <a className="dropdown-item" href="javascript:void(0);"><i className="bx bx-trash me-1" /> Delete</a>
-                                                                            </div>
-                                                                        </div>
-                                                                    </td>
-                                                                </tr>
-                                                                <tr>
-                                                                    <td style={{ border: "2px solid" }}>
-                                                                        <input type="checkbox" value=""></input>
-                                                                    </td>
-                                                                    <td style={{ border: "2px solid" }}>DHKTPM</td>
-                                                                    <td style={{ border: "2px solid" }}>3</td>
-                                                                    <td style={{ border: "2px solid" }}>3</td>
-                                                                    <td style={{ border: "2px solid" }}>2</td>
-                                                                    <td style={{ border: "2px solid" }}>DHKTPMA</td>
-                                                                    <td style={{ border: "2px solid" }}>DHKTPMB</td>
-                                                                    <td style={{ border: "2px solid" }}>KTPM</td>
-                                                                    <td style={{ border: "2px solid" }}></td>
-                                                                    <td style={{ border: "2px solid" }}>
-                                                                        <div className="dropdown">
-                                                                            <button type="button" className="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
-                                                                                <i className="bx bx-dots-vertical-rounded" />
-                                                                            </button>
-                                                                            <div className="dropdown-menu">
-                                                                                <a className="dropdown-item" href="javascript:void(0);"><i className="bx bx-edit-alt me-1" /> Edit</a>
-                                                                                <a className="dropdown-item" href="javascript:void(0);"><i className="bx bx-trash me-1" /> Delete</a>
-                                                                            </div>
-                                                                        </div>
-                                                                    </td>
-                                                                </tr>
-                                                                <tr>
-                                                                    <td style={{ border: "2px solid" }}>
-                                                                        <input type="checkbox" value=""></input>
-                                                                    </td>
-                                                                    <td style={{ border: "2px solid" }}>DHKTPM</td>
-                                                                    <td style={{ border: "2px solid" }}>3</td>
-                                                                    <td style={{ border: "2px solid" }}>3</td>
-                                                                    <td style={{ border: "2px solid" }}>2</td>
-                                                                    <td style={{ border: "2px solid" }}>DHKTPMA</td>
-                                                                    <td style={{ border: "2px solid" }}>DHKTPMB</td>
-                                                                    <td style={{ border: "2px solid" }}>KTPM</td>
-                                                                    <td style={{ border: "2px solid" }}></td>
-                                                                    <td style={{ border: "2px solid" }}>
-                                                                        <div className="dropdown">
-                                                                            <button type="button" className="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
-                                                                                <i className="bx bx-dots-vertical-rounded" />
-                                                                            </button>
-                                                                            <div className="dropdown-menu">
-                                                                                <a className="dropdown-item" href="javascript:void(0);"><i className="bx bx-edit-alt me-1" /> Edit</a>
-                                                                                <a className="dropdown-item" href="javascript:void(0);"><i className="bx bx-trash me-1" /> Delete</a>
-                                                                            </div>
-                                                                        </div>
-                                                                    </td>
-                                                                </tr>
-                                                                <tr>
-                                                                    <td style={{ border: "2px solid" }}>
-                                                                        <input type="checkbox" value=""></input>
-                                                                    </td>
-                                                                    <td style={{ border: "2px solid" }}>DHKTPM</td>
-                                                                    <td style={{ border: "2px solid" }}>3</td>
-                                                                    <td style={{ border: "2px solid" }}>3</td>
-                                                                    <td style={{ border: "2px solid" }}>2</td>
-                                                                    <td style={{ border: "2px solid" }}>DHKTPMA</td>
-                                                                    <td style={{ border: "2px solid" }}>DHKTPMB</td>
-                                                                    <td style={{ border: "2px solid" }}>KTPM</td>
-                                                                    <td style={{ border: "2px solid" }}></td>
-                                                                    <td style={{ border: "2px solid" }}>
-                                                                        <div className="dropdown">
-                                                                            <button type="button" className="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
-                                                                                <i className="bx bx-dots-vertical-rounded" />
-                                                                            </button>
-                                                                            <div className="dropdown-menu">
-                                                                                <a className="dropdown-item" href="javascript:void(0);"><i className="bx bx-edit-alt me-1" /> Edit</a>
-                                                                                <a className="dropdown-item" href="javascript:void(0);"><i className="bx bx-trash me-1" /> Delete</a>
-                                                                            </div>
-                                                                        </div>
-                                                                    </td>
-                                                                </tr>
-                                                                <tr>
-                                                                    <td style={{ border: "2px solid" }}>
-                                                                        <input type="checkbox" value=""></input>
-                                                                    </td>
-                                                                    <td style={{ border: "2px solid" }}>DHKTPM</td>
-                                                                    <td style={{ border: "2px solid" }}>3</td>
-                                                                    <td style={{ border: "2px solid" }}>3</td>
-                                                                    <td style={{ border: "2px solid" }}>2</td>
-                                                                    <td style={{ border: "2px solid" }}>DHKTPMA</td>
-                                                                    <td style={{ border: "2px solid" }}>DHKTPMB</td>
-                                                                    <td style={{ border: "2px solid" }}>KTPM</td>
-                                                                    <td style={{ border: "2px solid" }}></td>
-                                                                    <td style={{ border: "2px solid" }}>
-                                                                        <div className="dropdown">
-                                                                            <button type="button" className="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
-                                                                                <i className="bx bx-dots-vertical-rounded" />
-                                                                            </button>
-                                                                            <div className="dropdown-menu">
-                                                                                <a className="dropdown-item" href="javascript:void(0);"><i className="bx bx-edit-alt me-1" /> Edit</a>
-                                                                                <a className="dropdown-item" href="javascript:void(0);"><i className="bx bx-trash me-1" /> Delete</a>
-                                                                            </div>
-                                                                        </div>
-                                                                    </td>
-                                                                </tr>
-
+                                                                {
+                                                                    dsHocPhan && dsHocPhan?.result.length > 0
+                                                                        ?
+                                                                        <>
+                                                                            {
+                                                                                dsHocPhan["result"].map((ds) => (
+                                                                                    <tr>
+                                                                                        <td style={{ border: "2px solid" }}>
+                                                                                            <input type="checkbox" value=""></input>
+                                                                                        </td>
+                                                                                        <td style={{ border: "2px solid" }}>{ds.ma_hoc_phan}</td>
+                                                                                        <td style={{ border: "2px solid" }}>{ds.so_tin_chi_ly_thuyet}</td>
+                                                                                        <td style={{ border: "2px solid" }}>{ds.so_tin_chi_thuc_hanh}</td>
+                                                                                        <td style={{ border: "2px solid" }}>{
+                                                                                            ds.hoc_phan_bat_buoc == 1 ? "Bắt buộc" : "Tự chọn"
+                                                                                        }</td>
+                                                                                        <td style={{ border: "2px solid" }}>{ds.ma_mon_tien_quyet}</td>
+                                                                                        <td style={{ border: "2px solid" }}>{ds.ma_mon_hoc}</td>
+                                                                                        <td style={{ border: "2px solid" }}>{ds.mo_ta}</td>
+                                                                                        <td style={{ border: "2px solid" }}>
+                                                                                            <a ><i className="bx bx-edit-alt me-1" /> Edit</a>
+                                                                                            <a style={{ marginLeft: "15px" }} ><i className="bx bx-trash me-1" /> Delete</a>
+                                                                                        </td>
+                                                                                    </tr>
+                                                                                ))
+                                                                            }
+                                                                        </>
+                                                                        : <></>
+                                                                }
                                                             </tbody>
                                                         </table>
                                                     </div>

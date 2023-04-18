@@ -53,6 +53,34 @@ const adminAPI = {
     getDSMonHoc() {
         const url = "/admin/getDSMonHoc";
         return axiosClient.get(url);
-    }
+    },
+    getAllChuyenNganh() {
+        const url = "/admin/getAllChuyenNganh";
+        return axiosClient.get(url);
+    },
+    getAllHocPhan() {
+        const url = "/admin/getAllHocPhan";
+        return axiosClient.get(url);
+    },
+    getAllHocKi() {
+        const url = "/admin/getAllHocKi";
+        return axiosClient.get(url);
+    },
+    getAllLopHocPhan() {
+        const url = "/admin/getAllLopHocPhan";
+        return axiosClient.get(url);
+    },
+    getAllPhanCong() {
+        const url = "/admin/getAllPhanCong";
+        return axiosClient.get(url);
+    },
+    getAllPhong() {
+        const url = "/admin/getAllPhong";
+        return axiosClient.get(url);
+    },
+    getAllTKB() {
+        const url = "/admin/getAllTKB";
+        return axiosClient.get(url);
+    },
 };
 export default adminAPI;
