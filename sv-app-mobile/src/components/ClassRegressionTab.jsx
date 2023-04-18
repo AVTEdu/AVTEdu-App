@@ -9,7 +9,6 @@ const ClassRegressionTab = ({ lop_hoc_phan}) => {
     }
     return "Đã khóa";
   };
-  
   return (
     <TouchableOpacity
       style={{
@@ -17,7 +16,7 @@ const ClassRegressionTab = ({ lop_hoc_phan}) => {
         borderBottomWidth: 10,
         backgroundColor: COLORS.white,
       }}
-    >
+      >
       <View
         style={{
           width: "100%",

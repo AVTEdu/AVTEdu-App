@@ -1,6 +1,8 @@
 // const nodemailer = require('nodemailer');
 // const Mailgen = require('mailgen');
 
+const { sendMail } = require("./mail.config");
+
 // const transporter = nodemailer.createTransport({
 //   service: 'gmail',
 //   host:'smtp.gmail.com',
