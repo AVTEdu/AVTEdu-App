@@ -68,9 +68,9 @@ require('dotenv').config();
 // const DatabasePassword = "12345678";
 
 
-const Sequelize = require('sequelize');
-const mysql = require('mysql2/promise');
-require('dotenv').config();
+// const Sequelize = require('sequelize');
+// const mysql = require('mysql2/promise');
+// require('dotenv').config();
 
 
 
