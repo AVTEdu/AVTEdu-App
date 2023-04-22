@@ -4,10 +4,27 @@ import * as AiIcons from "react-icons/ai";
 // import * as Corecss from "../../../assets/vendor/css/core.css";
 import { useState, useEffect } from "react";
 import Popup from "../../Popup";
+import adminAPI from "../../../api/adminAPI";
+import PopupNotify from "../../PopupNotify";
+import { format } from 'date-fns';
+import dayjs from "dayjs";
 
 
 export const ThoiKhoaBieu = () => {
     const [openPopup, setOpenPopup] = useState(false);
+    const [dsTKB, setDsTKB] = useState();
+    useEffect(() => {
+        const getAllTKB = async () => {
+            try {
+                const res = await adminAPI.getAllTKB();
+                console.log(res.data);
+                setDsTKB(res.data);
+            } catch (error) {
+
+            }
+        };
+        getAllTKB();
+    }, [])
     return (
         <>
             <Sidebar />
@@ -108,40 +125,51 @@ export const ThoiKhoaBieu = () => {
                                                                     <th style={{ border: "2px solid" }}>Thời gian kết thúc</th>
                                                                     <th style={{ border: "2px solid" }}>Tiết học bắt đầu</th>
                                                                     <th style={{ border: "2px solid" }}>Tiết học kết thúc</th>
-                                                                    <th style={{ border: "2px solid" }}>Lớp học phần</th>
-                                                                    <th style={{ border: "2px solid" }}>Phòng học</th>
+                                                                    <th style={{ border: "2px solid" }}>Mã phòng học</th>
+                                                                    <th style={{ border: "2px solid" }}>Mã phân công</th>
                                                                     <th style={{ border: "2px solid" }}>Ghi chú</th>
                                                                     <th style={{ border: "2px solid" }}>Thao tác</th>
                                                                 </tr>
                                                             </thead>
                                                             <tbody className="adminClassHover">
-                                                                <tr>
-                                                                    <td style={{ border: "2px solid" }}>
-                                                                        <input type="checkbox" value=""></input>
-                                                                    </td>
-                                                                    <td style={{ border: "2px solid" }}>DHKTPM</td>
-                                                                    <td style={{ border: "2px solid" }}>3</td>
-                                                                    <td style={{ border: "2px solid" }}>3</td>
-                                                                    <td style={{ border: "2px solid" }}>2</td>
-                                                                    <td style={{ border: "2px solid" }}>DHKTPMA</td>
-                                                                    <td style={{ border: "2px solid" }}>DHKTPMB</td>
-                                                                    <td style={{ border: "2px solid" }}>KTPM</td>
-                                                                    <td style={{ border: "2px solid" }}>DHKTPMA</td>
-                                                                    <td style={{ border: "2px solid" }}>DHKTPMB</td>
-                                                                    <td style={{ border: "2px solid" }}>KTPM</td>
-                                                                    <td style={{ border: "2px solid" }}></td>
-                                                                    <td style={{ border: "2px solid" }}>
-                                                                        <div className="dropdown">
-                                                                            <button type="button" className="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
-                                                                                <i className="bx bx-dots-vertical-rounded" />
-                                                                            </button>
-                                                                            <div className="dropdown-menu">
-                                                                                <a className="dropdown-item" href="javascript:void(0);"><i className="bx bx-edit-alt me-1" /> Edit</a>
-                                                                                <a className="dropdown-item" href="javascript:void(0);"><i className="bx bx-trash me-1" /> Delete</a>
-                                                                            </div>
-                                                                        </div>
-                                                                    </td>
-                                                                </tr>                                                           </tbody>
+                                                                {
+                                                                    dsTKB && dsTKB?.result.length > 0
+                                                                        ?
+                                                                        <>
+                                                                            {
+                                                                                dsTKB["result"].map((ds) => (
+                                                                                    <tr>
+                                                                                        <td style={{ border: "2px solid" }}>
+                                                                                            <input type="checkbox" value=""></input>
+                                                                                        </td>
+                                                                                        <td style={{ border: "2px solid" }}>{ds.ma_thoi_khoa_bieu}</td>
+                                                                                        <td style={{ border: "2px solid" }}>{
+                                                                                            ds.loai_hoc_phan == 1 ? "Lý thuyết" : "Thực hành"
+                                                                                        }</td>
+                                                                                        <td style={{ border: "2px solid" }}>Thứ {ds.ngay_hoc_trong_tuan}</td>
+                                                                                        <td style={{ border: "2px solid" }}>{
+                                                                                            ds.nhom_thuc_hanh == null ? "Không có" : ds.nhom_thuc_hanh
+                                                                                        }</td>
+                                                                                        <td style={{ border: "2px solid" }}>{
+                                                                                            ds.thoi_gian_bat_dau
+                                                                                        }</td>
+                                                                                        <td style={{ border: "2px solid" }}>{ds.thoi_gian_ket_thuc}</td>
+                                                                                        <td style={{ border: "2px solid" }}>{ds.tiet_hoc_bat_dau}</td>
+                                                                                        <td style={{ border: "2px solid" }}>{ds.tiet_hoc_ket_thuc}</td>
+                                                                                        <td style={{ border: "2px solid" }}>{ds.ma_phong_hoc}</td>
+                                                                                        <td style={{ border: "2px solid" }}>{ds.ma_phan_cong_lop_hoc_phan}</td>
+                                                                                        <td style={{ border: "2px solid" }}>{ds.ghi_chu}</td>
+                                                                                        <td style={{ border: "2px solid" }}>
+                                                                                            <a ><i className="bx bx-edit-alt me-1" /> Edit</a>
+                                                                                            <a style={{ marginLeft: "15px" }} ><i className="bx bx-trash me-1" /> Delete</a>
+                                                                                        </td>
+                                                                                    </tr>
+                                                                                ))
+                                                                            }
+                                                                        </>
+                                                                        : <></>
+                                                                }
+                                                            </tbody>
                                                         </table>
                                                     </div>
                                                 </div>

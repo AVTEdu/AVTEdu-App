@@ -556,9 +556,20 @@ export default function Dkhp() {
                                 <div className="gr-table">
                                   <div className="border-scroll" style={{ maxHeight: '370px', outline: 'none' }} tabIndex={1}>
                                     <div id="box_lophocphan_chodangky" style={{ overflowY: "auto" }}>
-                                      <h3 className="title-table" lang="lhpchodangky-tabletitle">Lớp học phần chờ đăng ký</h3>
-                                      <div className="text-right" style={{ marginBottom: '10px', marginTop: '18px' }}>
+
+                                      <div className="row">
+                                        <div className="col-md-5">
+                                          <h3 className="title-table" lang="lhpchodangky-tabletitle">Lớp học phần chờ đăng ký</h3>
+                                          {/* <div className="text-right" style={{ marginBottom: '10px', marginTop: '18px' }}>
                                         <label><input id="checkLichTrung" name="checkLichTrung" type="checkbox" defaultValue="true" /><input name="checkLichTrung" type="hidden" defaultValue="false" /><b><span className="text-uppercase" style={{ color: 'red', marginLeft: '5px !important', marginRight: '10px !important' }} lang="lhpchodangky-lhpkhongtrunglich">HIỂN THỊ LỚP học phần KHÔNG TRÙNG LỊCH</span></b></label>
+                                      </div> */}
+                                        </div>
+                                        <div className="col-md-7" style={{ marginTop: "10px" }}>
+                                          <div className="text-right">
+                                            <label><input id="checkLichTrung" name="checkLichTrung" type="checkbox" defaultValue="true" /><input name="checkLichTrung" type="hidden" defaultValue="false" /><b><span className="text-uppercase" style={{ color: 'red', marginLeft: '5px !important', marginRight: '10px !important' }}>
+                                              học phần LÝ THUYẾT KHÔNG TRÙNG LỊCH</span></b></label>
+                                          </div>
+                                        </div>
                                       </div>
                                       <div className="table-responsive" style={{ overflowY: "auto", marginBottom: "20px" }}>
                                         <TableContainer>
@@ -615,9 +626,20 @@ export default function Dkhp() {
                                 <div className="border-scroll" tabIndex={2} style={{ overflowY: 'auto', outline: 'none' }}>
                                   <div id="box_chitietlophocphan_chodangky">
                                     <style dangerouslySetInnerHTML={{ __html: "\n    #tbChiTietDKHP .tr-active-nhom {\n        background-color: #ffee4a;\n        color: #003f65 !important;\n    }\n    /*#tbChiTietDKHP  .tr-active {\n        background-color: #ffeb3b52 !important;\n    }*/\n" }} />
-                                    <h3 className="title-table" lang="ctlhpchodangky-tabletitle">Chi tiết lớp học phần</h3>
-                                    <div className="text-right" style={{ marginBottom: '5px' }}>
+                                    <div className="row">
+                                      <div className="col-md-5">
+                                        <h3 className="title-table" lang="ctlhpchodangky-tabletitle">Chi tiết lớp học phần</h3>
+                                        {/* <div className="text-right" style={{ marginBottom: '5px' }}>
                                       <button onClick="XemLichTrung(this)" className="btn btn--m block first" style={{ backgroundColor: '#ec9e0f', color: '#fff' }} lang="dkhp-xemlichtrungButton">Xem lịch trùng</button>
+                                    </div> */}
+
+                                      </div>
+                                      <div className="col-md-7" style={{ marginTop: "10px" }}>
+                                        <div className="text-right">
+                                          <label><input id="checkLichTrung" name="checkLichTrung" type="checkbox" defaultValue="true" /><input name="checkLichTrung" type="hidden" defaultValue="false" /><b><span className="text-uppercase" style={{ color: 'red', marginLeft: '5px !important', marginRight: '10px !important' }}>
+                                            Học phần THỰC HÀNH KHÔNG TRÙNG LỊCH</span></b></label>
+                                        </div>
+                                      </div>
                                     </div>
                                     <table id="tbChiTietDKHP" className="table-pointer table-dkhp table-custom table table-bordered text-center no-footer dtr-inline" width="100%" role="grid">
                                       <thead>

@@ -6,6 +6,7 @@ import signinAPI from "../../api/signinAPI";
 import Cookies from "js-cookie";
 import useAuth from "../../services/hooks/useAuth"
 import { Link, useNavigate, useLocation } from 'react-router-dom';
+import bgAdmin from '../../assets/img/logo_img/bgAdmin02.png'
 
 
 export const LoginAdmin = () => {
@@ -61,12 +62,16 @@ export const LoginAdmin = () => {
 
 
     return (
-        <>
-            <section>
+        < >
+            <section style={{
+                backgroundImage: `url(${bgAdmin})`, backgroundPosition: "center", backgroundSize: 'cover',
+                width: '100vw',
+                height: '100vh'
+            }}>
                 <p ref={errRef} className={errMsg ? "errmsg" : "offscreen"} aria-live="assertive">
                     {errMsg}
                 </p>
-                <div>
+                <div >
 
                     <div className="container-xxl">
                         <div className="authentication-wrapper authentication-basic container-p-y">

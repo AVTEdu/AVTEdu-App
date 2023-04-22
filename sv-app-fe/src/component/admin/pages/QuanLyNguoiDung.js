@@ -236,7 +236,7 @@ export const GiangVien = () => {
 
 export const ReadOnlyRowDiem = ({ dsDiem, handleEditClick }) => {
     return (
-        <tr>
+        <tr onClick={() => handleEditClick(dsDiem)}>
             <td style={{ border: "2px solid" }}>{dsDiem.ma_sinh_vien}</td>
             <td style={{ border: "2px solid" }}>{dsDiem.ho_ten_sinh_vien}</td>
             <td style={{ border: "2px solid" }}>
@@ -297,8 +297,13 @@ export const ReadOnlyRowDiem = ({ dsDiem, handleEditClick }) => {
 };
 
 export const EditTableRowDiem = ({ dsDiem, editFormData, handleEditFormChange, handleEditFormSubmit }) => {
+    const editDiem = (e) => {
+        if (e.key === "Enter") {
+            handleEditFormSubmit();
+        }
+    }
     return (
-        <tr>
+        <tr onKeyDown={(e) => editDiem(e)}>
             <td style={{ border: "2px solid" }}>{dsDiem.ma_sinh_vien}</td>
             <td style={{ border: "2px solid" }}>{dsDiem.ho_ten_sinh_vien}</td>
             <td style={{ border: "2px solid" }}>
