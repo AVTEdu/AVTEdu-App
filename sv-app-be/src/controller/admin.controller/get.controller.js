@@ -51,7 +51,7 @@ const getDanhSachBacDaoTao = async (req, res, next) => {
 }
 const getDanhSachChuyenNganh = async (req, res, next) => {
   try {
-    const result = await ChuyenNganh.findAll({ limit: 10 });
+    const result = await ChuyenNganh.findAll({ limit: 40 });
     return res.status(201).json({ success: true, result });
   } catch (error) {
     next(error);
@@ -91,7 +91,7 @@ const getDanhSachHocKi = async (req, res, next) => {
 }
 const getDanhSachHocPhan = async (req, res, next) => {
   try {
-    const result = await HocPhan.findAll({ limit: 10 });
+    const result = await HocPhan.findAll({ limit: 20 });
     return res.status(201).json({ success: true, result });
   } catch (error) {
     next(error);
@@ -147,7 +147,7 @@ const getDanhSachLoaiPhongHoc = async (req, res, next) => {
 }
 const getDanhSachLopHocPhan = async (req, res, next) => {
   try {
-    const result = await LopHocPhan.findAll({ limit: 10 });
+    const result = await LopHocPhan.findAll({ limit: 20 });
     return res.status(201).json({ success: true, result });
   } catch (error) {
     next(error);
@@ -163,7 +163,7 @@ const getDanhSachMoHinhDaoTao = async (req, res, next) => {
 }
 const getDanhSachMonHoc = async (req, res, next) => {
   try {
-    const result = await MonHoc.findAll({ limit: 30 });
+    const result = await MonHoc.findAll({ limit: 20 });
     return res.status(201).json({ success: true, result });
   } catch (error) {
     next(error);
@@ -171,7 +171,7 @@ const getDanhSachMonHoc = async (req, res, next) => {
 }
 const getDanhSachPhanCongLopHocPhan = async (req, res, next) => {
   try {
-    const result = await PhanCongLopHocPhan.findAll({ limit: 10 });
+    const result = await PhanCongLopHocPhan.findAll({ limit: 20 });
     return res.status(201).json({ success: true, result });
   } catch (error) {
     next(error);
@@ -179,7 +179,7 @@ const getDanhSachPhanCongLopHocPhan = async (req, res, next) => {
 }
 const getDanhSachPhongHoc = async (req, res, next) => {
   try {
-    const result = await PhongHoc.findAll({ limit: 10 });
+    const result = await PhongHoc.findAll({ limit: 20 });
     return res.status(201).json({ success: true, result });
   } catch (error) {
     next(error);
@@ -187,7 +187,7 @@ const getDanhSachPhongHoc = async (req, res, next) => {
 }
 const getDanhSachThoiKhoaBieu = async (req, res, next) => {
   try {
-    const result = await PhanCongLopHocPhan.findAll({ limit: 10 });
+    const result = await ThoiKhoaBieu.findAll({ limit: 30 });
     return res.status(201).json({ success: true, result });
   } catch (error) {
     next(error);
@@ -380,7 +380,7 @@ const getDSChuyenNganhTheoKhoa = async (req, res, next) => {
   try {
     const { maKhoa } = req.body;
     const ds = await sequelize.query(
-      `select ten_chuyen_nganh,ma_chuyen_nganh from sinhviendb.chuyen_nganh where ma_khoa = '${maKhoa}'`,
+      `select * from sinhviendb.chuyen_nganh where ma_khoa = '${maKhoa}'`,
       { type: QueryTypes.SELECT }
     );
     res.status(201).json({ success: true, ds });
