@@ -94,5 +94,26 @@ const adminAPI = {
         const url = "/admin/getDSLopTheoHocKi";
         return axiosClient.put(url, { maHK: ma_hoc_ki });
     },
+    getDSLopTheoChuyenNganhHocKi(ma_hoc_ki, ma_chuyen_nganh) {
+        const url = "/admin/getDSLopTheoChuyenNganhHocKi";
+        return axiosClient.put(url, { maHK: ma_hoc_ki, maCN: ma_chuyen_nganh });
+    },
+    getDSPhanCongTheoMaGiangVien(ma_giang_vien) {
+        const url = "/admin/getDSPhanCongTheoMaGiangVien";
+        return axiosClient.put(url, { maGV: ma_giang_vien });
+    },
+    getDSPhanCongTheoMaLHP(ma_lop_hoc_phan) {
+        const url = "/admin/getDSPhanCongTheoMaLHP";
+        return axiosClient.put(url, { maLHP: ma_lop_hoc_phan });
+    },
+    getDSTKBTheoMaCNVaHocKi(ma_hoc_ki, ma_chuyen_nganh) {
+        const url = "/admin/getDSTKBTheoMaCNVaHocKi";
+        return axiosClient.put(url, { maHK: ma_hoc_ki, maCN: ma_chuyen_nganh });
+    },
+    getDsPhongTheoTen(ten_phong_hoc) {
+        const url = "/admin/getDsPhongTheoTen";
+        return axiosClient.put(url, { tenP: ten_phong_hoc });
+    },
+
 };
 export default adminAPI;

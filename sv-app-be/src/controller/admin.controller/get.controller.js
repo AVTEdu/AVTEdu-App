@@ -433,6 +433,89 @@ const getDSLopTheoHocKi = async (req, res, next) => {
     next(error);
   }
 };
+const getDSLopTheoChuyenNganhHocKi = async (req, res, next) => {
+
+  try {
+    const { maHK, maCN } = req.body;
+    const ds = await sequelize.query(
+      `SELECT sinhviendb.lop_hoc_phan.*
+      FROM     sinhviendb.lop_hoc_phan INNER JOIN
+                        sinhviendb.hoc_ki ON sinhviendb.lop_hoc_phan.ma_hoc_ki = sinhviendb.hoc_ki.ma_hoc_ki INNER JOIN
+                        sinhviendb.hoc_phan ON sinhviendb.lop_hoc_phan.ma_hoc_phan = sinhviendb.hoc_phan.ma_hoc_phan INNER JOIN
+                        sinhviendb.chuyen_nganh_hoc_phan ON sinhviendb.hoc_phan.ma_hoc_phan = sinhviendb.chuyen_nganh_hoc_phan.ma_hoc_phan INNER JOIN
+                        sinhviendb.chuyen_nganh ON sinhviendb.chuyen_nganh_hoc_phan.ma_chuyen_nganh = sinhviendb.chuyen_nganh.ma_chuyen_nganh
+                where sinhviendb.hoc_ki.ma_hoc_ki = '${maHK}' and sinhviendb.chuyen_nganh.ma_chuyen_nganh =  '${maCN}'`,
+      { type: QueryTypes.SELECT }
+    );
+    res.status(201).json({ success: true, ds });
+  } catch (error) {
+    next(error);
+  }
+};
+
+const getDSPhanCongTheoMaGiangVien = async (req, res, next) => {
+
+  try {
+    const { maGV } = req.body;
+    const ds = await sequelize.query(
+      `select * from sinhviendb.phan_cong_lop_hoc_phan where ma_giang_vien ='${maGV}'`,
+      { type: QueryTypes.SELECT }
+    );
+    res.status(201).json({ success: true, ds });
+  } catch (error) {
+    next(error);
+  }
+};
+
+const getDSPhanCongTheoMaLHP = async (req, res, next) => {
+
+  try {
+    const { maLHP } = req.body;
+    const ds = await sequelize.query(
+      `select * from sinhviendb.phan_cong_lop_hoc_phan where ma_lop_hoc_phan ='${maLHP}'`,
+      { type: QueryTypes.SELECT }
+    );
+    res.status(201).json({ success: true, ds });
+  } catch (error) {
+    next(error);
+  }
+};
+const getDSTKBTheoMaCNVaHocKi = async (req, res, next) => {
+
+  try {
+    const { maHK, maCN } = req.body;
+    const ds = await sequelize.query(
+      `SELECT sinhviendb.thoi_khoa_bieu.*
+      FROM     sinhviendb.chuyen_nganh INNER JOIN
+                        sinhviendb.chuyen_nganh_hoc_phan ON sinhviendb.chuyen_nganh.ma_chuyen_nganh = sinhviendb.chuyen_nganh_hoc_phan.ma_chuyen_nganh INNER JOIN
+                        sinhviendb.hoc_phan ON sinhviendb.chuyen_nganh_hoc_phan.ma_hoc_phan = sinhviendb.hoc_phan.ma_hoc_phan INNER JOIN
+                        sinhviendb.lop_hoc_phan ON sinhviendb.hoc_phan.ma_hoc_phan = sinhviendb.lop_hoc_phan.ma_hoc_phan INNER JOIN
+                        sinhviendb.hoc_ki ON sinhviendb.lop_hoc_phan.ma_hoc_ki = sinhviendb.hoc_ki.ma_hoc_ki INNER JOIN
+                        sinhviendb.phan_cong_lop_hoc_phan ON sinhviendb.lop_hoc_phan.ma_lop_hoc_phan = sinhviendb.phan_cong_lop_hoc_phan.ma_lop_hoc_phan INNER JOIN
+                        sinhviendb.thoi_khoa_bieu ON sinhviendb.phan_cong_lop_hoc_phan.ma_phan_cong = sinhviendb.thoi_khoa_bieu.ma_phan_cong_lop_hoc_phan
+               where sinhviendb.hoc_ki.ma_hoc_ki = '${maHK}' and sinhviendb.chuyen_nganh.ma_chuyen_nganh = '${maCN}'`,
+      { type: QueryTypes.SELECT }
+    );
+    res.status(201).json({ success: true, ds });
+  } catch (error) {
+    next(error);
+  }
+};
+
+const getDsPhongTheoTen = async (req, res, next) => {
+
+  try {
+    const { tenP } = req.body;
+    const ds = await sequelize.query(
+      `select * from sinhviendb.phong_hoc where ten_phong_hoc =  '${tenP}'`,
+      { type: QueryTypes.SELECT }
+    );
+    res.status(201).json({ success: true, ds });
+  } catch (error) {
+    next(error);
+  }
+};
+
 module.exports = {
   getDanhSachAdmin,
   getDanhSachBacDaoTao,
@@ -466,6 +549,11 @@ module.exports = {
   getDSChuyenNganhTheoKhoa,
   getDSMonTheoKhoa,
   getDSHocPhanTheoChuyenNganh,
-  getDSLopTheoHocKi
+  getDSLopTheoHocKi,
+  getDSLopTheoChuyenNganhHocKi,
+  getDSPhanCongTheoMaGiangVien,
+  getDSPhanCongTheoMaLHP,
+  getDSTKBTheoMaCNVaHocKi,
+  getDsPhongTheoTen
 }
 

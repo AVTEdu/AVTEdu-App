@@ -130,4 +130,19 @@ router
 router
   .route("/getDSLopTheoHocKi")
   .put(verifyAccessToken, AdminGetController.getDSLopTheoHocKi);
+router
+  .route("/getDSLopTheoChuyenNganhHocKi")
+  .put(verifyAccessToken, AdminGetController.getDSLopTheoChuyenNganhHocKi);
+router
+  .route("/getDSPhanCongTheoMaGiangVien")
+  .put(verifyAccessToken, AdminGetController.getDSPhanCongTheoMaGiangVien);
+router
+  .route("/getDSPhanCongTheoMaLHP")
+  .put(verifyAccessToken, AdminGetController.getDSPhanCongTheoMaLHP);
+router
+  .route("/getDSTKBTheoMaCNVaHocKi")
+  .put(verifyAccessToken, AdminGetController.getDSTKBTheoMaCNVaHocKi);
+router
+  .route("/getDsPhongTheoTen")
+  .put(verifyAccessToken, AdminGetController.getDsPhongTheoTen);
 module.exports = router;

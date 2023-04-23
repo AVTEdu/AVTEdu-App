@@ -243,6 +243,10 @@ export const LopHocPhan = () => {
     const [dsLopTheoHK, setDsLopTheoHK] = useState();
     const [dsHK, setDsHk] = useState();
     const [maHK, setMaHK] = useState();
+    const [dsKhoa, setDSKhoa] = useState();
+    const [maKhoa, setMaKhoa] = useState();
+    const [dsChuyenNganh, setDsChuyenNganh] = useState();
+    const [maCN, setMaCN] = useState();
     useEffect(() => {
         const getAllLop = async () => {
             try {
@@ -255,6 +259,17 @@ export const LopHocPhan = () => {
         getAllLop();
     }, [])
     useEffect(() => {
+        const getDSKhoa = async () => {
+            try {
+                const res = await adminAPI.getDanhSachToanBoKhoa();
+                setDSKhoa(res.data);
+            } catch (error) {
+
+            }
+        };
+        getDSKhoa();
+    }, [])
+    useEffect(() => {
         const getAllHK = async () => {
             try {
                 const res = await adminAPI.getAllHocKi();
@@ -265,22 +280,37 @@ export const LopHocPhan = () => {
         };
         getAllHK();
     }, [])
+    const getDSLopTheoCNvaHK = async (e) => {
+        try {
+            const res = await adminAPI.getDSLopTheoChuyenNganhHocKi(e.target.value, maCN)
+            setDsLopTheoHK(res.data);
+            setDsLopHP('');
+        } catch (error) {
+
+        }
+    };
     useEffect(() => {
-        const getDsLop = async () => {
+        const getdsCNtheoK = async () => {
             try {
-                const res = await adminAPI.getDSLopTheoHocKi(maHK);
-                setDsLopTheoHK(res.data);
-                setDsLopHP('');
+                const res = await adminAPI.getDsChuyenNganhTheoKhoa(maKhoa);
+                setDsChuyenNganh(res.data);
             } catch (error) {
 
             }
         };
-        getDsLop();
-    }, [maHK])
+        getdsCNtheoK();
+    }, [maKhoa])
     const getMaHK = (e) => {
         setMaHK(e.target.value);
     }
+    const getMaKhoa = (e) => {
+        setMaKhoa(e.target.value);
+    }
+    const getMaChuyenNganh = (e) => {
+        setMaCN(e.target.value);
+    }
     if (!dsHK) return null;
+    if (!dsKhoa) return null;
     return (
         <>
             <Sidebar />
@@ -319,41 +349,35 @@ export const LopHocPhan = () => {
                                                         <div className="col-md-3">
                                                             <label htmlFor="exampleFormControlSelect1" className="form-label">Khoa</label>
                                                             <select className="form-select" id="exampleFormControlSelect1" aria-label="Default select example"
-                                                            //onChange={(e) => getMaKhoa(e)}
+                                                                onChange={(e) => getMaKhoa(e)}
                                                             >
                                                                 <option selected>Chọn Khoa</option>
-                                                                {/* {
+                                                                {
                                                                     dsKhoa["result"].map((dsK) => (
                                                                         <option key={dsK.ma_khoa} value={dsK.ma_khoa} >
                                                                             {dsK.ten_khoa}
                                                                         </option>
-                                                                    ))} */}
+                                                                    ))}
                                                             </select>
                                                         </div>
                                                         <div className="col-md-3">
                                                             <label htmlFor="exampleFormControlSelect1" className="form-label">Chuyên ngành</label>
                                                             <select className="form-select" id="exampleFormControlSelect1" aria-label="Default select example"
-                                                            //onChange={(e) => getMaCN(e)}
+                                                                onChange={(e) => getMaChuyenNganh(e)}
                                                             >
-                                                                <option selected>Chọn Chuyên ngành</option>
-                                                                {/* {
-                                                                    dsChuyenNganh && dsChuyenNganh?.ds.length > 0 ?
-                                                                        <>
-                                                                            {
-                                                                                dsChuyenNganh["ds"].map((ds) => (
-                                                                                    <option key={ds.ma_chuyen_nganh} value={ds.ma_chuyen_nganh}>
-                                                                                        {ds.ten_chuyen_nganh}
-                                                                                    </option>
-                                                                                ))
-                                                                            }
-                                                                        </> : <></>
-                                                                } */}
+                                                                <option selected>Chọn chuyên ngành</option>
+                                                                {
+                                                                    dsChuyenNganh["ds"].map((ds) => (
+                                                                        <option key={ds.ma_chuyen_nganh} value={ds.ma_chuyen_nganh} >
+                                                                            {ds.ten_chuyen_nganh}
+                                                                        </option>
+                                                                    ))}
                                                             </select>
                                                         </div>
                                                         <div className="col-md-3">
                                                             <label htmlFor="exampleFormControlSelect1" className="form-label">Học kỳ</label>
                                                             <select className="form-select" id="exampleFormControlSelect1" aria-label="Default select example"
-                                                                onChange={(e) => getMaHK(e)}
+                                                                onChange={(e) => getDSLopTheoCNvaHK(e)}
                                                             >
                                                                 <option selected>Chọn học kỳ</option>
                                                                 {
@@ -668,6 +692,8 @@ export const LopHocPhan = () => {
 export const PhanCong = () => {
     const [openPopup, setOpenPopup] = useState(false);
     const [dsPhanCong, setDsPhanCong] = useState();
+    const [dsPCTheoMaGV, setDsPCTheoMaGV] = useState();
+    const [dsPCTheoLHP, setDsPCTheoLHP] = useState();
     useEffect(() => {
         const getAllPhanCong = async () => {
             try {
@@ -679,6 +705,40 @@ export const PhanCong = () => {
         };
         getAllPhanCong();
     }, [])
+    const searchTheoGiangVien = async (e) => {
+        try {
+            if (e.target.value === '') {
+                const res = await adminAPI.getAllPhanCong();
+                setDsPhanCong(res.data);
+                setDsPCTheoMaGV('');
+                setDsPCTheoLHP('');
+            } else {
+                const res = await adminAPI.getDSPhanCongTheoMaGiangVien(e.target.value);
+                setDsPCTheoMaGV(res.data);
+                setDsPCTheoLHP('');
+                setDsPhanCong('');
+            }
+        } catch (error) {
+
+        }
+    }
+    const searchTheoMaLHP = async (e) => {
+        try {
+            if (e.target.value === '') {
+                const res = await adminAPI.getAllPhanCong();
+                setDsPhanCong(res.data);
+                setDsPCTheoMaGV('');
+                setDsPCTheoLHP('');
+            } else {
+                const res = await adminAPI.getDSPhanCongTheoMaLHP(e.target.value);
+                setDsPCTheoLHP(res.data);
+                setDsPCTheoMaGV('');
+                setDsPhanCong('');
+            }
+        } catch (error) {
+
+        }
+    }
     return (
         <>
             <Sidebar />
@@ -720,7 +780,7 @@ export const PhanCong = () => {
                                                                 className="form-control"
                                                                 id="TimTheoMaLopHocPhan"
                                                                 aria-describedby="defaultFormControlHelp"
-                                                            //onKeyDown={searchLop}
+                                                                onKeyDown={(e) => searchTheoGiangVien(e)}
                                                             />
                                                         </div>
                                                         <div className="col-md-3">
@@ -730,7 +790,7 @@ export const PhanCong = () => {
                                                                 className="form-control"
                                                                 id="TimTheoMaLopHocPhan"
                                                                 aria-describedby="defaultFormControlHelp"
-                                                            //onKeyDown={searchLop}
+                                                                onKeyDown={(e) => searchTheoMaLHP(e)}
                                                             />
                                                         </div>
 
@@ -840,7 +900,71 @@ export const PhanCong = () => {
                                                                                 ))
                                                                             }
                                                                         </>
-                                                                        : <></>
+                                                                        : <>
+                                                                            {
+                                                                                dsPCTheoMaGV && dsPCTheoMaGV?.ds.length > 0
+                                                                                    ?
+                                                                                    <>
+                                                                                        {
+                                                                                            dsPCTheoMaGV["ds"].map((ds) => (
+                                                                                                <tr>
+                                                                                                    <td style={{ border: "2px solid" }}>
+                                                                                                        <input type="checkbox" value=""></input>
+                                                                                                    </td>
+                                                                                                    <td style={{ border: "2px solid" }}>{ds.ma_phan_cong}</td>
+                                                                                                    <td style={{ border: "2px solid" }}>{
+                                                                                                        ds.loai_hoc_phan_phu_trach == 1 ? "Thực hành" : "Lý thuyết"
+                                                                                                    }</td>
+                                                                                                    <td style={{ border: "2px solid" }}>{ds.nhom_thuc_hanh_phu_trach}</td>
+                                                                                                    <td style={{ border: "2px solid" }}>{ds.so_luong_sv_phu_trach}</td>
+                                                                                                    <td style={{ border: "2px solid" }}>{ds.ma_giang_vien}</td>
+                                                                                                    <td style={{ border: "2px solid" }}>{ds.ma_lop_hoc_phan}</td>
+                                                                                                    <td style={{ border: "2px solid" }}></td>
+                                                                                                    <td style={{ border: "2px solid" }}>
+                                                                                                        <a ><i className="bx bx-edit-alt me-1" /> Edit</a>
+                                                                                                        <a style={{ marginLeft: "15px" }} ><i className="bx bx-trash me-1" /> Delete</a>
+                                                                                                    </td>
+                                                                                                </tr>
+                                                                                            ))
+                                                                                        }
+                                                                                    </>
+                                                                                    : <>
+                                                                                        {
+                                                                                            dsPCTheoLHP && dsPCTheoLHP?.ds.length > 0
+                                                                                                ?
+                                                                                                <>
+                                                                                                    {
+                                                                                                        dsPCTheoLHP["ds"].map((ds) => (
+                                                                                                            <tr>
+                                                                                                                <td style={{ border: "2px solid" }}>
+                                                                                                                    <input type="checkbox" value=""></input>
+                                                                                                                </td>
+                                                                                                                <td style={{ border: "2px solid" }}>{ds.ma_phan_cong}</td>
+                                                                                                                <td style={{ border: "2px solid" }}>{
+                                                                                                                    ds.loai_hoc_phan_phu_trach == 1 ? "Thực hành" : "Lý thuyết"
+                                                                                                                }</td>
+                                                                                                                <td style={{ border: "2px solid" }}>{ds.nhom_thuc_hanh_phu_trach}</td>
+                                                                                                                <td style={{ border: "2px solid" }}>{ds.so_luong_sv_phu_trach}</td>
+                                                                                                                <td style={{ border: "2px solid" }}>{ds.ma_giang_vien}</td>
+                                                                                                                <td style={{ border: "2px solid" }}>{ds.ma_lop_hoc_phan}</td>
+                                                                                                                <td style={{ border: "2px solid" }}></td>
+                                                                                                                <td style={{ border: "2px solid" }}>
+                                                                                                                    <a ><i className="bx bx-edit-alt me-1" /> Edit</a>
+                                                                                                                    <a style={{ marginLeft: "15px" }} ><i className="bx bx-trash me-1" /> Delete</a>
+                                                                                                                </td>
+                                                                                                            </tr>
+                                                                                                        ))
+                                                                                                    }
+                                                                                                </>
+                                                                                                : <tr>
+                                                                                                    <td colSpan={9} className="text-center">
+                                                                                                        <p className="bold"><span>Tạm chưa có dữ liệu</span></p>
+                                                                                                    </td>
+                                                                                                </tr>
+                                                                                        }
+                                                                                    </>
+                                                                            }
+                                                                        </>
                                                                 }
 
                                                             </tbody>

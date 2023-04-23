@@ -15,6 +15,7 @@ export const Phong = () => {
     const [openPopup, setOpenPopup] = useState(false);
     const [openPopup2, setOpenPopup2] = useState(false);
     const [dsPhong, setDsPhong] = useState();
+    const [dSPhongTheoTen, setDSPhongTheoTen] = useState();
     useEffect(() => {
         const getAllPhong = async () => {
             try {
@@ -26,6 +27,21 @@ export const Phong = () => {
         };
         getAllPhong();
     }, [])
+    const searchTheoTenPhong = async (e) => {
+        try {
+            const ten = e.target.value;
+            if (ten.length > 0) {
+                const res = await adminAPI.getDsPhongTheoTen(ten);
+                setDSPhongTheoTen(res.data);
+                setDsPhong('');
+            } else {
+                const res = await adminAPI.getAllPhong();
+                setDsPhong(res.data);
+            }
+        } catch (error) {
+
+        }
+    }
     return (
         <>
             <Sidebar />
@@ -48,7 +64,10 @@ export const Phong = () => {
                                                     <div className="navbar-nav align-items-center">
                                                         <div className="nav-item d-flex align-items-center">
                                                             <i className="bx bx-search fs-4 lh-0" />
-                                                            <input type="text" className="form-control border-0 shadow-none" placeholder="Tìm theo mã phòng..." aria-label="Search..." />
+                                                            <input type="text" className="form-control border-0 shadow-none"
+                                                                placeholder="Tìm theo tên phòng..." aria-label="Search..."
+                                                                onKeyDown={(e) => searchTheoTenPhong(e)}
+                                                            />
                                                         </div>
                                                     </div>
                                                     {/* /Search */}
@@ -156,7 +175,39 @@ export const Phong = () => {
                                                                                 ))
                                                                             }
                                                                         </>
-                                                                        : <></>
+                                                                        : <>
+                                                                            {
+                                                                                dSPhongTheoTen && dSPhongTheoTen?.ds.length > 0
+                                                                                    ?
+                                                                                    <>
+                                                                                        {
+                                                                                            dSPhongTheoTen["ds"].map((ds) => (
+                                                                                                <tr>
+                                                                                                    <td style={{ border: "2px solid" }}>
+                                                                                                        <input type="checkbox" value=""></input>
+                                                                                                    </td>
+                                                                                                    <td style={{ border: "2px solid" }}>{ds.ma_phong_hoc}</td>
+                                                                                                    <td style={{ border: "2px solid" }}>{ds.ten_day_nha}</td>
+                                                                                                    <td style={{ border: "2px solid" }}>{ds.ten_phong_hoc}</td>
+                                                                                                    <td style={{ border: "2px solid" }}>{ds.ma_loai_phong}</td>
+                                                                                                    <td style={{ border: "2px solid" }}>{ds.ghi_chu}</td>
+                                                                                                    <td style={{ border: "2px solid" }}>
+                                                                                                        <a ><i className="bx bx-edit-alt me-1" /> Edit</a>
+                                                                                                        <a style={{ marginLeft: "15px" }} ><i className="bx bx-trash me-1" /> Delete</a>
+                                                                                                    </td>
+                                                                                                </tr>
+                                                                                            ))
+                                                                                        }
+                                                                                    </>
+                                                                                    : <>
+                                                                                        <tr>
+                                                                                            <td colSpan={10} className="text-center">
+                                                                                                <p className="bold"><span>Tạm chưa có dữ liệu</span></p>
+                                                                                            </td>
+                                                                                        </tr>
+                                                                                    </>
+                                                                            }
+                                                                        </>
                                                                 }
 
                                                             </tbody>

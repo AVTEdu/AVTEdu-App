@@ -121,16 +121,16 @@ export const SidebarData = [
         iconOpened: <RiIcons.RiArrowUpSFill />,
 
         subNav: [
-            {
-                title: "Admin",
-                path: "/ql-user/admin",
-                icon: <IoIcons.IoIosRadioButtonOn />,
-            },
-            {
-                title: "Giảng viên",
-                path: "/ql-user/gv",
-                icon: <IoIcons.IoIosRadioButtonOn />,
-            },
+            // {
+            //     title: "Admin",
+            //     path: "/ql-user/admin",
+            //     icon: <IoIcons.IoIosRadioButtonOn />,
+            // },
+            // {
+            //     title: "Giảng viên",
+            //     path: "/ql-user/gv",
+            //     icon: <IoIcons.IoIosRadioButtonOn />,
+            // },
             {
                 title: "Sinh viên",
                 path: "/ql-user/sv",
