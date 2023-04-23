@@ -82,5 +82,17 @@ const adminAPI = {
         const url = "/admin/getAllTKB";
         return axiosClient.get(url);
     },
+    getDsMonTheoKhoa(ma_khoa) {
+        const url = "/admin/getDsMonTheoKhoa";
+        return axiosClient.put(url, { maKhoa: ma_khoa });
+    },
+    getHocPhanTheoChuyenNganh(ma_chuyen_nganh) {
+        const url = "/admin/getHocPhanTheoChuyenNganh";
+        return axiosClient.put(url, { maCN: ma_chuyen_nganh });
+    },
+    getDSLopTheoHocKi(ma_hoc_ki) {
+        const url = "/admin/getDSLopTheoHocKi";
+        return axiosClient.put(url, { maHK: ma_hoc_ki });
+    },
 };
 export default adminAPI;

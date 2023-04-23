@@ -121,5 +121,13 @@ router
 router
   .route("/getAllTKB")
   .get(verifyAccessToken, AdminGetController.getDanhSachThoiKhoaBieu);
-
+router
+  .route("/getDsMonTheoKhoa")
+  .put(verifyAccessToken, AdminGetController.getDSMonTheoKhoa);
+router
+  .route("/getHocPhanTheoChuyenNganh")
+  .put(verifyAccessToken, AdminGetController.getDSHocPhanTheoChuyenNganh);
+router
+  .route("/getDSLopTheoHocKi")
+  .put(verifyAccessToken, AdminGetController.getDSLopTheoHocKi);
 module.exports = router;

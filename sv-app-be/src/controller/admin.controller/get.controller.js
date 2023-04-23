@@ -388,6 +388,51 @@ const getDSChuyenNganhTheoKhoa = async (req, res, next) => {
     next(error);
   }
 };
+const getDSMonTheoKhoa = async (req, res, next) => {
+
+  try {
+    const { maKhoa } = req.body;
+    const ds = await sequelize.query(
+      `select * from sinhviendb.mon_hoc where ma_khoa = '${maKhoa}'`,
+      { type: QueryTypes.SELECT }
+    );
+    res.status(201).json({ success: true, ds });
+  } catch (error) {
+    next(error);
+  }
+};
+
+const getDSHocPhanTheoChuyenNganh = async (req, res, next) => {
+
+  try {
+    const { maCN } = req.body;
+    const ds = await sequelize.query(
+      `SELECT sinhviendb.hoc_phan.*
+      FROM     sinhviendb.chuyen_nganh INNER JOIN
+                        sinhviendb.chuyen_nganh_hoc_phan ON sinhviendb.chuyen_nganh.ma_chuyen_nganh = sinhviendb.chuyen_nganh_hoc_phan.ma_chuyen_nganh INNER JOIN
+                        sinhviendb.hoc_phan ON sinhviendb.chuyen_nganh_hoc_phan.ma_hoc_phan = sinhviendb.hoc_phan.ma_hoc_phan
+                where sinhviendb.chuyen_nganh.ma_chuyen_nganh ='${maCN}'`,
+      { type: QueryTypes.SELECT }
+    );
+    res.status(201).json({ success: true, ds });
+  } catch (error) {
+    next(error);
+  }
+};
+
+const getDSLopTheoHocKi = async (req, res, next) => {
+
+  try {
+    const { maHK } = req.body;
+    const ds = await sequelize.query(
+      `select * from sinhviendb.lop_hoc_phan where sinhviendb.lop_hoc_phan.ma_hoc_ki = '${maHK}'`,
+      { type: QueryTypes.SELECT }
+    );
+    res.status(201).json({ success: true, ds });
+  } catch (error) {
+    next(error);
+  }
+};
 module.exports = {
   getDanhSachAdmin,
   getDanhSachBacDaoTao,
@@ -418,6 +463,9 @@ module.exports = {
   getDanhSachPhieuThuSinhVienParam,
   getDanhSachDiemSinhVienByMaLopHP,
   getDanhSachSinhVienByKhoa,
-  getDSChuyenNganhTheoKhoa
+  getDSChuyenNganhTheoKhoa,
+  getDSMonTheoKhoa,
+  getDSHocPhanTheoChuyenNganh,
+  getDSLopTheoHocKi
 }
 
