@@ -632,7 +632,7 @@ const xacNhanThanhToanTrucTuyen = async (req, res, next) => {
         where sinh_vien.ma_sinh_vien =${ma_sinh_vien} and hoc_phi.ma_hoc_phi <> 0 `,
         { type: QueryTypes.UPDATE }
       );
-      let data
+
       res.status(200).json({ success: true, msg: "Thanh toán thành công " + ma_sinh_vien });
     } else {
       res.status(400).json({ success: false, msg: "Thanh toán thất bại " + ma_sinh_vien });
@@ -809,7 +809,7 @@ const getLopHocPhanKhongTrung = async (req, res, next) => {
 
     let DsHocPhan = await sequelize
     .query(
-      `select mh.ten_mon_hoc,lhp.trang_thai,lhp.ma_lop_hoc_phan,lhp.ten_lop_hoc_phan,lhp.so_luong_dang_ki_hien_tai,lhp.so_luong_dang_ki_toi_da,hk.ma_hoc_ki,tkb.tiet_hoc_bat_dau,tkb.tiet_hoc_ket_thuc,tkb.ngay_hoc_trong_tuan
+      `select mh.ten_mon_hoc,lhp.trang_thai,lhp.ma_lop_hoc_phan,lhp.ten_lop_hoc_phan,lhp.so_luong_dang_ki_hien_tai,lhp.so_luong_dang_ki_toi_da,hk.ma_hoc_ki,tkb.tiet_hoc_bat_dau,tkb.tiet_hoc_ket_thuc,tkb.ngay_hoc_trong_tuan,pclhp.nhom_thuc_hanh_phu_trach
       from sinhviendb.hoc_phan as hp
       left join sinhviendb.lop_hoc_phan as lhp on hp.ma_hoc_phan = lhp.ma_hoc_phan
       left join sinhviendb.mon_hoc as mh on hp.ma_mon_hoc = mh.ma_mon_hoc
@@ -839,7 +839,7 @@ const getLopHocPhanKhongTrung = async (req, res, next) => {
     if(Array.isArray(DsHocPhan) && Array.isArray(DsHocPhanDaDky)){
        DsHocPhan = DsHocPhan.filter((element) => {
         return !DsHocPhanDaDky.some((i) => {
-          return element.ngay_hoc_trong_tuan == i.ngay_hoc_trong_tuan && element.tiet_hoc_bat_dau >= i.tiet_hoc_bat_dau && element.tiet_hoc_ket_thuc <= i.tiet_hoc_ket_thuc;
+          return element.ngay_hoc_trong_tuan == i.ngay_hoc_trong_tuan && element.tiet_hoc_bat_dau >= i.tiet_hoc_bat_dau && element.tiet_hoc_ket_thuc <= i.tiet_hoc_ket_thuc && element.nhom_thuc_hanh_phu_trach != 0;
         });
       });
     }
