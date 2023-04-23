@@ -833,10 +833,7 @@ const getLopHocPhanKhongTrung = async (req, res, next) => {
       left join sinhviendb.thoi_khoa_bieu as tkb on tkb.ma_phan_cong_lop_hoc_phan = pclhp.ma_phan_cong
       left join sinhviendb.thoi_khoa_bieu_sinh_vien as tkbsv on tkbsv.ma_thoi_khoa_bieu = tkb.ma_thoi_khoa_bieu
       where sv.ma_sinh_vien = ${ma_sinh_vien} and hk.ma_hoc_ki = ${ma_hoc_ki} 
-      group by pclhp.ma_phan_cong,mh.ten_mon_hoc,lhp.ten_lop_hoc_phan,
-       hpp.so_tin_chi_ly_thuyet,hpp.so_tin_chi_thuc_hanh,
-      pclhp.nhom_thuc_hanh_phu_trach,hp.so_tien,hp.trang_thai,
-      hp.trang_thai_dang_ki,lhp.trang_thai`,
+      group by  tkb.tiet_hoc_bat_dau,tkb.tiet_hoc_ket_thuc,tkb.ngay_hoc_trong_tuan`,
       { type: QueryTypes.SELECT }
     )
     if(Array.isArray(DsHocPhan) && Array.isArray(DsHocPhanDaDky)){
