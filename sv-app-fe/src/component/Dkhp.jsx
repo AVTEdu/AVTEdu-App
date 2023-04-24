@@ -17,6 +17,7 @@ export default function Dkhp() {
   const [itemNamHocBatDau, setItemNamHocBatDau] = useState();
   const [maHocPhan, setMaHocPhan] = useState();
   const [dsToanBoLopHocPhan, setDsToanBoLopHocPhan] = useState();
+  const [dsToanBoLopHocPhanKOTrungLich, setDsToanBoLopHocPhanKOTrungLich] = useState();
   const [maLopHocPhan, setMaLopHocPhan] = useState('');
   const [chiTietLopHP, setChiTietLopHP] = useState();
   const [hpDaDangKy, setHpDaDangKy] = useState();
@@ -70,6 +71,7 @@ export default function Dkhp() {
       try {
         setLoading(true);
         setDsToanBoLopHocPhan('');
+        setDsToanBoLopHocPhanKOTrungLich('');
         setChiTietLopHP('');
         const res = await dkhpAPI.getHocPhanDaDangKyTrongKynay(maHocKi);
         setHpDaDangKy(res.data);
@@ -89,6 +91,7 @@ export default function Dkhp() {
           setItemNamHocBatDau(selectElementDotDangKy);
         if (selectElementDotDangKy === '') {
           setDsToanBoLopHocPhan('');
+          setDsToanBoLopHocPhanKOTrungLich('');
           setChiTietLopHP('');
         }
         var receiveDate = (new Date()).getTime();
@@ -124,6 +127,9 @@ export default function Dkhp() {
         setLoading(true);
         const res = await dkhpAPI.getLopHocPhanByHocPhan(maHocPhan, maHocKi);
         setDsToanBoLopHocPhan(res.data);
+        const resKoTrung = await dkhpAPI.getLopHocPhanKhongTrung(maHocPhan, maHocKi);
+        setDsToanBoLopHocPhanKOTrungLich(resKoTrung.data);
+        console.log(resKoTrung.data);
         var receiveDate = (new Date()).getTime();
         var responseTimeMs = receiveDate - sendDate;
         setResTime(responseTimeMs);
@@ -225,8 +231,6 @@ export default function Dkhp() {
       else if (chiTietLopHP["results"].length === 1) {
         const res = await dkhpAPI.dangKiHocPhan(maPhanCongLopHocPhan, maHocKi, trangThaiLopHocPhan, 1860000, 0);
         console.log(res.data);
-        const resF5MonChuaDK = await dkhpAPI.getToanBoMonHocChuaDangKy();
-        setMonChuaDangKy(resF5MonChuaDK.data);
         // const res2 = await dkhpAPI.getHocPhanDaDangKyTrongKynay(maHocKi);
         // setHpDaDangKy(res2.data);
         setPopupNotify({
@@ -256,6 +260,20 @@ export default function Dkhp() {
       console.log(error.message);
     }
 
+  }
+
+  const checkLichTrung = async (e) => {
+    var checkBox = document.getElementById("checkLichTrung");
+    var coTrungLop = document.getElementById("lhpCoTheBiTrung");
+    var koTrungLop = document.getElementById("lhpKoBiTrung");
+    if (checkBox.checked == true) {
+      coTrungLop.style.display = "none";
+      koTrungLop.style.display = "";
+    } else {
+      coTrungLop.style.display = "";
+      koTrungLop.style.display = "none";
+      dsToanBoLopHocPhanKOTrungLich('');
+    }
   }
 
   return (
@@ -566,7 +584,9 @@ export default function Dkhp() {
                                         </div>
                                         <div className="col-md-7" style={{ marginTop: "10px" }}>
                                           <div className="text-right">
-                                            <label><input id="checkLichTrung" name="checkLichTrung" type="checkbox" defaultValue="true" /><input name="checkLichTrung" type="hidden" defaultValue="false" /><b><span className="text-uppercase" style={{ color: 'red', marginLeft: '5px !important', marginRight: '10px !important' }}>
+                                            <label><input id="checkLichTrung" name="checkLichTrung" type="checkbox" defaultValue="true"
+                                              onClick={checkLichTrung}
+                                            /><input name="checkLichTrung" type="hidden" defaultValue="false" /><b><span className="text-uppercase" style={{ color: 'red', marginLeft: '5px !important', marginRight: '10px !important' }}>
                                               học phần LÝ THUYẾT KHÔNG TRÙNG LỊCH</span></b></label>
                                           </div>
                                         </div>
@@ -581,34 +601,82 @@ export default function Dkhp() {
                                                 <TableCell lang="dkhp-dadangky">Đã đăng ký</TableCell>
                                               </TableRow>
                                             </TableHead>
-                                            <TableBody>
+                                            <TableBody style={{ display: "" }} id="lhpCoTheBiTrung">
 
-                                              {dsToanBoLopHocPhan["results"].map((dsLhp) => {
+                                              {
+                                                dsToanBoLopHocPhan
+                                                  ?
+                                                  <>
+                                                    {dsToanBoLopHocPhan["results"].map((dsLhp) => {
 
-                                                return (
-                                                  <TableRow
-                                                    id={"maLHP" + dsLhp.ma_lop_hoc_phan}
-                                                    key={dsLhp.ma_lop_hoc_phan}
-                                                    hover
-                                                    onClick={(e) => selectLopHocPhan(e, dsLhp, dsLhp.ma_lop_hoc_phan)}
-                                                    selectedDsToanBoLopHP={isSelectedDsToanBoLopHP(dsLhp)}
-                                                  >
-                                                    <TableCell style={{ width: '40px' }} component="th" scope="row">{sttLHPChoDK++}</TableCell>
-                                                    <TableCell className="text-left" >
-                                                      <div className="name">{dsLhp.ten_mon_hoc}</div>
-                                                      <div>
-                                                        <span lang="dkhp-trangthai">Trạng thái</span>: <span className="cl-red">
-                                                          {dsLhp.trang_thai === 1 ? 'Có thể đăng ký' : 'Đã khóa'}</span><br />
-                                                        <span lang="dkhp-malhp">Mã lớp  học phần</span>: {dsLhp.ma_lop_hoc_phan} - {dsLhp.ten_lop_hoc_phan}
-                                                      </div>
-                                                    </TableCell>
-                                                    <TableCell>
-                                                      {dsLhp.so_luong_dang_ki_hien_tai} / {dsLhp.so_luong_dang_ki_toi_da}
-                                                    </TableCell>
+                                                      return (
+                                                        <TableRow
+                                                          id={"maLHP" + dsLhp.ma_lop_hoc_phan}
+                                                          key={dsLhp.ma_lop_hoc_phan}
+                                                          hover
+                                                          onClick={(e) => selectLopHocPhan(e, dsLhp, dsLhp.ma_lop_hoc_phan)}
+                                                          selectedDsToanBoLopHP={isSelectedDsToanBoLopHP(dsLhp)}
+                                                        >
+                                                          <TableCell style={{ width: '40px' }} component="th" scope="row">{sttLHPChoDK++}</TableCell>
+                                                          <TableCell className="text-left" >
+                                                            <div className="name">{dsLhp.ten_mon_hoc}</div>
+                                                            <div>
+                                                              <span lang="dkhp-trangthai">Trạng thái</span>: <span className="cl-red">
+                                                                {dsLhp.trang_thai === 1 ? 'Có thể đăng ký' : 'Đã khóa'}</span><br />
+                                                              <span lang="dkhp-malhp">Mã lớp  học phần</span>: {dsLhp.ma_lop_hoc_phan} - {dsLhp.ten_lop_hoc_phan}
+                                                            </div>
+                                                          </TableCell>
+                                                          <TableCell>
+                                                            {dsLhp.so_luong_dang_ki_hien_tai} / {dsLhp.so_luong_dang_ki_toi_da}
+                                                          </TableCell>
 
-                                                  </TableRow>
-                                                );
-                                              })}
+                                                        </TableRow>
+                                                      );
+                                                    })}
+                                                  </>
+                                                  :
+                                                  <>
+                                                  </>
+                                              }
+                                            </TableBody>
+
+                                            <TableBody style={{ display: "none" }} id="lhpKoBiTrung">
+
+                                              {
+                                                dsToanBoLopHocPhanKOTrungLich
+                                                  ?
+                                                  <>
+                                                    {dsToanBoLopHocPhanKOTrungLich.data["DsHocPhan"].map((dsLhp) => {
+
+                                                      return (
+                                                        <TableRow
+                                                          id={"maLHP" + dsLhp.ma_lop_hoc_phan}
+                                                          key={dsLhp.ma_lop_hoc_phan}
+                                                          hover
+                                                          onClick={(e) => selectLopHocPhan(e, dsLhp, dsLhp.ma_lop_hoc_phan)}
+                                                          selectedDsToanBoLopHP={isSelectedDsToanBoLopHP(dsLhp)}
+                                                        >
+                                                          <TableCell style={{ width: '40px' }} component="th" scope="row">{sttLHPChoDK++}</TableCell>
+                                                          <TableCell className="text-left" >
+                                                            <div className="name">{dsLhp.ten_mon_hoc}</div>
+                                                            <div>
+                                                              <span lang="dkhp-trangthai">Trạng thái</span>: <span className="cl-red">
+                                                                {dsLhp.trang_thai === 1 ? 'Có thể đăng ký' : 'Đã khóa'}</span><br />
+                                                              <span lang="dkhp-malhp">Mã lớp  học phần</span>: {dsLhp.ma_lop_hoc_phan} - {dsLhp.ten_lop_hoc_phan}
+                                                            </div>
+                                                          </TableCell>
+                                                          <TableCell>
+                                                            {dsLhp.so_luong_dang_ki_hien_tai} / {dsLhp.so_luong_dang_ki_toi_da}
+                                                          </TableCell>
+
+                                                        </TableRow>
+                                                      );
+                                                    })}
+                                                  </>
+                                                  :
+                                                  <>
+                                                  </>
+                                              }
                                             </TableBody>
                                           </Table>
                                         </TableContainer>

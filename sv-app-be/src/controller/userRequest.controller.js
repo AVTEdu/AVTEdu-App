@@ -810,6 +810,7 @@ const getLopHocPhanKhongTrung = async (req, res, next) => {
     let DsHocPhan = await sequelize
       .query(
         `select mh.ten_mon_hoc,lhp.trang_thai,lhp.ma_lop_hoc_phan,lhp.ten_lop_hoc_phan,lhp.so_luong_dang_ki_hien_tai,lhp.so_luong_dang_ki_toi_da,hk.ma_hoc_ki,tkb.tiet_hoc_bat_dau,tkb.tiet_hoc_ket_thuc,tkb.ngay_hoc_trong_tuan
+,pclhp.loai_hoc_phan_phu_trach
       from sinhviendb.hoc_phan as hp
       left join sinhviendb.lop_hoc_phan as lhp on hp.ma_hoc_phan = lhp.ma_hoc_phan
       left join sinhviendb.mon_hoc as mh on hp.ma_mon_hoc = mh.ma_mon_hoc
@@ -822,21 +823,18 @@ const getLopHocPhanKhongTrung = async (req, res, next) => {
     let DsHocPhanDaDky = await sequelize
       .query(
         `select tkb.tiet_hoc_bat_dau,tkb.tiet_hoc_ket_thuc,tkb.ngay_hoc_trong_tuan
-      from sinhviendb.sinh_vien as sv
-      left join sinhviendb.hoc_phi_sinh_vien as hpsv on sv.ma_sinh_vien = hpsv.ma_sinh_vien
-      left join sinhviendb.hoc_phi as hp on hp.ma_hoc_phi = hpsv.ma_hoc_phi
-      left join sinhviendb.lop_hoc_phan as lhp on hp.ma_lop_hoc_phan = lhp.ma_lop_hoc_phan
-      left join sinhviendb.phan_cong_lop_hoc_phan as pclhp on pclhp.ma_lop_hoc_phan = lhp.ma_lop_hoc_phan
-      left join sinhviendb.hoc_phan as hpp on hpp.ma_hoc_phan = lhp.ma_hoc_phan
-      left join sinhviendb.hoc_ki as hk on lhp.ma_hoc_ki = hk.ma_hoc_ki
-      left join sinhviendb.mon_hoc as mh on mh.ma_mon_hoc = hpp.ma_mon_hoc
-      left join sinhviendb.thoi_khoa_bieu as tkb on tkb.ma_phan_cong_lop_hoc_phan = pclhp.ma_phan_cong
-      left join sinhviendb.thoi_khoa_bieu_sinh_vien as tkbsv on tkbsv.ma_thoi_khoa_bieu = tkb.ma_thoi_khoa_bieu
-      where sv.ma_sinh_vien = ${ma_sinh_vien} and hk.ma_hoc_ki = ${ma_hoc_ki} 
-      group by pclhp.ma_phan_cong,mh.ten_mon_hoc,lhp.ten_lop_hoc_phan,
-       hpp.so_tin_chi_ly_thuyet,hpp.so_tin_chi_thuc_hanh,
-      pclhp.nhom_thuc_hanh_phu_trach,hp.so_tien,hp.trang_thai,
-      hp.trang_thai_dang_ki,lhp.trang_thai`,
+        from sinhviendb.sinh_vien as sv
+        left join sinhviendb.hoc_phi_sinh_vien as hpsv on sv.ma_sinh_vien = hpsv.ma_sinh_vien
+        left join sinhviendb.hoc_phi as hp on hp.ma_hoc_phi = hpsv.ma_hoc_phi
+        left join sinhviendb.lop_hoc_phan as lhp on hp.ma_lop_hoc_phan = lhp.ma_lop_hoc_phan
+        left join sinhviendb.phan_cong_lop_hoc_phan as pclhp on pclhp.ma_lop_hoc_phan = lhp.ma_lop_hoc_phan
+        left join sinhviendb.hoc_phan as hpp on hpp.ma_hoc_phan = lhp.ma_hoc_phan
+        left join sinhviendb.hoc_ki as hk on lhp.ma_hoc_ki = hk.ma_hoc_ki
+        left join sinhviendb.mon_hoc as mh on mh.ma_mon_hoc = hpp.ma_mon_hoc
+        left join sinhviendb.thoi_khoa_bieu as tkb on tkb.ma_phan_cong_lop_hoc_phan = pclhp.ma_phan_cong
+        left join sinhviendb.thoi_khoa_bieu_sinh_vien as tkbsv on tkbsv.ma_thoi_khoa_bieu = tkb.ma_thoi_khoa_bieu
+        where sv.ma_sinh_vien = ${ma_sinh_vien} and hk.ma_hoc_ki = ${ma_hoc_ki} 
+        group by  tkb.tiet_hoc_bat_dau,tkb.tiet_hoc_ket_thuc,tkb.ngay_hoc_trong_tuan`,
         { type: QueryTypes.SELECT }
       )
     if (Array.isArray(DsHocPhan) && Array.isArray(DsHocPhanDaDky)) {
