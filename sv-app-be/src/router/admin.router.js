@@ -145,4 +145,7 @@ router
 router
   .route("/getDsPhongTheoTen")
   .put(verifyAccessToken, AdminGetController.getDsPhongTheoTen);
+router
+  .route("/taoMaSinhVien")
+  .get(verifyAccessToken, AdminGetController.taoMaSinhVien);
 module.exports = router;

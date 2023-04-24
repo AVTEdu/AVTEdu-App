@@ -114,6 +114,10 @@ const adminAPI = {
         const url = "/admin/getDsPhongTheoTen";
         return axiosClient.put(url, { tenP: ten_phong_hoc });
     },
+    taoMaSinhVien() {
+        const url = "/admin/taoMaSinhVien";
+        return axiosClient.get(url);
+    },
 
 };
 export default adminAPI;

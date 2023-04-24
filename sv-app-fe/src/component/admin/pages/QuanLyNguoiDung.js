@@ -468,6 +468,9 @@ export const SinhVien = () => {
     const [dsChuyenNganh, setDsChuyenNganh] = useState();
     const [maCN, setMaCN] = useState();
     const [maKhoaNew, setMaKhoaNew] = useState();
+    const [generateMaSV, setGenerateMaSV] = useState(false);
+    const [newMaSV, setNewMaSV] = useState();
+
 
     useEffect(() => {
         const getDSKhoa = async () => {
@@ -526,6 +529,35 @@ export const SinhVien = () => {
         };
         activeLopTimDuoc();
     }, [searchLopTheoMa])
+
+    // useEffect(() => {
+    //     const getNewMaSinhVien = async (e) => {
+    //         try {
+    //             const res = await adminAPI.taoMaSinhVien();
+    //             // setGenerateMaSV(res.data);
+    //             let newMaSinhVien = res?.data.newMaSinhVien + 1;
+    //             setGenerateMaSV(newMaSinhVien);
+    //         } catch (error) {
+
+    //         }
+    //     }
+    //     getNewMaSinhVien();
+    // }, [])
+
+    useEffect(() => {
+        const getNewMaSinhVien = async (e) => {
+            try {
+                const res = await adminAPI.taoMaSinhVien();
+                // setGenerateMaSV(res.data);
+                let newMaSinhVien = res?.data.newMaSinhVien + 1;
+                setNewMaSV(newMaSinhVien);
+                setGenerateMaSV(true);
+            } catch (error) {
+
+            }
+        }
+        getNewMaSinhVien();
+    }, [generateMaSV])
 
     if (!dsKhoa) return null;
 
@@ -637,6 +669,8 @@ export const SinhVien = () => {
 
 
 
+
+
     return (
         <>
             <Sidebar />
@@ -725,7 +759,7 @@ export const SinhVien = () => {
                                                             , lineHeight: "1.53", textAlign: "center", verticalAlign: "middle", userSelect: "none"
                                                             , border: "1px solid transparent", padding: "0.4375rem 1.25rem", fontSize: "0.9375 rme",
                                                         }}
-                                                        onClick={() => { setOpenPopup(true); setMaKhoa(''); }}
+                                                        onClick={() => { setOpenPopup(true); setMaKhoa(''); setGenerateMaSV('') }}
                                                     > <AiIcons.AiFillPlusSquare /> Thêm mới</button>
 
                                                 </div>
@@ -910,49 +944,49 @@ export const SinhVien = () => {
                                                                     display: "inline-block", boxSizing: "border-box"
                                                                     , cursor: "default", fontFamily: "var(--bs-body-font-family)", lineHeight: "var(--bs-body-line-height)"
                                                                 }}>Mã sv</label>
-                                                                <input type="text" className="form-control" id="maSV" placeholder="" />
+                                                                <input type="text" className="form-control" id="maSV" placeholder="" defaultValue={newMaSV} />
                                                             </div>
                                                             <div className="mb-3">
                                                                 <label htmlFor="" className="form-label" style={{
                                                                     display: "inline-block", boxSizing: "border-box"
                                                                     , cursor: "default", fontFamily: "var(--bs-body-font-family)", lineHeight: "var(--bs-body-line-height)"
                                                                 }}>Tên</label>
-                                                                <input type="text" className="form-control" id="tenSV" placeholder="" />
+                                                                <input type="text" className="form-control" id="tenSV" placeholder="" defaultValue="Việt Trường" />
                                                             </div>
                                                             <div className="mb-3">
                                                                 <label htmlFor="" className="form-label" style={{
                                                                     display: "inline-block", boxSizing: "border-box"
                                                                     , cursor: "default", fontFamily: "var(--bs-body-font-family)", lineHeight: "var(--bs-body-line-height)"
                                                                 }}>Ngày sinh</label>
-                                                                <input type="text" className="form-control" id="ngaySinh" placeholder="" />
+                                                                <input type="text" className="form-control" id="ngaySinh" placeholder="" defaultValue="2001-10-15" />
                                                             </div>
                                                             <div className="mb-3">
                                                                 <label htmlFor="" className="form-label" style={{
                                                                     display: "inline-block", boxSizing: "border-box"
                                                                     , cursor: "default", fontFamily: "var(--bs-body-font-family)", lineHeight: "var(--bs-body-line-height)"
                                                                 }}>Email</label>
-                                                                <input type="text" className="form-control" id="newEmail" placeholder="" />
+                                                                <input type="text" className="form-control" id="newEmail" placeholder="" defaultValue="t1@gmail.com" />
                                                             </div>
                                                             <div className="mb-3">
                                                                 <label htmlFor="" className="form-label" style={{
                                                                     display: "inline-block", boxSizing: "border-box"
                                                                     , cursor: "default", fontFamily: "var(--bs-body-font-family)", lineHeight: "var(--bs-body-line-height)"
                                                                 }}>Giới tính</label>
-                                                                <input type="text" className="form-control" id="sex" placeholder="" />
+                                                                <input type="text" className="form-control" id="sex" placeholder="" defaultValue="Nam" />
                                                             </div>
                                                             <div className="mb-3">
                                                                 <label htmlFor="" className="form-label" style={{
                                                                     display: "inline-block", boxSizing: "border-box"
                                                                     , cursor: "default", fontFamily: "var(--bs-body-font-family)", lineHeight: "var(--bs-body-line-height)"
                                                                 }}>Số điện thoại</label>
-                                                                <input type="text" className="form-control" id="newSdt" placeholder="" />
+                                                                <input type="text" className="form-control" id="newSdt" placeholder="" defaultValue="0899613041" />
                                                             </div>
                                                             <div className="mb-3">
                                                                 <label htmlFor="" className="form-label" style={{
                                                                     display: "inline-block", boxSizing: "border-box"
                                                                     , cursor: "default", fontFamily: "var(--bs-body-font-family)", lineHeight: "var(--bs-body-line-height)"
                                                                 }}>Số chứng minh nhân dân</label>
-                                                                <input type="text" className="form-control" id="cccd" placeholder="" />
+                                                                <input type="text" className="form-control" id="cccd" placeholder="" defaultValue="079201003755" />
                                                             </div>
 
                                                             <div className="mb-3">
@@ -1014,6 +1048,7 @@ export const SinhVien = () => {
                                                                             e.preventDefault()
                                                                             setOpenPopup(false)
                                                                             newSinhVien()
+                                                                            setGenerateMaSV(false)
                                                                         }}
                                                                     >Lưu</button>
                                                                 </div>

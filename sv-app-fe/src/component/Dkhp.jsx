@@ -23,13 +23,16 @@ export default function Dkhp() {
   const [hpDaDangKy, setHpDaDangKy] = useState();
   const [maHocKi, setMahocKi] = useState();
   const [maPhanCongLopHocPhan, setMaPhanCongLopHocPhan] = useState();
+  const [maPhanCongLopHocPhanLyThuyet, setMaPhanCongLopHocPhanLyThuyet] = useState();
   const [trangThaiLopHocPhan, setTrangThaiLopHocPhan] = useState();
   const [selectedDsToanBoLopHP, setSelectedDsToanBoLopHP] = useState([]);
   const [loaiHocPhanPhuTrach, setLoaiHocPhanPhuTrach] = useState();
   const [trangThaiDangKy, setTrangThaiDangKy] = useState();
+  const [tinChi, setTinChi] = useState();
   let sttMonChuaDK = 1;
   let sttLHPChoDK = 1;
   let sttHocPhanDaDangKy = 1;
+  let sttLHPChoDKKoTrung = 1;
   let countMonChuaDK = 0;
   const namHienTai = new Date().getFullYear();
   var sendDate = (new Date()).getTime();
@@ -202,17 +205,19 @@ export default function Dkhp() {
   }
 
   async function DangKyHocPhan(e) {
-    console.log("ma phan cong: " + maPhanCongLopHocPhan);
+    console.log("ma phan cong thuc hanh: " + maPhanCongLopHocPhan);
+    console.log("ma phan cong ly thuyet:" + maPhanCongLopHocPhanLyThuyet);
     console.log("ma hoc ki: " + maHocKi);
     console.log(trangThaiLopHocPhan);
     console.log(loaiHocPhanPhuTrach);
     console.log(maLopHocPhan);
     console.log("length chi tiet lhp:" + chiTietLopHP["results"].length);
+    console.log("so tin chi:" + tinChi);
     try {
       setLoading(true);
-      if (loaiHocPhanPhuTrach === 1 & chiTietLopHP["results"].length > 1) {
-        const res = await dkhpAPI.dangKiHocPhan(maPhanCongLopHocPhan, maHocKi, trangThaiLopHocPhan, 1860000, 0);
-        console.log(res.data);
+      if (loaiHocPhanPhuTrach === 1 && chiTietLopHP["results"].length > 1) {
+        const res = await dkhpAPI.dangKiHocPhan(maPhanCongLopHocPhan, maHocKi, trangThaiLopHocPhan, tinChi * 500000, 0);
+
         const resF5MonChuaDK = await dkhpAPI.getToanBoMonHocChuaDangKy();
         setMonChuaDangKy(resF5MonChuaDK.data);
         // const res2 = await dkhpAPI.getHocPhanDaDangKyTrongKynay(maHocKi);
@@ -226,11 +231,12 @@ export default function Dkhp() {
         var receiveDate = (new Date()).getTime();
         var responseTimeMs = receiveDate - sendDate;
         setResTime(responseTimeMs);
-
+        const waitingUpdateThucHanh = setTimeout(async () => {
+          const lt = await dkhpAPI.dangKiHocPhan(maPhanCongLopHocPhanLyThuyet, maHocKi, trangThaiLopHocPhan, tinChi * 500000, 0);
+        }, responseTimeMs);
       }
       else if (chiTietLopHP["results"].length === 1) {
-        const res = await dkhpAPI.dangKiHocPhan(maPhanCongLopHocPhan, maHocKi, trangThaiLopHocPhan, 1860000, 0);
-        console.log(res.data);
+        const res = await dkhpAPI.dangKiHocPhan(maPhanCongLopHocPhan, maHocKi, trangThaiLopHocPhan, tinChi * 500000, 0);
         // const res2 = await dkhpAPI.getHocPhanDaDangKyTrongKynay(maHocKi);
         // setHpDaDangKy(res2.data);
         setPopupNotify({
@@ -272,7 +278,42 @@ export default function Dkhp() {
     } else {
       coTrungLop.style.display = "";
       koTrungLop.style.display = "none";
-      dsToanBoLopHocPhanKOTrungLich('');
+    }
+  }
+
+  const changeColorWhenClick = (id, dsLhp) => {
+    var dongCanDoiMau = document.getElementById(id);
+    var mauRestSet;
+    dsToanBoLopHocPhan["results"].map((ds) => (
+      ds.ma_lop_hoc_phan != dsLhp.ma_lop_hoc_phan ? mauRestSet = document.getElementById("maLHP" + ds.ma_lop_hoc_phan).style.backgroundColor = ""
+        : <></>
+    ))
+    dongCanDoiMau.style.backgroundColor = "#8DD9EB";
+  }
+
+  const changeColorWhenClick2 = (id, ctlhp) => {
+    var dongCanDoiMau = document.getElementById(id);
+    var mauRestSet;
+    chiTietLopHP["results"].map((ds) => (
+      ds.ma_phan_cong != ctlhp.ma_phan_cong ? mauRestSet = document.getElementById("maPC" + ds.ma_phan_cong).style.backgroundColor = ""
+        : <></>
+    ))
+    dongCanDoiMau.style.backgroundColor = "#FBCBCB";
+  }
+
+  const changeColorWhenClick3 = (id, dsLhp) => {
+    var dongCanDoiMau = document.getElementById(id);
+    var mauRestSet;
+    dsToanBoLopHocPhanKOTrungLich.data["DsHocPhan"].map((ds) => (
+      ds.ma_lop_hoc_phan != dsLhp.ma_lop_hoc_phan ? mauRestSet = document.getElementById("maLHP" + ds.ma_lop_hoc_phan).style.backgroundColor = ""
+        : <></>
+    ))
+    dongCanDoiMau.style.backgroundColor = "#8DD9EB";
+  }
+
+  const locRaMaPhanCongLyThuyet = (ctlhp) => {
+    if (ctlhp.loai_hoc_phan_phu_trach == 2) {
+      setMaPhanCongLopHocPhanLyThuyet(ctlhp.ma_phan_cong)
     }
   }
 
@@ -459,7 +500,7 @@ export default function Dkhp() {
                                                             // onClick={activeLopHocPhanByHocPhan}
                                                             onChange={event => {
                                                               setMaHocPhan(event.target.value)
-
+                                                              setTinChi(mh.so_tin_chi_ly_thuyet)
                                                             }}
                                                           />
                                                           <span></span>
@@ -587,7 +628,7 @@ export default function Dkhp() {
                                             <label><input id="checkLichTrung" name="checkLichTrung" type="checkbox" defaultValue="true"
                                               onClick={checkLichTrung}
                                             /><input name="checkLichTrung" type="hidden" defaultValue="false" /><b><span className="text-uppercase" style={{ color: 'red', marginLeft: '5px !important', marginRight: '10px !important' }}>
-                                              học phần LÝ THUYẾT KHÔNG TRÙNG LỊCH</span></b></label>
+                                              học phần KHÔNG TRÙNG LỊCH</span></b></label>
                                           </div>
                                         </div>
                                       </div>
@@ -614,8 +655,14 @@ export default function Dkhp() {
                                                           id={"maLHP" + dsLhp.ma_lop_hoc_phan}
                                                           key={dsLhp.ma_lop_hoc_phan}
                                                           hover
-                                                          onClick={(e) => selectLopHocPhan(e, dsLhp, dsLhp.ma_lop_hoc_phan)}
+                                                          onClick={(e) => {
+                                                            e.preventDefault()
+                                                            selectLopHocPhan(e, dsLhp, dsLhp.ma_lop_hoc_phan)
+                                                            //setMaPhanCongLopHocPhanLyThuyet(dsLhp.ma_phan_cong)
+                                                            changeColorWhenClick("maLHP" + dsLhp.ma_lop_hoc_phan, dsLhp)
+                                                          }}
                                                           selectedDsToanBoLopHP={isSelectedDsToanBoLopHP(dsLhp)}
+                                                          style={{ backgroundColor: "" }}
                                                         >
                                                           <TableCell style={{ width: '40px' }} component="th" scope="row">{sttLHPChoDK++}</TableCell>
                                                           <TableCell className="text-left" >
@@ -653,10 +700,16 @@ export default function Dkhp() {
                                                           id={"maLHP" + dsLhp.ma_lop_hoc_phan}
                                                           key={dsLhp.ma_lop_hoc_phan}
                                                           hover
-                                                          onClick={(e) => selectLopHocPhan(e, dsLhp, dsLhp.ma_lop_hoc_phan)}
+                                                          // onClick={(e) => selectLopHocPhan(e, dsLhp, dsLhp.ma_lop_hoc_phan)}
+                                                          onClick={(e) => {
+                                                            e.preventDefault()
+                                                            selectLopHocPhan(e, dsLhp, dsLhp.ma_lop_hoc_phan)
+                                                            setMaPhanCongLopHocPhanLyThuyet(dsLhp.ma_phan_cong)
+                                                            changeColorWhenClick3("maLHP" + dsLhp.ma_lop_hoc_phan, dsLhp)
+                                                          }}
                                                           selectedDsToanBoLopHP={isSelectedDsToanBoLopHP(dsLhp)}
                                                         >
-                                                          <TableCell style={{ width: '40px' }} component="th" scope="row">{sttLHPChoDK++}</TableCell>
+                                                          <TableCell style={{ width: '40px' }} component="th" scope="row">{sttLHPChoDKKoTrung++}</TableCell>
                                                           <TableCell className="text-left" >
                                                             <div className="name">{dsLhp.ten_mon_hoc}</div>
                                                             <div>
@@ -702,12 +755,12 @@ export default function Dkhp() {
                                     </div> */}
 
                                       </div>
-                                      <div className="col-md-7" style={{ marginTop: "10px" }}>
+                                      {/* <div className="col-md-7" style={{ marginTop: "10px" }}>
                                         <div className="text-right">
                                           <label><input id="checkLichTrung" name="checkLichTrung" type="checkbox" defaultValue="true" /><input name="checkLichTrung" type="hidden" defaultValue="false" /><b><span className="text-uppercase" style={{ color: 'red', marginLeft: '5px !important', marginRight: '10px !important' }}>
                                             Học phần THỰC HÀNH KHÔNG TRÙNG LỊCH</span></b></label>
                                         </div>
-                                      </div>
+                                      </div> */}
                                     </div>
                                     <table id="tbChiTietDKHP" className="table-pointer table-dkhp table-custom table table-bordered text-center no-footer dtr-inline" width="100%" role="grid">
                                       <thead>
@@ -726,13 +779,18 @@ export default function Dkhp() {
                                       <tbody className="adminClassHover">
                                         {
                                           chiTietLopHP["results"].map((ctlhp) =>
-                                            <tr className="tr-active tr-chitietlichdangky" onClick={(e) => {
-                                              (ctlhp.trang_thai === 1 ? setTrangThaiLopHocPhan('Đăng ký mới') : setTrangThaiLopHocPhan(''))
-                                              setMaPhanCongLopHocPhan(ctlhp.ma_phan_cong)
-                                              setLoaiHocPhanPhuTrach(ctlhp.loai_hoc_phan_phu_trach)
-                                            }}>
+                                            <tr className="tr-active tr-chitietlichdangky"
+                                              id={"maPC" + ctlhp.ma_phan_cong}
+                                              style={{ backgroundColor: "" }}
+                                              onClick={(e) => {
+                                                (ctlhp.trang_thai === 1 ? setTrangThaiLopHocPhan('Đăng ký mới') : setTrangThaiLopHocPhan(''))
+                                                setMaPhanCongLopHocPhan(ctlhp.ma_phan_cong)
+                                                setLoaiHocPhanPhuTrach(ctlhp.loai_hoc_phan_phu_trach)
+                                                locRaMaPhanCongLyThuyet(ctlhp);
+                                                changeColorWhenClick2("maPC" + ctlhp.ma_phan_cong, ctlhp);
+                                              }}>
                                               <td className="text-left">
-                                                <div><span >Lịch học</span>: <b> {ctlhp.ngay_hoc_trong_tuan}   (Tiết {ctlhp.tiet_hoc_bat_dau}  -&gt; {ctlhp.tiet_hoc_ket_thuc} )</b></div>
+                                                <div><span >Lịch học</span>: <b> Thứ {ctlhp.ngay_hoc_trong_tuan + 1}   (Tiết {ctlhp.tiet_hoc_bat_dau}  -&gt; {ctlhp.tiet_hoc_ket_thuc} )</b></div>
                                                 <p><span >Cơ sở</span>: <b>Cơ sở 1 (Thành phố Hồ Chí Minh)</b></p>
                                                 <p><span >Dãy nhà</span>: <b>{ctlhp.ten_day_nha} (CS1)</b></p>
                                                 <p><span >Phòng</span>: <b>{ctlhp.ten_phong_hoc}</b></p>
@@ -796,14 +854,14 @@ export default function Dkhp() {
                                         Lớp học dự kiến
                                       </th>
                                       <th lang="dangkyhocphan-tc">TC</th>
-                                      <th lang="dangkyhocphan-nhomth">Nhóm TH</th>
+                                      {/* <th lang="dangkyhocphan-nhomth">Nhóm TH</th> */}
                                       <th lang="dangkyhocphan-hocphi">Học phí</th>
-                                      <th lang="dangkyhocphan-hannop">Hạn nộp</th>
+                                      {/* <th lang="dangkyhocphan-hannop">Hạn nộp</th> */}
                                       <th lang="dangkyhocphan-thu">Thu</th>
                                       <th lang="dangkyhocphan-trangthaidangky">
                                         Trạng thái ĐK
                                       </th>
-                                      <th lang="dangkyhocphan-ngaydangky">Ngày ĐK</th>
+                                      {/* <th lang="dangkyhocphan-ngaydangky">Ngày ĐK</th> */}
                                       <th lang="dangkyhocphan-trangthailhp">
                                         Trạng thái Lớp học phần{" "}
                                       </th>
@@ -844,18 +902,18 @@ export default function Dkhp() {
                                             </td>
                                             <td>{hpDaDk.ten_lop_hoc_phan}</td>
                                             <td>{hpDaDk.so_tin_chi_ly_thuyet}</td>
-                                            <td>{hpDaDk.nhom_thuc_hanh_phu_trach}</td>
+                                            {/* <td>{hpDaDk.nhom_thuc_hanh_phu_trach}</td> */}
                                             <td className="text-right">
                                               <span>{hpDaDk.so_tien}</span>
                                             </td>
-                                            <td>Chưa set</td>
+                                            {/* <td>Chưa set</td> */}
                                             {/* <td>
                                           <div>
                                             <div className="check"></div>
                                           </div>
                                         </td> */}
                                             <td>
-                                              {hpDaDk.trang_thai === 1 ?
+                                              {hpDaDk.trangthaiHocPhi == 1 ?
                                                 <div>
                                                   <div className="no-check">
                                                   </div>
@@ -867,8 +925,10 @@ export default function Dkhp() {
                                               }
                                             </td>
                                             <td>{hpDaDk.trang_thai_dang_ki}</td>
-                                            <td>Chưa set</td>
-                                            <td>Chưa set</td>
+                                            {/* <td>Chưa set</td> */}
+                                            <td>
+                                              {hpDaDk.trang_thai === 1 ? 'Chờ sinh viên đăng ký' : 'Đã khóa'}
+                                            </td>
                                           </tr></> : <div></div>
                                       )
                                     }

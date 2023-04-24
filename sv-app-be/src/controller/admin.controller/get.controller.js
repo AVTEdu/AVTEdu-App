@@ -516,7 +516,13 @@ const getDsPhongTheoTen = async (req, res, next) => {
   }
 };
 
+const taoMaSinhVien = async (req, res, next) => {
+  const newMaSinhVien = await SinhVien.max("ma_sinh_vien");
+  res.status(201).json({ success: true, newMaSinhVien });
+};
+
 module.exports = {
+  taoMaSinhVien,
   getDanhSachAdmin,
   getDanhSachBacDaoTao,
   getDanhSachChuyenNganh,
