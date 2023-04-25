@@ -207,6 +207,181 @@ const getChiTietLopHocPhan = async (req, res, next) => {
     next(error);
   }
 };
+//   try {
+//     //Mã phân công lớp học phần
+//     const { ma, ma_hoc_ki, trang_thai_dang_ki, so_tien, mien_giam } = req.body;
+//     const foundPCLopHocPhan = await PhanCongLopHocPhan.findOne({
+//       where: { ma_phan_cong: `${ma}` },
+//     });
+//     if (!foundPCLopHocPhan) {
+//       return res
+//         .status(403)
+//         .json({ error: { message: "Không tìm thấy phân công lớp học phần" } });
+//     }
+//     const foundLopHocPhan = await LopHocPhan.findOne({
+//       where: { ma_lop_hoc_phan: `${foundPCLopHocPhan.ma_lop_hoc_phan}` },
+//     });
+//     if (!foundLopHocPhan) {
+//       return res
+//         .status(403)
+//         .json({ error: { message: "Không tìm thấy lớp học phần" } });
+//     }
+//     if (ma_hoc_ki != foundLopHocPhan.ma_hoc_ki) {
+//       return res.status(403).json({
+//         error: {
+//           message:
+//             "Học kì trong lớp học phần và học kì đang chọn không trùng nhau",
+//         },
+//       });
+//     }
+//     const ThoiKhoabieu = await sequelize.query(
+//       `select tkb.* 
+//                                             from sinhviendb.lop_hoc_phan as lhp
+//                                             left join sinhviendb.phan_cong_lop_hoc_phan as pclhp on lhp.ma_lop_hoc_phan = pclhp.ma_lop_hoc_phan
+//                                             left join sinhviendb.thoi_khoa_bieu as tkb on tkb.ma_phan_cong_lop_hoc_phan = pclhp.ma_phan_cong
+//                                             where tkb.ma_phan_cong_lop_hoc_phan = '${ma}'`,
+//       { type: QueryTypes.SELECT }
+//     );
+
+//     if (!ThoiKhoabieu) {
+//       return res
+//         .status(403)
+//         .json({ error: { message: "Không tìm thấy thời khoá biểu " } });
+//     }
+//     const foundSinhVien = await SinhVien.findOne({
+//       where: { ma_sinh_vien: req.payload.userId },
+//     });
+//     if (!foundSinhVien) {
+//       return res
+//         .status(403)
+//         .json({ error: { message: "Không tìm thấy sinh viên" } });
+//     }
+//     if (
+//       foundLopHocPhan.so_luong_dang_ki_toi_da ===
+//       foundLopHocPhan.so_luong_dang_ki_hien_tai
+//     ) {
+//       return res
+//         .status(403)
+//         .json({ error: { message: "Lớp đã đủ số lượng sinh viên đăng kí " } });
+//     }
+//     const ma_tkb_sv = await ThoiKhoaBieuSinhVien.max("ma");
+//     let createTKBSinhVien = await ThoiKhoaBieuSinhVien.findOne({
+//       where: {
+//         [Op.and]: [
+//           { ma_sinh_vien: foundSinhVien.ma_sinh_vien },
+//           { ma_thoi_khoa_bieu: ThoiKhoabieu[0].ma_thoi_khoa_bieu },
+//         ],
+//       },
+//     });
+//     if (!createTKBSinhVien)
+//       createTKBSinhVien = await ThoiKhoaBieuSinhVien.create({
+//         ma: ma_tkb_sv + 1,
+//         loai_ngay_hoc: "Thứ",
+//         ma_sinh_vien: foundSinhVien.ma_sinh_vien,
+//         ma_thoi_khoa_bieu: ThoiKhoabieu[0].ma_thoi_khoa_bieu,
+//         ghi_chu: "....",
+//       });
+//     const ma_hoc_phi = await HocPhi.max("ma_hoc_phi");
+//     // let createHocPhi = await HocPhi.findOne({
+//     //   where: { ma_lop_hoc_phan: foundLopHocPhan.ma_lop_hoc_phan },
+//     // });
+//     // if (!createHocPhi) {
+//     //   createHocPhi = await HocPhi.create({
+//     //     ma_hoc_phi: ma_hoc_phi + 1,
+//     //     noi_dung_thu: "Tiền học phí",
+//     //     trang_thai_dang_ki: trang_thai_dang_ki,
+//     //     so_tien: so_tien,
+//     //     mien_giam: mien_giam,
+//     //     so_tien_da_nop: 0,
+//     //     cong_no: so_tien,
+//     //     trang_thai: 1,
+//     //     ma_lop_hoc_phan: foundLopHocPhan.ma_lop_hoc_phan,
+//     //     ma_phieu_thu: null,
+//     //   });
+//     // } else {
+//     //   console.log('Ko tạo được học phí')
+//     // }
+//     let createHocPhi = await HocPhi.create({
+//       ma_hoc_phi: ma_hoc_phi + 1,
+//       noi_dung_thu: "Tiền học phí",
+//       trang_thai_dang_ki: trang_thai_dang_ki,
+//       so_tien: so_tien,
+//       mien_giam: mien_giam,
+//       so_tien_da_nop: 0,
+//       cong_no: so_tien,
+//       trang_thai: 1,
+//       ma_lop_hoc_phan: foundLopHocPhan.ma_lop_hoc_phan,
+//       ma_phieu_thu: null,
+//     });
+//     const updateSVHT = await LopHocPhan.update(
+//       {
+//         so_luong_dang_ki_hien_tai: `${foundLopHocPhan.so_luong_dang_ki_hien_tai + 1
+//           }`,
+//       },
+//       { where: { ma_lop_hoc_phan: `${foundLopHocPhan.ma_lop_hoc_phan}` } }
+//     );
+//     const ma_hoc_phi_sinh_vien = await HocPhiSinhVien.max(
+//       "ma_hoc_phi_sinh_vien"
+//     );
+//     let createHocPhiSinhVien = await HocPhiSinhVien.findOne({
+//       where: { ma_hoc_phi: ma_hoc_phi + 1 },
+//     });
+//     if (!createHocPhiSinhVien) {
+//       createHocPhiSinhVien = await HocPhiSinhVien.create({
+//         ma_hoc_phi_sinh_vien: ma_hoc_phi_sinh_vien + 1,
+//         ma_hoc_phi: ma_hoc_phi + 1,
+//         ma_sinh_vien: foundSinhVien.ma_sinh_vien,
+//       });
+//     }
+//     const ma_bang_diem = await KetQuaHocTap.max("ma_ket_qua_hoc_tap");
+//     let createBangDiem = await KetQuaHocTap.findOne({
+//       where: {
+//         [Op.and]: [
+//           { ma_sinh_vien: foundSinhVien.ma_sinh_vien },
+//           { ma_lop_hoc_phan: foundLopHocPhan.ma_lop_hoc_phan },
+//         ],
+//       },
+//     });
+//     if (!createBangDiem) {
+//       createBangDiem = await KetQuaHocTap.create({
+//         ma_ket_qua_hoc_tap: ma_bang_diem + 1,
+//         diem_tk_1: null,
+//         diem_tk_2: null,
+//         diem_tk_3: null,
+//         diem_tk_4: null,
+//         diem_tk_5: null,
+//         diem_th_1: null,
+//         diem_th_2: null,
+//         diem_th_3: null,
+//         diem_th_4: null,
+//         diem_th_5: null,
+//         diem_gk: null,
+//         diem_ck: null,
+//         diem_tk_hs_4: null,
+//         diem_tk_hs_10: null,
+//         diem_chu: null,
+//         xep_loai: null,
+//         ghi_chu: null,
+//         ma_sinh_vien: foundSinhVien.ma_sinh_vien,
+//         ma_lop_hoc_phan: foundLopHocPhan.ma_lop_hoc_phan,
+//         tinh_trang_hoc_tap: null,
+//         ngay_dang_ki: new Date(),
+//       });
+//     }
+//     res.status(201).json({
+//       success: true,
+//       createTKBSinhVien,
+//       createHocPhi,
+//       updateSVHT,
+//       createHocPhiSinhVien,
+//       createBangDiem,
+//     });
+//   } catch (error) {
+//     console.log(error);
+//     next(error);
+//   }
+// };
+
 const DangKiHocPhan = async (req, res, next) => {
   try {
     //Mã phân công lớp học phần
@@ -304,12 +479,14 @@ const DangKiHocPhan = async (req, res, next) => {
         ma_lop_hoc_phan: foundLopHocPhan.ma_lop_hoc_phan,
         ma_phieu_thu: null,
       });
+    } else {
+      console.log('ko tao dc hoc phi');
     }
+    console.log(createHocPhi);
     const updateSVHT = await LopHocPhan.update(
       {
-        so_luong_dang_ki_hien_tai: `${
-          foundLopHocPhan.so_luong_dang_ki_hien_tai + 1
-        }`,
+        so_luong_dang_ki_hien_tai: `${foundLopHocPhan.so_luong_dang_ki_hien_tai + 1
+          }`,
       },
       { where: { ma_lop_hoc_phan: `${foundLopHocPhan.ma_lop_hoc_phan}` } }
     );
@@ -319,9 +496,16 @@ const DangKiHocPhan = async (req, res, next) => {
     let createHocPhiSinhVien = await HocPhiSinhVien.findOne({
       where: { ma_hoc_phi: ma_hoc_phi + 1 },
     });
-    const ma_hoc_phi_equal = !createHocPhi
-      ? ma_hoc_phi + 1
-      : createHocPhi.ma_hoc_phi;
+
+    // if (!createHocPhiSinhVien) {
+    //   createHocPhiSinhVien = await HocPhiSinhVien.create({
+    //     ma_hoc_phi_sinh_vien: ma_hoc_phi_sinh_vien + 1,
+    //     ma_hoc_phi: ma_hoc_phi + 1,
+    //     ma_sinh_vien: foundSinhVien.ma_sinh_vien,
+    //   });
+    // }
+    const ma_hoc_phi_equal = !createHocPhi ? createHocPhi.ma_hoc_phi : ma_hoc_phi + 1;
+    
     if (!createHocPhiSinhVien) {
       createHocPhiSinhVien = await HocPhiSinhVien.create({
         ma_hoc_phi_sinh_vien: ma_hoc_phi_sinh_vien + 1,
@@ -382,6 +566,7 @@ const DangKiHocPhan = async (req, res, next) => {
     next(error);
   }
 };
+
 const getThongTinSinhvien = async (req, res, next) => {
   try {
     const foundSinhVien = await SinhVien.findOne({
@@ -444,7 +629,8 @@ const getMonDaDangKiTrongHocKi = async (req, res, next) => {
     }
     const dsMonDaDangKiTrongHocKi = await sequelize.query(
       `select lhp.ma_hoc_phan,mh.ten_mon_hoc,lhp.ten_lop_hoc_phan,hpp.so_tin_chi_ly_thuyet,hpp.so_tin_chi_thuc_hanh,pclhp.nhom_thuc_hanh_phu_trach,hp.so_tien,hp.trang_thai,hp.trang_thai_dang_ki,lhp.trang_thai
-    from sinhviendb.sinh_vien as sv
+   ,hp.trang_thai AS trangthaiHocPhi 
+      from sinhviendb.sinh_vien as sv
     left join sinhviendb.hoc_phi_sinh_vien as hpsv on sv.ma_sinh_vien = hpsv.ma_sinh_vien
     left join sinhviendb.hoc_phi as hp on hp.ma_hoc_phi = hpsv.ma_hoc_phi
     left join sinhviendb.lop_hoc_phan as lhp on hp.ma_lop_hoc_phan = lhp.ma_lop_hoc_phan
@@ -477,14 +663,14 @@ const getThoiKhoaBieuSinhVienTrongMotTuan = async (req, res, next) => {
       let dayOfWeeek = day.wod;
       console.log(
         i +
-          ":" +
-          dayOfWeeek +
-          "+" +
-          day.date +
-          "+" +
-          req.payload.userId +
-          "+" +
-          result
+        ":" +
+        dayOfWeeek +
+        "+" +
+        day.date +
+        "+" +
+        req.payload.userId +
+        "+" +
+        result
       );
       ++i;
       let ngayHoc = await sequelize.query(
@@ -862,6 +1048,7 @@ const getLopHocPhanKhongTrung = async (req, res, next) => {
 
     let DsHocPhan = await sequelize.query(
       `select mh.ten_mon_hoc,lhp.trang_thai,lhp.ma_lop_hoc_phan,lhp.ten_lop_hoc_phan,lhp.so_luong_dang_ki_hien_tai,lhp.so_luong_dang_ki_toi_da,hk.ma_hoc_ki,tkb.tiet_hoc_bat_dau,tkb.tiet_hoc_ket_thuc,tkb.ngay_hoc_trong_tuan,pclhp.nhom_thuc_hanh_phu_trach
+      ,pclhp.ma_phan_cong
       from sinhviendb.hoc_phan as hp
       left join sinhviendb.lop_hoc_phan as lhp on hp.ma_hoc_phan = lhp.ma_hoc_phan
       left join sinhviendb.mon_hoc as mh on hp.ma_mon_hoc = mh.ma_mon_hoc

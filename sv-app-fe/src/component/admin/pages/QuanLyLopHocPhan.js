@@ -240,6 +240,13 @@ export const HocKi = () => {
 export const LopHocPhan = () => {
     const [openPopup, setOpenPopup] = useState(false);
     const [dsLopHP, setDsLopHP] = useState();
+    const [dsLopTheoHK, setDsLopTheoHK] = useState();
+    const [dsHK, setDsHk] = useState();
+    const [maHK, setMaHK] = useState();
+    const [dsKhoa, setDSKhoa] = useState();
+    const [maKhoa, setMaKhoa] = useState();
+    const [dsChuyenNganh, setDsChuyenNganh] = useState();
+    const [maCN, setMaCN] = useState();
     useEffect(() => {
         const getAllLop = async () => {
             try {
@@ -251,6 +258,59 @@ export const LopHocPhan = () => {
         };
         getAllLop();
     }, [])
+    useEffect(() => {
+        const getDSKhoa = async () => {
+            try {
+                const res = await adminAPI.getDanhSachToanBoKhoa();
+                setDSKhoa(res.data);
+            } catch (error) {
+
+            }
+        };
+        getDSKhoa();
+    }, [])
+    useEffect(() => {
+        const getAllHK = async () => {
+            try {
+                const res = await adminAPI.getAllHocKi();
+                setDsHk(res.data);
+            } catch (error) {
+
+            }
+        };
+        getAllHK();
+    }, [])
+    const getDSLopTheoCNvaHK = async (e) => {
+        try {
+            const res = await adminAPI.getDSLopTheoChuyenNganhHocKi(e.target.value, maCN)
+            setDsLopTheoHK(res.data);
+            setDsLopHP('');
+        } catch (error) {
+
+        }
+    };
+    useEffect(() => {
+        const getdsCNtheoK = async () => {
+            try {
+                const res = await adminAPI.getDsChuyenNganhTheoKhoa(maKhoa);
+                setDsChuyenNganh(res.data);
+            } catch (error) {
+
+            }
+        };
+        getdsCNtheoK();
+    }, [maKhoa])
+    const getMaHK = (e) => {
+        setMaHK(e.target.value);
+    }
+    const getMaKhoa = (e) => {
+        setMaKhoa(e.target.value);
+    }
+    const getMaChuyenNganh = (e) => {
+        setMaCN(e.target.value);
+    }
+    if (!dsHK) return null;
+    if (!dsKhoa) return null;
     return (
         <>
             <Sidebar />
@@ -266,20 +326,71 @@ export const LopHocPhan = () => {
                                     <div className="row">
                                         <div className="col-md-2"></div>
                                         <div className="col-md-10">
-                                            <nav className="layout-navbar container-xxl navbar navbar-expand-xl  align-items-center bg-navbar-theme" id="layout-navbar">
 
-                                                <div className="navbar-nav-right d-flex align-items-center" id="navbar-collapse">
-                                                    {/* Search */}
-                                                    <div className="navbar-nav align-items-center">
-                                                        <div className="nav-item d-flex align-items-center">
-                                                            <i className="bx bx-search fs-4 lh-0" />
-                                                            <input type="text" className="form-control border-0 shadow-none" placeholder="Search..." aria-label="Search..." />
+                                            <div className="card-gv-header grid-bg">
+                                                <h5 style={{
+                                                    display: "inline-flex",
+                                                    position: "relative",
+                                                    boxSizing: "border-box",
+                                                    backgroundColor: "transparent",
+                                                    border: "0",
+                                                    margin: "0",
+                                                    textDecoration: "none",
+                                                    fontWeight: "500",
+                                                    fontSize: "0.875rem",
+                                                    lineHeight: "1.75",
+                                                    letterSpacing: "0.02857em",
+                                                    textTransform: "uppercase",
+                                                    minWidth: "64px",
+                                                    padding: "6px 8px",
+                                                }}>Lọc Danh sách lớp học phần</h5>
+                                                <div className="card-body">
+                                                    <div className="demo-inline-spacing">
+                                                        <div className="col-md-3">
+                                                            <label htmlFor="exampleFormControlSelect1" className="form-label">Khoa</label>
+                                                            <select className="form-select" id="exampleFormControlSelect1" aria-label="Default select example"
+                                                                onChange={(e) => getMaKhoa(e)}
+                                                            >
+                                                                <option selected>Chọn Khoa</option>
+                                                                {
+                                                                    dsKhoa["result"].map((dsK) => (
+                                                                        <option key={dsK.ma_khoa} value={dsK.ma_khoa} >
+                                                                            {dsK.ten_khoa}
+                                                                        </option>
+                                                                    ))}
+                                                            </select>
+                                                        </div>
+                                                        <div className="col-md-3">
+                                                            <label htmlFor="exampleFormControlSelect1" className="form-label">Chuyên ngành</label>
+                                                            <select className="form-select" id="exampleFormControlSelect1" aria-label="Default select example"
+                                                                onChange={(e) => getMaChuyenNganh(e)}
+                                                            >
+                                                                <option selected>Chọn chuyên ngành</option>
+                                                                {
+                                                                    dsChuyenNganh["ds"].map((ds) => (
+                                                                        <option key={ds.ma_chuyen_nganh} value={ds.ma_chuyen_nganh} >
+                                                                            {ds.ten_chuyen_nganh}
+                                                                        </option>
+                                                                    ))}
+                                                            </select>
+                                                        </div>
+                                                        <div className="col-md-3">
+                                                            <label htmlFor="exampleFormControlSelect1" className="form-label">Học kỳ</label>
+                                                            <select className="form-select" id="exampleFormControlSelect1" aria-label="Default select example"
+                                                                onChange={(e) => getDSLopTheoCNvaHK(e)}
+                                                            >
+                                                                <option selected>Chọn học kỳ</option>
+                                                                {
+                                                                    dsHK["result"].map((ds) => (
+                                                                        <option key={ds.ma_hoc_ki} value={ds.ma_hoc_ki} >
+                                                                            {ds.nam_hoc_bat_dau}-{ds.nam_hoc_ket_thuc} HK{ds.thu_tu_hoc_ki}
+                                                                        </option>
+                                                                    ))}
+                                                            </select>
                                                         </div>
                                                     </div>
-                                                    {/* /Search */}
-
                                                 </div>
-                                            </nav>
+                                            </div>
                                         </div>
                                     </div>
                                     <div className="row">
@@ -385,7 +496,44 @@ export const LopHocPhan = () => {
                                                                                 ))
                                                                             }
                                                                         </>
-                                                                        : <></>
+                                                                        : <>
+                                                                            {
+                                                                                dsLopTheoHK && dsLopTheoHK?.ds.length > 0
+                                                                                    ?
+                                                                                    <>
+                                                                                        {
+                                                                                            dsLopTheoHK["ds"].map((ds) => (
+                                                                                                <tr>
+                                                                                                    <td style={{ border: "2px solid" }}>
+                                                                                                        <input type="checkbox" value=""></input>
+                                                                                                    </td>
+                                                                                                    <td style={{ border: "2px solid" }}>{ds.ma_lop_hoc_phan}</td>
+                                                                                                    <td style={{ border: "2px solid" }}>{ds.ten_lop_hoc_phan}</td>
+                                                                                                    <td style={{ border: "2px solid" }}>{ds.so_luong_dang_ki_toi_da}</td>
+                                                                                                    <td style={{ border: "2px solid" }}>{ds.so_luong_dang_ki_hien_tai}</td>
+                                                                                                    <td style={{ border: "2px solid" }}>{ds.so_nhom_thuc_hanh}</td>
+                                                                                                    <td style={{ border: "2px solid" }}>{
+                                                                                                        ds.trang_thai == 1 ? "Chờ sv đăng ký" : "Đã khóa"
+                                                                                                    }</td>
+                                                                                                    <td style={{ border: "2px solid" }}>{ds.ma_hoc_ki}</td>
+                                                                                                    <td style={{ border: "2px solid" }}>{ds.ma_hoc_phan}</td>
+                                                                                                    <td style={{ border: "2px solid" }}>{ds.mo_ta}</td>
+                                                                                                    <td style={{ border: "2px solid" }}>
+                                                                                                        <a ><i className="bx bx-edit-alt me-1" /> Edit</a>
+                                                                                                        <a style={{ marginLeft: "15px" }} ><i className="bx bx-trash me-1" /> Delete</a>
+                                                                                                    </td>
+                                                                                                </tr>
+                                                                                            ))
+                                                                                        }
+                                                                                    </>
+                                                                                    :
+                                                                                    <tr>
+                                                                                        <td colSpan={5} className="text-center">
+                                                                                            <p className="bold"><span>Tạm chưa có dữ liệu</span></p>
+                                                                                        </td>
+                                                                                    </tr>
+                                                                            }
+                                                                        </>
                                                                 }
                                                             </tbody>
                                                         </table>
@@ -544,6 +692,8 @@ export const LopHocPhan = () => {
 export const PhanCong = () => {
     const [openPopup, setOpenPopup] = useState(false);
     const [dsPhanCong, setDsPhanCong] = useState();
+    const [dsPCTheoMaGV, setDsPCTheoMaGV] = useState();
+    const [dsPCTheoLHP, setDsPCTheoLHP] = useState();
     useEffect(() => {
         const getAllPhanCong = async () => {
             try {
@@ -555,6 +705,40 @@ export const PhanCong = () => {
         };
         getAllPhanCong();
     }, [])
+    const searchTheoGiangVien = async (e) => {
+        try {
+            if (e.target.value === '') {
+                const res = await adminAPI.getAllPhanCong();
+                setDsPhanCong(res.data);
+                setDsPCTheoMaGV('');
+                setDsPCTheoLHP('');
+            } else {
+                const res = await adminAPI.getDSPhanCongTheoMaGiangVien(e.target.value);
+                setDsPCTheoMaGV(res.data);
+                setDsPCTheoLHP('');
+                setDsPhanCong('');
+            }
+        } catch (error) {
+
+        }
+    }
+    const searchTheoMaLHP = async (e) => {
+        try {
+            if (e.target.value === '') {
+                const res = await adminAPI.getAllPhanCong();
+                setDsPhanCong(res.data);
+                setDsPCTheoMaGV('');
+                setDsPCTheoLHP('');
+            } else {
+                const res = await adminAPI.getDSPhanCongTheoMaLHP(e.target.value);
+                setDsPCTheoLHP(res.data);
+                setDsPCTheoMaGV('');
+                setDsPhanCong('');
+            }
+        } catch (error) {
+
+        }
+    }
     return (
         <>
             <Sidebar />
@@ -570,20 +754,51 @@ export const PhanCong = () => {
                                     <div className="row">
                                         <div className="col-md-2"></div>
                                         <div className="col-md-10">
-                                            <nav className="layout-navbar container-xxl navbar navbar-expand-xl  align-items-center bg-navbar-theme" id="layout-navbar">
-
-                                                <div className="navbar-nav-right d-flex align-items-center" id="navbar-collapse">
-                                                    {/* Search */}
-                                                    <div className="navbar-nav align-items-center">
-                                                        <div className="nav-item d-flex align-items-center">
-                                                            <i className="bx bx-search fs-4 lh-0" />
-                                                            <input type="text" className="form-control border-0 shadow-none" placeholder="Search..." aria-label="Search..." />
+                                            <div className="card-gv-header grid-bg">
+                                                <h5 style={{
+                                                    display: "inline-flex",
+                                                    position: "relative",
+                                                    boxSizing: "border-box",
+                                                    backgroundColor: "transparent",
+                                                    border: "0",
+                                                    margin: "0",
+                                                    textDecoration: "none",
+                                                    fontWeight: "500",
+                                                    fontSize: "0.875rem",
+                                                    lineHeight: "1.75",
+                                                    letterSpacing: "0.02857em",
+                                                    textTransform: "uppercase",
+                                                    minWidth: "64px",
+                                                    padding: "6px 8px",
+                                                }}>Lọc Danh sách phân công</h5>
+                                                <div className="card-body">
+                                                    <div className="demo-inline-spacing">
+                                                        <div className="col-md-3">
+                                                            <label htmlFor="defaultFormControlInput" className="form-label">Tìm theo Mã giảng viên</label>
+                                                            <input
+                                                                type="text"
+                                                                className="form-control"
+                                                                id="TimTheoMaLopHocPhan"
+                                                                aria-describedby="defaultFormControlHelp"
+                                                                onKeyDown={(e) => searchTheoGiangVien(e)}
+                                                            />
                                                         </div>
-                                                    </div>
-                                                    {/* /Search */}
+                                                        <div className="col-md-3">
+                                                            <label htmlFor="defaultFormControlInput" className="form-label">Tìm theo Mã lớp học phần</label>
+                                                            <input
+                                                                type="text"
+                                                                className="form-control"
+                                                                id="TimTheoMaLopHocPhan"
+                                                                aria-describedby="defaultFormControlHelp"
+                                                                onKeyDown={(e) => searchTheoMaLHP(e)}
+                                                            />
+                                                        </div>
 
+                                                    </div>
                                                 </div>
-                                            </nav>
+
+
+                                            </div>
                                         </div>
                                     </div>
                                     <div className="row">
@@ -685,7 +900,71 @@ export const PhanCong = () => {
                                                                                 ))
                                                                             }
                                                                         </>
-                                                                        : <></>
+                                                                        : <>
+                                                                            {
+                                                                                dsPCTheoMaGV && dsPCTheoMaGV?.ds.length > 0
+                                                                                    ?
+                                                                                    <>
+                                                                                        {
+                                                                                            dsPCTheoMaGV["ds"].map((ds) => (
+                                                                                                <tr>
+                                                                                                    <td style={{ border: "2px solid" }}>
+                                                                                                        <input type="checkbox" value=""></input>
+                                                                                                    </td>
+                                                                                                    <td style={{ border: "2px solid" }}>{ds.ma_phan_cong}</td>
+                                                                                                    <td style={{ border: "2px solid" }}>{
+                                                                                                        ds.loai_hoc_phan_phu_trach == 1 ? "Thực hành" : "Lý thuyết"
+                                                                                                    }</td>
+                                                                                                    <td style={{ border: "2px solid" }}>{ds.nhom_thuc_hanh_phu_trach}</td>
+                                                                                                    <td style={{ border: "2px solid" }}>{ds.so_luong_sv_phu_trach}</td>
+                                                                                                    <td style={{ border: "2px solid" }}>{ds.ma_giang_vien}</td>
+                                                                                                    <td style={{ border: "2px solid" }}>{ds.ma_lop_hoc_phan}</td>
+                                                                                                    <td style={{ border: "2px solid" }}></td>
+                                                                                                    <td style={{ border: "2px solid" }}>
+                                                                                                        <a ><i className="bx bx-edit-alt me-1" /> Edit</a>
+                                                                                                        <a style={{ marginLeft: "15px" }} ><i className="bx bx-trash me-1" /> Delete</a>
+                                                                                                    </td>
+                                                                                                </tr>
+                                                                                            ))
+                                                                                        }
+                                                                                    </>
+                                                                                    : <>
+                                                                                        {
+                                                                                            dsPCTheoLHP && dsPCTheoLHP?.ds.length > 0
+                                                                                                ?
+                                                                                                <>
+                                                                                                    {
+                                                                                                        dsPCTheoLHP["ds"].map((ds) => (
+                                                                                                            <tr>
+                                                                                                                <td style={{ border: "2px solid" }}>
+                                                                                                                    <input type="checkbox" value=""></input>
+                                                                                                                </td>
+                                                                                                                <td style={{ border: "2px solid" }}>{ds.ma_phan_cong}</td>
+                                                                                                                <td style={{ border: "2px solid" }}>{
+                                                                                                                    ds.loai_hoc_phan_phu_trach == 1 ? "Thực hành" : "Lý thuyết"
+                                                                                                                }</td>
+                                                                                                                <td style={{ border: "2px solid" }}>{ds.nhom_thuc_hanh_phu_trach}</td>
+                                                                                                                <td style={{ border: "2px solid" }}>{ds.so_luong_sv_phu_trach}</td>
+                                                                                                                <td style={{ border: "2px solid" }}>{ds.ma_giang_vien}</td>
+                                                                                                                <td style={{ border: "2px solid" }}>{ds.ma_lop_hoc_phan}</td>
+                                                                                                                <td style={{ border: "2px solid" }}></td>
+                                                                                                                <td style={{ border: "2px solid" }}>
+                                                                                                                    <a ><i className="bx bx-edit-alt me-1" /> Edit</a>
+                                                                                                                    <a style={{ marginLeft: "15px" }} ><i className="bx bx-trash me-1" /> Delete</a>
+                                                                                                                </td>
+                                                                                                            </tr>
+                                                                                                        ))
+                                                                                                    }
+                                                                                                </>
+                                                                                                : <tr>
+                                                                                                    <td colSpan={9} className="text-center">
+                                                                                                        <p className="bold"><span>Tạm chưa có dữ liệu</span></p>
+                                                                                                    </td>
+                                                                                                </tr>
+                                                                                        }
+                                                                                    </>
+                                                                            }
+                                                                        </>
                                                                 }
 
                                                             </tbody>

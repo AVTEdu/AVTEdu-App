@@ -54,8 +54,12 @@ const dkhpAPI = {
     return axiosClient.put(url, { ma_phieu_thu: maPhieuThu })
   },
   getKetQuaHocTap(maHocKi) {
-    const url = "userRequest/getKetQuaHocTap";
+    const url = "/userRequest/getKetQuaHocTap";
     return axiosClient.put(url, { ma_hoc_ki: maHocKi })
+  },
+  getLopHocPhanKhongTrung(maHP, maHK) {
+    const url = "/userRequest/getLopHocPhanKhongTrung";
+    return axiosClient.put(url, { ma: maHP, ma_hoc_ki: maHK });
   },
 };
 
