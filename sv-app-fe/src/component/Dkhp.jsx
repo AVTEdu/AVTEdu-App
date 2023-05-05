@@ -222,11 +222,6 @@ export default function Dkhp() {
         setMonChuaDangKy(resF5MonChuaDK.data);
         // const res2 = await dkhpAPI.getHocPhanDaDangKyTrongKynay(maHocKi);
         // setHpDaDangKy(res2.data);
-        setPopupNotify({
-          title: 'Thông báo',
-          mes: 'Đăng ký thành công',
-          isLoading: true
-        });
         setTrangThaiDangKy(res.data);
         var receiveDate = (new Date()).getTime();
         var responseTimeMs = receiveDate - sendDate;
@@ -234,6 +229,11 @@ export default function Dkhp() {
         const waitingUpdateThucHanh = setTimeout(async () => {
           const lt = await dkhpAPI.dangKiHocPhan(maPhanCongLopHocPhanLyThuyet, maHocKi, trangThaiLopHocPhan, tinChi * 500000, 0);
         }, responseTimeMs);
+        setPopupNotify({
+          title: 'Thông báo',
+          mes: 'Đăng ký thành công',
+          isLoading: true
+        });
       }
       else if (chiTietLopHP["results"].length === 1) {
         const res = await dkhpAPI.dangKiHocPhan(maPhanCongLopHocPhan, maHocKi, trangThaiLopHocPhan, tinChi * 500000, 0);

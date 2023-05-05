@@ -586,11 +586,11 @@ export const CongNo = () => {
                                         </div>
                                     </td>
                                 </tr>
-                                <tr>
+                                {/* <tr>
                                     <td style={{ textAlign: 'left', paddingLeft: '10px' }}>
                                         <div style={{ fontWeight: 'bold' }}>Số tiền bằng chữ: <span>Chưa có</span></div>
                                     </td>
-                                </tr>
+                                </tr> */}
                                 <tr>
                                     <td>
                                         <table style={{ width: '100%', textAlign: 'center' }}>
