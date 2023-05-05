@@ -30,6 +30,14 @@ const lichHocAPI = {
         const url= "/userRequest/dangKiHocPhan";
         return axiosClient.post(url,{ma:ma_lop_hoc_phan,ma_hoc_ki:ma_hoc_ki,trang_thai_dang_ki:trang_thai_dang_ki,so_tien:so_tien,mien_giam:mien_giam},{headers:{ 'authorization': `Bearer ${token}` }});
     },
+    getThongTinSinhVien(token){
+        const url="/userRequest/getThongTinSinhVien"
+        return axiosClient.get(url,{headers:{ 'authorization': `Bearer ${token}` }});
+    },
+    logout(token,refreshToken){
+        const url = "/auth/logout";
+        return axiosClient.delete(url,{refreshToken:refreshToken},{headers:{ 'authorization': `Bearer ${token}` }})
+    }
 
 };
 

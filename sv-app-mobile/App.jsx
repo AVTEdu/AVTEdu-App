@@ -1,5 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
-import { Alert, StyleSheet, Text, View } from 'react-native';
+import { ActivityIndicator, Alert, StyleSheet, Text, View } from 'react-native';
 import LoginScreen from './src/screens/LoginScreen';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
@@ -8,69 +8,110 @@ import BottomNavigator from './src/components/BottomTabNavigaton';
 import DateScreen from './src/screens/DateScreen';
 import { useState } from 'react';
 import SocreScreen from './src/screens/SocreScreen';
-import { Provider } from "react-redux";
+import { Provider, useDispatch } from "react-redux";
 import store from './src/api/store';
 import ModuleRegistrationScreen from './src/screens/ModuleRegistrationScreen';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axiosClient from './src/api/axiosClient';
 import ClassRegistion from './src/screens/ClassRegistion';
 import ChiTietLopHocPhanScreen from './src/screens/ChiTietLopHocPhanScreen';
+import { useEffect } from 'react';
 
 
 const Stack = createNativeStackNavigator();
 
 export default function App() {
+  const [isReady, setIsReady] = useState(false);
+  const [isSignedIn, setSignedIn] = useState(false);
 
-  const [IsReady, SetIsReady] = useState(false);
+  const checkAccessToken = async () => {
+    try {
+      const value = await AsyncStorage.getItem('accessToken');
+      const value1 = await AsyncStorage.getItem('accessToken');
+      
 
-  const LoadFonts = async () => {
-    await useFonts();
+      if (value !== null && value1 != null) {
+        const url = '/userRequest/getThongTinSinhVien';
+        const getUser = await axiosClient.get(url, {
+          headers: { authorization: `Bearer ${value}` },
+        });
+        
+        if (!getUser.status == 201) {
+          const newUrl = '/auth/refreshToken';
+          const getToken = await axiosClient.post(newUrl, { refreshToken: value1 });
+          AsyncStorage.setItem('accessToken', getToken);
+          const url = '/userRequest/getThongTinSinhVien';
+          const getUser = await axiosClient.get(url, {
+            headers: { authorization: `Bearer ${getToken}` },
+          });
+          setSignedIn(true);
+        }
+        setSignedIn(true);
+      }
+    } catch (error) {
+      console.log(error);
+      setSignedIn(false);
+    }
   };
 
-  const Check_Login = async () => {
-      try {
-        const value = await AsyncStorage.getItem('accessToken');
-        const value1 = await AsyncStorage.getItem('accessToken');
-        if (value !== null && value1 != null) {
-          const url = "/userRequest/getThongTinSinhVien";
-          const getUser = await axiosClient.get(url, {headers:{ 'authorization': `Bearer ${value}` }});
-          if(!getUser){
-            const newurl = "/auth/refreshToken";
-            const getToken = await axiosClient.post(newurl,{refreshToken:value1});
-            console.log(getToken)
-            AsyncStorage.setItem("accessToken", getToken);
-            const url = "/userRequest/getThongTinSinhVien";
-            const getUser = await axiosClient.get(url, {headers:{ 'authorization': `Bearer ${getToken}` }});
-            console.log(getUser)
-          }
-        }
-      } catch (error) {
-        console.log(error)
+  const checkServerConnection = async () => {
+    try {
+      const response = await fetch('http://172.19.48.1:4001/hello');
+      if (response.status === 200) {
+        console.log('Server is online');
+        setIsReady(true);
+      } else {
+        console.log('Server is offline');
+        setIsReady(false);
       }
-    
+    } catch (error) {
+      console.log('Error checking server connection:', error);
+      setIsReady(false);
+    }
+  }
+  
+
+  useEffect(() => {
+    checkServerConnection();
+    checkAccessToken();
+    console.log(isSignedIn)
+  },[]);
+
+  if (!isReady) {
+    return (
+      <View style={styles.container}>
+        <Text>Loading...</Text>
+      </View>
+    );
   }
 
-  if(!IsReady){
-  {Check_Login()}
   return (
-    <Provider store={store}>
-    <NavigationContainer>
-      <Stack.Navigator initialRouteName="Login" screenOptions={{ headerShown: false }}>
-        <Stack.Screen name="Login" component={LoginScreen} />
-        <Stack.Screen name="Home" component={BottomNavigator} />
-        <Stack.Screen name="Date" component={DateScreen} />
-        <Stack.Screen name="Score" component={SocreScreen} />
-        <Stack.Screen name="ModuleRegistration" component={ModuleRegistrationScreen} />
-        <Stack.Screen name="ClassRegistion" component={ClassRegistion} />
-        <Stack.Screen name="ChiTietLopHocPhan" component={ChiTietLopHocPhanScreen} />
-      </Stack.Navigator>
-    </NavigationContainer>
+    <Provider store={store} >
+      <NavigationContainer >
+        <Stack.Navigator
+          initialRouteName='Login'
+          screenOptions={{ headerShown: false }}
+        >
+          <Stack.Screen name="Login" component={LoginScreen} />
+          <Stack.Screen name="Home" component={BottomNavigator} />
+          <Stack.Screen name="Date" component={DateScreen} />
+          <Stack.Screen name="Score" component={SocreScreen} />
+          <Stack.Screen
+            name="ModuleRegistration"
+            component={ModuleRegistrationScreen}
+          />
+          <Stack.Screen name="ClassRegistion" component={ClassRegistion} />
+          <Stack.Screen
+            name="ChiTietLopHocPhan"
+            component={ChiTietLopHocPhanScreen}
+          />
+        </Stack.Navigator>
+      </NavigationContainer>
     </Provider>
   );
-  }
-
-  return <View style={styles.container}> <Text>Hello Wolrd</Text> </View>
 }
+
+
 
 const styles = StyleSheet.create({
   container: {

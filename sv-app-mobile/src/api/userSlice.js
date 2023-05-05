@@ -15,6 +15,28 @@ export const signin = createAsyncThunk("auth/signIn", async (payload, thunkAPI) 
    
   });
 
+  // export const checkAccessToken = createAsyncThunk(
+  //   'auth/checkAccessToken',
+  //   async () => {
+  //     try {
+  //       const accessToken = await AsyncStorage.getItem('accessToken');
+  //       const refreshToken = await AsyncStorage.getItem('refreshToken');
+  
+  //       if (accessToken && refreshToken) {
+  //         const url = '/userRequest/getThongTinSinhVien';
+  //         const response = await axiosClient.get(url, {
+  //           headers: { authorization: `Bearer ${accessToken}` },
+  //         });
+  //         return response.data;
+  //       } else {
+  //         throw new Error('Access token and/or refresh token not found');
+  //       }
+  //     } catch (error) {
+  //       throw error;
+  //     }
+  //   }
+  // );
+
   const userSlice = createSlice({
     name: "user",
     initialState: {

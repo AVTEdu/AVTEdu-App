@@ -492,11 +492,12 @@ export default function KetQuaHocTap() {
                                                                                                         (ds.diem_tk_hs_10 > 9) ? 'A+' : (ds.diem_tk_hs_10 > 8.5) ? 'A' :
                                                                                                             (ds.diem_tk_hs_10 > 8) ? 'B+' : (ds.diem_tk_hs_10 > 7) ? 'B' :
                                                                                                                 (ds.xep_loai > 6) ? 'C+' : (ds.xep_loai > 5.5) ? 'C' :
-                                                                                                                    (ds.xep_loai > 5) ? 'D+' : (ds.xep_loai > 4) ? 'D' : 'F'
+                                                                                                                    (ds.xep_loai > 5) ? 'D+' : (ds.xep_loai > 4) ? 'D' :
+                                                                                                                        (ds.xep_loai !== null) ? 'F' : ''
                                                                                                     }
                                                                                                 </td>
                                                                                                 <td className title="XepLoai">{
-                                                                                                    (ds.diem_tk_hs_10 < 4) ? 'Yếu' : (ds.diem_tk_hs_10 < 5) ? 'Trung bình' :
+                                                                                                    (ds.diem_tk_hs_10 === null) ? '' : (ds.diem_tk_hs_10 < 4) ? 'Yếu' : (ds.diem_tk_hs_10 < 5) ? 'Trung bình' :
                                                                                                         (ds.diem_tk_hs_10 < 8) ? 'Khá' : (ds.diem_tk_hs_10 < 9) ? 'Giỏi' :
                                                                                                             (ds.diem_tk_hs_10 >= 9) ? 'Xuất sắc' : ''
                                                                                                 }</td>

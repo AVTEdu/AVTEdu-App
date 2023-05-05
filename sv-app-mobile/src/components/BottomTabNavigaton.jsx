@@ -5,6 +5,7 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 import COLORS from '../consts/color';
 import {View} from 'react-native';
 import HomeScreen from '../screens/HomeScreen';
+import TaiKhoanScreen from '../screens/TaiKhoanScreen';
 
 
 const Tab = createBottomTabNavigator();
@@ -47,15 +48,15 @@ const BottomNavigator = () => {
           tabBarIcon: ({color}) => (
             <View
               style={{
-                height: 60,
-                width: 60,
+                height: 50,
+                width: 50,
                 justifyContent: 'center',
                 alignItems: 'center',
                 backgroundColor: COLORS.white,
                 borderColor: COLORS.primary,
                 borderWidth: 2,
-                borderRadius: 30,
-                top: -25,
+                borderRadius: 10,
+                top: -15,
                 elevation: 5,
               }}>
               <Icon name="search" color={COLORS.primary} size={28} />
@@ -74,7 +75,7 @@ const BottomNavigator = () => {
       />
       <Tab.Screen
         name="Tài khoản"
-        component={HomeScreen}
+        component={TaiKhoanScreen}
         options={{
           tabBarIcon: ({color}) => (
             <Icon name="person" color={color} size={28} />
