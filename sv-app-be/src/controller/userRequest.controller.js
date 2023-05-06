@@ -627,7 +627,7 @@ const getDanhSachHocPhi = async (req, res, next) => {
     next(error);
   }
 };
-const getMonDaDangKiTrongHocKi = async (req, res, next) => {
+const rgetMonDaDangKiTrongHocKi = async (req, res, next) => {
   try {
     const { ma } = req.body;
     const foundSinhVien = await SinhVien.findOne({

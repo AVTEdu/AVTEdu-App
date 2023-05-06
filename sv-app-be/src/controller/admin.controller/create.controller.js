@@ -57,6 +57,43 @@ const createSinhVien = async (req, res, next) => {
     next(error);
   }
 };
+//Hàm tạo nhiều sinh viên 
+const createManySinhVien = async (req, res, next) => {
+  try {
+    console.log("----------------createSinhVien-----------------------------");
+    const { ma, ten, ngay_sinh, email, gioitinh, sdt, so_cmnd, khoa, chuyennganh } = req.body;
+    const password = "12345";
+    // Check có sinh viên nào trùng không
+    const foundUser = await SinhVien.findOne({ where: { ma_sinh_vien: `${ma}` } });
+    if (foundUser)
+      return res
+        .status(403)
+        .json({ error: { message: "Mã đã được sử dụng." } });
+    // Generate a salt
+    const salt = await bcrypt.genSalt(10);
+    // Generate a password hash (salt + hash)
+    const passwordHashed = await bcrypt.hash(password, salt);
+    // Re-assign password hashed
+    const newPassword = passwordHashed;
+    //Tạo sinh viên mới
+    const newUser = await SinhVien.create({
+      ma_sinh_vien: ma,
+      ho_ten_sinh_vien: ten,
+      ngay_sinh: ngay_sinh,
+      email: email,
+      gioitinh: 0,
+      mat_khau: newPassword,
+      so_dien_thoai: sdt,
+      so_cmnd: so_cmnd,
+      nien_khoa: "2022-2026",
+      ma_khoa: khoa,
+      ma_chuyen_nganh: chuyennganh
+    });
+    return res.status(201).json({ success: true, newUser });
+  } catch (error) {
+    next(error);
+  }
+};
 // Hàm tạo khoa mới
 const createKhoa = async (req, res, next) => {
   try {
