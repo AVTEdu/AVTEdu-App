@@ -10,7 +10,7 @@ const transporter = nodemailer.createTransport({
   secure:true,
   auth: {
     user: 'avteduapp@gmail.com',
-    pass: 'tocxuaeswmvqrctl'
+    pass: 'temlegxcxikfmmnt'
   }
 });
 //Tạo theme của mail với Mailgen

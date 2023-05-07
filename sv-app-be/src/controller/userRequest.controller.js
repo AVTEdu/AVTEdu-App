@@ -639,7 +639,7 @@ const getMonDaDangKiTrongHocKi = async (req, res, next) => {
         .json({ error: { message: "Không tìm thấy sinh viên" } });
     }
     const dsMonDaDangKiTrongHocKi = await sequelize.query(
-      `select lhp.ma_hoc_phan,mh.ten_mon_hoc,lhp.ten_lop_hoc_phan,hpp.so_tin_chi_ly_thuyet,hpp.so_tin_chi_thuc_hanh,pclhp.nhom_thuc_hanh_phu_trach,hp.so_tien,hp.trang_thai,hp.trang_thai_dang_ki,lhp.trang_thai
+      `select lhp.ma_lop_hoc_phan,mh.ten_mon_hoc,lhp.ten_lop_hoc_phan,hpp.so_tin_chi_ly_thuyet,hpp.so_tin_chi_thuc_hanh,pclhp.nhom_thuc_hanh_phu_trach,hp.so_tien,hp.trang_thai,hp.trang_thai_dang_ki,lhp.trang_thai
    ,hp.trang_thai AS trangthaiHocPhi 
       from sinhviendb.sinh_vien as sv
     left join sinhviendb.hoc_phi_sinh_vien as hpsv on sv.ma_sinh_vien = hpsv.ma_sinh_vien
@@ -1161,4 +1161,6 @@ module.exports = {
   getChiTietPhieuThuTongHopBySV,
   getKetQuaHocTap,
   getLopHocPhanKhongTrung,
+  HuyHocPhanDaDangKi,
+  getChiTietHocPhanDaDangKi
 };

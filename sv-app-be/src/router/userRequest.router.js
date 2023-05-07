@@ -61,7 +61,14 @@ router
   .put(verifyAccessToken, userRequestController.getKetQuaHocTap);
   router
   .route("/getLopHocPhanKhongTrung")
-  .put(verifyAccessToken, userRequestController.getLopHocPhanKhongTrung);  
+  .put(verifyAccessToken, userRequestController.getLopHocPhanKhongTrung); 
+  
+router
+  .route("/HuyHocPhanDaDangKi")
+  .delete(verifyAccessToken, userRequestController.HuyHocPhanDaDangKi); 
+router
+  .route("/getChiTietHocPhanDaDangKi")
+  .put(verifyAccessToken, userRequestController.getChiTietHocPhanDaDangKi); 
 
 
 module.exports = router;
