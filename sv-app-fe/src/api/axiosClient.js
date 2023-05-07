@@ -3,7 +3,7 @@ import Cookies from "js-cookie";
 //let token = localStorage.getItem("token");
 const axiosClient = axios.create({
   // baseURL: "https://back-end-vietanh6jk-appchatfinalzola.vercel.app/",
-  baseURL: "http://13.214.33.186:4000/",
+  baseURL: "https://api.avtedu.cloud/",
   // baseURL: "http://54.169.194.122:4000/",
   headers: {
     "Content-Type": "application/json",
