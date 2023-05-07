@@ -76,6 +76,7 @@ const ConnectDB = (function () {
             {
                 host: 'database-1.chodan0pjpbf.ap-southeast-1.rds.amazonaws.com',
                 dialect: 'mysql',
+                logging: false,
             }
 
         );
