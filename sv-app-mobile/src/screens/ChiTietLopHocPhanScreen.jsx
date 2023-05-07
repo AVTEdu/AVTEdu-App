@@ -14,11 +14,12 @@ import { useSelector } from "react-redux";
 import { useState } from "react";
 
 const ChiTietLopHocPhanScreen = ({ route, navigation }) => {
-  const { ma_lop_hoc_phan, ten_lop_hoc_phan, ma_hoc_ki } = route.params;
+  const { ma_lop_hoc_phan, ten_lop_hoc_phan, ma_hoc_ki ,da_dki} = route.params;
   const token = useSelector((state) => state.user.user[0].accessToken);
   const [listLopHocPhan, setListLopHocPhan] = useState("");
   const [selectedThucHanh, setSelectedThucHanh] = useState("");
   const [isThucHanh, setIsThucHanh] = useState(false);
+  const [clickCount,setClickCount] = useState(0);
   useEffect(() => {
     getData();
   }, []);
@@ -33,6 +34,7 @@ const ChiTietLopHocPhanScreen = ({ route, navigation }) => {
     navigation.navigate("Home");
   };
   const DangKyHandler = async () => {
+    if(!da_dki)
     Alert.alert("Cảnh báo", "Bạn có chắc chắn đăng ký học phần này", [
       {
         text: "Có",
@@ -40,7 +42,7 @@ const ChiTietLopHocPhanScreen = ({ route, navigation }) => {
           try{
           if (
             Array.isArray(listLopHocPhan) &&
-            listLopHocPhan[0]?.ma_phan_cong
+            listLopHocPhan[0]?.ma_phan_cong || clickCount >= 1
           ) {
             if (isThucHanh) {
               const DKHP_ThucHanh = await lichHocAPI.dangKiHocPhan(
@@ -52,6 +54,7 @@ const ChiTietLopHocPhanScreen = ({ route, navigation }) => {
                 0
               );
               console.log(DKHP_ThucHanh);
+              setClickCount(clickCount+1)
             }
             let ma_phan_cong = listLopHocPhan[0].ma_phan_cong;
             console.log(ma_phan_cong);
@@ -89,8 +92,9 @@ const ChiTietLopHocPhanScreen = ({ route, navigation }) => {
     }
   };
   function ChiTietLopHocPhanTab({ lop_hoc_phan }) {
-    const setSlected = () => {
-      // return COLORS.secondary;
+    const setSlected = (ma,loai_hoc_phan_phu_trach) => {
+      if(selectedThucHanh == ma || loai_hoc_phan_phu_trach != 1)
+         return COLORS.secondary;
       return COLORS.white;
     };
 
@@ -99,7 +103,7 @@ const ChiTietLopHocPhanScreen = ({ route, navigation }) => {
         style={{
           borderBottomColor: COLORS.blue,
           borderBottomWidth: 10,
-          backgroundColor: setSlected(),
+          backgroundColor: setSlected(lop_hoc_phan.ma_phan_cong),
         }}
         onPress={() => {
           isThucHanh ? setSelectedThucHanh(lop_hoc_phan.ma_phan_cong) : null;
@@ -109,7 +113,7 @@ const ChiTietLopHocPhanScreen = ({ route, navigation }) => {
           style={{
             width: "100%",
             height: 40,
-            backgroundColor: COLORS.white,
+            backgroundColor: setSlected(lop_hoc_phan.ma_phan_cong,lop_hoc_phan.loai_hoc_phan_phu_trach),
             flexDirection: "row",
             alignItems: "center",
             borderBottomWidth: 0.5,
@@ -155,7 +159,7 @@ const ChiTietLopHocPhanScreen = ({ route, navigation }) => {
               }}
             >
               Thứ:{lop_hoc_phan.ngay_hoc_trong_tuan}{" "}
-              {lop_hoc_phan.loai_hoc_phan_phu_trach != 1
+              {lop_hoc_phan.loai_hoc_phan_phu_trach == 1
                 ? "(Thực hành)"
                 : "(Lý Thuyết)"}
             </Text>

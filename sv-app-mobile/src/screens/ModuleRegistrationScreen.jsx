@@ -27,6 +27,7 @@ const ModuleRegistrationScreen = ({ navigation }) => {
   const [checked, setChecked] = useState("");
   const [tenMonHoc, setTenMonHoc] = useState("");
   const [selectedHocPhan, setSelectedHocPhan] = useState("");
+  const [isDaDKy, setDaDKy] = useState(false);
 
 
   useEffect(() => {
@@ -43,6 +44,8 @@ const ModuleRegistrationScreen = ({ navigation }) => {
   useEffect(() => {
     getDSHocPhanDaDky(token, selectedHocKi);
   }, [selectedHocKi]);
+
+
 
   const getData = async () => {
     const res = await lichHocAPI.getHocKiSinhVien(token);
@@ -62,6 +65,23 @@ const ModuleRegistrationScreen = ({ navigation }) => {
   const BackHandler = () => {
     navigation.navigate("Home");
   };
+
+  const ChiTietHandler = () => {
+    if(!isDaDKy){
+    navigation.navigate("ClassRegistion", {
+      ma_hoc_phan: checked,
+      ma_hoc_ki: selectedHocKi,
+      ten_mon_hoc: tenMonHoc,
+    });
+    }else{
+      navigation.navigate("ChiTietLopHocPhan", {
+        ma_lop_hoc_phan: checked,
+        ma_hoc_ki: selectedHocKi,
+        ten_mon_hoc: tenMonHoc,
+        da_dki: isDaDKy
+      });
+    }
+  }
 
   const RenderItemHocKi = (item) => {
     return (
@@ -110,6 +130,7 @@ const ModuleRegistrationScreen = ({ navigation }) => {
           setChecked("");
           setTenMonHoc("");
           setSelectedHocPhan("");
+          setDaDKy(false);
         }}
       >
         <View
@@ -166,6 +187,11 @@ const ModuleRegistrationScreen = ({ navigation }) => {
           setChecked(item.ma_hoc_phan);
           setTenMonHoc(item.ten_mon_hoc);
           setSelectedHocPhan(item.ten_mon_hoc);
+          if(item.trang_thai_dang_ki != null){
+            setDaDKy(true);
+          }else{
+            setDaDKy(false);
+          }
         }}
       >
         <View
@@ -491,13 +517,7 @@ const ModuleRegistrationScreen = ({ navigation }) => {
               justifyContent: "center",
               alignItems: "center",
             }}
-            onPress={() => {
-              navigation.navigate("ClassRegistion", {
-                ma_hoc_phan: checked,
-                ma_hoc_ki: selectedHocKi,
-                ten_mon_hoc: tenMonHoc,
-              });
-            }}
+            onPress={() => ChiTietHandler()}
           >
             <Text style={{ fontWeight: "bold", color: COLORS.white }}>
               Chi tiết
