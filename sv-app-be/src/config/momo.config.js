@@ -7,7 +7,7 @@ function momoPayment(orderInfo, amount, callback) {
     var accessKey = 'F8BBA842ECF85';
     var secretKey = 'K951B6PE1waDMi640xX08PD3vg6EkVlz';
     var partnerCode = 'MOMO';
-    var redirectUrl = 'https://api.avtedu.cloud/xac-nhan-thanh-toan';
+    var redirectUrl = 'https://avt-edu-app-fe.vercel.app/xac-nhan-thanh-toan';
     var ipnUrl = 'https://webhook.site/b3088a6a-2d17-4f8d-a383-71389a6c600b';
     var requestType = "payWithMethod";
     var orderId = partnerCode + new Date().getTime();
