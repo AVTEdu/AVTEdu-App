@@ -312,9 +312,10 @@ export default function Dkhp() {
   }
 
   const locRaMaPhanCongLyThuyet = (ctlhp) => {
-    if (ctlhp.loai_hoc_phan_phu_trach == 2) {
-      setMaPhanCongLopHocPhanLyThuyet(ctlhp.ma_phan_cong)
-    }
+    chiTietLopHP["results"].map((ctlhp) =>
+      ctlhp.loai_hoc_phan_phu_trach == 2 ? setMaPhanCongLopHocPhanLyThuyet(ctlhp.ma_phan_cong)
+        : <></>
+    )
   }
 
   return (
@@ -704,7 +705,7 @@ export default function Dkhp() {
                                                           onClick={(e) => {
                                                             e.preventDefault()
                                                             selectLopHocPhan(e, dsLhp, dsLhp.ma_lop_hoc_phan)
-                                                            setMaPhanCongLopHocPhanLyThuyet(dsLhp.ma_phan_cong)
+                                                            //setMaPhanCongLopHocPhanLyThuyet(dsLhp.ma_phan_cong)
                                                             changeColorWhenClick3("maLHP" + dsLhp.ma_lop_hoc_phan, dsLhp)
                                                           }}
                                                           selectedDsToanBoLopHP={isSelectedDsToanBoLopHP(dsLhp)}
@@ -786,7 +787,7 @@ export default function Dkhp() {
                                                 (ctlhp.trang_thai === 1 ? setTrangThaiLopHocPhan('Đăng ký mới') : setTrangThaiLopHocPhan(''))
                                                 setMaPhanCongLopHocPhan(ctlhp.ma_phan_cong)
                                                 setLoaiHocPhanPhuTrach(ctlhp.loai_hoc_phan_phu_trach)
-                                                locRaMaPhanCongLyThuyet(ctlhp);
+                                                locRaMaPhanCongLyThuyet();
                                                 changeColorWhenClick2("maPC" + ctlhp.ma_phan_cong, ctlhp);
                                               }}>
                                               <td className="text-left">
@@ -896,7 +897,7 @@ export default function Dkhp() {
                                             </td>
 
                                             <td>{sttHocPhanDaDangKy++}</td>
-                                            <td>{hpDaDk.ma_hoc_phan}</td>
+                                            <td>{hpDaDk.ma_lop_hoc_phan}</td>
                                             <td className="text-left">
                                               {hpDaDk.ten_mon_hoc}
                                             </td>
