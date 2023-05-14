@@ -37,6 +37,10 @@ const lichHocAPI = {
     logout(token,refreshToken){
         const url = "/auth/logout";
         return axiosClient.delete(url,{refreshToken:refreshToken},{headers:{ 'authorization': `Bearer ${token}` }})
+    },
+    getKetQuaHocTapAndroid(token){
+        const url ="/userRequest/getKetQuaHocTapAndroid"
+        return axiosClient.get(url,{headers:{ 'authorization': `Bearer ${token}` }});
     }
 
 };

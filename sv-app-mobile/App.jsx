@@ -56,7 +56,8 @@ export default function App() {
 
   const checkServerConnection = async () => {
     try {
-      const response = await fetch('https://api.avtedu.cloud/hello');
+      // const response = await fetch('https://api.avtedu.cloud/hello');
+      const response = await fetch('http:172.27.128.1:4000/hello');
       if (response.status === 200) {
         console.log('Server is online');
         setIsReady(true);

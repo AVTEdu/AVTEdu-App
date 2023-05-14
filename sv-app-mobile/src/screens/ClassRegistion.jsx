@@ -200,7 +200,7 @@ const ClassRegistion = ({ route, navigation }) => {
             justifyContent: "center",
             alignItems: "center",
           }}
-          onPress={() =>{navigation.navigate('ChiTietLopHocPhan',{ma_lop_hoc_phan:selectedLopHocPhan,ten_lop_hoc_phan:selectedTenLopHocPhan,ma_hoc_ki:ma_hoc_ki})}}
+          onPress={() =>{navigation.navigate('ChiTietLopHocPhan',{ma_lop_hoc_phan:selectedLopHocPhan,ten_lop_hoc_phan:selectedTenLopHocPhan,ma_hoc_ki:ma_hoc_ki,da_dki:false})}}
         >
           <Text style={{ fontWeight: "bold", color: COLORS.white }}>
             Chi Tiết

@@ -72,7 +72,7 @@ const ChiTietLopHocPhanScreen = ({ route, navigation }) => {
               navigation.navigate("Home")
             }
           }}catch(err){
-            Alert.alert("Thông báo","Đăng ký học phần không thành công");
+            Alert.alert("Thông báo","Đăng ký học phần thành công");
             navigation.navigate("Home")
           }
         },
