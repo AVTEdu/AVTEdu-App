@@ -322,9 +322,10 @@ const getFile = async (req, res, next) => {
         workbook.Sheets[sheet_name_list[0]]
       );
       const listImport = [{}];
-      // console.log(json);
+      console.log(json);
       listImport.shift();
-      for (let i = 8; i < json.length; i++) {
+      for (let i = 0; i < json.length; i++) {
+        // const excelDate = new Date(Math.floor((cell - 25569) * 86400 * 1000));
         listImport.push({
           stt: json[i].__EMPTY,
           ma_sinh_vien: json[i].__EMPTY_1,

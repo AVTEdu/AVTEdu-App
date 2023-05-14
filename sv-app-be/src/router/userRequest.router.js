@@ -70,5 +70,10 @@ router
   .route("/getChiTietHocPhanDaDangKi")
   .put(verifyAccessToken, userRequestController.getChiTietHocPhanDaDangKi); 
 
+router
+  .route("/getKetQuaHocTapAndroid")
+  .get(verifyAccessToken, userRequestController.getKetQuaHocTapAndroid); 
+
+
 
 module.exports = router;

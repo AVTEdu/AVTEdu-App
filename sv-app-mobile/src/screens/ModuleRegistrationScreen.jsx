@@ -236,6 +236,129 @@ const ModuleRegistrationScreen = ({ navigation }) => {
       </TouchableOpacity>
     );
   };
+  //
+  const RenderItemHocPhanDaDky = (item) => {
+    return checked == item.ma_hoc_phan ? (
+      <TouchableOpacity
+        style={{
+          justifyContent: "center",
+          alignItems: "center",
+          fontFamily: "Roboto",
+          width: "95%",
+          flexDirection: "row",
+          backgroundColor: COLORS.primary,
+          marginTop: 5,
+        }}
+        onPress={() => {
+          setChecked("");
+          setTenMonHoc("");
+          setSelectedHocPhan("");
+          setDaDKy(false);
+        }}
+      >
+        <View
+          style={{
+            width: "25%",
+            paddingVertical: 15,
+            alignItems: "center",
+            justifyContent: "center",
+            borderWidth: 0.8,
+            borderColor: COLORS.grey,
+            height: 65,
+          }}
+        >
+          <Text>{item.ma_lop_hoc_phan}</Text>
+        </View>
+        <View
+          style={{
+            width: "50%",
+            paddingVertical: 15,
+            alignItems: "center",
+            borderWidth: 0.8,
+            borderColor: COLORS.grey,
+            height: 65,
+            justifyContent: "center",
+          }}
+        >
+          <Text>{item.ten_mon_hoc}</Text>
+        </View>
+        <View
+          style={{
+            width: "25%",
+            paddingVertical: 15,
+            alignItems: "center",
+            borderWidth: 0.8,
+            borderColor: COLORS.grey,
+            height: 65,
+            justifyContent: "center",
+          }}
+        >
+          <Text>{item.so_tin_chi_ly_thuyet + item.so_tin_chi_thuc_hanh}</Text>
+        </View>
+      </TouchableOpacity>
+    ) : (
+      <TouchableOpacity
+        style={{
+          justifyContent: "center",
+          alignItems: "center",
+          fontFamily: "Roboto",
+          width: "95%",
+          flexDirection: "row",
+          marginTop: 5,
+        }}
+        onPress={() => {
+          setChecked(item.ma_lop_hoc_phan);
+          setTenMonHoc(item.ten_mon_hoc);
+          setSelectedHocPhan(item.ten_mon_hoc);
+          if(item.trang_thai_dang_ki != null){
+            setDaDKy(true);
+          }else{
+            setDaDKy(false);
+          }
+        }}
+      >
+        <View
+          style={{
+            width: "25%",
+            paddingVertical: 15,
+            alignItems: "center",
+            borderWidth: 0.8,
+            borderColor: COLORS.grey,
+            height: 65,
+            justifyContent: "center",
+          }}
+        >
+          <Text>{item.ma_lop_hoc_phan}</Text>
+        </View>
+        <View
+          style={{
+            width: "50%",
+            paddingVertical: 15,
+            alignItems: "center",
+            borderWidth: 0.8,
+            borderColor: COLORS.grey,
+            height: 65,
+            justifyContent: "center",
+          }}
+        >
+          <Text>{item.ten_mon_hoc}</Text>
+        </View>
+        <View
+          style={{
+            width: "25%",
+            paddingVertical: 15,
+            alignItems: "center",
+            borderWidth: 0.8,
+            borderColor: COLORS.grey,
+            height: 65,
+            justifyContent: "center",
+          }}
+        >
+          <Text>{item.so_tin_chi_ly_thuyet + item.so_tin_chi_thuc_hanh}</Text>
+        </View>
+      </TouchableOpacity>
+    );
+  };
 
   function renderHeader() {
     return (
@@ -450,7 +573,7 @@ const ModuleRegistrationScreen = ({ navigation }) => {
                   borderColor: COLORS.grey,
                 }}
               >
-                <Text style={{ color: COLORS.white }}>Mã môn</Text>
+                <Text style={{ color: COLORS.white }}>Mã lớp</Text>
               </View>
               <View
                 style={{
@@ -477,7 +600,7 @@ const ModuleRegistrationScreen = ({ navigation }) => {
             </View>
             <FlatList
               data={dsHocPhanDaDky}
-              renderItem={({ item }) => RenderItemHocPhan(item)}
+              renderItem={({ item }) => RenderItemHocPhanDaDky(item)}
             />
           </View>
         ) : null}

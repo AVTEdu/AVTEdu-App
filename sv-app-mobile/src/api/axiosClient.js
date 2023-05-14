@@ -2,7 +2,8 @@ import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 //let token = localStorage.getItem("token");
 const axiosClient = axios.create({
-  baseURL: "https://api.avtedu.cloud",
+  // baseURL: "https://api.avtedu.cloud",
+  baseURL: "http:172.27.128.1:4000",
   headers: {
     "Content-Type": "application/json",
     Accept: "application/json",
