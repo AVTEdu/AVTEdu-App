@@ -6,7 +6,6 @@ const { QueryTypes } = require("sequelize");
 const HocPhan = require("../models/hocphan.model");
 const LopHocPhan = require("../models/lophocphan.model");
 const ThoiKhoaBieuSinhVien = require("../models/thoikhoabieusinhvien.model");
-const { createThoiKhoaBieuSinhVien } = require("./admin.controller");
 const { verifyRefreshToken } = require("../helpers/jwt.service");
 const HocPhi = require("../models/hocphi.model");
 const responseHanlder = require("../handlers/response.handler");
@@ -134,7 +133,12 @@ const getMonHocSinhVienChuaHoc = async (req, res, next) => {
     next(error);
   }
 };
-
+/**
+ * Hàm này dùng để lấy tất cả lớp học phần từ mã học phần
+ * @returns: Tất cả lớp học phần của học phần từ mã học phần
+ * @private:Private
+ * @Vietanh6jk
+ */
 const getLopHocPhanByHocPhan = async (req, res, next) => {
   try {
     //Mã học phần
@@ -170,18 +174,26 @@ const getLopHocPhanByHocPhan = async (req, res, next) => {
     next(error);
   }
 };
+/**
+ * Hàm này dùng để lấy tất cả thông tin của lớp học phần và số lượng sinh viên phụ trách, loại học phần phụ trách , ngày học trong tuần ,tiết  * * học bắt đầu, tiết học kết thúc, tên dãy nhà, tên phòng học , tên giảng viên, thời gian bắt đầu , thời gian kết thúc,mã phân công lớp học phần
+ * @returns: Tất cả thông tin ở trên
+ * @private:Private
+ * @Vietanh6jk
+ */
 const getChiTietLopHocPhan = async (req, res, next) => {
   try {
     //Mã lớp học phần
     const { ma } = req.body;
+    //Kiểm tra học phần có tồn tại
     const foundHocPhan = await LopHocPhan.findOne({
       where: { ma_lop_hoc_phan: `${ma}` },
     });
-    console.log(ma);
+    //Nếu học phần không tồn tại tạo lỗi 400
     if (!foundHocPhan)
       return res
-        .status(403)
+        .status(400)
         .json({ error: { message: "Không tìm thấy  học phần" } });
+    //Nếu học phần tồn tại đưa ra những thông tin mà request cần    
     sequelize
       .query(
         `select lhp.trang_thai,pclhp.so_luong_sv_phu_trach,pclhp.loai_hoc_phan_phu_trach,tkb.ngay_hoc_trong_tuan,tkb.tiet_hoc_bat_dau,tkb.tiet_hoc_ket_thuc,ph.ten_day_nha,ph.ten_phong_hoc,gv.ten_giang_vien,tkb.thoi_gian_bat_dau,tkb.thoi_gian_ket_thuc,pclhp.ma_phan_cong
@@ -198,6 +210,7 @@ const getChiTietLopHocPhan = async (req, res, next) => {
         { type: QueryTypes.SELECT }
       )
       .then(function (results) {
+        //Kiểm tra nhằm tránh res tạo ra object null
         if (results[0].ma_phan_cong == null)
           return res.status(201).json({ success: true });
         return res.status(201).json({ success: true, results });
@@ -381,36 +394,49 @@ const getChiTietLopHocPhan = async (req, res, next) => {
 //     next(error);
 //   }
 // };
-
+/**
+ * Hàm này dùng để đăng kí học phần dành cho sinh viên đang nhập hiện tại cần mã phân công lớp học phần , mã học kì, trạng thái đăng kí, số tiền * học phí và miễn giảm . 
+ * @returns: Đăng ký thành công sinh viên cho lớp học phần đồng thời tạo những bảng liên quan
+ * @private:Private
+ * @Vietanh6jk
+ */
 const DangKiHocPhan = async (req, res, next) => {
   try {
-    //Mã phân công lớp học phần
+    //Mã phân công lớp học phần,mã học kì, trạng thái đăng kí , số tiền ,miễn giảm
     const { ma, ma_hoc_ki, trang_thai_dang_ki, so_tien, mien_giam } = req.body;
+    //Mã sinh viên từ payload
     const ma_sinh_vien = req.payload.userId;
+    //Kiểm tra mã phân công lớp học phần
     const foundPCLopHocPhan = await PhanCongLopHocPhan.findOne({
       where: { ma_phan_cong: `${ma}` },
     });
     if (!foundPCLopHocPhan) {
+      //Đưa ra lỗi 400 nếu không tồn tại mã phân công lớp học phần
       return res
-        .status(403)
+        .status(400)
         .json({ error: { message: "Không tìm thấy phân công lớp học phần" } });
     }
+    //Kiểm tra mã lớp học phần
     const foundLopHocPhan = await LopHocPhan.findOne({
       where: { ma_lop_hoc_phan: `${foundPCLopHocPhan.ma_lop_hoc_phan}` },
     });
     if (!foundLopHocPhan) {
+      //Đưa ra lỗi 400 nếu không tồn tại mã lớp học phần
       return res
-        .status(403)
+        .status(400)
         .json({ error: { message: "Không tìm thấy lớp học phần" } });
     }
+    //Kiểm tra mã học kì mà request đưa có trùng với mã học kì mà lớp học phần liên kết
     if (ma_hoc_ki != foundLopHocPhan.ma_hoc_ki) {
-      return res.status(403).json({
+      //Đưa ra lỗi 400 nếu mã học kì không trùng
+      return res.status(400).json({
         error: {
           message:
             "Học kì trong lớp học phần và học kì đang chọn không trùng nhau",
         },
       });
     }
+    //Kiểm tra thời khóa biểu của 
     const ThoiKhoabieu = await sequelize.query(
       `select tkb.* 
                                             from sinhviendb.lop_hoc_phan as lhp
@@ -640,7 +666,7 @@ const getMonDaDangKiTrongHocKi = async (req, res, next) => {
     }
     const dsMonDaDangKiTrongHocKi = await sequelize.query(
       `select lhp.ma_lop_hoc_phan,mh.ten_mon_hoc,lhp.ten_lop_hoc_phan,hpp.so_tin_chi_ly_thuyet,hpp.so_tin_chi_thuc_hanh,pclhp.nhom_thuc_hanh_phu_trach,hp.so_tien,hp.trang_thai,hp.trang_thai_dang_ki,lhp.trang_thai
-   ,hp.trang_thai AS trangthaiHocPhi 
+   ,hp.trang_thai AS trangthaiHocPhi,lhp.ma_hoc_phan
       from sinhviendb.sinh_vien as sv
     left join sinhviendb.hoc_phi_sinh_vien as hpsv on sv.ma_sinh_vien = hpsv.ma_sinh_vien
     left join sinhviendb.hoc_phi as hp on hp.ma_hoc_phi = hpsv.ma_hoc_phi

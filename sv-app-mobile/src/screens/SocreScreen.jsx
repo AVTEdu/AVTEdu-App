@@ -47,7 +47,7 @@ const SocreScreen = ({navigation}) => {
               style={{flex:1, top:60, width: "100%", flexDirection: "row",paddingHorizontal:15}}
             >
                 <View  style={{flexDirection: "row"}}>
-                    <TouchableOpacity onPress={BackHandler}>
+                    <TouchableOpacity onPress={() => BackHandler}>
                         <Icon name="arrow-back-ios" color={COLORS.white} size={23} />
                     </TouchableOpacity>
                     <Text style={{fontWeight:"700",color:COLORS.white,fontFamily:"Roboto"}} >Xem điểm</Text>
@@ -64,29 +64,26 @@ const SocreScreen = ({navigation}) => {
       renderDiemTungHocKi(ma_hoc_ki)
     };
     const renderDiemTungHocKi = (ma_hoc_ki) =>{
-      const getHocKi = (data, maHocKi) => {
-        const hocKi = data.flat().filter((item) => item.ma_hoc_ki === maHocKi);
-        return hocKi.length > 0 ? hocKi[0] : null;
-      };
-      let ketQuaHocTapTheoKi = getHocKi(ketQuaHocTap,ma_hoc_ki);
-      // Kiểm tra nếu ketQuaHocTapTheoKi không phải là mảng, chuyển đổi thành mảng
-      if (!Array.isArray(ketQuaHocTapTheoKi)) {
-        ketQuaHocTapTheoKi = Object.values(ketQuaHocTapTheoKi);
-      }
-     return ketQuaHocTapTheoKi;
-    }   
-    const ketQuaHocKi = renderDiemTungHocKi(ma_hoc_ki);
-    console.log(ma_hoc_ki)
+    //   const getHocKi = (data, maHocKi) => {
+    //     const hocKi = data.flat().filter((item) => item.ma_hoc_ki === maHocKi);
+    //     return hocKi.length > 0 ? hocKi[0] : null;
+    //   };
+    //   let ketQuaHocTapTheoKi = getHocKi(ketQuaHocTap,ma_hoc_ki);
+    //   // Kiểm tra nếu ketQuaHocTapTheoKi không phải là mảng, chuyển đổi thành mảng
+    //   if (!Array.isArray(ketQuaHocTapTheoKi)) {
+    //     ketQuaHocTapTheoKi = Object.values(ketQuaHocTapTheoKi);
+    //   }
+    //  return ketQuaHocTapTheoKi;
+    // }   
+    // const ketQuaHocKi = renderDiemTungHocKi(ma_hoc_ki);
+    // console.log(ma_hoc_ki)
+    }
     return(
       <View style={{marginHorizontal:"2.5%",marginTop:10}}>
-      <TouchableOpacity style={{width:"95%",padding:15,backgroundColor:COLORS.light,flexDirection:'row',alignItems:'center'}} onPress={handlePress} >
+      <TouchableOpacity style={{width:"95%",padding:15,backgroundColor:COLORS.light,flexDirection:'row',alignItems:'center'}} >
         <Text style={{color:COLORS.blue}}>HK{thu_tu_hoc_ki}-({nam_hoc_bat_dau}-{nam_hoc_ket_thuc})</Text>
         <Icon name="arrow-back-ios" color={COLORS.dark} size={20} style={{ transform: [{ rotate: '270deg' }],top:10,right:10,position:'absolute'}}/>
       </TouchableOpacity>
-      {/* <FlatList
-        data={ketQuaHocKi}
-        renderItem={(item) => console.log(item)}
-      /> */}
       </View>
     )
   }
