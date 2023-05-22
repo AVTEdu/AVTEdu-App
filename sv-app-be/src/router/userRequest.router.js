@@ -65,7 +65,7 @@ router
   
 router
   .route("/HuyHocPhanDaDangKi")
-  .delete(verifyAccessToken, userRequestController.HuyHocPhanDaDangKi); 
+  .put(verifyAccessToken, userRequestController.HuyHocPhanDaDangKi); 
 router
   .route("/getChiTietHocPhanDaDangKi")
   .put(verifyAccessToken, userRequestController.getChiTietHocPhanDaDangKi); 

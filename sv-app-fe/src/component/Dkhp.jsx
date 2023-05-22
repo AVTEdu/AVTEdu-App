@@ -275,6 +275,7 @@ export default function Dkhp() {
     if (checkBox.checked == true) {
       coTrungLop.style.display = "none";
       koTrungLop.style.display = "";
+      setChiTietLopHP('');
     } else {
       coTrungLop.style.display = "";
       koTrungLop.style.display = "none";
@@ -317,7 +318,23 @@ export default function Dkhp() {
         : <></>
     )
   }
-
+  const huyHocPhan = async (e, hpDaDk) => {
+    try {
+      const res = await dkhpAPI.HuyHocPhanDaDangKi(hpDaDk.ma_hoc_phan);
+      setPopupNotify({
+        title: 'Thông báo',
+        mes: 'Hủy học phần thành công',
+        isLoading: true
+      });
+    } catch (error) {
+      setPopupNotify({
+        title: 'Thông báo',
+        mes: 'Hủy học phần thành công',
+        isLoading: true
+      });
+      const res = await dkhpAPI.getHocPhanDaDangKyTrongKynay(maHocKi);
+      setHpDaDangKy(res.data);
+    }}
   return (
     <div className="wrapper">
       <>
