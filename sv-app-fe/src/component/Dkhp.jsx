@@ -10,6 +10,7 @@ import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import TableScrollbar from 'react-table-scrollbar';
 import PopupNotify from "./PopupNotify";
+import PopupCTHPdaDK from "./PopupCTHPdaDK";
 
 export default function Dkhp() {
   const [hocKiState, setHocKiState] = useState(null);
@@ -43,6 +44,13 @@ export default function Dkhp() {
     mes: '',
     isLoading: false
   })
+  const [popupCTLHP, setPopupCTLHP] = useState({
+    isLoading: false,
+    dsChiTietLHP: null
+  })
+
+  const [stateDaKhoa, setStateDaKhoa] = useState();
+
 
   useEffect(() => {
     if (resTime > 0) {
@@ -215,7 +223,7 @@ export default function Dkhp() {
     console.log("so tin chi:" + tinChi);
     try {
       setLoading(true);
-      if (loaiHocPhanPhuTrach === 1 && chiTietLopHP["results"].length > 1) {
+      if (loaiHocPhanPhuTrach === 1 && chiTietLopHP["results"].length > 1 && stateDaKhoa === 1) {
         const res = await dkhpAPI.dangKiHocPhan(maPhanCongLopHocPhan, maHocKi, trangThaiLopHocPhan, tinChi * 500000, 0);
 
         const resF5MonChuaDK = await dkhpAPI.getToanBoMonHocChuaDangKy();
@@ -235,7 +243,7 @@ export default function Dkhp() {
           isLoading: true
         });
       }
-      else if (chiTietLopHP["results"].length === 1) {
+      else if (chiTietLopHP["results"].length === 1 && stateDaKhoa === 1) {
         const res = await dkhpAPI.dangKiHocPhan(maPhanCongLopHocPhan, maHocKi, trangThaiLopHocPhan, tinChi * 500000, 0);
         // const res2 = await dkhpAPI.getHocPhanDaDangKyTrongKynay(maHocKi);
         // setHpDaDangKy(res2.data);
@@ -248,6 +256,13 @@ export default function Dkhp() {
         var receiveDate = (new Date()).getTime();
         var responseTimeMs = receiveDate - sendDate;
         setResTime(responseTimeMs);
+      }
+      else if (stateDaKhoa !== 1) {
+        setPopupNotify({
+          title: 'Thông báo',
+          mes: 'Học phần đã khóa',
+          isLoading: true
+        });
       }
       else {
         setPopupNotify({
@@ -318,6 +333,7 @@ export default function Dkhp() {
         : <></>
     )
   }
+
   const huyHocPhan = async (e, hpDaDk) => {
     try {
       const res = await dkhpAPI.HuyHocPhanDaDangKi(hpDaDk.ma_hoc_phan);
@@ -334,7 +350,31 @@ export default function Dkhp() {
       });
       const res = await dkhpAPI.getHocPhanDaDangKyTrongKynay(maHocKi);
       setHpDaDangKy(res.data);
-    }}
+    }
+
+  }
+
+  function hanldeChiTietLHP(choose) {
+    if (choose) {
+      setPopupCTLHP({
+        isLoading: false,
+        dsChiTietLHP: null
+      });
+    }
+  }
+
+  const activeChiTietLopHP = async (ma) => {
+    try {
+      const res = await dkhpAPI.getChiTietHocPhanDaDangKi(ma);
+      setPopupCTLHP({
+        isLoading: true,
+        dsChiTietLHP: res.data
+      });
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
+
   return (
     <div className="wrapper">
       <>
@@ -677,6 +717,7 @@ export default function Dkhp() {
                                                             e.preventDefault()
                                                             selectLopHocPhan(e, dsLhp, dsLhp.ma_lop_hoc_phan)
                                                             //setMaPhanCongLopHocPhanLyThuyet(dsLhp.ma_phan_cong)
+                                                            setStateDaKhoa(dsLhp.trang_thai)
                                                             changeColorWhenClick("maLHP" + dsLhp.ma_lop_hoc_phan, dsLhp)
                                                           }}
                                                           selectedDsToanBoLopHP={isSelectedDsToanBoLopHP(dsLhp)}
@@ -687,7 +728,7 @@ export default function Dkhp() {
                                                             <div className="name">{dsLhp.ten_mon_hoc}</div>
                                                             <div>
                                                               <span lang="dkhp-trangthai">Trạng thái</span>: <span className="cl-red">
-                                                                {dsLhp.trang_thai === 1 ? 'Có thể đăng ký' : 'Đã khóa'}</span><br />
+                                                                {dsLhp.trang_thai == 1 ? 'Có thể đăng ký' : 'Đã khóa'}</span><br />
                                                               <span lang="dkhp-malhp">Mã lớp  học phần</span>: {dsLhp.ma_lop_hoc_phan} - {dsLhp.ten_lop_hoc_phan}
                                                             </div>
                                                           </TableCell>
@@ -897,6 +938,9 @@ export default function Dkhp() {
                                                 data-guid="XtSz3Srj05-JLoWwpYueBA"
                                                 lang="dangkyhocphan-xem-button"
                                                 style={{}}
+                                                onClick={(e) => {
+                                                  activeChiTietLopHP(hpDaDk.ma_lop_hoc_phan)
+                                                }}
                                               >
                                                 Xem
                                               </button>
@@ -908,6 +952,7 @@ export default function Dkhp() {
                                                 data-idlhpdk="7623002"
                                                 data-guid="XtSz3Srj05-JLoWwpYueBA"
                                                 lang="dangkyhocphan-huy-button"
+                                                onClick={(e) => huyHocPhan(e, hpDaDk)}
                                               >
                                                 Hủy
                                               </button>
@@ -968,6 +1013,7 @@ export default function Dkhp() {
         </div>
       </>
       {popupNotify.isLoading && <PopupNotify onDialog={handleNotify} title={popupNotify.title} mes={popupNotify.mes} />}
+      {popupCTLHP.isLoading && <PopupCTHPdaDK onDialog={hanldeChiTietLHP} dsChiTietHPdaDK={popupCTLHP.dsChiTietLHP} />}
     </div >
   );
 }

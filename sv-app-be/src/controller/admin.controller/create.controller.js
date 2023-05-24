@@ -316,8 +316,9 @@ const createLopHocPhan = async (req, res, next) => {
         .status(403)
         .json({ error: { message: "Mã lớp học phần đã tồn tại ." } });
     }
+    const new_ma_LHP = await LopHocPhan.max("ma_lop_hoc_phan");
     const newLopHocPhan = await LopHocPhan.create({
-      ma_lop_hoc_phan: ma,
+      ma_lop_hoc_phan: new_ma_LHP + 1,
       ten_lop_hoc_phan: ten,
       ten_viet_tat: ten_vt,
       so_luong_dang_ki_toi_da: sl_sv_td,

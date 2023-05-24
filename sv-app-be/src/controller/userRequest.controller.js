@@ -394,6 +394,9 @@ const getChiTietLopHocPhan = async (req, res, next) => {
 //     next(error);
 //   }
 // };
+
+
+
 /**
  * Hàm này dùng để đăng kí học phần dành cho sinh viên đang nhập hiện tại cần mã phân công lớp học phần , mã học kì, trạng thái đăng kí, số tiền * học phí và miễn giảm . 
  * @returns: Đăng ký thành công sinh viên cho lớp học phần đồng thời tạo những bảng liên quan
@@ -448,21 +451,36 @@ const DangKiHocPhan = async (req, res, next) => {
 
     if (!ThoiKhoabieu) {
       return res
-        .status(403)
+        .status(400)
         .json({ error: { message: "Không tìm thấy thời khoá biểu " } });
     }
     const foundSinhVien = await SinhVien.findOne({
       where: { ma_sinh_vien: req.payload.userId },
     });
+    //Kiểm tra mã sinh viên có tồn tại
     if (!foundSinhVien) {
       return res
-        .status(403)
+        .status(400)
         .json({ error: { message: "Không tìm thấy sinh viên" } });
     }
+    //Kiểm tra số lượng sinh viên trong lớp 
     if (
       foundLopHocPhan.so_luong_dang_ki_toi_da ===
       foundLopHocPhan.so_luong_dang_ki_hien_tai
     ) {
+      return res
+        .status(400)
+        .json({ error: { message: "Lớp không ở trạng thái đăng kí" } });
+    }
+    //Kiểm tra trạng thái 
+    const checkTrangThai = await sequelize.query(
+      `select lhp.trang_thai
+      from sinhviendb.phan_cong_lop_hoc_phan as pclhp
+      left join sinhviendb.lop_hoc_phan as lhp on lhp.ma_lop_hoc_phan = pclhp.ma_lop_hoc_phan
+      where pclhp.ma_phan_cong ='${ma}'`,
+      { type: QueryTypes.SELECT }
+    );
+    if(checkTrangThai != 1){
       return res
         .status(403)
         .json({ error: { message: "Lớp đã đủ số lượng sinh viên đăng kí " } });

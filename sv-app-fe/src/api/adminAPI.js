@@ -118,6 +118,13 @@ const adminAPI = {
         const url = "/admin/taoMaSinhVien";
         return axiosClient.get(url);
     },
+    createLopHocPhan(Ma, Ten, Ten_VT, sl_toida, soNhomTH, Loai, TT, MaHK, MaHP, mota) {
+        const url = "/admin/createLopHocPhan";
+        return axiosClient.post(url, {
+            ma: Ma, ten: Ten, ten_vt: Ten_VT, sl_sv_td: sl_toida, sl_dk_ht: 0, so_nhom_th: soNhomTH, loai: Loai,
+            trang_thai: TT, ma_hoc_ki: MaHK, ma_hoc_phan: MaHP, mo_ta: mota
+        });
+    },
 
 };
 export default adminAPI;
