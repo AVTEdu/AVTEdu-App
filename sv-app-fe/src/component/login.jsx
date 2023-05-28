@@ -56,15 +56,8 @@ export const Login = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        //console.log(user, pwd);
         try {
             setLoading(true);
-            // for (let i = 0; i <= 100000; i += 10) {
-            //     await signinAPI.signIn({
-            //         ma: user,
-            //         password: pwd,
-            //     });
-            // }
             const res = await signinAPI.signIn({
                 ma: user,
                 password: pwd,
