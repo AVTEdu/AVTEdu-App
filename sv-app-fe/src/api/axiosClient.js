@@ -3,8 +3,8 @@ import Cookies from "js-cookie";
 //let token = localStorage.getItem("token");
 const axiosClient = axios.create({
   // baseURL: "https://back-end-vietanh6jk-appchatfinalzola.vercel.app/",
-  baseURL: "https://api.avtedu.cloud/",
-  // baseURL: "http://localhost:4000/",
+  //baseURL: "https://api.avtedu.cloud/",
+  baseURL: "http://localhost:4000/",
   headers: {
     "Content-Type": "application/json",
     //authorization: `${token}`,
