@@ -73,6 +73,9 @@ router
 router
   .route("/getKetQuaHocTapAndroid")
   .get(verifyAccessToken, userRequestController.getKetQuaHocTapAndroid); 
+router
+  .route("/getChiTietLopHocPhan")
+  .get(verifyAccessToken, userRequestController.getChiTietLopHocPhan);
 
 
 

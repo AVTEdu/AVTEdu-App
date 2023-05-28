@@ -37,12 +37,12 @@ const updateSinhVien = async (req, res, next) => {
     const result = await SinhVien.update(
       {
         ho_ten_sinh_vien: ten,
-        ngay_sinh,
-        email,
-        gioitinh,
+        ngay_sinh:ngay_sinh,
+        email:email,
+        gioitinh:gioitinh,
         ho_khau_thuong_tru: hktt,
         so_dien_thoai: sdt,
-        so_cmnd,
+        so_cmnd:so_cmnd,
       },
       {
         where: { ma_sinh_vien: ma },
