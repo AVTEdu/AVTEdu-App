@@ -70,10 +70,12 @@ export const CongNo = () => {
     useEffect(() => {
         const activeRefresh = async () => {
             try {
-                const dshpsv_res = await adminAPI.getDSHocPhiSinhVien(sinhVienSearch);
-                const dsphieuthu_res = await adminAPI.getDanhSachPhieuThuSinhVien(sinhVienSearch);
-                setDsPhieuThu(dsphieuthu_res.data);
-                setDsHocPhi(dshpsv_res.data);
+                setTimeout(async () => {
+                    const dshpsv_res = await adminAPI.getDSHocPhiSinhVien(sinhVienSearch);
+                    const dsphieuthu_res = await adminAPI.getDanhSachPhieuThuSinhVien(sinhVienSearch);
+                    setDsPhieuThu(dsphieuthu_res.data);
+                    setDsHocPhi(dshpsv_res.data);
+                }, 500)
             } catch (error) {
                 console.log(error.message);
             }
@@ -128,11 +130,11 @@ export const CongNo = () => {
 
     const thanhToanCongNo = async () => {
         try {
-            const res = await adminAPI.thanhToanCongNoSinhVien(sinhVienSearch, isCheck);
+            const res = await adminAPI.thanhToanCongNoSinhVien(sinhVienSearch, isCheck.filter((item) => item !== ''));
             if (res.status == 200 && isCheck.length > 0) {
                 setIsCheck([]);
                 setIsCheckAll(false);
-                setStateThanhToanSinhVien(res.data);
+                setStateThanhToanSinhVien(isCheck.filter((item) => item !== ''));
                 setPopupNotify({
                     title: 'Thông báo',
                     mes: 'Thanh toán cho sinh viên thành công !!!',
@@ -161,7 +163,7 @@ export const CongNo = () => {
 
     const handleSelectAll = (e) => {
         setIsCheckAll(!isCheckAll);
-        setIsCheck(dsHocPhi["dsHocPhiSinhVien"].map((dshp) => dshp.ma_hoc_phi));
+        setIsCheck(dsHocPhi["dsHocPhiSinhVien"].map((dshp) => dshp.trang_thai == 1 ? dshp.ma_hoc_phi : ''));
         if (isCheckAll) {
             setIsCheck([]);
         }
