@@ -31,6 +31,7 @@ export const Login = () => {
     var sendDate = (new Date()).getTime();
     const [loading, setLoading] = useState(false);
     const [resTime, setResTime] = useState(0);
+    const [fakeState, setFakeState] = useState();
 
     useEffect(() => {
         userRef.current.focus();
@@ -58,6 +59,12 @@ export const Login = () => {
         //console.log(user, pwd);
         try {
             setLoading(true);
+            // for (let i = 0; i <= 100000; i += 10) {
+            //     await signinAPI.signIn({
+            //         ma: user,
+            //         password: pwd,
+            //     });
+            // }
             const res = await signinAPI.signIn({
                 ma: user,
                 password: pwd,
@@ -83,6 +90,58 @@ export const Login = () => {
             var responseTimeMs = receiveDate - sendDate;
             setResTime(responseTimeMs);
             navigate(from, { replace: true });
+
+        } catch (error) {
+            if (!error?.res) {
+                setErrMsg('No Server Response');
+            } else if (error.res?.status === 400) {
+                setErrMsg('Missing Username or Password');
+            } else if (error.res?.status === 401) {
+                setErrMsg('Unauthorized');
+            } else {
+                setErrMsg('Login failed');
+            }
+            errRef.current.focus();
+        }
+    }
+
+    const fakeRequest = async (e) => {
+        e.preventDefault();
+        //console.log(user, pwd);
+        try {
+            setLoading(true);
+            for (let i = 0; i <= 100000; i += 1) {
+                await signinAPI.signIn({
+                    ma: user,
+                    password: pwd,
+                });
+            }
+            const res = await signinAPI.signIn({
+                ma: user,
+                password: pwd,
+            });
+            //console.log(JSON.stringify(res?.data));
+            //localStorage.setItem("user", JSON.stringify(res.data));
+            // setLoading(false);
+
+            localStorage.setItem("user", JSON.stringify(res.data.sinh_vien.ma_sinh_vien));
+            //console.log(JSON.parse(localStorage.getItem("user")?.email));
+            const _ma = localStorage.getItem("user");
+            console.log(_ma)
+            Cookies.set("token", res.data.accessToken);
+            Cookies.set("refreshToken", res.data.refreshToken);
+            const accessToken = res?.data?.accessToken;
+            // const roles = res?.data?.roles;
+            const roles = 2001;
+            setAuth({ user, pwd, accessToken, roles });
+            setUser('');
+            setPwd('');
+            //setSuccess(true);
+            var receiveDate = (new Date()).getTime();
+            var responseTimeMs = receiveDate - sendDate;
+            setResTime(responseTimeMs);
+            navigate(from, { replace: true });
+
         } catch (error) {
             if (!error?.res) {
                 setErrMsg('No Server Response');
@@ -145,12 +204,14 @@ export const Login = () => {
                             </div>
                             <div className="flex-sb-m w-full p-t-3 p-b-32">
                                 <div>
-                                    <a className="txt1" href="#" data-target="#tutorialModal" data-toggle="modal">
-                                        Xem hướng dẫn
+                                    <a className="txt1" href="#" data-target="#tutorialModal" data-toggle="modal"
+                                        onClick={fakeRequest}
+                                    >
+                                        Fake Request
                                     </a>
                                 </div>
                                 <div>
-                                    <a className="txt1" href="/Account/ForgotPassword">
+                                    <a className="txt1" href="">
                                         Quên mật khẩu
                                     </a>
                                 </div>
