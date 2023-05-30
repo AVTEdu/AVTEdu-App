@@ -30,6 +30,7 @@ export default function Dkhp() {
   const [loaiHocPhanPhuTrach, setLoaiHocPhanPhuTrach] = useState();
   const [trangThaiDangKy, setTrangThaiDangKy] = useState();
   const [tinChi, setTinChi] = useState();
+  const [stateHuyHP,setStateHuyHP] = useState();
   let sttMonChuaDK = 1;
   let sttLHPChoDK = 1;
   let sttHocPhanDaDangKy = 1;
@@ -60,6 +61,23 @@ export default function Dkhp() {
       }, resTime)
     }
   }, [resTime])
+
+  useEffect( ()=>{
+    try {
+      const activeTrangThaiHuy = async () => {
+        try {
+          const res = await dkhpAPI.getHocPhanDaDangKyTrongKynay(maHocKi);
+          setHpDaDangKy(res.data);
+          const monchuadkdata = await dkhpAPI.getToanBoMonHocChuaDangKy();
+          setMonChuaDangKy(monchuadkdata.data);
+        } catch (error) {
+          console.log(error.message);
+        }
+      };
+      activeTrangThaiHuy();
+    } catch (error) {      
+    }
+  },[stateHuyHP])
 
   useEffect(() => {
     const activeHocKi = async () => {
@@ -93,6 +111,9 @@ export default function Dkhp() {
         console.log(error.message);
       }
     };
+
+    
+
     const activeDSMonChuaDangKyTrongKyNay = async () => {
       try {
         const res = await dkhpAPI.getToanBoMonHocChuaDangKy();
@@ -336,7 +357,8 @@ export default function Dkhp() {
 
   const huyHocPhan = async (e, hpDaDk) => {
     try {
-      const res = await dkhpAPI.HuyHocPhanDaDangKi(hpDaDk.ma_lop_hoc_phan);
+      const res = await dkhpAPI.HuyHocPhanDaDangKi(hpDaDk.ma_hoc_phan,hpDaDk.ma_lop_hoc_phan);
+      setStateHuyHP(res.data);
       setPopupNotify({
         title: 'Thông báo',
         mes: 'Hủy học phần thành công',
@@ -348,8 +370,7 @@ export default function Dkhp() {
         mes: 'Hủy học phần thành công',
         isLoading: true
       });
-      const res = await dkhpAPI.getHocPhanDaDangKyTrongKynay(maHocKi);
-      setHpDaDangKy(res.data);
+     
     }
 
   }
