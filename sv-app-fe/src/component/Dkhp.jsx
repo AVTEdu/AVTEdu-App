@@ -336,7 +336,7 @@ export default function Dkhp() {
 
   const huyHocPhan = async (e, hpDaDk) => {
     try {
-      const res = await dkhpAPI.HuyHocPhanDaDangKi(hpDaDk.ma_hoc_phan);
+      const res = await dkhpAPI.HuyHocPhanDaDangKi(hpDaDk.ma_lop_hoc_phan);
       setPopupNotify({
         title: 'Thông báo',
         mes: 'Hủy học phần thành công',
