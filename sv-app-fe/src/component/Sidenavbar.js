@@ -50,7 +50,36 @@ export default function Sidenavbar() {
                             >Đăng xuất </a>
                         </div>
                     </div>
-
+                    <div className="user-account">
+                        <div className="user-info">
+                            <a className="user-account-name" href="/lich-theo-tuan"
+                            >Lịch </a>
+                        </div>
+                    </div>
+                    <div className="user-account">
+                        <div className="user-info">
+                            <a className="user-account-name" href="/ket-qua-hoc-tap"
+                            >Điểm </a>
+                        </div>
+                    </div>
+                    <div className="user-account">
+                        <div className="user-info">
+                            <a className="user-account-name" href="/dkhp"
+                            >Đăng ký học phần </a>
+                        </div>
+                    </div>
+                    <div className="user-account">
+                        <div className="user-info">
+                            <a className="user-account-name" href="/cong-no-sinh-vien"
+                            >Công nợ </a>
+                        </div>
+                    </div>
+                    <div className="user-account">
+                        <div className="user-info">
+                            <a className="user-account-name" href="/thanh-toan-truc-tuyen"
+                            >Thanh toán </a>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
