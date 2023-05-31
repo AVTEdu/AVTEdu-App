@@ -19,6 +19,22 @@ export const ThoiKhoaBieu = () => {
     const [maKhoa, setMaKhoa] = useState();
     const [dsChuyenNganh, setDsChuyenNganh] = useState();
     const [maCN, setMaCN] = useState();
+    const [newMaPC, setNewMaPC] = useState();
+    const [popupNotify, setPopupNotify] = useState({
+        title: '',
+        mes: '',
+        isLoading: false
+    })
+    function handleNotify(choose) {
+        if (choose) {
+            setPopupNotify({
+                title: '',
+                mes: '',
+                isLoading: false
+            });
+        }
+    }
+
     useEffect(() => {
         const getAllTKB = async () => {
             try {
@@ -30,6 +46,17 @@ export const ThoiKhoaBieu = () => {
             }
         };
         getAllTKB();
+    }, [])
+    useEffect(() => {
+        const getNewMaPC = async () => {
+            try {
+                const res = await adminAPI.getNewMaPhanCong();
+                setNewMaPC(res.data);
+            } catch (error) {
+
+            }
+        }
+        getNewMaPC();
     }, [])
     useEffect(() => {
         const getDSKhoa = async () => {
@@ -81,6 +108,30 @@ export const ThoiKhoaBieu = () => {
     }
     if (!dsHK) return null;
     if (!dsKhoa) return null;
+    const newTKB = async () => {
+        var nhapThuTuNgayHocTrongTuan = document.querySelector('#nhapThuTuNgayHocTrongTuan').value;
+        var nhapTGBatDau = document.querySelector('#nhapTGBatDau').value;
+        var nhapTGKetThuc = document.querySelector('#nhapTGKetThuc').value;
+        var nhapTietBD = document.querySelector('#nhapTietBD').value;
+        var nhapTietKT = document.querySelector('#nhapTietKT').value;
+        var nhapMaPhong = document.querySelector('#nhapMaPhong').value;
+        var nhapMaPhanCong = document.querySelector('#nhapMaPhanCong').value;
+        try {
+            const newTKB = await adminAPI.createThoiKhoaBieu(nhapThuTuNgayHocTrongTuan, nhapTGBatDau, nhapTGKetThuc, nhapTietBD, nhapTietKT, nhapMaPhong, nhapMaPhanCong);
+            setPopupNotify({
+                title: 'Thông báo',
+                mes: 'Thêm lịch thành công',
+                isLoading: true
+            });
+        } catch (error) {
+            console.log(error.message)
+            setPopupNotify({
+                title: 'Thông báo',
+                mes: 'Thêm lịch thất bại',
+                isLoading: true
+            });
+        }
+    }
     return (
         <>
             <Sidebar />
@@ -218,15 +269,15 @@ export const ThoiKhoaBieu = () => {
                                                         }} >
                                                             <thead>
                                                                 <tr style={{ backgroundColor: "#CADAE1" }}>
-                                                                    <th style={{
+                                                                    {/* <th style={{
                                                                         border: "2px solid"
                                                                     }}>
                                                                         <input type="checkbox"></input>
-                                                                    </th>
+                                                                    </th> */}
                                                                     <th style={{ border: "2px solid" }}>Mã thời khóa biểu</th>
-                                                                    <th style={{ border: "2px solid" }}>Loại học phần</th>
+                                                                    {/* <th style={{ border: "2px solid" }}>Loại học phần</th> */}
                                                                     <th style={{ border: "2px solid" }}>Số ngày học trong tuần</th>
-                                                                    <th style={{ border: "2px solid" }}>Nhóm TH</th>
+                                                                    {/* <th style={{ border: "2px solid" }}>Nhóm TH</th> */}
                                                                     <th style={{ border: "2px solid" }}>Thời gian bắt đầu</th>
                                                                     <th style={{ border: "2px solid" }}>Thời gian kết thúc</th>
                                                                     <th style={{ border: "2px solid" }}>Tiết học bắt đầu</th>
@@ -245,17 +296,17 @@ export const ThoiKhoaBieu = () => {
                                                                             {
                                                                                 dsTKB["result"].map((ds) => (
                                                                                     <tr>
-                                                                                        <td style={{ border: "2px solid" }}>
+                                                                                        {/* <td style={{ border: "2px solid" }}>
                                                                                             <input type="checkbox" value=""></input>
-                                                                                        </td>
+                                                                                        </td> */}
                                                                                         <td style={{ border: "2px solid" }}>{ds.ma_thoi_khoa_bieu}</td>
-                                                                                        <td style={{ border: "2px solid" }}>{
+                                                                                        {/* <td style={{ border: "2px solid" }}>{
                                                                                             ds.loai_hoc_phan == 1 ? "Lý thuyết" : "Thực hành"
-                                                                                        }</td>
+                                                                                        }</td> */}
                                                                                         <td style={{ border: "2px solid" }}>Thứ {ds.ngay_hoc_trong_tuan}</td>
-                                                                                        <td style={{ border: "2px solid" }}>{
+                                                                                        {/* <td style={{ border: "2px solid" }}>{
                                                                                             ds.nhom_thuc_hanh == null ? "Không có" : ds.nhom_thuc_hanh
-                                                                                        }</td>
+                                                                                        }</td> */}
                                                                                         <td style={{ border: "2px solid" }}>{
                                                                                             ds.thoi_gian_bat_dau
                                                                                         }</td>
@@ -281,17 +332,17 @@ export const ThoiKhoaBieu = () => {
                                                                                         {
                                                                                             dSTKBTheoCNvaHK["ds"].map((ds) => (
                                                                                                 <tr>
-                                                                                                    <td style={{ border: "2px solid" }}>
+                                                                                                    {/* <td style={{ border: "2px solid" }}>
                                                                                                         <input type="checkbox" value=""></input>
-                                                                                                    </td>
+                                                                                                    </td> */}
                                                                                                     <td style={{ border: "2px solid" }}>{ds.ma_thoi_khoa_bieu}</td>
-                                                                                                    <td style={{ border: "2px solid" }}>{
+                                                                                                    {/* <td style={{ border: "2px solid" }}>{
                                                                                                         ds.loai_hoc_phan == 1 ? "Lý thuyết" : "Thực hành"
-                                                                                                    }</td>
+                                                                                                    }</td> */}
                                                                                                     <td style={{ border: "2px solid" }}>Thứ {ds.ngay_hoc_trong_tuan}</td>
-                                                                                                    <td style={{ border: "2px solid" }}>{
+                                                                                                    {/* <td style={{ border: "2px solid" }}>{
                                                                                                         ds.nhom_thuc_hanh == null ? "Không có" : ds.nhom_thuc_hanh
-                                                                                                    }</td>
+                                                                                                    }</td> */}
                                                                                                     <td style={{ border: "2px solid" }}>{
                                                                                                         ds.thoi_gian_bat_dau
                                                                                                     }</td>
@@ -353,84 +404,60 @@ export const ThoiKhoaBieu = () => {
                                                                 <label htmlFor="" className="form-label" style={{
                                                                     display: "inline-block", boxSizing: "border-box"
                                                                     , cursor: "default", fontFamily: "var(--bs-body-font-family)", lineHeight: "var(--bs-body-line-height)"
-                                                                }}>Mã thời khóa biểu</label>
-                                                                <input type="text" className="form-control" id="" placeholder="" />
-                                                            </div>
-                                                            <div className="mb-3">
-                                                                <label htmlFor="" className="form-label" style={{
-                                                                    display: "inline-block", boxSizing: "border-box"
-                                                                    , cursor: "default", fontFamily: "var(--bs-body-font-family)", lineHeight: "var(--bs-body-line-height)"
-                                                                }}>Loại học phần</label>
-                                                                <input type="text" className="form-control" id="" placeholder="" />
-                                                            </div>
-                                                            <div className="mb-3">
-                                                                <label htmlFor="" className="form-label" style={{
-                                                                    display: "inline-block", boxSizing: "border-box"
-                                                                    , cursor: "default", fontFamily: "var(--bs-body-font-family)", lineHeight: "var(--bs-body-line-height)"
                                                                 }}>Thứ tự ngày học trong tuần</label>
-                                                                <input type="text" className="form-control" id="" placeholder="" />
+                                                                <input type="text" className="form-control" id="nhapThuTuNgayHocTrongTuan" placeholder="" defaultValue="1" />
                                                             </div>
 
-                                                            <div className="mb-3">
+                                                            {/* <div className="mb-3">
                                                                 <label htmlFor="" className="form-label" style={{
                                                                     display: "inline-block", boxSizing: "border-box"
                                                                     , cursor: "default", fontFamily: "var(--bs-body-font-family)", lineHeight: "var(--bs-body-line-height)"
                                                                 }}>Nhóm thực hành</label>
                                                                 <input type="text" className="form-control" id="" placeholder="" />
-                                                            </div>
+                                                            </div> */}
                                                             <div className="mb-3">
                                                                 <label htmlFor="" className="form-label" style={{
                                                                     display: "inline-block", boxSizing: "border-box"
                                                                     , cursor: "default", fontFamily: "var(--bs-body-font-family)", lineHeight: "var(--bs-body-line-height)"
                                                                 }}>Thời gian bắt đầu</label>
-                                                                <input type="text" className="form-control" id="" placeholder="" />
+                                                                <input type="date" className="form-control" id="nhapTGBatDau" placeholder="" defaultValue="2023-06-01" />
                                                             </div>
                                                             <div className="mb-3">
                                                                 <label htmlFor="" className="form-label" style={{
                                                                     display: "inline-block", boxSizing: "border-box"
                                                                     , cursor: "default", fontFamily: "var(--bs-body-font-family)", lineHeight: "var(--bs-body-line-height)"
                                                                 }}>Thời gian kết thúc</label>
-                                                                <input type="text" className="form-control" id="" placeholder="" />
+                                                                <input type="date" className="form-control" id="nhapTGKetThuc" placeholder="" defaultValue="2023-09-01" />
                                                             </div>
                                                             <div className="mb-3">
                                                                 <label htmlFor="" className="form-label" style={{
                                                                     display: "inline-block", boxSizing: "border-box"
                                                                     , cursor: "default", fontFamily: "var(--bs-body-font-family)", lineHeight: "var(--bs-body-line-height)"
                                                                 }}>Tiết học bắt đầu</label>
-                                                                <input type="text" className="form-control" id="" placeholder="" />
+                                                                <input type="text" className="form-control" id="nhapTietBD" placeholder="" defaultValue="1" />
                                                             </div>
                                                             <div className="mb-3">
                                                                 <label htmlFor="" className="form-label" style={{
                                                                     display: "inline-block", boxSizing: "border-box"
                                                                     , cursor: "default", fontFamily: "var(--bs-body-font-family)", lineHeight: "var(--bs-body-line-height)"
                                                                 }}>Tiết học kết thúc</label>
-                                                                <input type="text" className="form-control" id="" placeholder="" />
+                                                                <input type="text" className="form-control" id="nhapTietKT" placeholder="" defaultValue="3" />
                                                             </div>
 
                                                             <div className="mb-3">
                                                                 <label htmlFor="" className="form-label" style={{
                                                                     display: "inline-block", boxSizing: "border-box"
                                                                     , cursor: "default", fontFamily: "var(--bs-body-font-family)", lineHeight: "var(--bs-body-line-height)"
-                                                                }}>Lớp học phần</label>
-                                                                <select className="form-select" id="" aria-label="Default select example">
-                                                                    <option selected>Chọn lớp học phần</option>
-                                                                    <option value={1}>One</option>
-                                                                    <option value={2}>Two</option>
-                                                                    <option value={3}>Three</option>
-                                                                </select>
+                                                                }}>Mã phòng học</label>
+                                                                <input type="text" className="form-control" id="nhapMaPhong" placeholder="" defaultValue="11" />
                                                             </div>
 
                                                             <div className="mb-3">
                                                                 <label htmlFor="" className="form-label" style={{
                                                                     display: "inline-block", boxSizing: "border-box"
                                                                     , cursor: "default", fontFamily: "var(--bs-body-font-family)", lineHeight: "var(--bs-body-line-height)"
-                                                                }}>Phòng học</label>
-                                                                <select className="form-select" id="" aria-label="Default select example">
-                                                                    <option selected>Chọn phòng</option>
-                                                                    <option value={1}>One</option>
-                                                                    <option value={2}>Two</option>
-                                                                    <option value={3}>Three</option>
-                                                                </select>
+                                                                }}>Mã phân công</label>
+                                                                <input type="text" className="form-control" id="nhapMaPhanCong" placeholder="" defaultValue={newMaPC.new_ma_PCLHP} />
                                                             </div>
                                                             <div>
                                                                 <label htmlFor="" className="form-label" style={{
@@ -450,6 +477,7 @@ export const ThoiKhoaBieu = () => {
                                                                         }}
                                                                         onClick={(e) => {
                                                                             e.preventDefault()
+                                                                            newTKB();
                                                                             setOpenPopup(false)
                                                                         }}
                                                                     >Lưu</button>
@@ -467,6 +495,7 @@ export const ThoiKhoaBieu = () => {
                     </div>
                 </Popup>
             </div>
+            {popupNotify.isLoading && <PopupNotify onDialog={handleNotify} title={popupNotify.title} mes={popupNotify.mes} />}
         </>
     );
 };

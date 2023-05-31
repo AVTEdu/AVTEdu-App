@@ -125,6 +125,41 @@ const adminAPI = {
             trang_thai: TT, ma_hoc_ki: MaHK, ma_hoc_phan: MaHP, mo_ta: mota
         });
     },
-
+    createPhanCongLopHocPhan(nhapMaPC, nhapLoaiHP, nhapNhomTH, nhapSoluong, nhapMaGiangVien, nhapMaLHP) {
+        const url = "/admin/createPhanCongLopHocPhan";
+        return axiosClient.post(url, {
+            ma: nhapMaPC,
+            loai: nhapLoaiHP,
+            nhom_th_pt: nhapNhomTH,
+            sl_sv_pt: nhapSoluong,
+            ma_giang_vien: nhapMaGiangVien,
+            ma_lop_hoc_phan: nhapMaLHP,
+            ghi_chu: "..."
+        });
+    },
+    getNewMaPhanCong() {
+        const url = "/admin/getNewMaPhanCong";
+        return axiosClient.get(url);
+    },
+    getNewMaLopHocPhan() {
+        const url = "/admin/getNewMaLopHocPhan";
+        return axiosClient.get(url);
+    },
+    createThoiKhoaBieu(nhapThuTuNgayHocTrongTuan, nhapTGBatDau, nhapTGKetThuc, nhapTietBD, nhapTietKT, nhapMaPhong, nhapMaPhanCong) {
+        const url = "/admin/createThoiKhoaBieu";
+        return axiosClient.post(url, {
+            ma: null,
+            loai: "1",
+            ngay_hoc_trong_tuan: nhapThuTuNgayHocTrongTuan,
+            nhom_thuc_hanh: null,
+            thoi_gian_bat_dau: nhapTGBatDau,
+            thoi_gian_ket_thuc: nhapTGKetThuc,
+            tiet_hoc_bat_dau: nhapTietBD,
+            tiet_hoc_ket_thuc: nhapTietKT,
+            ma_phan_cong_lop_hoc_phan: nhapMaPhanCong,
+            ma_phong_hoc: nhapMaPhong,
+            ghi_chu: ".."
+        });
+    },
 };
 export default adminAPI;
