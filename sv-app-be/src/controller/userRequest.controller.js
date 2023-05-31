@@ -527,9 +527,17 @@ const DangKiHocPhan = async (req, res, next) => {
     } else {
       console.log("ko tao dc hoc phi");
     }
-    console.log(createHocPhi);
-    console.log(ma_hoc_phi)
-    const updateSVHT = await LopHocPhan.update(
+    let isUpdateSVHT = await sequelize.query(`select lhp.ma_lop_hoc_phan
+    from sinhviendb.sinh_vien as sv
+    left join sinhviendb.hoc_phi_sinh_vien as hpsv on hpsv.ma_sinh_vien = sv.ma_sinh_vien
+    left join sinhviendb.hoc_phi as hp on hp.ma_hoc_phi = hpsv.ma_hoc_phi
+    left join sinhviendb.lop_hoc_phan as lhp on lhp.ma_lop_hoc_phan = hp.ma_lop_hoc_phan
+    left join sinhviendb.phan_cong_lop_hoc_phan as pclhp on pclhp.ma_lop_hoc_phan = hp.ma_lop_hoc_phan
+    where sv.ma_sinh_vien = ${ma_sinh_vien} and lhp.ma_lop_hoc_phan =${foundPCLopHocPhan.ma_lop_hoc_phan}`,
+      { type: QueryTypes.SELECT }
+    );
+    if(isUpdateSVHT[0] == null ){
+      const updateSVHT = await LopHocPhan.update(
       {
         so_luong_dang_ki_hien_tai: `${
           foundLopHocPhan.so_luong_dang_ki_hien_tai + 1
@@ -537,6 +545,10 @@ const DangKiHocPhan = async (req, res, next) => {
       },
       { where: { ma_lop_hoc_phan: `${foundLopHocPhan.ma_lop_hoc_phan}` } }
     );
+    console.log(updateSVHT)
+    }else{
+      console.log("Khong cap nhat SVHT");
+    }
     const ma_hoc_phi_sinh_vien = await HocPhiSinhVien.max(
       "ma_hoc_phi_sinh_vien"
     );
@@ -600,7 +612,6 @@ const DangKiHocPhan = async (req, res, next) => {
     if (
       createHocPhi &&
       createHocPhi &&
-      updateSVHT &&
       createHocPhiSinhVien &&
       createBangDiem
     ) {
@@ -608,7 +619,6 @@ const DangKiHocPhan = async (req, res, next) => {
         success: true,
         createTKBSinhVien,
         createHocPhi,
-        updateSVHT,
         createHocPhiSinhVien,
         createBangDiem,
       });
@@ -830,6 +840,7 @@ const HuyHocPhanDaDangKi = async (req, res, next) => {
     WHERE sv.ma_sinh_vien = ${ma_sinh_vien} and hpp.ma_hoc_phan = ${ma};`,
       { type: QueryTypes.DELETE }
     );
+    //Cập nhật lại số lượng sinh viên 
     const updateSLSVHT = await LopHocPhan.update(
       {
         so_luong_dang_ki_hien_tai: `${
