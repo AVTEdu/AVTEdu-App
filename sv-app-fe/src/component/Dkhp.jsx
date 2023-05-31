@@ -264,6 +264,14 @@ export default function Dkhp() {
         });
         return;
       }
+      if (loaiHocPhanPhuTrach === '' || loaiHocPhanPhuTrach == undefined || !loaiHocPhanPhuTrach || loaiHocPhanPhuTrach == NaN) {
+        setPopupNotify({
+          title: 'Thông báo',
+          mes: 'Bạn chưa chọn nhóm thực hành',
+          isLoading: true
+        });
+        return;
+      }
       //thuc hanh + LT
       if (loaiHocPhanPhuTrach === 1 && chiTietLopHP["results"].length > 1 && stateDaKhoa === 1) {
         const res = await dkhpAPI.dangKiHocPhan(maPhanCongLopHocPhan, maHocKi, trangThaiLopHocPhan, tinChi * 500000, 0);
@@ -278,6 +286,7 @@ export default function Dkhp() {
         const waitingUpdateThucHanh = setTimeout(async () => {
           const lt = await dkhpAPI.dangKiHocPhan(maPhanCongLopHocPhanLyThuyet, maHocKi, trangThaiLopHocPhan, tinChi * 500000, 0);
         }, responseTimeMs);
+        setLoaiHocPhanPhuTrach('');
         setPopupNotify({
           title: 'Thông báo',
           mes: 'Đăng ký thành công',
@@ -285,7 +294,7 @@ export default function Dkhp() {
         });
       }
       //only lt
-      else if (chiTietLopHP["results"].length === 1 && stateDaKhoa === 1) {
+      else if (loaiHocPhanPhuTrach === 2 && chiTietLopHP["results"].length === 1 && stateDaKhoa === 1) {
         const res = await dkhpAPI.dangKiHocPhan(maPhanCongLopHocPhan, maHocKi, trangThaiLopHocPhan, tinChi * 500000, 0);
         // const res2 = await dkhpAPI.getHocPhanDaDangKyTrongKynay(maHocKi);
         // setHpDaDangKy(res2.data);
