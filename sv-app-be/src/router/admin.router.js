@@ -39,8 +39,14 @@ router
   .route("/createLopHocPhan")
   .post(verifyAccessToken, AdminCreateController.createLopHocPhan);
 router
+  .route("/getNewMaLopHocPhan")
+  .get(verifyAccessToken, AdminCreateController.getNewMaLopHocPhan);
+router
   .route("/createPhanCongLopHocPhan")
   .post(verifyAccessToken, AdminCreateController.createPhanCongLopHocPhan);
+router
+  .route("/getNewMaPhanCong")
+  .get(verifyAccessToken, AdminCreateController.getNewMaPhanCong);
 router
   .route("/createThoiKhoaBieu")
   .post(verifyAccessToken, AdminCreateController.createThoiKhoaBieu);

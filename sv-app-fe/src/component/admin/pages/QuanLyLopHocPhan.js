@@ -255,6 +255,7 @@ export const LopHocPhan = () => {
     })
     const [maKhoaNew, setMaKhoaNew] = useState();
     const [maCNNew, setMaCNNNew] = useState();
+
     useEffect(() => {
         const getAllLop = async () => {
             try {
@@ -266,6 +267,7 @@ export const LopHocPhan = () => {
         };
         getAllLop();
     }, [])
+
     useEffect(() => {
         const getDSKhoa = async () => {
             try {
@@ -671,14 +673,14 @@ export const LopHocPhan = () => {
                                                                     display: "inline-block", boxSizing: "border-box"
                                                                     , cursor: "default", fontFamily: "var(--bs-body-font-family)", lineHeight: "var(--bs-body-line-height)"
                                                                 }}>Tên lớp học phần</label>
-                                                                <input type="text" className="form-control" id="tenlhp" placeholder="" />
+                                                                <input type="text" className="form-control" id="tenlhp" placeholder="" defaultValue="DHKTPM15DEMO" />
                                                             </div>
                                                             <div className="mb-3">
                                                                 <label htmlFor="" className="form-label" style={{
                                                                     display: "inline-block", boxSizing: "border-box"
                                                                     , cursor: "default", fontFamily: "var(--bs-body-font-family)", lineHeight: "var(--bs-body-line-height)"
                                                                 }}>Tên viết tắt</label>
-                                                                <input type="text" className="form-control" id="tvt" placeholder="" />
+                                                                <input type="text" className="form-control" id="tvt" placeholder="" defaultValue="DHKTPM15DEMO" />
                                                             </div>
 
                                                             <div className="mb-3">
@@ -686,7 +688,7 @@ export const LopHocPhan = () => {
                                                                     display: "inline-block", boxSizing: "border-box"
                                                                     , cursor: "default", fontFamily: "var(--bs-body-font-family)", lineHeight: "var(--bs-body-line-height)"
                                                                 }}>Số lượng sv tối đa</label>
-                                                                <input type="text" className="form-control" id="slmax" placeholder="" />
+                                                                <input type="text" className="form-control" id="slmax" placeholder="" defaultValue="81" />
                                                             </div>
 
                                                             {/* <div className="mb-3">
@@ -849,6 +851,12 @@ export const PhanCong = () => {
     const [dsPhanCong, setDsPhanCong] = useState();
     const [dsPCTheoMaGV, setDsPCTheoMaGV] = useState();
     const [dsPCTheoLHP, setDsPCTheoLHP] = useState();
+    const [popupNotify, setPopupNotify] = useState({
+        title: '',
+        mes: '',
+        isLoading: false
+    })
+    const [newMaLHP, setNewMaLHP] = useState();
     useEffect(() => {
         const getAllPhanCong = async () => {
             try {
@@ -860,6 +868,20 @@ export const PhanCong = () => {
         };
         getAllPhanCong();
     }, [])
+
+    useEffect(() => {
+        const getNewMaLHP = async () => {
+            try {
+                const res = await adminAPI.getNewMaLopHocPhan();
+                setNewMaLHP(res.data);
+            } catch (error) {
+
+            }
+        }
+        getNewMaLHP();
+    }, [])
+
+    if (!newMaLHP) return null;
     const searchTheoGiangVien = async (e) => {
         try {
             if (e.target.value === '') {
@@ -892,6 +914,44 @@ export const PhanCong = () => {
             }
         } catch (error) {
 
+        }
+    }
+
+    function handleNotify(choose) {
+        if (choose) {
+            setPopupNotify({
+                title: '',
+                mes: '',
+                isLoading: false
+            });
+        }
+    }
+
+    const newPCLHP = async () => {
+        var nhapMaPC = "...";
+        var nhapLoaiHP = document.querySelector('#nhapLoaiHP').value;
+        var nhapNhomTH = document.querySelector('#nhapNhomTH').value;
+        var nhapSoluong = document.querySelector('#nhapSoluong').value;
+        var nhapMaGiangVien = document.querySelector('#nhapMaGiangVien').value;
+        var nhapMaLHP = document.querySelector('#nhapMaLHP').value;
+        try {
+            const newPCLHP = await adminAPI.createPhanCongLopHocPhan(nhapMaPC, nhapLoaiHP, nhapNhomTH, nhapSoluong, nhapMaGiangVien,
+                nhapMaLHP)
+            setPopupNotify({
+                title: 'Thông báo',
+                mes: 'Phân công lớp học phần thành công',
+                isLoading: true
+            });
+        } catch (error) {
+            if (error.response) {
+                if (error.response.status === 403) {
+                    setPopupNotify({
+                        title: 'Thông báo',
+                        mes: 'Mã đã được sử dụng',
+                        isLoading: true
+                    });
+                }
+            }
         }
     }
     return (
@@ -1156,29 +1216,27 @@ export const PhanCong = () => {
                                                                 <label htmlFor="" className="form-label" style={{
                                                                     display: "inline-block", boxSizing: "border-box"
                                                                     , cursor: "default", fontFamily: "var(--bs-body-font-family)", lineHeight: "var(--bs-body-line-height)"
-                                                                }}>Mã phân công</label>
-                                                                <input type="text" className="form-control" id="" placeholder="" />
-                                                            </div>
-                                                            <div className="mb-3">
-                                                                <label htmlFor="" className="form-label" style={{
-                                                                    display: "inline-block", boxSizing: "border-box"
-                                                                    , cursor: "default", fontFamily: "var(--bs-body-font-family)", lineHeight: "var(--bs-body-line-height)"
                                                                 }}>Loại học phần phụ trách</label>
-                                                                <input type="text" className="form-control" id="" placeholder="" />
+
+                                                                <select className="form-select" id="nhapLoaiHP" aria-label="Default select example"
+                                                                >
+                                                                    <option value={1}>Thực hành</option>
+                                                                    <option value={2}>Lý thuyết</option>
+                                                                </select>
                                                             </div>
                                                             <div className="mb-3">
                                                                 <label htmlFor="" className="form-label" style={{
                                                                     display: "inline-block", boxSizing: "border-box"
                                                                     , cursor: "default", fontFamily: "var(--bs-body-font-family)", lineHeight: "var(--bs-body-line-height)"
                                                                 }}>Nhóm thực hành phụ trách</label>
-                                                                <input type="text" className="form-control" id="" placeholder="" />
+                                                                <input type="text" className="form-control" id="nhapNhomTH" placeholder="" defaultValue="0" />
                                                             </div>
                                                             <div className="mb-3">
                                                                 <label htmlFor="" className="form-label" style={{
                                                                     display: "inline-block", boxSizing: "border-box"
                                                                     , cursor: "default", fontFamily: "var(--bs-body-font-family)", lineHeight: "var(--bs-body-line-height)"
                                                                 }}>Số lượng sv phụ trách</label>
-                                                                <input type="text" className="form-control" id="" placeholder="" />
+                                                                <input type="text" className="form-control" id="nhapSoluong" placeholder="" defaultValue="80" />
                                                             </div>
 
                                                             <div className="mb-3">
@@ -1186,12 +1244,7 @@ export const PhanCong = () => {
                                                                     display: "inline-block", boxSizing: "border-box"
                                                                     , cursor: "default", fontFamily: "var(--bs-body-font-family)", lineHeight: "var(--bs-body-line-height)"
                                                                 }}>Mã giảng viên</label>
-                                                                <select className="form-select" id="" aria-label="Default select example">
-                                                                    <option selected>Chọn giảng viên</option>
-                                                                    <option value={1}>One</option>
-                                                                    <option value={2}>Two</option>
-                                                                    <option value={3}>Three</option>
-                                                                </select>
+                                                                <input type="text" className="form-control" id="nhapMaGiangVien" placeholder="" defaultValue="14" />
                                                             </div>
 
                                                             <div className="mb-3">
@@ -1199,12 +1252,7 @@ export const PhanCong = () => {
                                                                     display: "inline-block", boxSizing: "border-box"
                                                                     , cursor: "default", fontFamily: "var(--bs-body-font-family)", lineHeight: "var(--bs-body-line-height)"
                                                                 }}>Mã lớp học phần</label>
-                                                                <select className="form-select" id="" aria-label="Default select example">
-                                                                    <option selected>Chọn mã LHP</option>
-                                                                    <option value={1}>One</option>
-                                                                    <option value={2}>Two</option>
-                                                                    <option value={3}>Three</option>
-                                                                </select>
+                                                                <input type="text" className="form-control" id="nhapMaLHP" placeholder="" defaultValue={newMaLHP.new_ma_LHP} />
                                                             </div>
 
                                                             <div>
@@ -1225,6 +1273,7 @@ export const PhanCong = () => {
                                                                         }}
                                                                         onClick={(e) => {
                                                                             e.preventDefault()
+                                                                            newPCLHP()
                                                                             setOpenPopup(false)
                                                                         }}
                                                                     >Lưu</button>
@@ -1242,6 +1291,7 @@ export const PhanCong = () => {
                     </div>
                 </Popup>
             </div>
+            {popupNotify.isLoading && <PopupNotify onDialog={handleNotify} title={popupNotify.title} mes={popupNotify.mes} />}
         </>
     );
 };
