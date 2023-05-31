@@ -335,6 +335,15 @@ const createLopHocPhan = async (req, res, next) => {
     next(error);
   }
 }
+
+const getNewMaLopHocPhan = async (req, res, next) => {
+  try {
+    const new_ma_LHP = await LopHocPhan.max("ma_lop_hoc_phan");
+    return res.status(201).json({ success: true, new_ma_LHP });
+  } catch (error) {
+    next(error);
+  }
+}
 const createPhanCongLopHocPhan = async (req, res, next) => {
   try {
     const { ma, loai, nhom_th_pt, sl_sv_pt, ma_giang_vien, ma_lop_hoc_phan, ghi_chu } = req.body;
@@ -344,8 +353,9 @@ const createPhanCongLopHocPhan = async (req, res, next) => {
         .status(403)
         .json({ error: { message: "Mã phân công lớp học phần đã tồn tại ." } });
     }
+    const new_ma_PCLHP = await PhanCongLopHocPhan.max("ma_phan_cong");
     const newPhanCongLopHocPhan = await PhanCongLopHocPhan.create({
-      ma_phan_cong: ma,
+      ma_phan_cong: new_ma_PCLHP + 1,
       loai_hoc_phan_phu_trach: loai,
       nhom_thuc_hanh_phu_trach: nhom_th_pt,
       so_luong_sv_phu_trach: sl_sv_pt,
@@ -358,6 +368,16 @@ const createPhanCongLopHocPhan = async (req, res, next) => {
     next(error);
   }
 }
+
+const getNewMaPhanCong = async (req, res, next) => {
+  try {
+    const new_ma_PCLHP = await PhanCongLopHocPhan.max("ma_phan_cong");
+    return res.status(201).json({ success: true, new_ma_PCLHP });
+  } catch (error) {
+    next(error);
+  }
+}
+
 const createThoiKhoaBieu = async (req, res, next) => {
   try {
     const { ma, loai, ngay_hoc_trong_tuan, nhom_thuc_hanh, thoi_gian_bat_dau, thoi_gian_ket_thuc, tiet_hoc_bat_dau, tiet_hoc_ket_thuc, ma_phan_cong_lop_hoc_phan, ma_phong_hoc, ghi_chu } = req.body;
@@ -367,8 +387,9 @@ const createThoiKhoaBieu = async (req, res, next) => {
         .status(403)
         .json({ error: { message: "Mã thời khoá biểu đã tồn tại ." } });
     }
+    const new_ma_TKB = await ThoiKhoaBieu.max("ma_thoi_khoa_bieu");
     const newThoiKhoaBieu = await ThoiKhoaBieu.create({
-      ma_thoi_khoa_bieu: ma,
+      ma_thoi_khoa_bieu: new_ma_TKB + 1,
       loai_hoc_phan: loai,
       ngay_hoc_trong_tuan: ngay_hoc_trong_tuan,
       nhom_thuc_hanh: nhom_thuc_hanh,
@@ -534,7 +555,7 @@ const createNhieuSinhVien = async (req, res, next) => {
   } catch (err) {
     return res.status(500).json({ success: false, message: err.message });
   }
-}  
+}
 module.exports = {
   createSinhVien,
   createKhoa,
@@ -553,4 +574,6 @@ module.exports = {
   createPhongHoc,
   createBangDiem,
   createThoiKhoaBieuSinhVien,
+  getNewMaLopHocPhan,
+  getNewMaPhanCong
 };
