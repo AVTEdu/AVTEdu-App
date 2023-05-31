@@ -30,7 +30,7 @@ export default function Dkhp() {
   const [loaiHocPhanPhuTrach, setLoaiHocPhanPhuTrach] = useState();
   const [trangThaiDangKy, setTrangThaiDangKy] = useState();
   const [tinChi, setTinChi] = useState();
-  const [stateHuyHP,setStateHuyHP] = useState();
+  const [stateHuyHP, setStateHuyHP] = useState();
   let sttMonChuaDK = 1;
   let sttLHPChoDK = 1;
   let sttHocPhanDaDangKy = 1;
@@ -51,7 +51,7 @@ export default function Dkhp() {
   })
 
   const [stateDaKhoa, setStateDaKhoa] = useState();
-
+  const [kiemTraSoLuong, setKiemTraSoLuong] = useState();
 
   useEffect(() => {
     if (resTime > 0) {
@@ -62,7 +62,7 @@ export default function Dkhp() {
     }
   }, [resTime])
 
-  useEffect( ()=>{
+  useEffect(() => {
     try {
       const activeTrangThaiHuy = async () => {
         try {
@@ -70,14 +70,15 @@ export default function Dkhp() {
           setHpDaDangKy(res.data);
           const monchuadkdata = await dkhpAPI.getToanBoMonHocChuaDangKy();
           setMonChuaDangKy(monchuadkdata.data);
+          setMaHocPhan('');
         } catch (error) {
           console.log(error.message);
         }
       };
       activeTrangThaiHuy();
-    } catch (error) {      
+    } catch (error) {
     }
-  },[stateHuyHP])
+  }, [stateHuyHP])
 
   useEffect(() => {
     const activeHocKi = async () => {
@@ -112,7 +113,7 @@ export default function Dkhp() {
       }
     };
 
-    
+
 
     const activeDSMonChuaDangKyTrongKyNay = async () => {
       try {
@@ -238,15 +239,34 @@ export default function Dkhp() {
     console.log("ma phan cong ly thuyet:" + maPhanCongLopHocPhanLyThuyet);
     console.log("ma hoc ki: " + maHocKi);
     console.log(trangThaiLopHocPhan);
-    console.log(loaiHocPhanPhuTrach);
+    console.log("loaihocphanphutrach" + loaiHocPhanPhuTrach);
+    console.log("statedakhoa:" + stateDaKhoa);
     console.log(maLopHocPhan);
     console.log("length chi tiet lhp:" + chiTietLopHP["results"].length);
     console.log("so tin chi:" + tinChi);
+    console.log(kiemTraSoLuong);
     try {
       setLoading(true);
+      if (kiemTraSoLuong <= 0) {
+        setPopupNotify({
+          title: 'Thông báo',
+          mes: 'Lớp học phần đủ số lượng sinh viên đăng ký',
+          isLoading: true
+        });
+        return;
+      }
+      var checkBox = document.getElementById("checkLichTrung");
+      if (hpDaDangKy?.dsMonDaDangKiTrongHocKi.length > 0 && checkBox.checked == false) {
+        setPopupNotify({
+          title: 'Thông báo',
+          mes: 'Hãy tích chọn học phần không trùng lịch',
+          isLoading: true
+        });
+        return;
+      }
+      //thuc hanh + LT
       if (loaiHocPhanPhuTrach === 1 && chiTietLopHP["results"].length > 1 && stateDaKhoa === 1) {
         const res = await dkhpAPI.dangKiHocPhan(maPhanCongLopHocPhan, maHocKi, trangThaiLopHocPhan, tinChi * 500000, 0);
-
         const resF5MonChuaDK = await dkhpAPI.getToanBoMonHocChuaDangKy();
         setMonChuaDangKy(resF5MonChuaDK.data);
         // const res2 = await dkhpAPI.getHocPhanDaDangKyTrongKynay(maHocKi);
@@ -264,6 +284,7 @@ export default function Dkhp() {
           isLoading: true
         });
       }
+      //only lt
       else if (chiTietLopHP["results"].length === 1 && stateDaKhoa === 1) {
         const res = await dkhpAPI.dangKiHocPhan(maPhanCongLopHocPhan, maHocKi, trangThaiLopHocPhan, tinChi * 500000, 0);
         // const res2 = await dkhpAPI.getHocPhanDaDangKyTrongKynay(maHocKi);
@@ -312,9 +333,12 @@ export default function Dkhp() {
       coTrungLop.style.display = "none";
       koTrungLop.style.display = "";
       setChiTietLopHP('');
+      selectLopHocPhan(e, null, null)
     } else {
       coTrungLop.style.display = "";
       koTrungLop.style.display = "none";
+      setChiTietLopHP('');
+      selectLopHocPhan(e, null, null)
     }
   }
 
@@ -357,7 +381,7 @@ export default function Dkhp() {
 
   const huyHocPhan = async (e, hpDaDk) => {
     try {
-      const res = await dkhpAPI.HuyHocPhanDaDangKi(hpDaDk.ma_hoc_phan,hpDaDk.ma_lop_hoc_phan);
+      const res = await dkhpAPI.HuyHocPhanDaDangKi(hpDaDk.ma_hoc_phan, hpDaDk.ma_lop_hoc_phan);
       setStateHuyHP(res.data);
       setPopupNotify({
         title: 'Thông báo',
@@ -370,7 +394,7 @@ export default function Dkhp() {
         mes: 'Hủy học phần thành công',
         isLoading: true
       });
-     
+
     }
 
   }
@@ -611,7 +635,7 @@ export default function Dkhp() {
                                                 ?
                                                 <tr>
                                                   <td colSpan={7}>
-                                                    <span>Học kỳ này không còn môn để đăng ký</span>
+                                                    <span>Không có môn để đăng ký</span>
                                                   </td>
                                                 </tr>
                                                 : <></>
@@ -740,6 +764,7 @@ export default function Dkhp() {
                                                             //setMaPhanCongLopHocPhanLyThuyet(dsLhp.ma_phan_cong)
                                                             setStateDaKhoa(dsLhp.trang_thai)
                                                             changeColorWhenClick("maLHP" + dsLhp.ma_lop_hoc_phan, dsLhp)
+                                                            setKiemTraSoLuong(dsLhp.so_luong_dang_ki_toi_da - dsLhp.so_luong_dang_ki_hien_tai)
                                                           }}
                                                           selectedDsToanBoLopHP={isSelectedDsToanBoLopHP(dsLhp)}
                                                           style={{ backgroundColor: "" }}
@@ -785,7 +810,9 @@ export default function Dkhp() {
                                                             e.preventDefault()
                                                             selectLopHocPhan(e, dsLhp, dsLhp.ma_lop_hoc_phan)
                                                             //setMaPhanCongLopHocPhanLyThuyet(dsLhp.ma_phan_cong)
+                                                            setStateDaKhoa(dsLhp.trang_thai)
                                                             changeColorWhenClick3("maLHP" + dsLhp.ma_lop_hoc_phan, dsLhp)
+                                                            setKiemTraSoLuong(dsLhp.so_luong_dang_ki_toi_da - dsLhp.so_luong_dang_ki_hien_tai)
                                                           }}
                                                           selectedDsToanBoLopHP={isSelectedDsToanBoLopHP(dsLhp)}
                                                         >
