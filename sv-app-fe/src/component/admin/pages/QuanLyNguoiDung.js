@@ -8,6 +8,7 @@ import { Link, useNavigate, useLocation } from 'react-router-dom';
 import adminAPI from "../../../api/adminAPI";
 import PopupNotify from "../../PopupNotify";
 import { event } from "jquery";
+import * as xlsx from "xlsx";
 
 
 export const Admin = () => {
@@ -476,7 +477,6 @@ export const SinhVien = () => {
         const getDSKhoa = async () => {
             try {
                 const res = await adminAPI.getDanhSachToanBoKhoa();
-                console.log(res.data)
                 setDSKhoa(res.data);
             } catch (error) {
 
@@ -667,6 +667,73 @@ export const SinhVien = () => {
         }
     }
 
+    const readUploadFile = (e) => {
+        e.preventDefault();
+        if (e.target.files) {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                const data = e.target.result;
+                const workbook = xlsx.read(data, { type: "array" });
+                const sheetName = workbook.SheetNames[0];
+                const worksheet = workbook.Sheets[sheetName];
+                const json = xlsx.utils.sheet_to_json(worksheet);
+                console.log(json);
+                if (json.some(e => e.__EMPTY === 'Họ tên sinh viên ')) {
+                    console.log('ok');
+                } else {
+                    setPopupNotify({
+                        title: 'Thông báo',
+                        mes: 'Mẫu import sai định dạng',
+                        isLoading: true
+                    });
+                    return;
+                }
+                try {
+                    for (let i = 1; i < json.length; i++) {
+                        setTimeout(async () => {
+                            try {
+                                const newsv = await adminAPI.createSinhVien(
+                                    json[i]["DANH SÁCH THÊM SINH VIÊN"],
+                                    json[i].__EMPTY,
+                                    json[i].__EMPTY_1,
+                                    json[i].__EMPTY_3,
+                                    json[i].__EMPTY_8,
+                                    json[i].__EMPTY_4,
+                                    json[i].__EMPTY_5,
+                                    json[i].__EMPTY_7,
+                                    json[i].__EMPTY_2);
+                            } catch (error) {
+                                setPopupNotify({
+                                    title: 'Thông báo',
+                                    mes: 'Import thất bại. Có mã bị trùng!!!',
+                                    isLoading: true
+                                });
+                                setDsSVTheoKhoa('');
+                            }
+                        }, 20)
+                    }
+                    setTimeout(async () => {
+                        const res = await adminAPI.getDanhSachSVByKhoa(json[1].__EMPTY_7);
+                        setDsSVTheoKhoa(res.data);
+                    }, 1000);
+                    setPopupNotify({
+                        title: 'Thông báo',
+                        mes: 'Import thành công',
+                        isLoading: true
+                    });
+                } catch (error) {
+                    setPopupNotify({
+                        title: 'Thông báo',
+                        mes: 'Import thất bại',
+                        isLoading: true
+                    });
+                    setDsSVTheoKhoa('');
+                }
+            };
+            reader.readAsArrayBuffer(e.target.files[0]);
+        }
+    }
+
 
 
 
@@ -675,8 +742,8 @@ export const SinhVien = () => {
         <>
             <Sidebar />
             <div className="qlhp" style={{ backgroundColor: "#E7EEF1" }}>
-                <div class="layout-wrapper layout-content-navbar">
-                    <div class="layout-container">
+                <div className="layout-wrapper layout-content-navbar">
+                    <div className="layout-container">
                         <div className="layout-page">
 
                             {/* Content wrapper */}
@@ -762,8 +829,27 @@ export const SinhVien = () => {
                                                         onClick={() => { setOpenPopup(true); setMaKhoa(''); setGenerateMaSV('') }}
                                                     > <AiIcons.AiFillPlusSquare /> Thêm mới</button>
 
+                                                    <label htmlFor="upload" className="btn btn-primary"
+                                                        style={{
+                                                            float: "right", display: "inline-block", fontWeight: "400"
+                                                            , lineHeight: "1.53", textAlign: "center", verticalAlign: "middle", userSelect: "none"
+                                                            , border: "1px solid transparent", padding: "0.4375rem 1.25rem", fontSize: "0.9375 rme"
+                                                        }}
+                                                    >
+                                                        <AiIcons.AiOutlineImport />
+                                                        Import Danh sách sinh viên</label>
+                                                    <input
+                                                        type="file"
+                                                        name="upload"
+                                                        id="upload"
+                                                        onChange={readUploadFile}
+                                                        style={{ display: "none" }}
+                                                    />
+
                                                 </div>
                                             </div>
+
+
                                         </div>
                                     </div>
                                     <div className="row">
