@@ -108,6 +108,7 @@ export const ThoiKhoaBieu = () => {
     }
     if (!dsHK) return null;
     if (!dsKhoa) return null;
+    if (!newMaPC) return null;
     const newTKB = async () => {
         var nhapThuTuNgayHocTrongTuan = document.querySelector('#nhapThuTuNgayHocTrongTuan').value;
         var nhapTGBatDau = document.querySelector('#nhapTGBatDau').value;
