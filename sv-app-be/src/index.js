@@ -73,33 +73,12 @@ app.use("/", homeRouter);
 
 
 
-// SinhVien.sync();
-TrangThaiHocTap.sync();
-Khoa.sync();
-BacDaoTao.sync();
-DanToc.sync();
-KhoaHoc.sync();
-MoHinhDaoTao.sync();
-TonGiao.sync();
-TrangThaiHocTap.sync();
-Admin.sync();
-MonHoc.sync();
-SinhVien.sync();
-HocKi.sync();
-HocPhan.sync();
-LopHocPhan.sync();
-ChuyenNganh.sync();
-LoaiPhongHoc.sync();
-PhanCongLopHocPhan.sync();
-PhongHoc.sync();
-ThoiKhoaBieu.sync({ alter: true });
-ThoiKhoaBieuSinhVien.sync();
-ChuyenNganhHocPhan.sync();
-GiangVien.sync({ alter: true });
-KetQuaHocTap.sync();
-HocPhi.sync();
-HocPhiSinhVien.sync();
-PhieuThu.sync();
+const sequelize = ConnectDB().getInstance();
+sequelize.sync().then(() => {
+    console.log('All models synced successfully');
+}).catch((err) => {
+    console.error('Error syncing models:', err);
+});
 // Catch 404 Errors and forward them to error handler
 app.use((req, res, next) => {
   const err = new Error("Not Found");

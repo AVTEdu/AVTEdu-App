@@ -61,39 +61,36 @@ require('dotenv').config();
 // const mysql = require('mysql2/promise');
 // require('dotenv').config();
 
-const DatabaseName = "sinhviendb";
-const DatabaseUsername = 'admin';
-const DatabasePassword = "12345678";
+const DatabaseName = process.env.DATABASE_NAME || "sinhviendb";
+const DatabaseUsername = process.env.DATABSE_USERNAME || "root";
+const DatabasePassword = process.env.DATABASE_PASSWORD || "sapassword";
 
+let _sequelizeInstance = null;
 
-const ConnectDB = (function () {
-    var instance;
-    function init() {
-        const sequelize = new Sequelize(
-            `${DatabaseName}`,
-            `${DatabaseUsername}`,
-            `${DatabasePassword}`,
-            {
-                host: 'database-1.chodan0pjpbf.ap-southeast-1.rds.amazonaws.com',
-                dialect: 'mysql',
-                logging: false,
-            }
-
-        );
-        sequelize.authenticate().then(() => {
-        }).catch((error) => {
-            console.error('Unable to connect to the database: ', error);
-        });
-        return sequelize;
-    }
+const ConnectDB = function () {
     return {
         getInstance: function () {
-            // if (!instance) instance = init();
-            instance = init();
-            return instance;
+            if (!_sequelizeInstance) {
+                _sequelizeInstance = new Sequelize(
+                    `${DatabaseName}`,
+                    `${DatabaseUsername}`,
+                    `${DatabasePassword}`,
+                    {
+                        host: process.env.MYSQL_HOST || 'localhost',
+                        dialect: 'mysql',
+                        logging: false,
+                        port: process.env.MYSQL_PORT || 3306
+                    }
+                );
+                _sequelizeInstance.authenticate().then(() => {
+                }).catch((error) => {
+                    console.error('Unable to connect to the database: ', error);
+                });
+            }
+            return _sequelizeInstance;
         }
     }
-});
+};
 
 
 module.exports = {
