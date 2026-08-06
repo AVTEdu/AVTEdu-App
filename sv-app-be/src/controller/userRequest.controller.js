@@ -6,7 +6,6 @@ const { QueryTypes } = require("sequelize");
 const HocPhan = require("../models/hocphan.model");
 const LopHocPhan = require("../models/lophocphan.model");
 const ThoiKhoaBieuSinhVien = require("../models/thoikhoabieusinhvien.model");
-const { verifyRefreshToken } = require("../helpers/jwt.service");
 const HocPhi = require("../models/hocphi.model");
 const responseHanlder = require("../handlers/response.handler");
 const HocPhiSinhVien = require("../models/hocphisinhvien.model");
@@ -17,11 +16,8 @@ const {
   fomartDateToFE,
 } = require("../helpers/date.validate");
 const KetQuaHocTap = require("../models/ketquahoctap.model");
-const { findAll } = require("../models/hocki.model");
 const { momoPayment, verifyMomoSignature } = require("../config/momo.config");
 const PhieuThu = require("../models/phieuthu.model");
-const { sendMailSample } = require("../config/testmail");
-const { sendMail } = require("../config/mail.config");
 
 const sequelize = ConnectDB().getInstance();
 /**
@@ -970,42 +966,6 @@ const xacNhanThanhToanTrucTuyen = async (req, res, next) => {
     res
       .status(200)
       .json({ success: true, msg: "Thanh toán thành công " + ma_sinh_vien });
-  } catch (error) {
-    console.log(error);
-    next(error);
-  }
-};
-const getPhieuThuCongNo = async (req, res, next) => {
-  try {
-    const ma_sinh_vien = req.payload.userId;
-    const findPhieuThu = sequelize.query(
-      `select pt.*
-    from phieu_thu as pt 
-    left join hoc_phi as hp on hp.ma_phieu_thu = pt.ma_phieu_thu
-    left join hoc_phi_sinh_vien as hpsv on hpsv.ma_hoc_phi = hp.ma_hoc_phi
-    left join sinh_vien as sv on hpsv.ma_sinh_vien = sv.ma_sinh_vien
-    where sv.ma_sinh_vien = :ma_sinh_vien`,
-      { type: QueryTypes.SELECT, replacements: { ma_sinh_vien } }
-    );
-    res.status(200).json({ success: true, findPhieuThu });
-  } catch (error) {
-    console.log(error);
-    next(error);
-  }
-};
-const getChiTietPhieuThu = async (req, res, next) => {
-  try {
-    const { ma } = req.body;
-    const findChiTietPhieuThu = sequelize.query(
-      `select pt.*
-    from phieu_thu as pt 
-    left join hoc_phi as hp on hp.ma_phieu_thu = pt.ma_phieu_thu
-    left join hoc_phi_sinh_vien as hpsv on hpsv.ma_hoc_phi = hp.ma_hoc_phi
-    left join sinh_vien as sv on hpsv.ma_sinh_vien = sv.ma_sinh_vien
-    where sv.ma_sinh_vien = :ma_sinh_vien`,
-      { type: QueryTypes.SELECT, replacements: { ma_sinh_vien } }
-    );
-    res.status(200).json({ success: true, findPhieuThu });
   } catch (error) {
     console.log(error);
     next(error);

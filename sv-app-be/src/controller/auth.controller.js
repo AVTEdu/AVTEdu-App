@@ -1,22 +1,18 @@
 const SinhVien = require("../models/sinhvien.model");
 const client = require("../helpers/connect_redis");
-const JWT = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 const {
   signAccessToken,
   signRefreshToken,
   verifyRefreshToken,
-  verifyAccessToken,
 } = require("../helpers/jwt.service");
 const { createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   onAuthStateChanged,
   sendEmailVerification } = require("firebase/auth");
 const { defaultAuth } = require("../config/firebase.config");
-const { use } = require("../router/auth.router");
 const Admin = require("../models/admin.model");
 const XLSX = require("xlsx");
-const fs = require('fs');
 const multer = require("multer");
 const GiangVien = require("../models/giangvien.model");
 

@@ -1,4 +1,3 @@
-const bcrypt = require("bcryptjs");
 const { ConnectDB } = require("../../config/mysql.config");
 const { QueryTypes, Model } = require("sequelize");
 const responseHandler = require("../../handlers/response.handler");
@@ -20,7 +19,6 @@ const MonHoc = require("../../models/monhoc.model");
 const PhanCongLopHocPhan = require("../../models/phanconglophocphan.model");
 const PhongHoc = require("../../models/phonghoc.model");
 const SinhVien = require("../../models/sinhvien.model");
-const ThoiKhoaBieu = require("../../models/thoikhoabieu.model");
 const ThoiKhoaBieuSinhVien = require("../../models/thoikhoabieusinhvien.model");
 const TonGiao = require("../../models/tongiao.model");
 const TrangThaiHocTap = require("../../models/trangthaihoctap.model");

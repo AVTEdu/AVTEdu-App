@@ -2,7 +2,6 @@ require('dotenv').config();
 require('./helpers/connect_redis');
 const http = require('http');
 const express = require('express');
-const { route } = require('./router/home.router');
 const app = express();
 const server = http.createServer(app);
 const SinhVien = require('./models/sinhvien.model');

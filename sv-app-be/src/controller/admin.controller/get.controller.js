@@ -1,5 +1,4 @@
 
-const bcrypt = require("bcryptjs");
 const { QueryTypes } = require("sequelize");
 const { ConnectDB } = require("../../config/mysql.config");
 const Admin = require("../../models/admin.model");
