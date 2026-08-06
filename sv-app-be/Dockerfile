@@ -1,8 +1,14 @@
 FROM node:16
 
-COPY ./src .
-COPY package-lock.json .
-COPY package.json .
+WORKDIR /app
+
+#Cài dependencies trước để tận dụng layer cache
+COPY package.json package-lock.json ./
 RUN npm install
+
+#Copy mã nguồn
+COPY src ./src
+
 EXPOSE 4000
-CMD ["node", "index.js"]
+#node_modules/nodemon được dùng qua npm start (compose), prod dùng node src/index.js
+CMD ["node", "src/index.js"]

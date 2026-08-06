@@ -27,6 +27,8 @@ services:
     restart: always 
     # networks:
     #   - app-tier
+    env_file:
+      - .././sv-app-be/.env
     ports:
       - "4000:4000"
     environment:
