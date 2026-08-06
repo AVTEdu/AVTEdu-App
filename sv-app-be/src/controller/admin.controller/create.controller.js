@@ -25,7 +25,7 @@ const createSinhVien = async (req, res, next) => {
   try {
     console.log("----------------createSinhVien-----------------------------");
     const { ma, ten, ngay_sinh, email, gioitinh, sdt, so_cmnd, khoa, chuyennganh } = req.body;
-    const password = "12345";
+    const password = process.env.DEFAULT_STUDENT_PASSWORD;
     // Check có sinh viên nào trùng không
     const foundUser = await SinhVien.findOne({ where: { ma_sinh_vien: `${ma}` } });
     if (foundUser)
@@ -62,7 +62,7 @@ const createManySinhVien = async (req, res, next) => {
   try {
     console.log("----------------createSinhVien-----------------------------");
     const { ma, ten, ngay_sinh, email, gioitinh, sdt, so_cmnd, khoa, chuyennganh } = req.body;
-    const password = "12345";
+    const password = process.env.DEFAULT_STUDENT_PASSWORD;
     // Check có sinh viên nào trùng không
     const foundUser = await SinhVien.findOne({ where: { ma_sinh_vien: `${ma}` } });
     if (foundUser)

@@ -1,8 +1,8 @@
 const JWT = require("jsonwebtoken");
 const client = require("../helpers/connect_redis");
 require("dotenv").config();
-const ref = "secret";
-const halo = "halo";
+const ref = process.env.REFRESH_TOKEN_SECRET;
+const halo = process.env.ACCESS_TOKEN_SECRET;
 const signAccessToken = async (userId) => {
   return new Promise((resolve, reject) => {
     const payload = {

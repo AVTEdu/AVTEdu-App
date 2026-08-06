@@ -9,8 +9,8 @@ const transporter = nodemailer.createTransport({
   port:465,
   secure:true,
   auth: {
-    user: 'avteduapp@gmail.com',
-    pass: 'temlegxcxikfmmnt'
+    user: process.env.MAIL_USER,
+    pass: process.env.MAIL_PASSWORD
   }
 });
 //Tạo theme của mail với Mailgen
@@ -82,7 +82,7 @@ async function sendMail(data,ma_sinh_vien,mail_sinh_vien,ten_sinh_vien,phuong_th
       let mail = MailGenerator.generate(response)  
       //Địa chỉ gửi và nhận của mail
         let message = {
-            from: 'avteduapp@gmail.com',
+            from: process.env.MAIL_USER,
             to: mail_sinh_vien,
             subject: "Phiếu thu học phí của "+ma_sinh_vien,
             html: mail

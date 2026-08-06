@@ -1,8 +1,8 @@
 const cloudinary = require('cloudinary').v2;
 //Khai báo các biến cần thiết để config đến instance Cloudinary
-const CLOUD_NAME = "dtcke5fkl";
-const API_KEY ="295933496344431";
-const API_SECRET = "SbeoXulEWODLfB9hI5QE5MMl9WY";
+const CLOUD_NAME = process.env.CLOUDINARY_NAME;
+const API_KEY = process.env.CLOUDINARY_API_KEY;
+const API_SECRET = process.env.CLOUDINARY_API_SECERT;
 
 //Tạo instance đến Cloudinary
 const ConnectImage = (function(){
