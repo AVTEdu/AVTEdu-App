@@ -3,10 +3,11 @@ const client = require("../helpers/connect_redis");
 require("dotenv").config();
 const ref = process.env.REFRESH_TOKEN_SECRET;
 const halo = process.env.ACCESS_TOKEN_SECRET;
-const signAccessToken = async (userId) => {
+const signAccessToken = async (userId, role) => {
   return new Promise((resolve, reject) => {
     const payload = {
       userId,
+      role,
     };
     const secret = halo;
     const options = {
@@ -43,10 +44,11 @@ const verifyAccessToken = (req, res, next) => {
     }, 100);
   });
 };
-const signRefreshToken = async (userId) => {
+const signRefreshToken = async (userId, role) => {
   return new Promise((resolve, reject) => {
     const payload = {
       userId,
+      role,
     };
     const secret = ref;
     const options = {
@@ -83,9 +85,19 @@ const verifyRefreshToken = (refreshToken) => {
     });
   });
 };
+const requireRole = (...allowedRoles) => {
+  return (req, res, next) => {
+    const role = req.payload && req.payload.role;
+    if (!role || !allowedRoles.includes(role)) {
+      return res.status(403).json({ error: { message: "Không có quyền truy cập" } });
+    }
+    next();
+  };
+};
 module.exports = {
   signAccessToken,
   verifyAccessToken,
   signRefreshToken,
   verifyRefreshToken,
+  requireRole,
 };

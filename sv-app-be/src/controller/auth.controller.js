@@ -55,9 +55,9 @@ const signIn = async (req, res, next) => {
     console.log("-----------------------Đã đăng nhập--------------------------");
 
     //Tạo accessToken
-    const accessToken = await signAccessToken(ma);
+    const accessToken = await signAccessToken(ma, "sinhvien");
     //Tạo refeshToken
-    const refreshToken = await signRefreshToken(ma);
+    const refreshToken = await signRefreshToken(ma, "sinhvien");
     await res.cookie('authorization', accessToken, { maxAge: 900000, httpOnly: true });
     await res.cookie('refreshToken', refreshToken, { maxAge: 1900000, httpOnly: true });
     return res
@@ -88,9 +88,9 @@ const signInAdmin = async (req, res, next) => {
     }
     console.log("-----------------------Đã đăng nhập--------------------------");
     //Tạo accessToken
-    const accessToken = await signAccessToken(ma);
+    const accessToken = await signAccessToken(ma, "admin");
     //Tạo refeshToken
-    const refreshToken = await signRefreshToken(ma);
+    const refreshToken = await signRefreshToken(ma, "admin");
     await res.cookie('authorization', accessToken, { maxAge: 900000, httpOnly: true });
     await res.cookie('refreshToken', refreshToken, { maxAge: 1900000, httpOnly: true });
     return res
@@ -122,9 +122,9 @@ const signInGiangVien = async (req, res, next) => {
     }
     console.log("-----------------------Đã đăng nhập--------------------------");
     //Tạo accessToken
-    const accessToken = await signAccessToken(ma);
+    const accessToken = await signAccessToken(ma, "giangvien");
     //Tạo refeshToken
-    const refreshToken = await signRefreshToken(ma);
+    const refreshToken = await signRefreshToken(ma, "giangvien");
     await res.cookie('authorization', accessToken, { maxAge: 900000, httpOnly: true });
     await res.cookie('refreshToken', refreshToken, { maxAge: 1900000, httpOnly: true });
     return res
@@ -142,10 +142,10 @@ const refreshToken = async (req, res, next) => {
       return res.status(403).json({ message: "không có refreshtoken" });
     }
     console.log(refreshToken);
-    const { userId } = await verifyRefreshToken(refreshToken);
+    const { userId, role } = await verifyRefreshToken(refreshToken);
     console.log(userId);
-    const accessToken = await signAccessToken(userId);
-    const refToken = await signRefreshToken(userId);
+    const accessToken = await signAccessToken(userId, role);
+    const refToken = await signRefreshToken(userId, role);
     return res.status(200).json({ accessToken, refToken });
   } catch (error) {
     next(error);

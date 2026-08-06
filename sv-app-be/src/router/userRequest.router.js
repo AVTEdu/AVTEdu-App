@@ -1,16 +1,16 @@
 const express = require('express');
 const userRequestController = require("../controller/userRequest.controller");
-const { verifyAccessToken } = require('../helpers/jwt.service');
+const { verifyAccessToken, requireRole } = require('../helpers/jwt.service');
 const router = express.Router();
 
 //Api này lấy học kì của sinh viên đang đăng nhập
 router
   .route("/getHocKiSinhVien")
-  .get(verifyAccessToken, userRequestController.getHocKiSinhVien);
+  .get(verifyAccessToken, requireRole("sinhvien"), userRequestController.getHocKiSinhVien);
 //Api này lấy những môn chưa học của sinh viên đang đăng nhập
 router
   .route("/getMonSinhVienChuaHoc")
-  .get(verifyAccessToken, userRequestController.getMonHocSinhVienChuaHoc);
+  .get(verifyAccessToken, requireRole("sinhvien"), userRequestController.getMonHocSinhVienChuaHoc);
 //Api này lấy tất cả lớp học phần đang có của học phần cần mã học phần 
 router
   .route("/getLopHocPhanByHocPhan")
@@ -23,26 +23,26 @@ router
 //Api này đăng kí học phần đang chọn cần mã phân công lớp học phần và mã học kì đang chọn     
 router
   .route("/dangKiHocPhan")
-  .post(verifyAccessToken, userRequestController.DangKiHocPhan);
+  .post(verifyAccessToken, requireRole("sinhvien"), userRequestController.DangKiHocPhan);
 //Api này lấy những thông tin của sinh viên đang đăng nhập  
 router
   .route("/getThongTinSinhVien")
-  .get(verifyAccessToken, userRequestController.getThongTinSinhvien);
+  .get(verifyAccessToken, requireRole("sinhvien"), userRequestController.getThongTinSinhvien);
 //Api này lấy công nợ của sinh viên đang đăng nhập  
 router
   .route("/getDanhSachHocPhi")
-  .get(verifyAccessToken, userRequestController.getDanhSachHocPhi);
+  .get(verifyAccessToken, requireRole("sinhvien"), userRequestController.getDanhSachHocPhi);
 //Api này lấy những môn đã đăng kí trong 1 học kì của sinh viên đang đăng nhập cần mã học kì  
 router
   .route("/getMonDaDangKiTrongHocKi")
-  .put(verifyAccessToken, userRequestController.getMonDaDangKiTrongHocKi);
+  .put(verifyAccessToken, requireRole("sinhvien"), userRequestController.getMonDaDangKiTrongHocKi);
 //Api này lấy những môn trong thời khoá biểu trong 1 tuần của sinh viên đang đăng nhập cần ngày hiện tại  
 router
   .route("/getThoiKhoaBieuSinhVienTrongMotTuan")
-  .put(verifyAccessToken, userRequestController.getThoiKhoaBieuSinhVienTrongMotTuan);
+  .put(verifyAccessToken, requireRole("sinhvien"), userRequestController.getThoiKhoaBieuSinhVienTrongMotTuan);
 router
   .route("/thanhToanHocPhiTrucTuyen")
-  .put(verifyAccessToken, userRequestController.thanhToanHocPhiTrucTuyen);
+  .put(verifyAccessToken, requireRole("sinhvien"), userRequestController.thanhToanHocPhiTrucTuyen);
 router
   .route("/xacNhanThanhToanTrucTuyen")
   .put(userRequestController.xacNhanThanhToanTrucTuyen);
@@ -52,30 +52,30 @@ router
   .put(userRequestController.getChiTietPhieuThuTongHop);
 router
   .route("/getDSPhieuThuBySinhVien")
-  .put(verifyAccessToken, userRequestController.getDanhSachPhieuThuSinhVien);
+  .put(verifyAccessToken, requireRole("sinhvien"), userRequestController.getDanhSachPhieuThuSinhVien);
 router
   .route("/getChiTietPhieuThuTongHopBySV")
-  .put(verifyAccessToken, userRequestController.getChiTietPhieuThuTongHopBySV);
+  .put(verifyAccessToken, requireRole("sinhvien"), userRequestController.getChiTietPhieuThuTongHopBySV);
 router
   .route("/getKetQuaHocTap")
-  .put(verifyAccessToken, userRequestController.getKetQuaHocTap);
+  .put(verifyAccessToken, requireRole("sinhvien"), userRequestController.getKetQuaHocTap);
   router
   .route("/getLopHocPhanKhongTrung")
-  .put(verifyAccessToken, userRequestController.getLopHocPhanKhongTrung); 
+  .put(verifyAccessToken, requireRole("sinhvien"), userRequestController.getLopHocPhanKhongTrung); 
   
 router
   .route("/HuyHocPhanDaDangKi")
-  .put(verifyAccessToken, userRequestController.HuyHocPhanDaDangKi); 
+  .put(verifyAccessToken, requireRole("sinhvien"), userRequestController.HuyHocPhanDaDangKi); 
 router
   .route("/getChiTietHocPhanDaDangKi")
-  .put(verifyAccessToken, userRequestController.getChiTietHocPhanDaDangKi); 
+  .put(verifyAccessToken, requireRole("sinhvien"), userRequestController.getChiTietHocPhanDaDangKi); 
 
 router
   .route("/getKetQuaHocTapAndroid")
-  .get(verifyAccessToken, userRequestController.getKetQuaHocTapAndroid); 
+  .get(verifyAccessToken, requireRole("sinhvien"), userRequestController.getKetQuaHocTapAndroid); 
 router
   .route("/getChiTietLopHocPhan")
-  .get(verifyAccessToken, userRequestController.getChiTietLopHocPhan);
+  .get(verifyAccessToken, requireRole("sinhvien"), userRequestController.getChiTietLopHocPhan);
 
 
 
