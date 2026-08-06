@@ -194,27 +194,24 @@ const getChiTietLopHocPhan = async (req, res, next) => {
         .status(400)
         .json({ error: { message: "Không tìm thấy  học phần" } });
     //Nếu học phần tồn tại đưa ra những thông tin mà request cần    
-    sequelize
-      .query(
-        `select lhp.trang_thai,pclhp.so_luong_sv_phu_trach,pclhp.loai_hoc_phan_phu_trach,tkb.ngay_hoc_trong_tuan,tkb.tiet_hoc_bat_dau,tkb.tiet_hoc_ket_thuc,ph.ten_day_nha,ph.ten_phong_hoc,gv.ten_giang_vien,tkb.thoi_gian_bat_dau,tkb.thoi_gian_ket_thuc,pclhp.ma_phan_cong
-        from sinhviendb.hoc_phan as hp
-        left join sinhviendb.lop_hoc_phan as lhp on hp.ma_hoc_phan = lhp.ma_hoc_phan
-        left join sinhviendb.phan_cong_lop_hoc_phan as pclhp on lhp.ma_lop_hoc_phan = pclhp.ma_lop_hoc_phan
-        left join sinhviendb.giang_vien as gv on pclhp.ma_giang_vien = gv.ma_giang_vien
-        left join sinhviendb.thoi_khoa_bieu as tkb on tkb.ma_phan_cong_lop_hoc_phan = pclhp.ma_phan_cong
-        left join sinhviendb.phong_hoc as ph on tkb.ma_phong_hoc = ph.ma_phong_hoc
-        where lhp.ma_lop_hoc_phan = :ma
-        group by pclhp.ma_phan_cong,lhp.trang_thai,pclhp.so_luong_sv_phu_trach,pclhp.loai_hoc_phan_phu_trach,
-        tkb.ngay_hoc_trong_tuan,tkb.tiet_hoc_bat_dau,tkb.tiet_hoc_ket_thuc,ph.ten_day_nha,ph.ten_phong_hoc,
-        gv.ten_giang_vien,tkb.thoi_gian_bat_dau,tkb.thoi_gian_ket_thuc`,
-        { type: QueryTypes.SELECT, replacements: { ma } }
-      )
-      .then(function (results) {
-        //Kiểm tra nhằm tránh res tạo ra object null
-        if (results[0].ma_phan_cong == null)
-          return res.status(201).json({ success: true });
-        return res.status(201).json({ success: true, results });
-      });
+    const results = await sequelize.query(
+      `select lhp.trang_thai,pclhp.so_luong_sv_phu_trach,pclhp.loai_hoc_phan_phu_trach,tkb.ngay_hoc_trong_tuan,tkb.tiet_hoc_bat_dau,tkb.tiet_hoc_ket_thuc,ph.ten_day_nha,ph.ten_phong_hoc,gv.ten_giang_vien,tkb.thoi_gian_bat_dau,tkb.thoi_gian_ket_thuc,pclhp.ma_phan_cong
+      from sinhviendb.hoc_phan as hp
+      left join sinhviendb.lop_hoc_phan as lhp on hp.ma_hoc_phan = lhp.ma_hoc_phan
+      left join sinhviendb.phan_cong_lop_hoc_phan as pclhp on lhp.ma_lop_hoc_phan = pclhp.ma_lop_hoc_phan
+      left join sinhviendb.giang_vien as gv on pclhp.ma_giang_vien = gv.ma_giang_vien
+      left join sinhviendb.thoi_khoa_bieu as tkb on tkb.ma_phan_cong_lop_hoc_phan = pclhp.ma_phan_cong
+      left join sinhviendb.phong_hoc as ph on tkb.ma_phong_hoc = ph.ma_phong_hoc
+      where lhp.ma_lop_hoc_phan = :ma
+      group by pclhp.ma_phan_cong,lhp.trang_thai,pclhp.so_luong_sv_phu_trach,pclhp.loai_hoc_phan_phu_trach,
+      tkb.ngay_hoc_trong_tuan,tkb.tiet_hoc_bat_dau,tkb.tiet_hoc_ket_thuc,ph.ten_day_nha,ph.ten_phong_hoc,
+      gv.ten_giang_vien,tkb.thoi_gian_bat_dau,tkb.thoi_gian_ket_thuc`,
+      { type: QueryTypes.SELECT, replacements: { ma } }
+    );
+    //Kiểm tra nhằm tránh res tạo ra object null
+    if (!results.length || results[0].ma_phan_cong == null)
+      return res.status(201).json({ success: true });
+    return res.status(201).json({ success: true, results });
   } catch (error) {
     console.log(error);
     next(error);
@@ -449,7 +446,7 @@ const DangKiHocPhan = async (req, res, next) => {
       { type: QueryTypes.SELECT, replacements: { ma } }
     );
 
-    if (!ThoiKhoabieu) {
+    if (!ThoiKhoabieu || !ThoiKhoabieu.length) {
       return res
         .status(400)
         .json({ error: { message: "Không tìm thấy thời khoá biểu " } });

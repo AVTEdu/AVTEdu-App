@@ -101,7 +101,7 @@ const updateChuyenNganhHocPhan = async (req, res, next) => {
   try {
     const { ma, ma_chuyen_nganh, ma_hoc_phan } = req.body;
     const foundChuyenNganhHocPhan = await ChuyenNganhHocPhan.findOne({ where: { ma: `${ma}` } });
-    if (foundChuyenNganhHocPhan) {
+    if (!foundChuyenNganhHocPhan) {
       return responseHandler.badrequest(res, { success: false, msg: "Không tìm thấy mã chuyên ngành học phần" })
     }
     const result = await ChuyenNganhHocPhan.update({

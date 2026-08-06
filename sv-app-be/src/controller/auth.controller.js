@@ -39,7 +39,7 @@ const signIn = async (req, res, next) => {
   try {
     const { ma, password } = req.body;
     const sinh_vien = await SinhVien.findOne({ where: { ma_sinh_vien: `${ma}` } });
-    if (!ma) {
+    if (!sinh_vien) {
       return res
         .status(403)
         .json({ error: { message: "Tài khoản không tồn tại" } });
@@ -73,7 +73,7 @@ const signInAdmin = async (req, res, next) => {
   try {
     const { ma, password } = req.body;
     const admin = await Admin.findOne({ where: { ma_admin: `${ma}` } });
-    if (!ma) {
+    if (!admin) {
       return res
         .status(403)
         .json({ error: { message: "Tài khoản không tồn tại" } });
@@ -107,7 +107,7 @@ const signInGiangVien = async (req, res, next) => {
   try {
     const { ma, password } = req.body;
     const giangvien = await GiangVien.findOne({ where: { ma_giang_vien: `${ma}` } });
-    if (!ma) {
+    if (!giangvien) {
       return res
         .status(403)
         .json({ error: { message: "Tài khoản không tồn tại" } });
