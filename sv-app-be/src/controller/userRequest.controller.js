@@ -184,6 +184,11 @@ const getChiTietLopHocPhan = async (req, res, next) => {
   try {
     //Mã lớp học phần
     const { ma } = req.body;
+    if (!ma) {
+      return res
+        .status(400)
+        .json({ error: { message: "Thiếu mã lớp học phần" } });
+    }
     //Kiểm tra học phần có tồn tại
     const foundHocPhan = await LopHocPhan.findOne({
       where: { ma_lop_hoc_phan: `${ma}` },
@@ -406,6 +411,11 @@ const DangKiHocPhan = async (req, res, next) => {
     const { ma, ma_hoc_ki, trang_thai_dang_ki, so_tien, mien_giam } = req.body;
     //Mã sinh viên từ payload
     const ma_sinh_vien = req.payload.userId;
+    if (!ma || !ma_hoc_ki || so_tien == null) {
+      return res
+        .status(400)
+        .json({ error: { message: "Thiếu thông tin đăng kí học phần" } });
+    }
     //Kiểm tra mã phân công lớp học phần
     const foundPCLopHocPhan = await PhanCongLopHocPhan.findOne({
       where: { ma_phan_cong: `${ma}` },
@@ -852,16 +862,19 @@ const HuyHocPhanDaDangKi = async (req, res, next) => {
     next(error);
   }
 };
-const thanhToanHocPhiTrucTuyen = async (req, res, next) => {
-  try {
-    const foundTienHocPhi = await sequelize.query(
-      `select sum(so_tien)-sum(so_tien_da_nop) as tong_tien from hoc_phi as hp
+const getCongNoSinhVien = async (ma_sinh_vien) => {
+  const foundTienHocPhi = await sequelize.query(
+    `select sum(so_tien)-sum(so_tien_da_nop) as tong_tien from hoc_phi as hp
     left join hoc_phi_sinh_vien as hpsv on hp.ma_hoc_phi = hpsv.ma_hoc_phi
     left join sinh_vien as sv on hpsv.ma_sinh_vien = sv.ma_sinh_vien
-    where sv.ma_sinh_vien = :userId`,
-      { type: QueryTypes.SELECT, replacements: { userId: req.payload.userId } }
-    );
-    const tongTien = Number(foundTienHocPhi[0] && foundTienHocPhi[0].tong_tien);
+    where sv.ma_sinh_vien = :ma_sinh_vien`,
+    { type: QueryTypes.SELECT, replacements: { ma_sinh_vien } }
+  );
+  return Number(foundTienHocPhi[0] && foundTienHocPhi[0].tong_tien);
+};
+const thanhToanHocPhiTrucTuyen = async (req, res, next) => {
+  try {
+    const tongTien = await getCongNoSinhVien(req.payload.userId);
     if (!Number.isFinite(tongTien) || tongTien <= 0) {
       return res
         .status(400)
@@ -903,60 +916,56 @@ const xacNhanThanhToanTrucTuyen = async (req, res, next) => {
         .status(400)
         .json({ success: false, msg: "Đơn hàng không khớp với sinh viên hiện tại" });
     }
-    const foundTienHocPhi = await sequelize.query(
-      `select sum(so_tien)-sum(so_tien_da_nop) as tong_tien from hoc_phi as hp
-    left join hoc_phi_sinh_vien as hpsv on hp.ma_hoc_phi = hpsv.ma_hoc_phi
-    left join sinh_vien as sv on hpsv.ma_sinh_vien = sv.ma_sinh_vien
-    where sv.ma_sinh_vien = :ma_sinh_vien`,
-      { type: QueryTypes.SELECT, replacements: { ma_sinh_vien } }
-    );
-    const currentDebt = Number(foundTienHocPhi[0] && foundTienHocPhi[0].tong_tien) || 0;
+    const currentDebt = await getCongNoSinhVien(ma_sinh_vien);
     if (Number(params.amount) < currentDebt) {
       return res
         .status(400)
         .json({ success: false, msg: "Số tiền thanh toán không đủ để tất toán công nợ" });
     }
-    const ma_phieu_thu = await PhieuThu.max("ma_phieu_thu");
-    const maPhieuThuMoi = ma_phieu_thu + 1;
-    const createPhieuThu = await PhieuThu.create({
-      ma_phieu_thu: maPhieuThuMoi,
-      ten_phieu_thu: "Thanh toán công nợ của" + ma_sinh_vien,
-      ngay_thu: new Date(),
-      ghi_chu: "...",
-      don_vi_thu: "MoMo",
-    });
-    const updateHocPhi = await sequelize.query(
-      `update hoc_phi
+    //Toàn bộ thao tác ghi dữ liệu trong 1 transaction để đảm bảo tính nhất quán
+    await sequelize.transaction(async (t) => {
+      const ma_phieu_thu = await PhieuThu.max("ma_phieu_thu", { transaction: t });
+      const maPhieuThuMoi = ma_phieu_thu + 1;
+      await PhieuThu.create({
+        ma_phieu_thu: maPhieuThuMoi,
+        ten_phieu_thu: "Thanh toán công nợ của" + ma_sinh_vien,
+        ngay_thu: new Date(),
+        ghi_chu: "...",
+        don_vi_thu: "MoMo",
+      }, { transaction: t });
+      await sequelize.query(
+        `update hoc_phi
       join hoc_phi_sinh_vien on hoc_phi.ma_hoc_phi = hoc_phi_sinh_vien.ma_hoc_phi
       join sinh_vien on sinh_vien.ma_sinh_vien = hoc_phi_sinh_vien.ma_sinh_vien
       set hoc_phi.so_tien_da_nop = hoc_phi.so_tien 
       where sinh_vien.ma_sinh_vien = :ma_sinh_vien and hoc_phi.ma_hoc_phi <> 0 `,
-      { type: QueryTypes.UPDATE, replacements: { ma_sinh_vien } }
-    );
-    const updatephieuThuinHocPhi = await sequelize.query(
-      `update hoc_phi
+        { type: QueryTypes.UPDATE, replacements: { ma_sinh_vien }, transaction: t }
+      );
+      await sequelize.query(
+        `update hoc_phi
       join hoc_phi_sinh_vien on hoc_phi.ma_hoc_phi = hoc_phi_sinh_vien.ma_hoc_phi
       join sinh_vien on sinh_vien.ma_sinh_vien = hoc_phi_sinh_vien.ma_sinh_vien
       set hoc_phi.ma_phieu_thu = :ma_phieu_thu_moi
       where sinh_vien.ma_sinh_vien = :ma_sinh_vien and hoc_phi.ma_hoc_phi <> 0 `,
-      { type: QueryTypes.UPDATE, replacements: { ma_sinh_vien, ma_phieu_thu_moi: maPhieuThuMoi } }
-    );
-    const updateCongNo = await sequelize.query(
-      `update hoc_phi
+        { type: QueryTypes.UPDATE, replacements: { ma_sinh_vien, ma_phieu_thu_moi: maPhieuThuMoi }, transaction: t }
+      );
+      await sequelize.query(
+        `update hoc_phi
       join hoc_phi_sinh_vien on hoc_phi.ma_hoc_phi = hoc_phi_sinh_vien.ma_hoc_phi
       join sinh_vien on sinh_vien.ma_sinh_vien = hoc_phi_sinh_vien.ma_sinh_vien
       set hoc_phi.cong_no = 0
       where sinh_vien.ma_sinh_vien = :ma_sinh_vien and hoc_phi.ma_hoc_phi <> 0 `,
-      { type: QueryTypes.UPDATE, replacements: { ma_sinh_vien } }
-    );
-    const updateTrangThai = await sequelize.query(
-      `update hoc_phi
+        { type: QueryTypes.UPDATE, replacements: { ma_sinh_vien }, transaction: t }
+      );
+      await sequelize.query(
+        `update hoc_phi
       join hoc_phi_sinh_vien on hoc_phi.ma_hoc_phi = hoc_phi_sinh_vien.ma_hoc_phi
       join sinh_vien on sinh_vien.ma_sinh_vien = hoc_phi_sinh_vien.ma_sinh_vien
       set hoc_phi.trang_thai = 0
       where sinh_vien.ma_sinh_vien = :ma_sinh_vien and hoc_phi.ma_hoc_phi <> 0 `,
-      { type: QueryTypes.UPDATE, replacements: { ma_sinh_vien } }
-    );
+        { type: QueryTypes.UPDATE, replacements: { ma_sinh_vien }, transaction: t }
+      );
+    });
 
     res
       .status(200)
