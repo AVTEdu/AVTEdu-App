@@ -3,14 +3,11 @@ import Sidenavbar from "./Sidenavbar";
 import dkhpAPI from "../api/dkhpAPI";
 
 export default function XacNhanThanhToan() {
-    const queryParameters = new URLSearchParams(window.location.search);
-    const resultCode = queryParameters.get("resultCode");
-    const orderInfo = queryParameters.get("orderInfo");
     const [dataXacNhan, setDataXacNhan] = useState();
     useEffect(() => {
         const activeXacNhan = async () => {
             try {
-                const res = await dkhpAPI.xacNhanThanhToanTrucTuyen(resultCode, orderInfo);
+                const res = await dkhpAPI.xacNhanThanhToanTrucTuyen(window.location.search);
                 setDataXacNhan(res.data);
             } catch (error) {
                 console.log(error.message);

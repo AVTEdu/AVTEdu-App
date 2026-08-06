@@ -45,7 +45,7 @@ router
   .put(verifyAccessToken, requireRole("sinhvien"), userRequestController.thanhToanHocPhiTrucTuyen);
 router
   .route("/xacNhanThanhToanTrucTuyen")
-  .put(userRequestController.xacNhanThanhToanTrucTuyen);
+  .put(verifyAccessToken, requireRole("sinhvien"), userRequestController.xacNhanThanhToanTrucTuyen);
 //Cần mã sinh viên và danh sách mã phiếu thu
 router
   .route("/getChiTietPhieuThuTongHop")

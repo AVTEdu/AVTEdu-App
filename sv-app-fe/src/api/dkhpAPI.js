@@ -41,8 +41,8 @@ const dkhpAPI = {
     const url = "/userRequest/thanhToanHocPhiTrucTuyen";
     return axiosClient.put(url);
   },
-  xacNhanThanhToanTrucTuyen(resultCode, orderInfo) {
-    const url = "/userRequest/xacNhanThanhToanTrucTuyen?resultCode=" + resultCode + "&orderInfo=" + orderInfo;
+  xacNhanThanhToanTrucTuyen(searchParams) {
+    const url = "/userRequest/xacNhanThanhToanTrucTuyen" + searchParams;
     return axiosClient.put(url);
   },
   getDanhSachPhieuThuSinhVien() {

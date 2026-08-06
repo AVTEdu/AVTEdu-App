@@ -18,7 +18,7 @@ const {
 } = require("../helpers/date.validate");
 const KetQuaHocTap = require("../models/ketquahoctap.model");
 const { findAll } = require("../models/hocki.model");
-const { momoPayment } = require("../config/momo.config");
+const { momoPayment, verifyMomoSignature } = require("../config/momo.config");
 const PhieuThu = require("../models/phieuthu.model");
 const { sendMailSample } = require("../config/testmail");
 const { sendMail } = require("../config/mail.config");
@@ -857,12 +857,6 @@ const HuyHocPhanDaDangKi = async (req, res, next) => {
 };
 const thanhToanHocPhiTrucTuyen = async (req, res, next) => {
   try {
-    // const { ma} = req.payload.userId;
-    //   const updateHocPhi = await HocPhi.update({
-    //     so_tien_da_nop: `${so_tien}`,
-    //   },
-    //   { where: { ma_hoc_phi: `${ma_hoc_phi}` } }
-    // );
     const foundTienHocPhi = await sequelize.query(
       `select sum(so_tien)-sum(so_tien_da_nop) as tong_tien from hoc_phi as hp
     left join hoc_phi_sinh_vien as hpsv on hp.ma_hoc_phi = hpsv.ma_hoc_phi
@@ -870,13 +864,15 @@ const thanhToanHocPhiTrucTuyen = async (req, res, next) => {
     where sv.ma_sinh_vien = :userId`,
       { type: QueryTypes.SELECT, replacements: { userId: req.payload.userId } }
     );
-    console.log(foundTienHocPhi[0].tong_tien);
+    const tongTien = Number(foundTienHocPhi[0] && foundTienHocPhi[0].tong_tien);
+    if (!Number.isFinite(tongTien) || tongTien <= 0) {
+      return res
+        .status(400)
+        .json({ success: false, msg: "Không có công nợ để thanh toán" });
+    }
     const res1 = await momoPayment(
       "Thanh toan cong no " + req.payload.userId,
-      foundTienHocPhi[0].tong_tien,
-      (data) => {
-        console.log(data);
-      }
+      tongTien
     );
     const data = JSON.parse(res1);
     const payURL = data.payUrl;
@@ -890,60 +886,84 @@ const thanhToanHocPhiTrucTuyen = async (req, res, next) => {
 };
 const xacNhanThanhToanTrucTuyen = async (req, res, next) => {
   try {
-    // const {resultCode,orderId} = req.body
-    const rsl = Number.parseInt(req.query.resultCode);
-    const orderId = req.query.orderInfo;
-    const ma_sinh_vien = orderId.substring(19);
-    if (rsl === 0 && ma_sinh_vien !== "0") {
-      const ma_phieu_thu = await PhieuThu.max("ma_phieu_thu");
-      const createPhieuThu = await PhieuThu.create({
-        ma_phieu_thu: ma_phieu_thu + 1,
-        ten_phieu_thu: "Thanh toán công nợ của" + ma_sinh_vien,
-        ngay_thu: new Date(),
-        ghi_chu: "...",
-        don_vi_thu: "MoMo",
-      });
-      const updateHocPhi = await sequelize.query(
-        `update hoc_phi
-        join hoc_phi_sinh_vien on hoc_phi.ma_hoc_phi = hoc_phi_sinh_vien.ma_hoc_phi
-        join sinh_vien on sinh_vien.ma_sinh_vien = hoc_phi_sinh_vien.ma_sinh_vien
-        set hoc_phi.so_tien_da_nop = hoc_phi.so_tien 
-        where sinh_vien.ma_sinh_vien = :ma_sinh_vien and hoc_phi.ma_hoc_phi <> 0 `,
-        { type: QueryTypes.UPDATE, replacements: { ma_sinh_vien } }
-      );
-      const updatephieuThuinHocPhi = await sequelize.query(
-        `update hoc_phi
-        join hoc_phi_sinh_vien on hoc_phi.ma_hoc_phi = hoc_phi_sinh_vien.ma_hoc_phi
-        join sinh_vien on sinh_vien.ma_sinh_vien = hoc_phi_sinh_vien.ma_sinh_vien
-        set hoc_phi.ma_phieu_thu = :ma_phieu_thu_moi
-        where sinh_vien.ma_sinh_vien = :ma_sinh_vien and hoc_phi.ma_hoc_phi <> 0 `,
-        { type: QueryTypes.UPDATE, replacements: { ma_sinh_vien, ma_phieu_thu_moi: ma_phieu_thu + 1 } }
-      );
-      const updateCongNo = await sequelize.query(
-        `update hoc_phi
-        join hoc_phi_sinh_vien on hoc_phi.ma_hoc_phi = hoc_phi_sinh_vien.ma_hoc_phi
-        join sinh_vien on sinh_vien.ma_sinh_vien = hoc_phi_sinh_vien.ma_sinh_vien
-        set hoc_phi.cong_no = 0
-        where sinh_vien.ma_sinh_vien = :ma_sinh_vien and hoc_phi.ma_hoc_phi <> 0 `,
-        { type: QueryTypes.UPDATE, replacements: { ma_sinh_vien } }
-      );
-      const updateTrangThai = await sequelize.query(
-        `update hoc_phi
-        join hoc_phi_sinh_vien on hoc_phi.ma_hoc_phi = hoc_phi_sinh_vien.ma_hoc_phi
-        join sinh_vien on sinh_vien.ma_sinh_vien = hoc_phi_sinh_vien.ma_sinh_vien
-        set hoc_phi.trang_thai = 0
-        where sinh_vien.ma_sinh_vien = :ma_sinh_vien and hoc_phi.ma_hoc_phi <> 0 `,
-        { type: QueryTypes.UPDATE, replacements: { ma_sinh_vien } }
-      );
-
-      res
-        .status(200)
-        .json({ success: true, msg: "Thanh toán thành công " + ma_sinh_vien });
-    } else {
-      res
+    const params = req.query;
+    if (!verifyMomoSignature(params)) {
+      return res
         .status(400)
-        .json({ success: false, msg: "Thanh toán thất bại " + ma_sinh_vien });
+        .json({ success: false, msg: "Chữ ký xác thực từ MoMo không hợp lệ" });
     }
+    const resultCode = Number.parseInt(params.resultCode);
+    if (resultCode !== 0) {
+      return res
+        .status(400)
+        .json({ success: false, msg: "Thanh toán thất bại, mã lỗi: " + resultCode });
+    }
+    const ma_sinh_vien = req.payload.userId;
+    const prefix = "Thanh toan cong no ";
+    const orderInfo = String(params.orderInfo || "");
+    if (!orderInfo.startsWith(prefix) || orderInfo.slice(prefix.length) !== ma_sinh_vien) {
+      return res
+        .status(400)
+        .json({ success: false, msg: "Đơn hàng không khớp với sinh viên hiện tại" });
+    }
+    const foundTienHocPhi = await sequelize.query(
+      `select sum(so_tien)-sum(so_tien_da_nop) as tong_tien from hoc_phi as hp
+    left join hoc_phi_sinh_vien as hpsv on hp.ma_hoc_phi = hpsv.ma_hoc_phi
+    left join sinh_vien as sv on hpsv.ma_sinh_vien = sv.ma_sinh_vien
+    where sv.ma_sinh_vien = :ma_sinh_vien`,
+      { type: QueryTypes.SELECT, replacements: { ma_sinh_vien } }
+    );
+    const currentDebt = Number(foundTienHocPhi[0] && foundTienHocPhi[0].tong_tien) || 0;
+    if (Number(params.amount) < currentDebt) {
+      return res
+        .status(400)
+        .json({ success: false, msg: "Số tiền thanh toán không đủ để tất toán công nợ" });
+    }
+    const ma_phieu_thu = await PhieuThu.max("ma_phieu_thu");
+    const maPhieuThuMoi = ma_phieu_thu + 1;
+    const createPhieuThu = await PhieuThu.create({
+      ma_phieu_thu: maPhieuThuMoi,
+      ten_phieu_thu: "Thanh toán công nợ của" + ma_sinh_vien,
+      ngay_thu: new Date(),
+      ghi_chu: "...",
+      don_vi_thu: "MoMo",
+    });
+    const updateHocPhi = await sequelize.query(
+      `update hoc_phi
+      join hoc_phi_sinh_vien on hoc_phi.ma_hoc_phi = hoc_phi_sinh_vien.ma_hoc_phi
+      join sinh_vien on sinh_vien.ma_sinh_vien = hoc_phi_sinh_vien.ma_sinh_vien
+      set hoc_phi.so_tien_da_nop = hoc_phi.so_tien 
+      where sinh_vien.ma_sinh_vien = :ma_sinh_vien and hoc_phi.ma_hoc_phi <> 0 `,
+      { type: QueryTypes.UPDATE, replacements: { ma_sinh_vien } }
+    );
+    const updatephieuThuinHocPhi = await sequelize.query(
+      `update hoc_phi
+      join hoc_phi_sinh_vien on hoc_phi.ma_hoc_phi = hoc_phi_sinh_vien.ma_hoc_phi
+      join sinh_vien on sinh_vien.ma_sinh_vien = hoc_phi_sinh_vien.ma_sinh_vien
+      set hoc_phi.ma_phieu_thu = :ma_phieu_thu_moi
+      where sinh_vien.ma_sinh_vien = :ma_sinh_vien and hoc_phi.ma_hoc_phi <> 0 `,
+      { type: QueryTypes.UPDATE, replacements: { ma_sinh_vien, ma_phieu_thu_moi: maPhieuThuMoi } }
+    );
+    const updateCongNo = await sequelize.query(
+      `update hoc_phi
+      join hoc_phi_sinh_vien on hoc_phi.ma_hoc_phi = hoc_phi_sinh_vien.ma_hoc_phi
+      join sinh_vien on sinh_vien.ma_sinh_vien = hoc_phi_sinh_vien.ma_sinh_vien
+      set hoc_phi.cong_no = 0
+      where sinh_vien.ma_sinh_vien = :ma_sinh_vien and hoc_phi.ma_hoc_phi <> 0 `,
+      { type: QueryTypes.UPDATE, replacements: { ma_sinh_vien } }
+    );
+    const updateTrangThai = await sequelize.query(
+      `update hoc_phi
+      join hoc_phi_sinh_vien on hoc_phi.ma_hoc_phi = hoc_phi_sinh_vien.ma_hoc_phi
+      join sinh_vien on sinh_vien.ma_sinh_vien = hoc_phi_sinh_vien.ma_sinh_vien
+      set hoc_phi.trang_thai = 0
+      where sinh_vien.ma_sinh_vien = :ma_sinh_vien and hoc_phi.ma_hoc_phi <> 0 `,
+      { type: QueryTypes.UPDATE, replacements: { ma_sinh_vien } }
+    );
+
+    res
+      .status(200)
+      .json({ success: true, msg: "Thanh toán thành công " + ma_sinh_vien });
   } catch (error) {
     console.log(error);
     next(error);
