@@ -17,6 +17,8 @@ const Admin = require('./models/admin.model');
 const cors = require('cors');
 const morgan = require('morgan');
 const cookieParser = require('cookie-parser');
+const helmet = require('helmet');
+const rateLimit = require('express-rate-limit');
 
 
 const PORT = process.env.PORT || 9090
@@ -42,12 +44,39 @@ const PhieuThu = require('./models/phieuthu.model');
 
 
 ConnectDB().getInstance();
+app.set('trust proxy', 1);
+//Chỉ cho phép origin được cấu hình trong CORS_ORIGINS (.env)
+const allowedOrigins = (process.env.CORS_ORIGINS || "http://localhost:3000")
+  .split(",")
+  .map((origin) => origin.trim());
 const corsConfig = {
   credentials: true,
-  origin: true,
+  origin: (origin, callback) => {
+    if (!origin || allowedOrigins.includes(origin)) {
+      return callback(null, true);
+    }
+    return callback(new Error("Not allowed by CORS"));
+  },
 };
+//Chặn brute-force đăng nhập (20 lần thử / 15 phút / IP)
+const authLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 20,
+  standardHeaders: true,
+  legacyHeaders: false,
+});
+//Giới hạn chung (1000 request / 15 phút / IP)
+const globalLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 1000,
+  standardHeaders: true,
+  legacyHeaders: false,
+});
 //Hiện kết quả request trên termail
 app.use(morgan('dev'));
+app.use(helmet());
+app.use(globalLimiter);
+app.use("/auth", authLimiter);
 app.use(cors(corsConfig));
 //Chặn lỗi CORS policy
 // app.use(function(req, res, next) {
@@ -63,7 +92,6 @@ app.use(cors(corsConfig));
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-app.use(express.static("controller/public"));
 app.use(cookieParser());
 app.use("/", homeRouter);
 

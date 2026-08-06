@@ -52,6 +52,7 @@ const createSinhVien = async (req, res, next) => {
       ma_khoa: khoa,
       ma_chuyen_nganh: chuyennganh
     });
+    delete newUser.dataValues.mat_khau;
     return res.status(201).json({ success: true, newUser });
   } catch (error) {
     next(error);
@@ -89,6 +90,7 @@ const createManySinhVien = async (req, res, next) => {
       ma_khoa: khoa,
       ma_chuyen_nganh: chuyennganh
     });
+    delete newUser.dataValues.mat_khau;
     return res.status(201).json({ success: true, newUser });
   } catch (error) {
     next(error);
@@ -161,6 +163,7 @@ const createGiangVien = async (req, res, next) => {
       username: username,
       password: newPassword
     });
+    delete newGiangVien.dataValues.password;
     return res.status(201).json({ success: true, newGiangVien });
   } catch (error) {
     next(error);
@@ -194,6 +197,7 @@ const createAdmin = async (req, res, next) => {
       ma_khoa: ma_khoa,
 
     });
+    delete newAdmin.dataValues.mat_khau;
     return res.status(201).json({ success: true, newAdmin });
   } catch (error) {
     next(error);

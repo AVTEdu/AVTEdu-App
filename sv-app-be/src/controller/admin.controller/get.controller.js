@@ -30,7 +30,7 @@ const sequelize = ConnectDB().getInstance();
 
 const getDanhSachSinhVien = async (req, res, next) => {
   try {
-    const result = await SinhVien.findAll({ limit: 10 });
+    const result = await SinhVien.findAll({ limit: 10, attributes: { exclude: ['mat_khau'] } });
     return res.status(201).json({ success: true, result });
   } catch (error) {
     next(error);
@@ -38,7 +38,7 @@ const getDanhSachSinhVien = async (req, res, next) => {
 }
 const getDanhSachAdmin = async (req, res, next) => {
   try {
-    const result = await Admin.findAll({ limit: 10 });
+    const result = await Admin.findAll({ limit: 10, attributes: { exclude: ['mat_khau'] } });
     return res.status(201).json({ success: true, result });
   } catch (error) {
     next(error);
@@ -78,7 +78,7 @@ const getDanhSachDanToc = async (req, res, next) => {
 }
 const getDanhSachGiangVien = async (req, res, next) => {
   try {
-    const result = await GiangVien.findAll({ limit: 10 });
+    const result = await GiangVien.findAll({ limit: 10, attributes: { exclude: ['password'] } });
     return res.status(201).json({ success: true, result });
   } catch (error) {
     next(error);
@@ -365,7 +365,7 @@ const getDanhSachSinhVienByKhoa = async (req, res, next) => {
     const { maKhoa } = req.body;
     const dssv = await sequelize.query(
       `SELECT sinhviendb.chuyen_nganh.ten_chuyen_nganh, sinhviendb.khoa.ten_khoa, sinhviendb.sinh_vien.ma_sinh_vien, sinhviendb.sinh_vien.ho_ten_sinh_vien, sinhviendb.sinh_vien.ngay_sinh, sinhviendb.sinh_vien.email, 
-                        sinhviendb.sinh_vien.gioitinh, sinhviendb.sinh_vien.so_dien_thoai, sinhviendb.sinh_vien.so_cmnd, sinhviendb.sinh_vien.nien_khoa, sinhviendb.sinh_vien.mat_khau
+                        sinhviendb.sinh_vien.gioitinh, sinhviendb.sinh_vien.so_dien_thoai, sinhviendb.sinh_vien.so_cmnd, sinhviendb.sinh_vien.nien_khoa
       FROM     sinhviendb.chuyen_nganh INNER JOIN
                         sinhviendb.khoa ON sinhviendb.chuyen_nganh.ma_khoa = sinhviendb.khoa.ma_khoa INNER JOIN
                         sinhviendb.sinh_vien ON sinhviendb.chuyen_nganh.ma_chuyen_nganh = sinhviendb.sinh_vien.ma_chuyen_nganh AND sinhviendb.khoa.ma_khoa = sinhviendb.sinh_vien.ma_khoa

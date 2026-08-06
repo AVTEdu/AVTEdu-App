@@ -35,7 +35,6 @@ const upload = multer({ storage, limits: { fileSize: 20000000 } }).single(
 
 //Hàm đăng nhập sinh viên
 const signIn = async (req, res, next) => {
-  console.log(req.body);
   try {
     const { ma, password } = req.body;
     const sinh_vien = await SinhVien.findOne({ where: { ma_sinh_vien: `${ma}` } });
@@ -60,6 +59,7 @@ const signIn = async (req, res, next) => {
     const refreshToken = await signRefreshToken(ma, "sinhvien");
     await res.cookie('authorization', accessToken, { maxAge: 900000, httpOnly: true });
     await res.cookie('refreshToken', refreshToken, { maxAge: 1900000, httpOnly: true });
+    delete sinh_vien.dataValues.mat_khau;
     return res
       .status(200)
       .json({ success: true, accessToken, refreshToken, sinh_vien });
@@ -69,7 +69,6 @@ const signIn = async (req, res, next) => {
 }
 //Hàm đăng nhập admin
 const signInAdmin = async (req, res, next) => {
-  console.log(req.body);
   try {
     const { ma, password } = req.body;
     const admin = await Admin.findOne({ where: { ma_admin: `${ma}` } });
@@ -93,6 +92,7 @@ const signInAdmin = async (req, res, next) => {
     const refreshToken = await signRefreshToken(ma, "admin");
     await res.cookie('authorization', accessToken, { maxAge: 900000, httpOnly: true });
     await res.cookie('refreshToken', refreshToken, { maxAge: 1900000, httpOnly: true });
+    delete admin.dataValues.mat_khau;
     return res
       .status(200)
       .json({ success: true, accessToken, refreshToken, admin });
@@ -103,7 +103,6 @@ const signInAdmin = async (req, res, next) => {
 
 //Hàm đăng nhập giảng viên
 const signInGiangVien = async (req, res, next) => {
-  console.log(req.body);
   try {
     const { ma, password } = req.body;
     const giangvien = await GiangVien.findOne({ where: { ma_giang_vien: `${ma}` } });
@@ -127,6 +126,7 @@ const signInGiangVien = async (req, res, next) => {
     const refreshToken = await signRefreshToken(ma, "giangvien");
     await res.cookie('authorization', accessToken, { maxAge: 900000, httpOnly: true });
     await res.cookie('refreshToken', refreshToken, { maxAge: 1900000, httpOnly: true });
+    delete giangvien.dataValues.password;
     return res
       .status(200)
       .json({ success: true, accessToken, refreshToken, giangvien });
@@ -141,9 +141,7 @@ const refreshToken = async (req, res, next) => {
     if (!refreshToken) {
       return res.status(403).json({ message: "không có refreshtoken" });
     }
-    console.log(refreshToken);
     const { userId, role } = await verifyRefreshToken(refreshToken);
-    console.log(userId);
     const accessToken = await signAccessToken(userId, role);
     const refToken = await signRefreshToken(userId, role);
     return res.status(200).json({ accessToken, refToken });

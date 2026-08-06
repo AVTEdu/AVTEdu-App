@@ -10,7 +10,7 @@ const { sendMail } = require("./mail.config");
 //   secure:true,
 //   auth: {
 //     user: 'avteduapp@gmail.com',
-//     pass: 'tocxuaeswmvqrctl'
+//     pass: process.env.MAIL_PASSWORD
 //   }
 // });
 
