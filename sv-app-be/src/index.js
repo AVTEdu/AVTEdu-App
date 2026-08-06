@@ -18,6 +18,11 @@ const morgan = require('morgan');
 const cookieParser = require('cookie-parser');
 const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
+const swaggerUi = require("swagger-ui-express");
+const swaggerSpec = require("./config/swagger.config");
+
+//Bật/tắt Swagger UI qua biến môi trường SWAGGER_ENABLED
+const swaggerEnabled = process.env.SWAGGER_ENABLED === "true";
 
 
 const PORT = process.env.PORT || 9090
@@ -94,6 +99,18 @@ app.use(express.json());
 app.use(cookieParser());
 app.use("/", homeRouter);
 
+//Swagger UI - chỉ mở khi SWAGGER_ENABLED=true (tắt trên production)
+if (swaggerEnabled) {
+  app.use(
+    "/api-docs",
+    swaggerUi.serve,
+    swaggerUi.setup(swaggerSpec, {
+      customSiteTitle: "AVTEdu API Docs",
+    })
+  );
+  console.log("Swagger UI enabled at /api-docs");
+}
+
 
 
 
@@ -146,4 +163,4 @@ app.use((err, req, res, next) => {
 
 server.listen(PORT, function () {
   console.log(`Server is listening in port ${PORT}`);
-})
+})// nodemon restart trigger
