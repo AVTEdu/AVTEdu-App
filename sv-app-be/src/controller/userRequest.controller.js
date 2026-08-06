@@ -114,16 +114,16 @@ const getMonHocSinhVienChuaHoc = async (req, res, next) => {
          left join sinhviendb.lop_hoc_phan as lhp on hp.ma_hoc_phan = lhp.ma_hoc_phan
          left join sinhviendb.hoc_ki as hk on lhp.ma_hoc_ki = hk.ma_hoc_ki
          left join sinhviendb.mon_hoc as mh on hp.ma_mon_hoc = mh.ma_mon_hoc
-         where sv.ma_sinh_vien = '${ma}'
+         where sv.ma_sinh_vien = :ma
          and  hp.ma_hoc_phan not in (
             select lhp.ma_hoc_phan from sinhviendb.ket_qua_hoc_tap as kqht 
             left join sinhviendb.lop_hoc_phan as lhp on kqht.ma_lop_hoc_phan = lhp.ma_lop_hoc_phan
-            where kqht.ma_sinh_vien = '${ma}'
+            where kqht.ma_sinh_vien = :ma
          )
          group by hp.ma_hoc_phan,sv.ma_chuyen_nganh,cn.ma_chuyen_nganh,cnhp.ma_chuyen_nganh,lhp.ma_hoc_phan,hk.ma_hoc_ki
          ,lhp.ma_hoc_ki, mh.ma_mon_hoc,hp.ma_mon_hoc
         `,
-        { type: QueryTypes.SELECT }
+        { type: QueryTypes.SELECT, replacements: { ma } }
       )
       .then(function (results) {
         // Trả về danh sách các môn học chưa được sinh viên học
@@ -164,8 +164,8 @@ const getLopHocPhanByHocPhan = async (req, res, next) => {
         left join sinhviendb.lop_hoc_phan as lhp on hp.ma_hoc_phan = lhp.ma_hoc_phan
         left join sinhviendb.mon_hoc as mh on hp.ma_mon_hoc = mh.ma_mon_hoc
         left join sinhviendb.hoc_ki as hk on lhp.ma_hoc_ki = hk.ma_hoc_ki
-         where hp.ma_hoc_phan = '${ma}' and hk.ma_hoc_ki = '${ma_hoc_ki}'`,
-        { type: QueryTypes.SELECT }
+         where hp.ma_hoc_phan = :ma and hk.ma_hoc_ki = :ma_hoc_ki`,
+        { type: QueryTypes.SELECT, replacements: { ma, ma_hoc_ki } }
       )
       .then(function (results) {
         return res.status(201).json({ success: true, results });
@@ -203,11 +203,11 @@ const getChiTietLopHocPhan = async (req, res, next) => {
         left join sinhviendb.giang_vien as gv on pclhp.ma_giang_vien = gv.ma_giang_vien
         left join sinhviendb.thoi_khoa_bieu as tkb on tkb.ma_phan_cong_lop_hoc_phan = pclhp.ma_phan_cong
         left join sinhviendb.phong_hoc as ph on tkb.ma_phong_hoc = ph.ma_phong_hoc
-        where lhp.ma_lop_hoc_phan = '${ma}'
+        where lhp.ma_lop_hoc_phan = :ma
         group by pclhp.ma_phan_cong,lhp.trang_thai,pclhp.so_luong_sv_phu_trach,pclhp.loai_hoc_phan_phu_trach,
         tkb.ngay_hoc_trong_tuan,tkb.tiet_hoc_bat_dau,tkb.tiet_hoc_ket_thuc,ph.ten_day_nha,ph.ten_phong_hoc,
         gv.ten_giang_vien,tkb.thoi_gian_bat_dau,tkb.thoi_gian_ket_thuc`,
-        { type: QueryTypes.SELECT }
+        { type: QueryTypes.SELECT, replacements: { ma } }
       )
       .then(function (results) {
         //Kiểm tra nhằm tránh res tạo ra object null
@@ -445,8 +445,8 @@ const DangKiHocPhan = async (req, res, next) => {
                                             from sinhviendb.lop_hoc_phan as lhp
                                             left join sinhviendb.phan_cong_lop_hoc_phan as pclhp on lhp.ma_lop_hoc_phan = pclhp.ma_lop_hoc_phan
                                             left join sinhviendb.thoi_khoa_bieu as tkb on tkb.ma_phan_cong_lop_hoc_phan = pclhp.ma_phan_cong
-                                            where tkb.ma_phan_cong_lop_hoc_phan = '${ma}'`,
-      { type: QueryTypes.SELECT }
+                                            where tkb.ma_phan_cong_lop_hoc_phan = :ma`,
+      { type: QueryTypes.SELECT, replacements: { ma } }
     );
 
     if (!ThoiKhoabieu) {
@@ -477,8 +477,8 @@ const DangKiHocPhan = async (req, res, next) => {
       `select lhp.trang_thai
       from sinhviendb.phan_cong_lop_hoc_phan as pclhp
       left join sinhviendb.lop_hoc_phan as lhp on lhp.ma_lop_hoc_phan = pclhp.ma_lop_hoc_phan
-      where pclhp.ma_phan_cong ='${ma}'`,
-      { type: QueryTypes.SELECT }
+      where pclhp.ma_phan_cong = :ma`,
+      { type: QueryTypes.SELECT, replacements: { ma } }
     );
     if(checkTrangThai[0].trang_thai  != 1){ 
       return res
@@ -507,8 +507,8 @@ const DangKiHocPhan = async (req, res, next) => {
       `SELECT hp.* FROM sinhviendb.hoc_phi as hp
     left join hoc_phi_sinh_vien as hpsv  on hpsv.ma_hoc_phi = hp.ma_hoc_phi
     left join sinh_vien as sv on hpsv.ma_sinh_vien =sv.ma_sinh_vien
-    where sv.ma_sinh_vien = ${ma_sinh_vien} and hp.ma_lop_hoc_phan =${foundPCLopHocPhan.ma_lop_hoc_phan}`,
-      { type: QueryTypes.SELECT }
+    where sv.ma_sinh_vien = :ma_sinh_vien and hp.ma_lop_hoc_phan = :ma_lop_hoc_phan`,
+      { type: QueryTypes.SELECT, replacements: { ma_sinh_vien, ma_lop_hoc_phan: foundPCLopHocPhan.ma_lop_hoc_phan } }
     );
     if (createHocPhi[0] == null) {
       ma_hoc_phi = ma_hoc_phi +1
@@ -533,8 +533,8 @@ const DangKiHocPhan = async (req, res, next) => {
     left join sinhviendb.hoc_phi as hp on hp.ma_hoc_phi = hpsv.ma_hoc_phi
     left join sinhviendb.lop_hoc_phan as lhp on lhp.ma_lop_hoc_phan = hp.ma_lop_hoc_phan
     left join sinhviendb.phan_cong_lop_hoc_phan as pclhp on pclhp.ma_lop_hoc_phan = hp.ma_lop_hoc_phan
-    where sv.ma_sinh_vien = ${ma_sinh_vien} and lhp.ma_lop_hoc_phan =${foundPCLopHocPhan.ma_lop_hoc_phan}`,
-      { type: QueryTypes.SELECT }
+    where sv.ma_sinh_vien = :ma_sinh_vien and lhp.ma_lop_hoc_phan = :ma_lop_hoc_phan`,
+      { type: QueryTypes.SELECT, replacements: { ma_sinh_vien, ma_lop_hoc_phan: foundPCLopHocPhan.ma_lop_hoc_phan } }
     );
     if(isUpdateSVHT[0] == null ){
       const updateSVHT = await LopHocPhan.update(
@@ -649,8 +649,8 @@ const getThongTinSinhvien = async (req, res, next) => {
       left join sinhviendb.mo_hinh_dao_tao as mhdt on sv.ma_mo_hinh_dao_tao = mhdt.ma_mo_hinh_dao_tao
       left join sinhviendb.khoa_hoc as kh on sv.ma_khoa_hoc = kh.ma_khoa_hoc
       left join sinhviendb.bacdaotao as bdt on sv.ma_bac_dao_tao =bdt.ma_bac_dao_tao
-      where sv.ma_sinh_vien = '${req.payload.userId}'`,
-      { type: QueryTypes.SELECT }
+      where sv.ma_sinh_vien = :userId`,
+      { type: QueryTypes.SELECT, replacements: { userId: req.payload.userId } }
     );
     res.status(201).json({ success: true, infor });
   } catch (error) {
@@ -675,8 +675,8 @@ const getDanhSachHocPhi = async (req, res, next) => {
                     left join sinhviendb.lop_hoc_phan as lhp on hp.ma_lop_hoc_phan = lhp.ma_lop_hoc_phan
                     left join sinhviendb.hoc_phan as hpp on lhp.ma_hoc_phan = hpp.ma_hoc_phan
                     left join sinhviendb.mon_hoc as mh on hpp.ma_mon_hoc = mh.ma_mon_hoc
-                    where sv.ma_sinh_vien = '${req.payload.userId}'`,
-      { type: QueryTypes.SELECT }
+                    where sv.ma_sinh_vien = :userId`,
+      { type: QueryTypes.SELECT, replacements: { userId: req.payload.userId } }
     );
     res.status(201).json({ success: true, dsHocPhiSinhVien });
   } catch (error) {
@@ -707,12 +707,12 @@ const getMonDaDangKiTrongHocKi = async (req, res, next) => {
     left join sinhviendb.mon_hoc as mh on mh.ma_mon_hoc = hpp.ma_mon_hoc
     left join sinhviendb.thoi_khoa_bieu as tkb on tkb.ma_phan_cong_lop_hoc_phan = pclhp.ma_phan_cong
     left join sinhviendb.thoi_khoa_bieu_sinh_vien as tkbsv on tkbsv.ma_thoi_khoa_bieu = tkb.ma_thoi_khoa_bieu
-    where sv.ma_sinh_vien = '${req.payload.userId}' and hk.ma_hoc_ki = '${ma}' and pclhp.nhom_thuc_hanh_phu_trach =0
+    where sv.ma_sinh_vien = :userId and hk.ma_hoc_ki = :ma and pclhp.nhom_thuc_hanh_phu_trach =0
     group by pclhp.ma_phan_cong,mh.ten_mon_hoc,lhp.ten_lop_hoc_phan,
      hpp.so_tin_chi_ly_thuyet,hpp.so_tin_chi_thuc_hanh,
     pclhp.nhom_thuc_hanh_phu_trach,hp.so_tien,hp.trang_thai,
     hp.trang_thai_dang_ki,lhp.trang_thai `,
-      { type: QueryTypes.SELECT }
+      { type: QueryTypes.SELECT, replacements: { userId: req.payload.userId, ma } }
     );
     res.status(201).json({ success: true, dsMonDaDangKiTrongHocKi });
   } catch (error) {
@@ -751,8 +751,8 @@ const getThoiKhoaBieuSinhVienTrongMotTuan = async (req, res, next) => {
       left join sinhviendb.mon_hoc as mh on hp.ma_mon_hoc = mh.ma_mon_hoc
       left join sinhviendb.giang_vien as gv on pclhp.ma_giang_vien = gv.ma_giang_vien
       left join sinhviendb.phong_hoc as ph on tkb.ma_phong_hoc = ph.ma_phong_hoc
-      where tkb.thoi_gian_bat_dau <= '${day.date}' and tkb.thoi_gian_ket_thuc >= '${day.date}' and tkb.ngay_hoc_trong_tuan ='${dayOfWeeek}' and sv.ma_sinh_vien ='${req.payload.userId}'; `,
-        { type: QueryTypes.SELECT }
+      where tkb.thoi_gian_bat_dau <= :dayDate and tkb.thoi_gian_ket_thuc >= :dayDate and tkb.ngay_hoc_trong_tuan = :dayOfWeeek and sv.ma_sinh_vien = :userId; `,
+        { type: QueryTypes.SELECT, replacements: { dayDate: day.date, dayOfWeeek, userId: req.payload.userId } }
       );
       result.push({
         Thu: getWeekDay(day.originDay),
@@ -781,12 +781,12 @@ const getChiTietHocPhanDaDangKi = async (req, res, next) => {
     left join sinhviendb.mon_hoc as mh on mh.ma_mon_hoc = hpp.ma_mon_hoc
     left join sinhviendb.thoi_khoa_bieu as tkb on tkb.ma_phan_cong_lop_hoc_phan = pclhp.ma_phan_cong
     left join sinhviendb.thoi_khoa_bieu_sinh_vien as tkbsv on tkbsv.ma_thoi_khoa_bieu = tkb.ma_thoi_khoa_bieu
-    where lhp.ma_lop_hoc_phan = '${ma}'
+    where lhp.ma_lop_hoc_phan = :ma
     group by pclhp.ma_phan_cong,mh.ten_mon_hoc,lhp.ten_lop_hoc_phan,
      hpp.so_tin_chi_ly_thuyet,hpp.so_tin_chi_thuc_hanh,
     pclhp.nhom_thuc_hanh_phu_trach,hp.so_tien,hp.trang_thai,
     hp.trang_thai_dang_ki,lhp.trang_thai `,
-      { type: QueryTypes.SELECT }
+      { type: QueryTypes.SELECT, replacements: { ma } }
     );
     res.status(201).json({ success: true, dsMonDaDangKiTrongHocKi });
   } catch (error) {
@@ -837,8 +837,8 @@ const HuyHocPhanDaDangKi = async (req, res, next) => {
     left join sinhviendb.thoi_khoa_bieu as tkb on tkb.ma_phan_cong_lop_hoc_phan = pclhp.ma_phan_cong
     left join sinhviendb.thoi_khoa_bieu_sinh_vien as tkbsv on tkbsv.ma_thoi_khoa_bieu = tkb.ma_thoi_khoa_bieu
     left join sinhviendb.ket_qua_hoc_tap as kqht on lhp.ma_lop_hoc_phan = kqht.ma_lop_hoc_phan
-    WHERE sv.ma_sinh_vien = ${ma_sinh_vien} and hpp.ma_hoc_phan = ${ma};`,
-      { type: QueryTypes.DELETE }
+    WHERE sv.ma_sinh_vien = :ma_sinh_vien and hpp.ma_hoc_phan = :ma;`,
+      { type: QueryTypes.DELETE, replacements: { ma_sinh_vien, ma } }
     );
     //Cập nhật lại số lượng sinh viên 
     const updateSLSVHT = await LopHocPhan.update(
@@ -867,8 +867,8 @@ const thanhToanHocPhiTrucTuyen = async (req, res, next) => {
       `select sum(so_tien)-sum(so_tien_da_nop) as tong_tien from hoc_phi as hp
     left join hoc_phi_sinh_vien as hpsv on hp.ma_hoc_phi = hpsv.ma_hoc_phi
     left join sinh_vien as sv on hpsv.ma_sinh_vien = sv.ma_sinh_vien
-    where sv.ma_sinh_vien = ${req.payload.userId}`,
-      { type: QueryTypes.SELECT }
+    where sv.ma_sinh_vien = :userId`,
+      { type: QueryTypes.SELECT, replacements: { userId: req.payload.userId } }
     );
     console.log(foundTienHocPhi[0].tong_tien);
     const res1 = await momoPayment(
@@ -908,32 +908,32 @@ const xacNhanThanhToanTrucTuyen = async (req, res, next) => {
         join hoc_phi_sinh_vien on hoc_phi.ma_hoc_phi = hoc_phi_sinh_vien.ma_hoc_phi
         join sinh_vien on sinh_vien.ma_sinh_vien = hoc_phi_sinh_vien.ma_sinh_vien
         set hoc_phi.so_tien_da_nop = hoc_phi.so_tien 
-        where sinh_vien.ma_sinh_vien =${ma_sinh_vien} and hoc_phi.ma_hoc_phi <> 0 `,
-        { type: QueryTypes.UPDATE }
+        where sinh_vien.ma_sinh_vien = :ma_sinh_vien and hoc_phi.ma_hoc_phi <> 0 `,
+        { type: QueryTypes.UPDATE, replacements: { ma_sinh_vien } }
       );
       const updatephieuThuinHocPhi = await sequelize.query(
         `update hoc_phi
         join hoc_phi_sinh_vien on hoc_phi.ma_hoc_phi = hoc_phi_sinh_vien.ma_hoc_phi
         join sinh_vien on sinh_vien.ma_sinh_vien = hoc_phi_sinh_vien.ma_sinh_vien
-        set hoc_phi.ma_phieu_thu = ${ma_phieu_thu + 1}
-        where sinh_vien.ma_sinh_vien =${ma_sinh_vien} and hoc_phi.ma_hoc_phi <> 0 `,
-        { type: QueryTypes.UPDATE }
+        set hoc_phi.ma_phieu_thu = :ma_phieu_thu_moi
+        where sinh_vien.ma_sinh_vien = :ma_sinh_vien and hoc_phi.ma_hoc_phi <> 0 `,
+        { type: QueryTypes.UPDATE, replacements: { ma_sinh_vien, ma_phieu_thu_moi: ma_phieu_thu + 1 } }
       );
       const updateCongNo = await sequelize.query(
         `update hoc_phi
         join hoc_phi_sinh_vien on hoc_phi.ma_hoc_phi = hoc_phi_sinh_vien.ma_hoc_phi
         join sinh_vien on sinh_vien.ma_sinh_vien = hoc_phi_sinh_vien.ma_sinh_vien
         set hoc_phi.cong_no = 0
-        where sinh_vien.ma_sinh_vien =${ma_sinh_vien} and hoc_phi.ma_hoc_phi <> 0 `,
-        { type: QueryTypes.UPDATE }
+        where sinh_vien.ma_sinh_vien = :ma_sinh_vien and hoc_phi.ma_hoc_phi <> 0 `,
+        { type: QueryTypes.UPDATE, replacements: { ma_sinh_vien } }
       );
       const updateTrangThai = await sequelize.query(
         `update hoc_phi
         join hoc_phi_sinh_vien on hoc_phi.ma_hoc_phi = hoc_phi_sinh_vien.ma_hoc_phi
         join sinh_vien on sinh_vien.ma_sinh_vien = hoc_phi_sinh_vien.ma_sinh_vien
         set hoc_phi.trang_thai = 0
-        where sinh_vien.ma_sinh_vien =${ma_sinh_vien} and hoc_phi.ma_hoc_phi <> 0 `,
-        { type: QueryTypes.UPDATE }
+        where sinh_vien.ma_sinh_vien = :ma_sinh_vien and hoc_phi.ma_hoc_phi <> 0 `,
+        { type: QueryTypes.UPDATE, replacements: { ma_sinh_vien } }
       );
 
       res
@@ -958,8 +958,8 @@ const getPhieuThuCongNo = async (req, res, next) => {
     left join hoc_phi as hp on hp.ma_phieu_thu = pt.ma_phieu_thu
     left join hoc_phi_sinh_vien as hpsv on hpsv.ma_hoc_phi = hp.ma_hoc_phi
     left join sinh_vien as sv on hpsv.ma_sinh_vien = sv.ma_sinh_vien
-    where sv.ma_sinh_vien = ${ma_sinh_vien}`,
-      { type: QueryTypes.SELECT }
+    where sv.ma_sinh_vien = :ma_sinh_vien`,
+      { type: QueryTypes.SELECT, replacements: { ma_sinh_vien } }
     );
     res.status(200).json({ success: true, findPhieuThu });
   } catch (error) {
@@ -976,8 +976,8 @@ const getChiTietPhieuThu = async (req, res, next) => {
     left join hoc_phi as hp on hp.ma_phieu_thu = pt.ma_phieu_thu
     left join hoc_phi_sinh_vien as hpsv on hpsv.ma_hoc_phi = hp.ma_hoc_phi
     left join sinh_vien as sv on hpsv.ma_sinh_vien = sv.ma_sinh_vien
-    where sv.ma_sinh_vien = ${ma_sinh_vien}`,
-      { type: QueryTypes.SELECT }
+    where sv.ma_sinh_vien = :ma_sinh_vien`,
+      { type: QueryTypes.SELECT, replacements: { ma_sinh_vien } }
     );
     res.status(200).json({ success: true, findPhieuThu });
   } catch (error) {
@@ -995,9 +995,9 @@ const getChiTietPhieuThuTongHop = async (req, res, next) => {
     left join sinhviendb.hoc_phi_sinh_vien as hpsv on hpsv.ma_sinh_vien = sv.ma_sinh_vien
     left join sinhviendb.hoc_phi as hp on hp.ma_hoc_phi = hpsv.ma_hoc_phi
     left join sinhviendb.phieu_thu as pt on pt.ma_phieu_thu = hp.ma_phieu_thu
-    where sv.ma_sinh_vien = ${ma} and pt.ma_phieu_thu = ${ma_phieu_thu}
+    where sv.ma_sinh_vien = :ma and pt.ma_phieu_thu = :ma_phieu_thu
     group by sv.ho_ten_sinh_vien,sv.ma_sinh_vien,sv.nien_khoa ,bdt.ten_bac_dao_tao,pt.don_vi_thu`,
-      { type: QueryTypes.SELECT }
+      { type: QueryTypes.SELECT, replacements: { ma, ma_phieu_thu } }
     );
 
     const getChiTietPhieuThu = await sequelize.query(
@@ -1011,9 +1011,9 @@ const getChiTietPhieuThuTongHop = async (req, res, next) => {
     left join sinhviendb.hoc_phan as hpp on hpp.ma_hoc_phan = lhp.ma_hoc_phan
     left join sinhviendb.mon_hoc as mh on hpp.ma_mon_hoc = mh.ma_mon_hoc
     left join sinhviendb.hoc_ki as hk on hk.ma_hoc_ki = lhp.ma_hoc_ki
-    where sv.ma_sinh_vien = ${ma} and pt.ma_phieu_thu = ${ma_phieu_thu}
+    where sv.ma_sinh_vien = :ma and pt.ma_phieu_thu = :ma_phieu_thu
     group by hp.ma_hoc_phi,mh.ten_mon_hoc,hk.thu_tu_hoc_ki,hk.nam_hoc_bat_dau,hk.nam_hoc_ket_thuc,hp.so_tien`,
-      { type: QueryTypes.SELECT }
+      { type: QueryTypes.SELECT, replacements: { ma, ma_phieu_thu } }
     );
     responseHanlder.ok(res, {
       success: true,
@@ -1043,9 +1043,9 @@ const getDanhSachPhieuThuSinhVien = async (req, res, next) => {
         left join hoc_phi as hp on hp.ma_phieu_thu = pt.ma_phieu_thu
         left join hoc_phi_sinh_vien as hpsv on hpsv.ma_hoc_phi = hp.ma_hoc_phi
         left join sinh_vien as sv on hpsv.ma_sinh_vien = sv.ma_sinh_vien
-        where sv.ma_sinh_vien = '${ma}'
+        where sv.ma_sinh_vien = :ma
         group by pt.ma_phieu_thu, hp.so_tien_da_nop`,
-      { type: QueryTypes.SELECT }
+      { type: QueryTypes.SELECT, replacements: { ma } }
     );
     res.status(201).json({ success: true, dsHocPhiSinhVien });
   } catch (error) {
@@ -1076,9 +1076,9 @@ const getChiTietPhieuThuTongHopBySV = async (req, res, next) => {
     left join sinhviendb.hoc_phan as hpp on hpp.ma_hoc_phan = lhp.ma_hoc_phan
     left join sinhviendb.mon_hoc as mh on hpp.ma_mon_hoc = mh.ma_mon_hoc
     left join sinhviendb.hoc_ki as hk on hk.ma_hoc_ki = lhp.ma_hoc_ki
-    where sv.ma_sinh_vien = '${ma}' and pt.ma_phieu_thu = '${ma_phieu_thu}'
+    where sv.ma_sinh_vien = :ma and pt.ma_phieu_thu = :ma_phieu_thu
     group by hp.ma_hoc_phi,mh.ten_mon_hoc,hk.thu_tu_hoc_ki,hk.nam_hoc_bat_dau,hk.nam_hoc_ket_thuc,hp.so_tien`,
-      { type: QueryTypes.SELECT }
+      { type: QueryTypes.SELECT, replacements: { ma, ma_phieu_thu } }
     );
     // responseHanlder.ok(res, { success: true, getChiTietPhieuThu })
     res.status(201).json({ success: true, getChiTietPhieuThu });
@@ -1113,8 +1113,8 @@ FROM     sinhviendb.hoc_ki INNER JOIN
     sinhviendb.ket_qua_hoc_tap ON sinhviendb.lop_hoc_phan.ma_lop_hoc_phan = sinhviendb.ket_qua_hoc_tap.ma_lop_hoc_phan INNER JOIN
     sinhviendb.mon_hoc ON sinhviendb.hoc_phan.ma_mon_hoc = sinhviendb.mon_hoc.ma_mon_hoc INNER JOIN
     sinhviendb.sinh_vien ON sinhviendb.ket_qua_hoc_tap.ma_sinh_vien = sinhviendb.sinh_vien.ma_sinh_vien
-WHERE sinhviendb.sinh_vien.ma_sinh_vien = '${ma}' and sinhviendb.hoc_ki.ma_hoc_ki = '${ma_hoc_ki}'`,
-      { type: QueryTypes.SELECT }
+WHERE sinhviendb.sinh_vien.ma_sinh_vien = :ma and sinhviendb.hoc_ki.ma_hoc_ki = :ma_hoc_ki`,
+      { type: QueryTypes.SELECT, replacements: { ma, ma_hoc_ki } }
     );
     res.status(201).json({ success: true, getKetQuaHocTap });
   } catch (error) {
@@ -1144,8 +1144,8 @@ const getKetQuaHocTapAndroid = async (req, res, next) => {
           sinhviendb.ket_qua_hoc_tap ON sinhviendb.lop_hoc_phan.ma_lop_hoc_phan = sinhviendb.ket_qua_hoc_tap.ma_lop_hoc_phan INNER JOIN
           sinhviendb.mon_hoc ON sinhviendb.hoc_phan.ma_mon_hoc = sinhviendb.mon_hoc.ma_mon_hoc INNER JOIN
           sinhviendb.sinh_vien ON sinhviendb.ket_qua_hoc_tap.ma_sinh_vien = sinhviendb.sinh_vien.ma_sinh_vien
-      WHERE sinhviendb.sinh_vien.ma_sinh_vien = '${ma}'`,
-      { type: QueryTypes.SELECT }
+      WHERE sinhviendb.sinh_vien.ma_sinh_vien = :ma`,
+      { type: QueryTypes.SELECT, replacements: { ma } }
     );
     let getKetQuaHocTap = [];
     if(Array.isArray(getHocKiDaHoc)){
@@ -1162,8 +1162,8 @@ const getKetQuaHocTapAndroid = async (req, res, next) => {
         sinhviendb.ket_qua_hoc_tap ON sinhviendb.lop_hoc_phan.ma_lop_hoc_phan = sinhviendb.ket_qua_hoc_tap.ma_lop_hoc_phan INNER JOIN
         sinhviendb.mon_hoc ON sinhviendb.hoc_phan.ma_mon_hoc = sinhviendb.mon_hoc.ma_mon_hoc INNER JOIN
         sinhviendb.sinh_vien ON sinhviendb.ket_qua_hoc_tap.ma_sinh_vien = sinhviendb.sinh_vien.ma_sinh_vien
-    WHERE sinhviendb.sinh_vien.ma_sinh_vien = '${ma}' and sinhviendb.hoc_ki.ma_hoc_ki = '${element.ma_hoc_ki}'`,
-          { type: QueryTypes.SELECT }
+    WHERE sinhviendb.sinh_vien.ma_sinh_vien = :ma and sinhviendb.hoc_ki.ma_hoc_ki = :ma_hoc_ki`,
+          { type: QueryTypes.SELECT, replacements: { ma, ma_hoc_ki: element.ma_hoc_ki } }
         );
         getKetQuaHocTap.push(getKetQuaHocTapTheoKi);
       }
@@ -1196,8 +1196,8 @@ const getLopHocPhanKhongTrung = async (req, res, next) => {
       left join sinhviendb.hoc_ki as hk on lhp.ma_hoc_ki = hk.ma_hoc_ki
       left join sinhviendb.phan_cong_lop_hoc_phan as pclhp on pclhp.ma_lop_hoc_phan = lhp.ma_lop_hoc_phan
       left join sinhviendb.thoi_khoa_bieu as tkb on tkb.ma_phan_cong_lop_hoc_phan = pclhp.ma_phan_cong
-       where hp.ma_hoc_phan = '${ma}' and hk.ma_hoc_ki = '${ma_hoc_ki}'`,
-      { type: QueryTypes.SELECT }
+       where hp.ma_hoc_phan = :ma and hk.ma_hoc_ki = :ma_hoc_ki`,
+      { type: QueryTypes.SELECT, replacements: { ma, ma_hoc_ki } }
     );
     let DsHocPhanDaDky = await sequelize.query(
       `select tkb.tiet_hoc_bat_dau,tkb.tiet_hoc_ket_thuc,tkb.ngay_hoc_trong_tuan
@@ -1211,9 +1211,9 @@ const getLopHocPhanKhongTrung = async (req, res, next) => {
       left join sinhviendb.mon_hoc as mh on mh.ma_mon_hoc = hpp.ma_mon_hoc
       left join sinhviendb.thoi_khoa_bieu as tkb on tkb.ma_phan_cong_lop_hoc_phan = pclhp.ma_phan_cong
       left join sinhviendb.thoi_khoa_bieu_sinh_vien as tkbsv on tkbsv.ma_thoi_khoa_bieu = tkb.ma_thoi_khoa_bieu
-      where sv.ma_sinh_vien = ${ma_sinh_vien} and hk.ma_hoc_ki = ${ma_hoc_ki} 
+      where sv.ma_sinh_vien = :ma_sinh_vien and hk.ma_hoc_ki = :ma_hoc_ki 
       group by  tkb.tiet_hoc_bat_dau,tkb.tiet_hoc_ket_thuc,tkb.ngay_hoc_trong_tuan`,
-      { type: QueryTypes.SELECT }
+      { type: QueryTypes.SELECT, replacements: { ma_sinh_vien, ma_hoc_ki } }
     );
     if (Array.isArray(DsHocPhan) && Array.isArray(DsHocPhanDaDky)) {
       DsHocPhan = DsHocPhan.filter((element) => {
@@ -1259,8 +1259,8 @@ FROM     sinhviendb.hoc_ki INNER JOIN
     sinhviendb.ket_qua_hoc_tap ON sinhviendb.lop_hoc_phan.ma_lop_hoc_phan = sinhviendb.ket_qua_hoc_tap.ma_lop_hoc_phan INNER JOIN
     sinhviendb.mon_hoc ON sinhviendb.hoc_phan.ma_mon_hoc = sinhviendb.mon_hoc.ma_mon_hoc INNER JOIN
     sinhviendb.sinh_vien ON sinhviendb.ket_qua_hoc_tap.ma_sinh_vien = sinhviendb.sinh_vien.ma_sinh_vien
-WHERE sinhviendb.sinh_vien.ma_sinh_vien = '${ma}' and sinhviendb.hoc_ki.ma_hoc_ki = '${ma_hoc_ki}'`,
-      { type: QueryTypes.SELECT }
+WHERE sinhviendb.sinh_vien.ma_sinh_vien = :ma and sinhviendb.hoc_ki.ma_hoc_ki = :ma_hoc_ki`,
+      { type: QueryTypes.SELECT, replacements: { ma, ma_hoc_ki } }
     );
     res.status(201).json({ success: true, getKetQuaHocTap });
   } catch (error) {

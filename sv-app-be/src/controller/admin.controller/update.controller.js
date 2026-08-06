@@ -294,22 +294,22 @@ const thanhToanCongNoSinhVien = async (req, res, next) => {
 
       let updateTienHocPhi = await sequelize.query(`update hoc_phi
       set hoc_phi.so_tien_da_nop = hoc_phi.so_tien 
-      where hoc_phi.ma_hoc_phi = ${ma_hoc_phi}`, { type: QueryTypes.UPDATE });
+      where hoc_phi.ma_hoc_phi = :ma_hoc_phi`, { type: QueryTypes.UPDATE, replacements: { ma_hoc_phi } });
 
       let updateCongNo = await sequelize.query(`update hoc_phi
       set hoc_phi.cong_no = 0 
-      where hoc_phi.ma_hoc_phi = ${ma_hoc_phi}`, { type: QueryTypes.UPDATE });
+      where hoc_phi.ma_hoc_phi = :ma_hoc_phi`, { type: QueryTypes.UPDATE, replacements: { ma_hoc_phi } });
 
       let updateTrangThai = await sequelize.query(`update hoc_phi
       set hoc_phi.trang_thai = 0 
-      where hoc_phi.ma_hoc_phi = ${ma_hoc_phi}`, { type: QueryTypes.UPDATE });
+      where hoc_phi.ma_hoc_phi = :ma_hoc_phi`, { type: QueryTypes.UPDATE, replacements: { ma_hoc_phi } });
 
       let updatePhieuThu = await sequelize.query(`update hoc_phi
-      set hoc_phi.ma_phieu_thu = ${ma_phieu_thu + 1}
-      where hoc_phi.ma_hoc_phi = ${ma_hoc_phi}`, { type: QueryTypes.UPDATE });
+      set hoc_phi.ma_phieu_thu = :ma_phieu_thu_moi
+      where hoc_phi.ma_hoc_phi = :ma_hoc_phi`, { type: QueryTypes.UPDATE, replacements: { ma_hoc_phi, ma_phieu_thu_moi: ma_phieu_thu + 1 } });
 
     })
-    const dsUpdateHocPhi = await sequelize.query(`SELECT * FROM sinhviendb.hoc_phi where ma_phieu_thu=${ma_phieu_thu}`, { type: QueryTypes.SELECT })
+    const dsUpdateHocPhi = await sequelize.query(`SELECT * FROM sinhviendb.hoc_phi where ma_phieu_thu=:ma_phieu_thu`, { type: QueryTypes.SELECT, replacements: { ma_phieu_thu } })
     return responseHandler.ok(res, { ma_sinh_vien, dsUpdateHocPhi });
   } catch (error) {
     next(error)

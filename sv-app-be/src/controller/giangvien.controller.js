@@ -24,8 +24,8 @@ const getDanhSanhSachSinhVienTheoLopHocPhan = async (req, res, next) => {
         left join sinhviendb.mon_hoc as mh on hp.ma_mon_hoc = mh.ma_mon_hoc
         left join sinhviendb.giang_vien as gv on pclhp.ma_giang_vien = gv.ma_giang_vien
         left join sinhviendb.phong_hoc as ph on tkb.ma_phong_hoc = ph.ma_phong_hoc
-        where  lhp.ma_lop_hoc_phan="${ma_lop_hoc_phan}"  and gv.ma_giang_vien = ${req.payload.userId};`,
-      { type: QueryTypes.SELECT }
+        where  lhp.ma_lop_hoc_phan = :ma_lop_hoc_phan and gv.ma_giang_vien = :userId;`,
+      { type: QueryTypes.SELECT, replacements: { ma_lop_hoc_phan, userId: req.payload.userId } }
     );
     if (!DanhSachSinhVien) {
       return responseHandler.ok(res, { success: true });
@@ -67,8 +67,8 @@ const getThoiKhoaBieuGiangVienTrongMotTuan = async (req, res, next) => {
         left join sinhviendb.mon_hoc as mh on hp.ma_mon_hoc = mh.ma_mon_hoc
         left join sinhviendb.giang_vien as gv on pclhp.ma_giang_vien = gv.ma_giang_vien
         left join sinhviendb.phong_hoc as ph on tkb.ma_phong_hoc = ph.ma_phong_hoc
-        where tkb.thoi_gian_bat_dau <= '${day.date}' and tkb.thoi_gian_ket_thuc >= '${day.date}' and tkb.ngay_hoc_trong_tuan ='${dayOfWeeek}' and gv.ma_giang_vien ='${req.payload.userId}'; `,
-        { type: QueryTypes.SELECT }
+        where tkb.thoi_gian_bat_dau <= :dayDate and tkb.thoi_gian_ket_thuc >= :dayDate and tkb.ngay_hoc_trong_tuan = :dayOfWeeek and gv.ma_giang_vien = :userId; `,
+        { type: QueryTypes.SELECT, replacements: { dayDate: day.date, dayOfWeeek, userId: req.payload.userId } }
       );
       result.push({
         Thu: getWeekDay(day.originDay),
